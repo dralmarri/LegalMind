@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LegalMind — قاعدة الأحكام القضائية</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">LM</div>
+      <div class="brand-text">
+        <h1>قاعدة الأحكام القضائية <span>(LegalMind)</span></h1>
+        <p>إدخال + بحث + تصدير/استيراد — تخزين محلي قوي عبر IndexedDB</p>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button id="btnExport" class="btn btn-primary" type="button">تصدير</button>
+      <button id="btnImport" class="btn btn-ghost" type="button">استيراد</button>
+      <input id="importFile" type="file" accept="application/json" hidden />
+      <button id="btnTheme" class="btn btn-ghost" type="button">تبديل الثيم</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- إدخال جديد -->
+    <section class="card">
+      <div class="card-head">
+        <h2>إدخال جديد</h2>
+        <p class="muted">املأ ما يتوفر لديك — الحقول غير إجبارية.</p>
+      </div>
+
+      <form id="entryForm" class="form">
+        <div class="grid">
+          <div class="field">
+            <label>نوع الإدخال</label>
+            <select id="entryKind">
+              <option value="مبدأ" selected>مبدأ</option>
+              <option value="حكم">حكم</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>الفرع</label>
+            <select id="branch">
+              <option value="عام" selected>عام</option>
+              <option value="مدني">مدني</option>
+              <option value="تجاري">تجاري</option>
+              <option value="إداري">إداري</option>
+              <option value="عمالي">عمالي</option>
+              <option value="أحوال شخصية">أحوال شخصية</option>
+              <option value="جزائي">جزائي</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>المحكمة</label>
+            <select id="court">
+              <option value="محكمة التمييز" selected>محكمة التمييز</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>رقم الطعن (اختياري)</label>
+            <input id="appealNo" type="text" placeholder="مثال: 3220/2017" inputmode="numeric" />
+          </div>
+
+          <div class="field">
+            <label>رقم الدائرة (اختياري)</label>
+
+            <!-- ✅ المطلوب: الفرع يظهر تلقائيًا + أنت تختار رقم الدائرة فقط -->
+            <div class="inline-split">
+              <input id="circuitPrefix" type="text" readonly value="عام/" />
+              <select id="circuitNo">
+                <option value="" selected>— رقم الدائرة —</option>
+              </select>
+            </div>
+
+            <div class="hint">اختر الفرع أولًا، سيظهر تلقائيًا (مثال: إداري/)، ثم اختر رقم الدائرة فقط.</div>
+          </div>
+
+          <div class="field">
+            <label>تاريخ الجلسة (إدخال التاريخ فقط)</label>
+
+            <!-- ✅ كلمة جلسة ثابتة + أنت تدخل التاريخ فقط -->
+            <div class="inline-split">
+              <input class="fixed-chip" type="text" value="جلسة" readonly />
+              <input id="sessionDate" type="date" />
+            </div>
+
+            <div class="hint">سيُبنى النص تلقائيًا داخل بيانات الطعن/الحكم.</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>بيانات الطعن/الحكم (تلقائي — اختياري)</label>
+          <input id="metaPreview" type="text" readonly />
+          <div class="hint">الصيغة: (الفرع/رقم الدائرة) + (جلسة dd/mm/yyyy).</div>
+        </div>
+
+        <div class="field">
+          <label>نص الحكم/المبدأ (يمكن آلاف الكلمات)</label>
+          <textarea id="bodyText" rows="10" placeholder="الصق نص الحكم/المبدأ هنا..."></textarea>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn btn-primary">حفظ</button>
+          <button type="button" id="btnClearForm" class="btn btn-ghost">تفريغ الحقول</button>
+        </div>
+
+        <div id="saveStatus" class="note" aria-live="polite"></div>
+      </form>
+    </section>
+
+    <!-- بحث واسترجاع -->
+    <section class="card">
+      <div class="card-head">
+        <h2>بحث واسترجاع</h2>
+        <p class="muted">ابحث بالفرع/النوع/رقم الطعن/أي كلمة داخل النص.</p>
+      </div>
+
+      <div class="search-grid">
+        <div class="field">
+          <label>كلمة بحث</label>
+          <input id="q" type="text" placeholder="مثال: وكالة / بطلان / عقد..." />
+        </div>
+
+        <div class="field">
+          <label>فلترة بالنوع</label>
+          <select id="filterKind">
+            <option value="" selected>الكل</option>
+            <option value="مبدأ">مبدأ</option>
+            <option value="حكم">حكم</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>فلترة بالفرع</label>
+          <select id="filterBranch">
+            <option value="" selected>الكل</option>
+            <option value="عام">عام</option>
+            <option value="مدني">مدني</option>
+            <option value="تجاري">تجاري</option>
+            <option value="إداري">إداري</option>
+            <option value="عمالي">عمالي</option>
+            <option value="أحوال شخصية">أحوال شخصية</option>
+            <option value="جزائي">جزائي</option>
+          </select>
+        </div>
+
+        <div class="search-actions">
+          <button id="btnSearch" class="btn btn-primary" type="button">بحث</button>
+          <button id="btnResetSearch" class="btn btn-ghost" type="button">إلغاء الفلاتر</button>
+          <button id="btnWipe" class="btn btn-danger" type="button">مسح القاعدة (حذر)</button>
+        </div>
+      </div>
+
+      <div class="results-head">
+        <div class="muted" id="resultsInfo">—</div>
+      </div>
+
+      <div id="results" class="results"></div>
+    </section>
+
+    <!-- آخر المدخلات -->
+    <section class="card">
+      <div class="card-head">
+        <h2>آخر المدخلات</h2>
+        <p class="muted">هذه قائمة سريعة لتتأكد أن الحفظ يتم.</p>
+      </div>
+      <div id="latest" class="results"></div>
+    </section>
+  </main>
+
+  <div class="db-size-bar">
+    <div class="db-size-inner">
+      <span id="dbSizeInfo">جارٍ حساب الحجم...</span>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div>LegalMind © — تخزين محلي على جهازك فقط.</div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
