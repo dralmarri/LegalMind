@@ -2,7 +2,8 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
+const ROOT = __dirname;
 
 const MIME = {
   ".html": "text/html; charset=utf-8",
@@ -16,8 +17,23 @@ const MIME = {
 };
 
 const server = http.createServer((req, res) => {
-  let filePath = req.url === "/" ? "/index.html" : req.url.split("?")[0];
-  filePath = path.join(__dirname, filePath);
+  let urlPath;
+  try {
+    urlPath = decodeURIComponent(req.url.split("?")[0]);
+  } catch (_) {
+    res.writeHead(400);
+    res.end("Bad Request");
+    return;
+  }
+  if (urlPath === "/") urlPath = "/index.html";
+
+  // منع تجاوز المسار (path traversal)
+  const filePath = path.normalize(path.join(ROOT, urlPath));
+  if (filePath !== ROOT && !filePath.startsWith(ROOT + path.sep)) {
+    res.writeHead(403);
+    res.end("Forbidden");
+    return;
+  }
 
   const ext = path.extname(filePath);
   const contentType = MIME[ext] || "application/octet-stream";

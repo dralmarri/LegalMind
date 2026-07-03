@@ -1,17 +1,12 @@
 {
-  "name": "workspace",
-  "version": "1.0.0",
-  "main": "script.js",
+  "name": "legalmind",
+  "version": "2.0.0",
+  "description": "صوت العدالة — المرجع القانوني الكويتي: نصوص قانونية + أحكام + نماذج + مستشار ذكي موثق المصادر",
+  "main": "server.js",
   "scripts": {
-    "start": "serve -l 5000 -s .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
-  "keywords": [],
+  "keywords": ["legal", "kuwait", "rag", "law"],
   "author": "",
-  "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "@octokit/rest": "^22.0.1",
-    "serve": "^14.2.5"
-  }
+  "license": "ISC"
 }

@@ -3,175 +3,271 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>LegalMind — قاعدة الأحكام القضائية</title>
+  <title>صوت العدالة — المرجع القانوني الكويتي (LegalMind)</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚖️</text></svg>" />
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
   <header class="topbar">
     <div class="brand">
-      <div class="logo">LM</div>
+      <div class="logo">⚖</div>
       <div class="brand-text">
-        <h1>قاعدة الأحكام القضائية <span>(LegalMind)</span></h1>
-        <p>إدخال + بحث + تصدير/استيراد — تخزين محلي قوي عبر IndexedDB</p>
+        <h1>صوت العدالة <span>(LegalMind)</span></h1>
+        <p>المرجع القانوني الكويتي: نصوص قانونية + أحكام تمييز + نماذج + مستشار ذكي موثّق المصادر</p>
       </div>
     </div>
 
     <div class="toolbar">
-      <button id="btnExport" class="btn btn-primary" type="button">تصدير</button>
-      <button id="btnImport" class="btn btn-ghost" type="button">استيراد</button>
-      <input id="importFile" type="file" accept="application/json" hidden />
       <button id="btnTheme" class="btn btn-ghost" type="button">تبديل الثيم</button>
     </div>
   </header>
 
+  <nav class="tabs">
+    <button class="tab active" data-tab="advisor" type="button">⚖️ المستشار القانوني</button>
+    <button class="tab" data-tab="library" type="button">📚 المكتبة والبحث</button>
+    <button class="tab" data-tab="add" type="button">➕ إضافة مصدر</button>
+    <button class="tab" data-tab="settings" type="button">⚙️ الإعدادات</button>
+  </nav>
+
   <main class="container">
-    <!-- إدخال جديد -->
-    <section class="card">
-      <div class="card-head">
-        <h2>إدخال جديد</h2>
-        <p class="muted">املأ ما يتوفر لديك — الحقول غير إجبارية.</p>
+
+    <!-- ═══════════ المستشار القانوني ═══════════ -->
+    <section id="panel-advisor" class="panel active">
+      <div class="card">
+        <div class="card-head">
+          <h2>المستشار القانوني</h2>
+          <p class="muted">اسأل أي سؤال — يجيب المستشار حصرياً من مصادرك المرفوعة، موثّقاً كل معلومة بمصدرها.</p>
+        </div>
+
+        <div class="field">
+          <label>سؤالك القانوني</label>
+          <textarea id="qaQuestion" rows="3" placeholder="مثال: ما شروط استحقاق التعويض عن الفصل التعسفي وفق قانون العمل الكويتي؟ وما المستقر عليه في قضاء التمييز؟"></textarea>
+        </div>
+
+        <div class="qa-controls">
+          <div class="field">
+            <label>حصر البحث بفرع (اختياري)</label>
+            <select id="qaBranch"><option value="" selected>كل الفروع</option></select>
+          </div>
+          <div class="qa-actions">
+            <button id="btnAsk" class="btn btn-primary" type="button">اسأل المستشار</button>
+            <button id="btnStopAsk" class="btn btn-danger" type="button" hidden>إيقاف</button>
+          </div>
+        </div>
+
+        <div id="qaStatus" class="note" aria-live="polite"></div>
+        <article id="qaAnswer" class="answer" hidden></article>
+        <div id="qaVerification" class="verification" hidden></div>
+        <div class="results-head" id="qaSourcesHead" hidden><h3 class="sources-title">المصادر المعتمد عليها</h3></div>
+        <div id="qaSources" class="results"></div>
       </div>
-
-      <form id="entryForm" class="form">
-        <div class="grid">
-          <div class="field">
-            <label>نوع الإدخال</label>
-            <select id="entryKind">
-              <option value="مبدأ" selected>مبدأ</option>
-              <option value="حكم">حكم</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label>الفرع</label>
-            <select id="branch">
-              <option value="عام" selected>عام</option>
-              <option value="مدني">مدني</option>
-              <option value="تجاري">تجاري</option>
-              <option value="إداري">إداري</option>
-              <option value="عمالي">عمالي</option>
-              <option value="أحوال شخصية">أحوال شخصية</option>
-              <option value="جزائي">جزائي</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label>المحكمة</label>
-            <select id="court">
-              <option value="محكمة التمييز" selected>محكمة التمييز</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label>رقم الطعن (اختياري)</label>
-            <input id="appealNo" type="text" placeholder="مثال: 3220/2017" inputmode="numeric" />
-          </div>
-
-          <div class="field">
-            <label>رقم الدائرة (اختياري)</label>
-
-            <!-- ✅ المطلوب: الفرع يظهر تلقائيًا + أنت تختار رقم الدائرة فقط -->
-            <div class="inline-split">
-              <input id="circuitPrefix" type="text" readonly value="عام/" />
-              <select id="circuitNo">
-                <option value="" selected>— رقم الدائرة —</option>
-              </select>
-            </div>
-
-            <div class="hint">اختر الفرع أولًا، سيظهر تلقائيًا (مثال: إداري/)، ثم اختر رقم الدائرة فقط.</div>
-          </div>
-
-          <div class="field">
-            <label>تاريخ الجلسة (إدخال التاريخ فقط)</label>
-
-            <!-- ✅ كلمة جلسة ثابتة + أنت تدخل التاريخ فقط -->
-            <div class="inline-split">
-              <input class="fixed-chip" type="text" value="جلسة" readonly />
-              <input id="sessionDate" type="date" />
-            </div>
-
-            <div class="hint">سيُبنى النص تلقائيًا داخل بيانات الطعن/الحكم.</div>
-          </div>
-        </div>
-
-        <div class="field">
-          <label>بيانات الطعن/الحكم (تلقائي — اختياري)</label>
-          <input id="metaPreview" type="text" readonly />
-          <div class="hint">الصيغة: (الفرع/رقم الدائرة) + (جلسة dd/mm/yyyy).</div>
-        </div>
-
-        <div class="field">
-          <label>نص الحكم/المبدأ (يمكن آلاف الكلمات)</label>
-          <textarea id="bodyText" rows="10" placeholder="الصق نص الحكم/المبدأ هنا..."></textarea>
-        </div>
-
-        <div class="actions">
-          <button type="submit" class="btn btn-primary">حفظ</button>
-          <button type="button" id="btnClearForm" class="btn btn-ghost">تفريغ الحقول</button>
-        </div>
-
-        <div id="saveStatus" class="note" aria-live="polite"></div>
-      </form>
     </section>
 
-    <!-- بحث واسترجاع -->
-    <section class="card">
-      <div class="card-head">
-        <h2>بحث واسترجاع</h2>
-        <p class="muted">ابحث بالفرع/النوع/رقم الطعن/أي كلمة داخل النص.</p>
-      </div>
-
-      <div class="search-grid">
-        <div class="field">
-          <label>كلمة بحث</label>
-          <input id="q" type="text" placeholder="مثال: وكالة / بطلان / عقد..." />
+    <!-- ═══════════ المكتبة والبحث ═══════════ -->
+    <section id="panel-library" class="panel">
+      <div class="card">
+        <div class="card-head">
+          <h2>المكتبة والبحث</h2>
+          <p class="muted">كل مصادرك: نصوص قانونية مفصّلة بالمواد، أحكام مربوطة بالنصوص والمواضيع، ونماذج عملية.</p>
         </div>
 
-        <div class="field">
-          <label>فلترة بالنوع</label>
-          <select id="filterKind">
-            <option value="" selected>الكل</option>
-            <option value="مبدأ">مبدأ</option>
-            <option value="حكم">حكم</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>فلترة بالفرع</label>
-          <select id="filterBranch">
-            <option value="" selected>الكل</option>
-            <option value="عام">عام</option>
-            <option value="مدني">مدني</option>
-            <option value="تجاري">تجاري</option>
-            <option value="إداري">إداري</option>
-            <option value="عمالي">عمالي</option>
-            <option value="أحوال شخصية">أحوال شخصية</option>
-            <option value="جزائي">جزائي</option>
-          </select>
+        <div class="search-grid-4">
+          <div class="field">
+            <label>كلمة بحث</label>
+            <input id="q" type="text" placeholder="مثال: فصل تعسفي / المادة 227 / شيك بدون رصيد..." />
+          </div>
+          <div class="field">
+            <label>نوع المصدر</label>
+            <select id="filterType">
+              <option value="" selected>الكل</option>
+              <option value="ruling">أحكام ومبادئ</option>
+              <option value="law">نصوص قانونية</option>
+              <option value="template">نماذج قانونية</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>الفرع</label>
+            <select id="filterBranch"><option value="" selected>الكل</option></select>
+          </div>
+          <div class="field">
+            <label>الموضوع القانوني</label>
+            <select id="filterTopic"><option value="" selected>الكل</option></select>
+          </div>
         </div>
 
         <div class="search-actions">
           <button id="btnSearch" class="btn btn-primary" type="button">بحث</button>
           <button id="btnResetSearch" class="btn btn-ghost" type="button">إلغاء الفلاتر</button>
-          <button id="btnWipe" class="btn btn-danger" type="button">مسح القاعدة (حذر)</button>
         </div>
-      </div>
 
-      <div class="results-head">
-        <div class="muted" id="resultsInfo">—</div>
+        <div class="results-head">
+          <div class="muted" id="resultsInfo">—</div>
+        </div>
+        <div id="results" class="results"></div>
       </div>
-
-      <div id="results" class="results"></div>
     </section>
 
-    <!-- آخر المدخلات -->
-    <section class="card">
-      <div class="card-head">
-        <h2>آخر المدخلات</h2>
-        <p class="muted">هذه قائمة سريعة لتتأكد أن الحفظ يتم.</p>
+    <!-- ═══════════ إضافة مصدر ═══════════ -->
+    <section id="panel-add" class="panel">
+      <div class="card">
+        <div class="card-head">
+          <h2 id="addTitle">إضافة مصدر جديد</h2>
+          <p class="muted">حكم قضائي، نص قانوني كامل (يُفصَّل تلقائياً إلى مواد)، أو نموذج قانوني متبع في المحاكم الكويتية.</p>
+        </div>
+
+        <form id="entryForm" class="form">
+          <div class="grid">
+            <div class="field">
+              <label>نوع المصدر</label>
+              <select id="srcType">
+                <option value="ruling" selected>حكم / مبدأ قضائي</option>
+                <option value="law">نص قانوني (قانون / مرسوم / لائحة)</option>
+                <option value="template">نموذج قانوني (صحيفة / لائحة / عقد...)</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>الفرع القانوني</label>
+              <select id="branch"></select>
+            </div>
+
+            <!-- حقول الحكم -->
+            <div class="field ruling-only">
+              <label>نوع الإدخال</label>
+              <select id="entryKind">
+                <option value="مبدأ" selected>مبدأ</option>
+                <option value="حكم">حكم</option>
+              </select>
+            </div>
+
+            <div class="field ruling-only">
+              <label>المحكمة</label>
+              <select id="court"></select>
+            </div>
+
+            <div class="field ruling-only">
+              <label>رقم الطعن (اختياري)</label>
+              <input id="appealNo" type="text" placeholder="مثال: 3220/2017" />
+            </div>
+
+            <div class="field ruling-only">
+              <label>رقم الدائرة (اختياري)</label>
+              <div class="inline-split">
+                <input id="circuitPrefix" type="text" readonly value="عام/" />
+                <select id="circuitNo"></select>
+              </div>
+            </div>
+
+            <div class="field ruling-only">
+              <label>تاريخ الجلسة</label>
+              <div class="inline-split">
+                <input class="fixed-chip" type="text" value="جلسة" readonly />
+                <input id="sessionDate" type="date" />
+              </div>
+            </div>
+
+            <!-- حقول النص القانوني -->
+            <div class="field law-only" hidden>
+              <label>اسم القانون / التشريع</label>
+              <input id="lawTitle" type="text" placeholder="مثال: قانون العمل في القطاع الأهلي رقم 6 لسنة 2010" list="kuwaitLawsList" />
+              <datalist id="kuwaitLawsList"></datalist>
+            </div>
+
+            <!-- حقول النموذج -->
+            <div class="field template-only" hidden>
+              <label>اسم النموذج</label>
+              <input id="templateTitle" type="text" placeholder="مثال: صحيفة دعوى مطالبة بمستحقات عمالية" />
+            </div>
+
+            <div class="field template-only" hidden>
+              <label>تصنيف النموذج (حسب المتبع في المحاكم الكويتية)</label>
+              <select id="templateCategory"></select>
+            </div>
+          </div>
+
+          <div class="field ruling-only">
+            <label>بيانات الطعن/الحكم (تُبنى تلقائياً)</label>
+            <input id="metaPreview" type="text" readonly />
+          </div>
+
+          <div class="field">
+            <label>المواضيع القانونية <button type="button" id="btnSuggestTopics" class="btn btn-mini">✨ اقتراح تلقائي من النص</button></label>
+            <div id="topicChips" class="chips"></div>
+            <div class="inline-split">
+              <input id="topicInput" type="text" placeholder="أضف موضوعاً واضغط Enter..." list="topicsList" />
+            </div>
+            <datalist id="topicsList"></datalist>
+          </div>
+
+          <div class="field">
+            <label id="bodyLabel">نص الحكم/المبدأ (يمكن آلاف الكلمات)</label>
+            <textarea id="bodyText" rows="12" placeholder="الصق النص الكامل هنا..."></textarea>
+          </div>
+
+          <div id="extractPreview" class="extract-preview" hidden></div>
+
+          <div class="actions">
+            <button type="submit" class="btn btn-primary" id="btnSave">حفظ</button>
+            <button type="button" id="btnCancelEdit" class="btn btn-ghost" hidden>إلغاء التعديل</button>
+            <button type="button" id="btnClearForm" class="btn btn-ghost">تفريغ الحقول</button>
+          </div>
+
+          <div id="saveStatus" class="note" aria-live="polite"></div>
+        </form>
       </div>
-      <div id="latest" class="results"></div>
+    </section>
+
+    <!-- ═══════════ الإعدادات ═══════════ -->
+    <section id="panel-settings" class="panel">
+      <div class="card">
+        <div class="card-head">
+          <h2>المستشار الذكي (Claude API)</h2>
+          <p class="muted">مفتاحك يُحفظ محلياً على جهازك فقط ولا يُرسل إلا إلى خوادم Anthropic مباشرة.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label>مفتاح API (من console.anthropic.com)</label>
+            <div class="inline-split">
+              <input id="apiKey" type="password" placeholder="sk-ant-..." autocomplete="off" />
+              <button type="button" id="btnShowKey" class="btn btn-ghost key-toggle">👁</button>
+            </div>
+          </div>
+          <div class="field">
+            <label>النموذج</label>
+            <select id="aiModel"></select>
+          </div>
+          <div class="field">
+            <label>عدد المقاطع المسترجعة لكل سؤال</label>
+            <select id="topK">
+              <option value="8">8</option>
+              <option value="12" selected>12 (موصى به)</option>
+              <option value="16">16</option>
+              <option value="24">24</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="btnSaveSettings" class="btn btn-primary" type="button">حفظ الإعدادات</button>
+        </div>
+        <div id="settingsStatus" class="note" aria-live="polite"></div>
+        <div class="note">بدون مفتاح API يعمل المستشار في وضع "الاسترجاع الاستنادي": يعرض لك أدق المقاطع من مصادرك دون توليد نص — دقة مضمونة 100% لأنها نصوصك الأصلية حرفياً.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2>النسخ الاحتياطي وإدارة القاعدة</h2>
+          <p class="muted">بياناتك محفوظة محلياً في متصفحك (IndexedDB) — صدّر نسخة احتياطية دورياً.</p>
+        </div>
+        <div class="actions" style="justify-content:flex-start">
+          <button id="btnExport" class="btn btn-primary" type="button">تصدير المكتبة (JSON)</button>
+          <button id="btnImport" class="btn btn-ghost" type="button">استيراد</button>
+          <input id="importFile" type="file" accept="application/json" hidden />
+          <button id="btnWipe" class="btn btn-danger" type="button">مسح القاعدة بالكامل (حذر)</button>
+        </div>
+      </div>
     </section>
   </main>
 
@@ -182,9 +278,14 @@
   </div>
 
   <footer class="footer">
-    <div>LegalMind © — تخزين محلي على جهازك فقط.</div>
+    <div>صوت العدالة (LegalMind) © — تخزين محلي على جهازك فقط · soutaladalah.com</div>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="js/arabic.js"></script>
+  <script src="js/extract.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/ai.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>
