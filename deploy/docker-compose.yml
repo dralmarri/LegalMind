@@ -8,8 +8,8 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       TZ: ${TZ}
-    ports:
-      - "127.0.0.1:${POSTGRES_PORT}:5432"
+    expose:
+      - "5432"
     volumes:
       - ${LEGALMIND_DATA_DIR}/postgres:/var/lib/postgresql/data
       - ./postgres/init:/docker-entrypoint-initdb.d:ro
