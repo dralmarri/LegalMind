@@ -1,11 +1,11 @@
 # حالة استئناف المشروع
 
 - `project_status`: active
-- `last_completed_batch`: BATCH-20260713-PS-ONTOLOGY-0002
+- `last_completed_batch`: BATCH-20260713-ENGINE-0001
 - `current_branch`: أحوال شخصية
-- `current_topic`: الأنطولوجيا ومحرك الاستدلال
-- `current_classification_title`: LegalMind Personal Status Ontology v2.0
-- `last_saved_object`: personal-status.reasoning-rules.yaml
+- `current_topic`: محرك الإدخال الآلي
+- `current_classification_title`: LegalMind Automatic Ingestion Engine v1
+- `last_saved_object`: deploy/test_ingestion_engine.sh
 - `judicial_principles_indexed`: 23
 - `synthesized_rules`: 6
 - `legislation_sources_registered`: 4
@@ -13,17 +13,16 @@
 - `ontology_version`: 2.0
 - `graph_schema`: knowledge-system/ontology/personal-status.graph.schema.json
 - `reasoning_rules`: knowledge-system/ontology/personal-status.reasoning-rules.yaml
-- `pipeline_status`: infrastructure_running_knowledge_layer_v2_ready
+- `pipeline_status`: automatic_ingestion_engine_ready_for_vps_install
+- `engine_script`: engine/legalmind_engine.py
+- `engine_service`: deploy/legalmind-ingest.service
+- `engine_installer`: deploy/install_ingestion_engine.sh
+- `engine_test`: deploy/test_ingestion_engine.sh
+- `inbox_path`: /opt/legalmind-ingest/inbox
+- `archive_path`: /opt/legalmind-ingest/archive
+- `failed_path`: /opt/legalmind-ingest/failed
+- `postgres_host_port`: 55432
+- `qdrant_collection`: legalmind_objects_v1
 - `pending_verification_items`: 5
-- `registered_laws`:
-  - KW-51-1984
-  - KW-124-2019
-  - KW-12-2015
-  - KW-53-2026
-- `pipeline_script`: knowledge-system/scripts/ingest_legislation.py
-- `validator_script`: knowledge-system/scripts/validate_knowledge.py
-- `legislation_catalog`: knowledge-system/data/personal-status/legislation/LAW_CATALOG.md
-- `relation_map`: knowledge-system/data/personal-status/legislation/RELATION_MAP_PS_JURISDICTION.json
-- `next_action`: سحب آخر تحديث على الخادم، تشغيل validate_knowledge.py، ثم تنفيذ محول يستورد كائنات المواد والمبادئ والعلاقات إلى PostgreSQL وفق graph schema ويطبق reasoning rules على مجموعة الاختصاص الأولى.
-- `last_git_commit`: 50a1bcc3239b6aef0d1609a87687ee0d3a452243
+- `next_action`: سحب آخر تحديث على VPS، إعادة تشغيل Docker Compose، تثبيت خدمة ingestion، ثم تشغيل اختبار end-to-end.
 - `updated_at`: 2026-07-13
