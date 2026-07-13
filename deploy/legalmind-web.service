@@ -1,0 +1,18 @@
+[Unit]
+Description=LegalMind 3 Next.js Web Application
+After=network.target legalmind-admin.service
+Wants=legalmind-admin.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/LegalMind/web
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/npm run start
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
