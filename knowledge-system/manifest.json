@@ -1,0 +1,1 @@
+{"project":"LegalMind Kuwait Knowledge System","version":"1.0.0","created_at":"2026-07-13","persistence_rule":"No batch is complete until branch, index, verification queue, changelog, resume state, and backup/commit are updated."}
