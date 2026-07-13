@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://legalmind.local/schemas/personal-status.graph.schema.json",
+  "title": "LegalMind Personal Status Knowledge Graph",
+  "type": "object",
+  "required": ["nodes", "edges", "metadata"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": ["ontology_version", "branch", "batch_id"],
+      "properties": {
+        "ontology_version": {"const": "2.0"},
+        "branch": {"const": "personal-status"},
+        "batch_id": {"type": "string"},
+        "generated_at": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "nodes": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/node"}
+    },
+    "edges": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/edge"}
+    }
+  },
+  "$defs": {
+    "node": {
+      "type": "object",
+      "required": ["id", "type", "title", "branch", "verification_status"],
+      "properties": {
+        "id": {"type": "string", "minLength": 3},
+        "type": {
+          "enum": [
+            "legislation", "legislation_article", "full_judgment", "judicial_principle",
+            "synthesized_rule", "legal_concept", "legal_test", "exception", "condition",
+            "legal_effect", "burden_of_proof", "temporal_rule", "procedure",
+            "jurisdiction_rule", "admissibility_rule", "deadline", "fee", "legal_defense",
+            "request", "remedy", "evidence_requirement", "judicial_template",
+            "legal_memorandum", "drafting_clause", "document_requirement",
+            "legal_person_role", "legal_object", "legal_event", "legal_action",
+            "factual_element", "verification_issue", "reasoning_trace", "source_conflict"
+          ]
+        },
+        "title": {"type": "string"},
+        "branch": {"const": "أحوال شخصية"},
+        "topic": {"type": ["string", "null"]},
+        "classification_title": {"type": ["string", "null"]},
+        "micro_issue": {"type": ["string", "null"]},
+        "primary_classification": {"type": ["string", "null"]},
+        "secondary_classifications": {"type": "array", "items": {"type": "string"}},
+        "semantic_tags": {"type": "array", "items": {"type": "string"}},
+        "valid_from": {"type": ["string", "null"]},
+        "valid_to": {"type": ["string", "null"]},
+        "temporal_status": {"type": ["string", "null"]},
+        "verification_status": {
+          "enum": [
+            "source_verified", "operationally_accepted", "verified", "machine_pending_human",
+            "needs_source_review", "requires_temporal_reassessment", "conflict_detected",
+            "historical_only", "superseded_in_part", "superseded", "repealed", "incomplete"
+          ]
+        },
+        "source_reference": {"type": ["string", "null"]},
+        "payload": {"type": "object"}
+      },
+      "additionalProperties": true
+    },
+    "edge": {
+      "type": "object",
+      "required": ["id", "source", "relation", "target", "verification_status"],
+      "properties": {
+        "id": {"type": "string"},
+        "source": {"type": "string"},
+        "target": {"type": "string"},
+        "relation": {
+          "enum": [
+            "contains_article", "interprets", "applies", "cites", "derived_from", "supports",
+            "limits", "creates_exception_to", "distinguishes", "conflicts_with", "supersedes",
+            "repeals", "amends", "specializes", "procedural_for", "implements", "requires_fact",
+            "triggered_by", "establishes", "negates", "results_in", "bars", "preserves",
+            "transfers_right_to", "terminates_right_of", "filed_before", "requires_pre_step",
+            "requires_document", "subject_to_deadline", "subject_to_fee", "available_to_role",
+            "used_in", "supports_request", "supports_defense", "drafted_from",
+            "has_primary_classification", "has_secondary_classification", "has_micro_issue",
+            "has_semantic_tag", "excludes", "related_to"
+          ]
+        },
+        "valid_from": {"type": ["string", "null"]},
+        "valid_to": {"type": ["string", "null"]},
+        "scope": {"type": ["string", "null"]},
+        "verification_status": {"type": "string"},
+        "supported_by": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": true
+    }
+  }
+}
