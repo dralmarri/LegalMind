@@ -1,0 +1,40 @@
+version: 1
+updated_at: 2026-07-13
+sources:
+  - law_id: KW-51-1984
+    title: قانون رقم 51 لسنة 1984 في شأن الأحوال الشخصية
+    branch: personal-status
+    legal_function: substantive
+    applicability: السني ومن يحال إليه وفق قواعد التطبيق
+    source_status: uploaded_docx
+    verification_status: operationally_accepted
+    expected_articles: 347
+  - law_id: KW-124-2019
+    title: قانون رقم 124 لسنة 2019 بإصدار قانون الأحوال الشخصية الجعفرية
+    branch: personal-status
+    legal_function: substantive
+    applicability: الجعفري وفق مواد الإصدار وقواعد تعيين المذهب
+    source_status: uploaded_docx
+    verification_status: operationally_accepted
+    expected_articles: 510
+  - law_id: KW-12-2015
+    title: القانون رقم 12 لسنة 2015 بإصدار قانون محكمة الأسرة
+    branch: personal-status
+    legal_function: procedural
+    applicability: تنظيم محكمة الأسرة وإجراءاتها واختصاصها
+    source_status: uploaded_docx
+    verification_status: operationally_accepted
+    expected_attached_law_articles: 17
+  - law_id: KW-53-2026
+    title: المرسوم بقانون رقم 53 لسنة 2026 بتنظيم إجراءات دعاوى النسب وتصحيح الأسماء
+    branch: personal-status
+    legal_function: special_procedural
+    applicability: النسب المباشر وغير المباشر وتصحيح وتغيير الأسماء والألقاب
+    source_status: uploaded_docx
+    verification_status: operationally_accepted
+    expected_attached_law_articles: 20
+rules:
+  immutable_source: true
+  knowledge_layer_separate: true
+  extracted_text_is_not_officially_verified: true
+  operational_acceptance_does_not_equal_human_verification: true
