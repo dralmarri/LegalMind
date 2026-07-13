@@ -1,0 +1,10 @@
+[Unit]
+Description=LegalMind daily backup
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/opt/LegalMind/deploy/backup.sh
+User=root
+Group=root
