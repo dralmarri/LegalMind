@@ -1,0 +1,69 @@
+{
+  "batch_id": "BATCH-20260713-PS-LEG-0001",
+  "status": "operationally_accepted",
+  "relations": [
+    {
+      "from": "LEG-KW-51-1984-ART-345",
+      "relation": "interpreted_by",
+      "to": [
+        "JUR-PS-JURISDICTION-00001",
+        "JUR-PS-JURISDICTION-00002",
+        "JUR-PS-JURISDICTION-00003",
+        "JUR-PS-JURISDICTION-00007",
+        "JUR-PS-JURISDICTION-00010",
+        "JUR-PS-JURISDICTION-00012",
+        "JUR-PS-JURISDICTION-00014",
+        "JUR-PS-JURISDICTION-00015",
+        "JUR-PS-JURISDICTION-00016",
+        "JUR-PS-JURISDICTION-00019"
+      ]
+    },
+    {
+      "from": "LEG-KW-51-1984-ART-338",
+      "relation": "cited_or_applied_by",
+      "to": ["JUR-PS-JURISDICTION-00005", "JUR-PS-JURISDICTION-00006"]
+    },
+    {
+      "from": "LEG-KW-51-1984-ART-73",
+      "relation": "cited_or_applied_by",
+      "to": ["JUR-PS-JURISDICTION-00023"]
+    },
+    {
+      "from": "LEG-KW-12-2015-ART-3",
+      "relation": "procedural_successor_context_for",
+      "to": ["RULE-PS-JURISDICTION-00001", "RULE-PS-JURISDICTION-00002"]
+    },
+    {
+      "from": "LEG-KW-12-2015-ART-5",
+      "relation": "supersedes_or_specializes_procedure_for",
+      "to": ["JUR-PS-JURISDICTION-00021", "JUR-PS-JURISDICTION-00022"]
+    },
+    {
+      "from": "LEG-KW-53-2026-ART-4",
+      "relation": "specializes_current_forum_for",
+      "to": ["JUR-PS-JURISDICTION-00005", "JUR-PS-JURISDICTION-00006"]
+    },
+    {
+      "from": "LEG-KW-53-2026-ART-8",
+      "relation": "adds_mandatory_precondition_to",
+      "to": ["JUR-PS-JURISDICTION-00005", "JUR-PS-JURISDICTION-00006"]
+    },
+    {
+      "from": "LEG-KW-124-2019-ISSUANCE-ART-2",
+      "relation": "defines_jafari_jurisdiction_and_procedure",
+      "to": ["JUR-PS-JURISDICTION-00003", "JUR-PS-JURISDICTION-00019"]
+    }
+  ],
+  "reassessment_flags": [
+    {
+      "objects": ["JUR-PS-JURISDICTION-00005", "JUR-PS-JURISDICTION-00006"],
+      "flag": "requires_post_2026_reassessment",
+      "reason": "قانون 53/2026 أنشأ لجنة دائمة وحدد اختصاصها وإجراءات سابقة أو بديلة عن القضاء في النسب وتصحيح الأسماء."
+    },
+    {
+      "objects": ["JUR-PS-JURISDICTION-00021", "JUR-PS-JURISDICTION-00022"],
+      "flag": "requires_post_2015_reassessment",
+      "reason": "قانون محكمة الأسرة أدخل تنظيمًا خاصًا لمسكن الحضانة والجوازات والاختصاص المحلي والأوامر الوقتية."
+    }
+  ]
+}
