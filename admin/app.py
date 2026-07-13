@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Annotated
 
 import psycopg
-from fastapi import Depends, FastAPI, File, Form, HTTPException, Request, UploadFile, status
+from fastapi import Depends, FastAPI, File, Form, HTTPException, UploadFile, status
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.staticfiles import StaticFiles
@@ -110,9 +110,9 @@ async def upload(
     branch: Annotated[str, Form(...)],
     topic: Annotated[str, Form(...)],
     classification_title: Annotated[str, Form(...)],
-    micro_issue: Annotated[str, Form("")],
-    court_level: Annotated[str, Form("")],
-    circuit: Annotated[str, Form("")],
+    micro_issue: Annotated[str, Form()] = "",
+    court_level: Annotated[str, Form()] = "",
+    circuit: Annotated[str, Form()] = "",
     _: str = Depends(require_auth),
 ) -> JSONResponse:
     valid_source_types = {
