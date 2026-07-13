@@ -1,0 +1,21 @@
+[Unit]
+Description=LegalMind automatic knowledge ingestion engine
+After=docker.service network-online.target
+Wants=network-online.target
+Requires=docker.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/LegalMind
+EnvironmentFile=/opt/LegalMind/deploy/.env
+Environment=LEGALMIND_INGEST_ROOT=/opt/legalmind-ingest
+Environment=QDRANT_URL=http://127.0.0.1:6333
+ExecStart=/opt/LegalMind/.venv/bin/python /opt/LegalMind/engine/legalmind_engine.py watch --interval 10
+Restart=always
+RestartSec=5
+StandardOutput=append:/var/log/legalmind-ingest.log
+StandardError=append:/var/log/legalmind-ingest-error.log
+
+[Install]
+WantedBy=multi-user.target
