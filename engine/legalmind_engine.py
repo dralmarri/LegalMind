@@ -118,11 +118,24 @@ def load_metadata(path: Path) -> dict:
 
 def classify(path: Path, text: str, metadata: dict) -> tuple[str, list[dict]]:
     source_type = metadata.get("source_type")
-    if source_type == "legislation" or ARTICLE_RE.search(text):
-        return "legislation", split_articles(text)
-    if source_type in {"judicial_principle", "principles"}:
+    object_type = metadata.get("object_type")
+
+    if source_type == "legislation" or (not source_type and ARTICLE_RE.search(text)):
+        articles = split_articles(text)
+        if not articles:
+            return "legislation", [{"local_id": "DOC-1", "title": metadata.get("title", path.stem), "text": text}]
+        return "legislation", articles
+
+    if source_type in {"judicial_principles_collection", "single_judicial_principle", "judicial_principle", "principles"}:
         return "judicial_principle", split_principles(text)
-    return metadata.get("object_type", "legal_document"), [{"local_id": "DOC-1", "title": metadata.get("title", path.stem), "text": text}]
+
+    if source_type == "full_judgment":
+        return "full_judgment", [{"local_id": "JUD-1", "title": metadata.get("title", path.stem), "text": text}]
+
+    if source_type in {"judicial_template", "legal_memorandum"}:
+        return source_type, [{"local_id": "TPL-1", "title": metadata.get("title", path.stem), "text": text}]
+
+    return object_type or "legal_document", [{"local_id": "DOC-1", "title": metadata.get("title", path.stem), "text": text}]
 
 
 def qdrant_request(method: str, path: str, payload: dict | None = None) -> dict:
@@ -157,7 +170,7 @@ def ingest_file(path: Path, archive_root: Path, failed_root: Path) -> dict:
     object_type, chunks = classify(path, text, metadata)
     branch = metadata.get("branch", "أحوال شخصية")
     topic = metadata.get("topic")
-    subtopic = metadata.get("subtopic")
+    subtopic = metadata.get("subtopic") or metadata.get("classification_title")
     micro_issue = metadata.get("micro_issue")
     title = metadata.get("title", path.stem)
     source_key = metadata.get("source_key", f"SRC-{digest[:20].upper()}")
@@ -184,7 +197,15 @@ def ingest_file(path: Path, archive_root: Path, failed_root: Path) -> dict:
                 )
                 points: list[dict] = []
                 for chunk in chunks:
-                    object_id = metadata.get("id_prefix", f"LEG-{law_id}" if object_type == "legislation" else f"OBJ-{slug(branch)}-{slug(topic or title)}") + "-" + chunk["local_id"]
+                    default_prefixes = {
+                        "legislation": f"LEG-{law_id}",
+                        "judicial_principle": f"JUR-{slug(branch)}-{slug(topic or title)}",
+                        "full_judgment": f"JUD-{slug(branch)}-{slug(topic or title)}",
+                        "judicial_template": f"TPL-{slug(branch)}-{slug(topic or title)}",
+                        "legal_memorandum": f"MEMO-{slug(branch)}-{slug(topic or title)}",
+                    }
+                    prefix = metadata.get("id_prefix", default_prefixes.get(object_type, f"OBJ-{slug(branch)}-{slug(topic or title)}"))
+                    object_id = prefix + "-" + chunk["local_id"]
                     obj_metadata = {**metadata, **{k: v for k, v in chunk.items() if k not in {"text", "title", "local_id"}}, "batch_id": batch_id, "sha256": digest}
                     cur.execute(
                         """INSERT INTO knowledge_objects(id,object_type,branch,topic,subtopic,micro_issue,title,original_text,normalized_text,source_key,verification_status,metadata)
@@ -195,10 +216,10 @@ def ingest_file(path: Path, archive_root: Path, failed_root: Path) -> dict:
                     )
                     inserted_ids.append(object_id)
                     point_id = int.from_bytes(hashlib.sha256(object_id.encode()).digest()[:8], "big") & ((1 << 63) - 1)
-                    points.append({"id": point_id, "vector": hash_embedding(chunk["text"]), "payload": {"object_id": object_id, "object_type": object_type, "branch": branch, "topic": topic, "title": chunk["title"], "source_key": source_key}})
+                    points.append({"id": point_id, "vector": hash_embedding(chunk["text"]), "payload": {"object_id": object_id, "object_type": object_type, "branch": branch, "topic": topic, "subtopic": subtopic, "micro_issue": micro_issue, "title": chunk["title"], "source_key": source_key}})
                 cur.execute(
                     """UPDATE ingestion_batches SET status='completed',object_count=%s,report=%s,completed_at=now() WHERE batch_id=%s""",
-                    (len(inserted_ids), Jsonb({"file": path.name, "sha256": digest, "objects": inserted_ids}), batch_id),
+                    (len(inserted_ids), Jsonb({"file": path.name, "sha256": digest, "objects": inserted_ids, "source_type": source_type}), batch_id),
                 )
             conn.commit()
         if points:
@@ -209,7 +230,7 @@ def ingest_file(path: Path, archive_root: Path, failed_root: Path) -> dict:
         sidecar = path.with_suffix(path.suffix + ".json")
         if sidecar.exists():
             shutil.move(str(sidecar), archive_root / f"{batch_id}__{sidecar.name}")
-        return {"batch_id": batch_id, "source_key": source_key, "status": "completed", "object_count": len(inserted_ids), "objects": inserted_ids}
+        return {"batch_id": batch_id, "source_key": source_key, "status": "completed", "object_type": object_type, "object_count": len(inserted_ids), "objects": inserted_ids}
     except Exception as exc:
         failed_root.mkdir(parents=True, exist_ok=True)
         if path.exists():
