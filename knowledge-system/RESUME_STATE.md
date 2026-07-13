@@ -1,16 +1,24 @@
 # حالة استئناف المشروع
 
 - `project_status`: active
-- `last_completed_batch`: BATCH-20260713-PS-0001
+- `last_completed_batch`: BATCH-20260713-PS-LEG-0001
 - `current_branch`: أحوال شخصية
-- `current_topic`: الاختصاص
-- `current_classification_title`: اختصاص دائرة الأحوال الشخصية
-- `last_saved_object`: JUR-PS-JURISDICTION-00023
-- `total_objects_indexed`: 23
+- `current_topic`: التشريعات والبنية الإجرائية
+- `current_classification_title`: العمود الفقري التشريعي لفرع الأحوال الشخصية
+- `last_saved_object`: RELATION_MAP_PS_JURISDICTION
+- `judicial_principles_indexed`: 23
 - `synthesized_rules`: 6
+- `legislation_sources_registered`: 4
+- `pipeline_status`: executable_v1
 - `pending_verification_items`: 4
-- `source_file`: knowledge-system/sources/personal-status/اختصاص-دائرة-الأحوال-الشخصية-source.md
-- `processed_file`: knowledge-system/data/personal-status/PS-JURISDICTION-0001.md
-- `last_git_commit`: 9ffdab84ccda2f71e821f630fd56a2fa7f39ac87
-- `next_action`: رفع المجموعة التالية من ملف الأحوال الشخصية، أو رفع النصوص الرسمية للمواد 338 و345 و73 من القانون 51/1984 والمادة 940 مدني لربطها بالمبادئ الحالية.
+- `registered_laws`:
+  - KW-51-1984
+  - KW-124-2019
+  - KW-12-2015
+  - KW-53-2026
+- `pipeline_script`: knowledge-system/scripts/ingest_legislation.py
+- `legislation_catalog`: knowledge-system/data/personal-status/legislation/LAW_CATALOG.md
+- `relation_map`: knowledge-system/data/personal-status/legislation/RELATION_MAP_PS_JURISDICTION.json
+- `next_action`: تشغيل سكربت الإدخال على ملفات DOCX محليًا أو عبر GitHub Actions لإنتاج كائن مستقل لكل مادة، ثم تحديث OBJECT_INDEX.md آليًا وربط المواد بالقواعد والمبادئ.
+- `last_git_commit`: ad80901c785ff78c117a984fcff9e985141d1cd0
 - `updated_at`: 2026-07-13
