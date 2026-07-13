@@ -1,28 +1,34 @@
 # حالة استئناف المشروع
 
 - `project_status`: active
-- `last_completed_batch`: BATCH-20260713-ENGINE-0001
+- `last_completed_batch`: BATCH-20260713-ADMIN-0001
 - `current_branch`: أحوال شخصية
-- `current_topic`: محرك الإدخال الآلي
-- `current_classification_title`: LegalMind Automatic Ingestion Engine v1
-- `last_saved_object`: deploy/test_ingestion_engine.sh
+- `current_topic`: بوابة إدارة المصادر القضائية
+- `current_classification_title`: LegalMind Admin Portal v1
+- `last_saved_object`: deploy/install_admin_portal.sh
 - `judicial_principles_indexed`: 23
 - `synthesized_rules`: 6
 - `legislation_sources_registered`: 4
 - `legislation_objects_generated`: 869
 - `ontology_version`: 2.0
-- `graph_schema`: knowledge-system/ontology/personal-status.graph.schema.json
-- `reasoning_rules`: knowledge-system/ontology/personal-status.reasoning-rules.yaml
-- `pipeline_status`: automatic_ingestion_engine_ready_for_vps_install
+- `pipeline_status`: admin_portal_ready_for_vps_install
 - `engine_script`: engine/legalmind_engine.py
-- `engine_service`: deploy/legalmind-ingest.service
-- `engine_installer`: deploy/install_ingestion_engine.sh
-- `engine_test`: deploy/test_ingestion_engine.sh
+- `admin_backend`: admin/app.py
+- `admin_frontend`: admin/static/index.html
+- `admin_service`: deploy/legalmind-admin.service
+- `admin_installer`: deploy/install_admin_portal.sh
+- `admin_domain`: admin.soutaladalah.com
+- `supported_judicial_sources`:
+  - full_judgment
+  - judicial_principles_collection
+  - single_judicial_principle
+  - judicial_template
+  - legal_memorandum
 - `inbox_path`: /opt/legalmind-ingest/inbox
 - `archive_path`: /opt/legalmind-ingest/archive
 - `failed_path`: /opt/legalmind-ingest/failed
 - `postgres_host_port`: 55432
 - `qdrant_collection`: legalmind_objects_v1
 - `pending_verification_items`: 5
-- `next_action`: سحب آخر تحديث على VPS، إعادة تشغيل Docker Compose، تثبيت خدمة ingestion، ثم تشغيل اختبار end-to-end.
+- `next_action`: سحب آخر تحديث على VPS، تثبيت بوابة الإدارة، إنشاء DNS للعنوان admin.soutaladalah.com، ثم رفع أول مجموعة أحكام أو مبادئ بحسب موضوع محكمة التمييز.
 - `updated_at`: 2026-07-13
