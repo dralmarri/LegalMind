@@ -1,0 +1,150 @@
+ontology_version: '2.0'
+branch: personal-status
+
+entry_strategies:
+  substantive:
+    first: applicable_substantive_law
+    then:
+      - applicable_special_law
+      - judicial_principles
+      - synthesized_rules
+  procedural:
+    first: applicable_special_procedural_law
+    then:
+      - family_court_law
+      - general_procedure
+      - procedure_objects
+      - templates
+  drafting:
+    first: verified_template
+    then:
+      - required_facts
+      - required_documents
+      - legislation
+      - judicial_principles
+      - requests
+      - defenses
+
+mandatory_context_resolution:
+  - governing_personal_status_law
+  - sect_or_applicable_madhhab_when_relevant
+  - substantive_vs_procedural_question
+  - temporal_scope
+  - party_role_and_capacity
+  - requested_remedy
+
+inference_rules:
+  - id: IR-PS-001
+    title: تحديد القانون الموضوعي قبل الاسترجاع
+    if:
+      all:
+        - branch_is_personal_status
+      any:
+        - issue_is_marriage_or_divorce
+        - issue_is_will_or_inheritance
+        - issue_is_waqf
+        - issue_is_lineage
+    then:
+      require:
+        - determine_governing_law
+        - determine_applicable_sect_rule
+      block_answer_if_missing: true
+
+  - id: IR-PS-002
+    title: تقديم القانون الإجرائي الخاص
+    if:
+      all:
+        - question_is_procedural
+        - special_procedural_law_exists
+    then:
+      retrieval_priority:
+        - special_procedural_law
+        - family_court_law
+        - general_procedure
+      relation_required: specializes
+
+  - id: IR-PS-003
+    title: منع استعمال مبدأ الاختصاص لإثبات أصل الحق
+    if:
+      all:
+        - source_type_is_judicial_principle
+        - principle_role_is_jurisdiction
+        - question_is_substantive_right
+    then:
+      exclude_source: true
+      unless:
+        - principle_explicitly_states_substantive_rule
+
+  - id: IR-PS-004
+    title: تقييد الأحكام السابقة على التشريع اللاحق
+    if:
+      all:
+        - source_predates_governing_law
+        - later_law_changes_same_issue
+    then:
+      temporal_status: requires_temporal_reassessment
+      prohibit_as_current_rule: true
+      allow_for:
+        - historical_context
+        - distinct_issue_not_changed
+
+  - id: IR-PS-005
+    title: الفصل بين النسب المباشر وغير المباشر
+    if:
+      all:
+        - issue_is_lineage
+    then:
+      require:
+        - classify_direct_or_indirect_lineage
+      prevent_cross_use_without_explicit_relation: true
+
+  - id: IR-PS-006
+    title: منع النموذج من إنشاء السند
+    if:
+      all:
+        - source_type_is_template_or_memorandum
+    then:
+      cannot_establish_rule: true
+      may_supply:
+        - drafting_structure
+        - customary_sections
+        - editable_fields
+
+  - id: IR-PS-007
+    title: وجوب بيان الوقائع الناقصة
+    if:
+      all:
+        - missing_fact_can_change_outcome
+    then:
+      answer_status: conditional
+      require_output:
+        - missing_facts
+        - alternative_outcomes
+
+answer_acceptance:
+  reject_if:
+    - no_matching_source
+    - governing_law_unresolved
+    - sect_rules_mixed_without_explanation
+    - repealed_source_presented_as_current
+    - source_conflict_hidden
+    - template_used_as_legal_authority
+    - material_missing_facts_not_disclosed
+
+reasoning_trace_required_fields:
+  - user_question
+  - question_type
+  - explicit_facts
+  - missing_facts
+  - governing_law
+  - branch
+  - topic
+  - classification_title
+  - micro_issue
+  - legislation_used
+  - principles_used
+  - synthesized_rules_used
+  - excluded_sources_and_reasons
+  - temporal_analysis
+  - conclusion
+  - source_completeness
