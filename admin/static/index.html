@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>LegalMind Admin</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand"><span>⚖</span><div><strong>LegalMind</strong><small>إدارة المعرفة القانونية</small></div></div>
+    <button class="nav active" data-view="dashboard">لوحة المعلومات</button>
+    <button class="nav" data-view="upload">رفع الأحكام والمبادئ</button>
+    <button class="nav" data-view="topics">التصنيف الموضوعي</button>
+    <button class="nav" data-view="jobs">دفعات المعالجة</button>
+    <button class="nav" data-view="documents">الكائنات القانونية</button>
+  </aside>
+
+  <main>
+    <header><div><h1 id="page-title">لوحة المعلومات</h1><p>منصة صوت العدالة لإدارة المصادر القانونية الكويتية</p></div><button id="refresh">تحديث</button></header>
+
+    <section id="dashboard" class="view active">
+      <div class="cards" id="stats"></div>
+      <div class="panel"><h2>آخر دفعات المعالجة</h2><div id="recent-jobs"></div></div>
+    </section>
+
+    <section id="upload" class="view">
+      <div class="panel">
+        <h2>رفع ملفات بحسب موضوع محكمة التمييز</h2>
+        <p class="hint">يُحفظ عنوان التصنيف الذي وضعته محكمة التمييز باعتباره المفتاح الأساسي للاسترجاع. الملفات المدعومة حاليًا: DOCX وTXT وMarkdown.</p>
+        <form id="upload-form">
+          <div class="grid two">
+            <label>نوع المصدر<select name="source_type" required>
+              <option value="judicial_principles_collection">مجموعة مبادئ قضائية مختصرة</option>
+              <option value="single_judicial_principle">مبدأ قضائي منفرد</option>
+              <option value="full_judgment">حكم كامل</option>
+              <option value="legislation">تشريع</option>
+              <option value="judicial_template">صيغة أو صحيفة قضائية</option>
+              <option value="legal_memorandum">مذكرة دفاع</option>
+            </select></label>
+            <label>الفرع<select name="branch" required>
+              <option>أحوال شخصية</option><option>مدني</option><option>تجاري</option><option>عمالي</option><option>جزائي</option><option>إداري</option><option>دستوري</option><option>مرافعات</option><option>إثبات</option><option>تنفيذ</option>
+            </select></label>
+            <label>الموضوع<input name="topic" placeholder="مثال: الحضانة" required></label>
+            <label>عنوان تصنيف محكمة التمييز<input name="classification_title" placeholder="مثال: سقوط الحضانة" required></label>
+            <label>المسألة الدقيقة<input name="micro_issue" placeholder="مثال: زواج الحاضنة"></label>
+            <label>الدائرة<input name="circuit" placeholder="مثال: أحوال شخصية / تجاري"></label>
+            <label>درجة المحكمة<input name="court_level" placeholder="أول درجة / استئناف / تمييز"></label>
+          </div>
+          <label class="drop">اختر الملفات أو اسحبها هنا<input type="file" name="files" multiple accept=".docx,.txt,.md" required></label>
+          <div id="selected-files" class="file-list"></div>
+          <button class="primary" type="submit">رفع وبدء المعالجة</button>
+          <div id="upload-result"></div>
+        </form>
+      </div>
+    </section>
+
+    <section id="topics" class="view"><div class="panel"><h2>التصنيف الموضوعي</h2><div id="topics-table"></div></div></section>
+    <section id="jobs" class="view"><div class="panel"><h2>دفعات المعالجة</h2><div id="jobs-table"></div></div></section>
+    <section id="documents" class="view"><div class="panel"><h2>الكائنات القانونية</h2><div id="documents-table"></div></div></section>
+  </main>
+<script>
+const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+const api=async(url,opts={})=>{const r=await fetch(url,opts); if(!r.ok) throw new Error((await r.text())||r.statusText); return r.json()};
+const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+function table(rows, cols){if(!rows.length)return '<p class="empty">لا توجد بيانات</p>';return `<div class="table-wrap"><table><thead><tr>${cols.map(c=>`<th>${c[0]}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${cols.map(c=>`<td>${esc(r[c[1]])}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`}
+async function loadStats(){const s=await api('/api/stats'); const cards=[['التشريعات',s.objects.legislation||0],['المبادئ',s.objects.judicial_principle||0],['الأحكام الكاملة',s.objects.full_judgment||0],['النماذج',s.objects.judicial_template||0],['قيد الانتظار',s.inbox],['فشل',s.failed]]; $('#stats').innerHTML=cards.map(x=>`<div class="card"><span>${x[0]}</span><strong>${x[1]}</strong></div>`).join(''); const jobs=await api('/api/jobs?limit=8'); $('#recent-jobs').innerHTML=table(jobs,[['الدفعة','batch_id'],['الحالة','status'],['العناصر','object_count'],['البداية','started_at']]);}
+async function loadJobs(){const r=await api('/api/jobs'); $('#jobs-table').innerHTML=table(r,[['الدفعة','batch_id'],['الحالة','status'],['العناصر','object_count'],['العلاقات','relationship_count'],['بدأت','started_at'],['اكتملت','completed_at']]);}
+async function loadTopics(){const r=await api('/api/topics'); $('#topics-table').innerHTML=table(r,[['الفرع','branch'],['الموضوع','topic'],['العنوان الفرعي','subtopic'],['المسألة الدقيقة','micro_issue'],['العدد','object_count']]);}
+async function loadDocuments(){const r=await api('/api/documents'); $('#documents-table').innerHTML=table(r,[['المعرف','id'],['النوع','object_type'],['الفرع','branch'],['الموضوع','topic'],['العنوان','subtopic'],['المسألة','micro_issue'],['الحالة','verification_status']]);}
+async function refreshAll(){try{await Promise.all([loadStats(),loadJobs(),loadTopics(),loadDocuments()])}catch(e){console.error(e)}}
+$$('.nav').forEach(b=>b.onclick=()=>{$$('.nav,.view').forEach(x=>x.classList.remove('active'));b.classList.add('active');$('#'+b.dataset.view).classList.add('active');$('#page-title').textContent=b.textContent;});
+$('#refresh').onclick=refreshAll;
+const fileInput=$('input[type=file]'); fileInput.onchange=()=>$('#selected-files').innerHTML=[...fileInput.files].map(f=>`<span>${esc(f.name)} — ${(f.size/1024/1024).toFixed(2)} MB</span>`).join('');
+$('#upload-form').onsubmit=async e=>{e.preventDefault(); const out=$('#upload-result'); out.innerHTML='<p class="loading">جارٍ رفع الملفات...</p>'; try{const data=await api('/api/upload',{method:'POST',body:new FormData(e.target)}); out.innerHTML=`<p class="success">تم وضع ${data.files.length} ملف/ملفات في طابور المعالجة.</p>`; e.target.reset(); $('#selected-files').innerHTML=''; setTimeout(refreshAll,1500);}catch(err){out.innerHTML=`<p class="error">${esc(err.message)}</p>`}};
+refreshAll(); setInterval(loadStats,15000);
+</script>
+</body></html>
