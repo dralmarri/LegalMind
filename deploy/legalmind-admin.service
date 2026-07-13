@@ -1,0 +1,18 @@
+[Unit]
+Description=LegalMind Admin Web Application
+After=network.target docker.service legalmind-ingest.service
+Wants=docker.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/LegalMind
+EnvironmentFile=/opt/LegalMind/deploy/admin.env
+ExecStart=/opt/LegalMind/admin/.venv/bin/uvicorn admin.app:app --host 127.0.0.1 --port 8088 --proxy-headers
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
