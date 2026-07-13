@@ -1,24 +1,29 @@
 # حالة استئناف المشروع
 
 - `project_status`: active
-- `last_completed_batch`: BATCH-20260713-PS-LEG-0001
+- `last_completed_batch`: BATCH-20260713-PS-ONTOLOGY-0002
 - `current_branch`: أحوال شخصية
-- `current_topic`: التشريعات والبنية الإجرائية
-- `current_classification_title`: العمود الفقري التشريعي لفرع الأحوال الشخصية
-- `last_saved_object`: RELATION_MAP_PS_JURISDICTION
+- `current_topic`: الأنطولوجيا ومحرك الاستدلال
+- `current_classification_title`: LegalMind Personal Status Ontology v2.0
+- `last_saved_object`: personal-status.reasoning-rules.yaml
 - `judicial_principles_indexed`: 23
 - `synthesized_rules`: 6
 - `legislation_sources_registered`: 4
-- `pipeline_status`: executable_v1
-- `pending_verification_items`: 4
+- `legislation_objects_generated`: 869
+- `ontology_version`: 2.0
+- `graph_schema`: knowledge-system/ontology/personal-status.graph.schema.json
+- `reasoning_rules`: knowledge-system/ontology/personal-status.reasoning-rules.yaml
+- `pipeline_status`: infrastructure_running_knowledge_layer_v2_ready
+- `pending_verification_items`: 5
 - `registered_laws`:
   - KW-51-1984
   - KW-124-2019
   - KW-12-2015
   - KW-53-2026
 - `pipeline_script`: knowledge-system/scripts/ingest_legislation.py
+- `validator_script`: knowledge-system/scripts/validate_knowledge.py
 - `legislation_catalog`: knowledge-system/data/personal-status/legislation/LAW_CATALOG.md
 - `relation_map`: knowledge-system/data/personal-status/legislation/RELATION_MAP_PS_JURISDICTION.json
-- `next_action`: تشغيل سكربت الإدخال على ملفات DOCX محليًا أو عبر GitHub Actions لإنتاج كائن مستقل لكل مادة، ثم تحديث OBJECT_INDEX.md آليًا وربط المواد بالقواعد والمبادئ.
-- `last_git_commit`: ad80901c785ff78c117a984fcff9e985141d1cd0
+- `next_action`: سحب آخر تحديث على الخادم، تشغيل validate_knowledge.py، ثم تنفيذ محول يستورد كائنات المواد والمبادئ والعلاقات إلى PostgreSQL وفق graph schema ويطبق reasoning rules على مجموعة الاختصاص الأولى.
+- `last_git_commit`: 50a1bcc3239b6aef0d1609a87687ee0d3a452243
 - `updated_at`: 2026-07-13
