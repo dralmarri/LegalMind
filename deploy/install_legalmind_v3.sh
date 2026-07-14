@@ -117,7 +117,22 @@ nginx -t
 systemctl reload nginx
 systemctl restart legalmind-admin.service
 
-curl -fsS http://127.0.0.1:8088/health >/dev/null
+READY=0
+for _ in $(seq 1 30); do
+  if curl -fsS http://127.0.0.1:8088/health >/dev/null 2>&1; then
+    READY=1
+    break
+  fi
+  sleep 1
+done
+
+if [[ "$READY" -ne 1 ]]; then
+  echo "LegalMind Admin API did not become ready" >&2
+  systemctl status legalmind-admin.service --no-pager >&2 || true
+  journalctl -u legalmind-admin.service -n 100 --no-pager >&2 || true
+  exit 1
+fi
+
 curl -fsS -u "admin:$(cat "$ADMIN_PASSWORD_FILE")" -H "Host: ${DOMAIN}" http://127.0.0.1/ >/dev/null
 
 echo "LegalMind 3 deployed successfully"
