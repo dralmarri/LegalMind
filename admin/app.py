@@ -14,6 +14,8 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.staticfiles import StaticFiles
 
+from admin.security import verify_password
+
 APP_ROOT = Path(__file__).resolve().parent
 INGEST_ROOT = Path(os.getenv("LEGALMIND_INGEST_ROOT", "/opt/legalmind-ingest"))
 INBOX = INGEST_ROOT / "inbox"
@@ -21,7 +23,7 @@ ARCHIVE = INGEST_ROOT / "archive"
 FAILED = INGEST_ROOT / "failed"
 DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://legalmind:legalmind@127.0.0.1:55432/legalmind")
 ADMIN_USER = os.getenv("LEGALMIND_ADMIN_USER", "admin")
-ADMIN_PASSWORD = os.getenv("LEGALMIND_ADMIN_PASSWORD", "change-me")
+ADMIN_PASSWORD_HASH = os.getenv("LEGALMIND_ADMIN_PASSWORD_HASH", "")
 MAX_UPLOAD_MB = int(os.getenv("LEGALMIND_MAX_UPLOAD_MB", "100"))
 ALLOWED_EXTENSIONS = {".docx", ".pdf", ".html", ".htm", ".txt", ".md"}
 
@@ -31,8 +33,14 @@ app.mount("/static", StaticFiles(directory=APP_ROOT / "static"), name="static")
 
 
 def require_auth(credentials: Annotated[HTTPBasicCredentials, Depends(security)]) -> str:
+    if not ADMIN_PASSWORD_HASH:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="لم تُضبط تجزئة كلمة مرور المدير (LEGALMIND_ADMIN_PASSWORD_HASH)",
+        )
     user_ok = secrets.compare_digest(credentials.username, ADMIN_USER)
-    password_ok = secrets.compare_digest(credentials.password, ADMIN_PASSWORD)
+    # التحقق يعمل دائمًا حتى مع اسم مستخدم خاطئ حتى لا يسرّب الزمنُ وجودَ الحساب.
+    password_ok = verify_password(credentials.password, ADMIN_PASSWORD_HASH)
     if not (user_ok and password_ok):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
