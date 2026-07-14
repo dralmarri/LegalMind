@@ -14,6 +14,9 @@ type DocumentRow = { id: string; object_type: string; branch: string; topic?: st
 type LegalCase = { id: string; case_key: string; title: string; branch: string; topic?: string; subtopic?: string; client_name?: string; client_capacity?: string; opponent_name?: string; court_name?: string; court_level?: string; status: string; facts?: string; requests?: string; notes?: string; updated_at: string; authorities?: unknown[]; drafts?: unknown[] };
 type Coverage = { counts: Record<string, number>; drafting_ready: boolean; drafting_status: string; missing: string[]; note: string };
 type View = 'dashboard' | 'cases' | 'workspace' | 'research' | 'drafting' | 'review' | 'upload' | 'knowledge' | 'documents' | 'jobs' | 'graph';
+type UploadMethod = 'file' | 'paste';
+type DuplicateOf = { first_batch_id: string; object_count: number; ingested_at?: string; title?: string };
+type FileStatus = { file_id: string; status: string; batch_id?: string; object_count?: number; duplicate_of?: DuplicateOf; error?: string };
 
 const nav = [
   ['dashboard', 'الرئيسية', LayoutDashboard],
@@ -28,9 +31,18 @@ const nav = [
   ['jobs', 'دفعات المعالجة', Activity],
 ] as const;
 
+// رسالة الخطأ تُعرض كما كتبها الخادم بالعربية، لا JSON خامًا في وجه المستخدم.
 async function api<T>(url: string, options?: RequestInit): Promise<T> {
   const response = await fetch(url, options);
-  if (!response.ok) throw new Error(await response.text());
+  if (!response.ok) {
+    let message = response.statusText;
+    try {
+      const body = await response.json();
+      if (typeof body.detail === 'string') message = body.detail;
+      else if (body.detail) message = JSON.stringify(body.detail);
+    } catch { /* الرد ليس JSON — نبقي نص الحالة */ }
+    throw new Error(message);
+  }
   return response.json();
 }
 const fmt = (value?: string) => value ? new Date(value).toLocaleString('ar-KW') : '—';
@@ -51,6 +63,10 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState('');
   const [uploadMessage, setUploadMessage] = useState('');
+  const [uploadError, setUploadError] = useState('');
+  const [uploadMethod, setUploadMethod] = useState<UploadMethod>('file');
+  const [processing, setProcessing] = useState<FileStatus[]>([]);
+  const [uploading, setUploading] = useState(false);
 
   async function refresh() {
     setLoading(true);
@@ -84,10 +100,55 @@ export default function Home() {
     const updated=await api<LegalCase>(`/api/cases/${selectedCase.id}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     setSelectedCase({...selectedCase,...updated}); await refresh();
   }
-  async function submitUpload(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault(); setUploadMessage('جارٍ رفع الملفات...');
-    try { const result=await api<{files:unknown[]}>('/api/upload',{method:'POST',body:new FormData(event.currentTarget)}); setUploadMessage(`تم إدراج ${result.files.length} ملف/ملفات في طابور المعالجة.`); event.currentTarget.reset(); setTimeout(refresh,1800); }
-    catch(error){setUploadMessage(`تعذر الرفع: ${String(error)}`)}
+  // متابعة المعالجة فعليًا: نستقصي حالة كل مصدر حتى ينتهي (اكتمل/فشل/مكرر)،
+  // فلا يبقى المستخدم أمام «تم الإدراج» بلا علم بما جرى بعدها.
+  async function trackFiles(ids: string[]) {
+    const terminal = new Set(['completed','failed','duplicate']);
+    for (let attempt=0; attempt<40; attempt++) {
+      const items = await Promise.all(ids.map(id =>
+        api<FileStatus>(`/api/file-status/${encodeURIComponent(id)}`).catch(()=>({file_id:id,status:'unknown'} as FileStatus))
+      ));
+      setProcessing(items);
+      if (items.every(s => terminal.has(s.status))) break;
+      await new Promise(r => setTimeout(r, 2000));
+    }
+    await refresh();
+  }
+
+  async function submitSource(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    setProcessing([]); setUploadError('');
+
+    if (uploadMethod === 'file') {
+      data.delete('content');
+      const files = data.getAll('files').filter(f => f instanceof File && f.size > 0);
+      if (!files.length) { setUploadError('اختر ملفًا واحدًا على الأقل.'); return; }
+    } else {
+      data.delete('files');
+      const text = String(data.get('content') || '').trim();
+      if (text.length < 20) { setUploadError('النص فارغ أو أقصر من 20 حرفًا.'); return; }
+      data.set('content', text);
+    }
+
+    setUploading(true); setUploadMessage('جارٍ الحفظ...');
+    try {
+      let ids: string[];
+      if (uploadMethod === 'paste') {
+        const result = await api<{file_id:string}>('/api/paste-text', {method:'POST', body:data});
+        ids = [result.file_id];
+      } else {
+        const result = await api<{files:{file_id:string}[]}>('/api/upload', {method:'POST', body:data});
+        ids = result.files.map(f => f.file_id);
+      }
+      setUploadMessage(`حُفظ المصدر (${ids.length}) وبدأت معالجته.`);
+      form.reset();
+      await trackFiles(ids);
+    } catch(error) {
+      setUploadMessage('');
+      setUploadError(error instanceof Error ? error.message : String(error));
+    } finally { setUploading(false); }
   }
 
   const title = view==='workspace' ? selectedCase?.title || 'مساحة القضية' : nav.find(n=>n[0]===view)?.[1] || 'LegalMind';
@@ -106,7 +167,9 @@ export default function Home() {
         {view==='research'&&<ResearchView rows={filteredDocuments} query={query}/>} 
         {view==='drafting'&&<DraftingView cases={cases} onOpen={openCase}/>} 
         {view==='review'&&<ReviewView cases={cases} onOpen={openCase}/>} 
-        {view==='upload'&&<UploadPanel onSubmit={submitUpload} message={uploadMessage}/>} 
+        {view==='upload'&&<UploadPanel onSubmit={submitSource} message={uploadMessage} error={uploadError}
+          method={uploadMethod} setMethod={m=>{setUploadMethod(m);setUploadMessage('');setUploadError('');setProcessing([]);}}
+          processing={processing} busy={uploading}/>}
         {view==='knowledge'&&<KnowledgeTree groups={groupedTopics}/>} 
         {view==='documents'&&<DocumentsTable rows={filteredDocuments}/>} 
         {view==='jobs'&&<JobsTable jobs={jobs}/>} 
@@ -133,7 +196,110 @@ function ResearchView({rows,query}:{rows:DocumentRow[];query:string}) { return <
 function DraftingView({cases,onOpen}:{cases:LegalCase[];onOpen:(c:LegalCase)=>void}) { return <div className="rounded-2xl border bg-white p-7"><h2 className="text-2xl font-bold">استوديو الصياغة</h2><p className="mt-2 text-slate-500">اختر قضية لفتح ملفها وفحص جاهزية مصادرها قبل إنشاء صحيفة أو مذكرة.</p><div className="mt-6 grid grid-cols-2 gap-4">{cases.map(c=><button key={c.id} onClick={()=>onOpen(c)} className="rounded-2xl border p-5 text-right hover:border-amber-400"><div className="font-bold">{c.title}</div><div className="mt-2 text-sm text-slate-500">{c.branch} · {c.topic||'—'}</div></button>)}</div></div> }
 function ReviewView({cases,onOpen}:{cases:LegalCase[];onOpen:(c:LegalCase)=>void}) { return <div className="rounded-2xl border bg-white p-7"><h2 className="text-2xl font-bold">مراجعة الأسانيد</h2><p className="mt-2 text-slate-500">تعرض هذه المرحلة مدى وجود التشريع والمبدأ والنموذج لكل قضية. افتح القضية لعرض تقرير التغطية.</p><div className="mt-6 space-y-3">{cases.map(c=><button key={c.id} onClick={()=>onOpen(c)} className="flex w-full justify-between rounded-xl border p-4"><span>{c.title}</span><span className="text-slate-500">فتح التقرير</span></button>)}</div></div> }
 
-function UploadPanel({onSubmit,message}:{onSubmit:(e:React.FormEvent<HTMLFormElement>)=>void;message:string}) { return <form onSubmit={onSubmit} className="mx-auto max-w-5xl space-y-6 rounded-3xl border bg-white p-8"><div><h2 className="text-2xl font-bold">رفع المصادر القانونية</h2><p className="mt-2 text-slate-500">عنوان تصنيف محكمة التمييز هو مفتاح الاسترجاع الأساسي.</p></div><div className="grid grid-cols-2 gap-5"><Field label="نوع المصدر"><select name="source_type" required className="input"><option value="judicial_principles_collection">مجموعة مبادئ قضائية مختصرة</option><option value="single_judicial_principle">مبدأ قضائي منفرد</option><option value="full_judgment">حكم كامل</option><option value="legislation">تشريع</option><option value="judicial_template">صيغة أو صحيفة قضائية</option><option value="legal_memorandum">مذكرة دفاع</option></select></Field><Field label="الفرع"><select name="branch" required className="input"><option>أحوال شخصية</option><option>مدني</option><option>تجاري</option><option>عمالي</option><option>جزائي</option><option>إداري</option></select></Field><Field label="الموضوع"><input className="input" name="topic" required/></Field><Field label="عنوان تصنيف محكمة التمييز"><input className="input" name="classification_title" required/></Field><Field label="المسألة الدقيقة"><input className="input" name="micro_issue"/></Field><Field label="الدائرة"><input className="input" name="circuit"/></Field><Field label="درجة المحكمة"><input className="input" name="court_level"/></Field></div><label className="flex min-h-48 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed bg-slate-50 p-8"><UploadCloud size={38} className="mb-3 text-amber-500"/><span className="font-bold">اسحب الملفات هنا أو اضغط للاختيار</span><span className="mt-2 text-sm text-slate-500">DOCX وTXT وMarkdown</span><input type="file" name="files" multiple accept=".docx,.txt,.md" required className="hidden"/></label><button className="w-full rounded-xl bg-slate-950 py-3.5 font-bold text-white">رفع وبدء المعالجة</button>{message&&<p className="rounded-xl bg-slate-100 p-4 text-sm">{message}</p>}</form> }
+const statusLabel: Record<string,string> = {
+  queued:'في طابور المعالجة', started:'قيد المعالجة', completed:'اكتملت المعالجة',
+  failed:'فشلت المعالجة', duplicate:'مكرر — لم تُنشأ نسخة', unknown:'غير معروفة'
+};
+
+function ProcessingStatus({items}:{items:FileStatus[]}) {
+  if (!items.length) return null;
+  return <div className="space-y-3 rounded-2xl border bg-slate-50 p-5">
+    <h3 className="font-bold">حالة المعالجة</h3>
+    {items.map(s => {
+      const tone = s.status==='completed' ? 'border-emerald-300 bg-emerald-50 text-emerald-900'
+        : s.status==='failed' ? 'border-red-300 bg-red-50 text-red-900'
+        : s.status==='duplicate' ? 'border-amber-300 bg-amber-50 text-amber-900'
+        : 'border-slate-200 bg-white text-slate-700';
+      return <div key={s.file_id} className={`rounded-xl border p-4 text-sm ${tone}`}>
+        <div className="flex items-center gap-2 font-bold">
+          {s.status==='completed' && <CheckCircle2 size={16}/>}
+          {s.status==='failed' && <XCircle size={16}/>}
+          <span className="font-mono text-xs">{s.file_id}</span>
+          <span>— {statusLabel[s.status] || s.status}</span>
+        </div>
+        {s.status==='completed' && <p className="mt-2">أُنشئ {s.object_count} كائنًا قانونيًا · الدفعة <span className="font-mono text-xs">{s.batch_id}</span></p>}
+        {s.status==='duplicate' && s.duplicate_of && <p className="mt-2">
+          النص مُدخل مسبقًا تحت الفرع والموضوع نفسيهما. الدفعة السابقة:{' '}
+          <span className="font-mono text-xs">{s.duplicate_of.first_batch_id}</span>
+          {' '}({s.duplicate_of.object_count} كائنًا{s.duplicate_of.ingested_at ? ` · ${fmt(s.duplicate_of.ingested_at)}` : ''}).
+        </p>}
+        {s.status==='failed' && s.error && <p className="mt-2">{s.error}</p>}
+        {(s.status==='queued'||s.status==='started') && <p className="mt-2 text-slate-500">جارٍ التطبيع والاستخراج والفهرسة...</p>}
+      </div>;
+    })}
+  </div>;
+}
+
+function UploadPanel({onSubmit,message,error,method,setMethod,processing,busy}:{
+  onSubmit:(e:React.FormEvent<HTMLFormElement>)=>void; message:string; error:string;
+  method:UploadMethod; setMethod:(m:UploadMethod)=>void; processing:FileStatus[]; busy:boolean;
+}) {
+  const tab = (id:UploadMethod, label:string) =>
+    <button key={id} type="button" onClick={()=>setMethod(id)}
+      className={`rounded-xl px-6 py-3 font-bold ${method===id?'bg-slate-950 text-white':'border bg-white text-slate-600 hover:border-amber-400'}`}>{label}</button>;
+
+  return <form onSubmit={onSubmit} className="mx-auto max-w-5xl space-y-6 rounded-3xl border bg-white p-8">
+    <div>
+      <h2 className="text-2xl font-bold">إضافة مصدر قانوني</h2>
+      <p className="mt-2 text-slate-500">اختر طريقة واحدة: رفع ملف أو لصق نص. عنوان تصنيف محكمة التمييز هو مفتاح الاسترجاع الأساسي.</p>
+    </div>
+
+    <div className="flex gap-3">{tab('file','رفع ملف')}{tab('paste','لصق نص')}</div>
+
+    <div className="grid grid-cols-2 gap-5">
+      <Field label="عنوان المصدر"><input className="input" name="source_title" required={method==='paste'} placeholder="مثال: الطعن رقم 145 لسنة 2023"/></Field>
+      <Field label="نوع المصدر"><select name="source_type" required className="input">
+        <option value="judicial_principles_collection">مجموعة مبادئ قضائية مختصرة</option>
+        <option value="single_judicial_principle">مبدأ قضائي منفرد</option>
+        <option value="full_judgment">حكم كامل</option>
+        <option value="legislation">تشريع</option>
+        <option value="judicial_template">صيغة أو صحيفة قضائية</option>
+        <option value="legal_memorandum">مذكرة دفاع</option>
+      </select></Field>
+      <Field label="الفرع"><select name="branch" required className="input">
+        <option>أحوال شخصية</option><option>مدني</option><option>تجاري</option>
+        <option>عمالي</option><option>جزائي</option><option>إداري</option>
+        <option>دستوري</option><option>مرافعات</option><option>إثبات</option><option>تنفيذ</option>
+      </select></Field>
+      <Field label="الموضوع"><input className="input" name="topic" required placeholder="مثال: الحضانة"/></Field>
+      <Field label="عنوان تصنيف محكمة التمييز"><input className="input" name="classification_title" required placeholder="مثال: سقوط الحضانة"/></Field>
+      <Field label="المسألة الدقيقة (اختياري)"><input className="input" name="micro_issue" placeholder="مثال: زواج الحاضنة"/></Field>
+      <Field label="الدائرة (اختياري)"><input className="input" name="circuit"/></Field>
+      <Field label="درجة المحكمة (اختياري)"><input className="input" name="court_level" placeholder="أول درجة / استئناف / تمييز"/></Field>
+      <Field label="حالة التوثيق"><select name="verification_status" required className="input" defaultValue="source_verified">
+        <option value="source_verified">موثّق من مصدره — نص أصلي حرفي</option>
+        <option value="operationally_accepted">مقبول عمليًا — راجعه إنسان</option>
+        <option value="machine_pending_human">مستنبط آليًا — بانتظار مراجعة بشرية</option>
+        <option value="historical_only">تاريخي فقط</option>
+        <option value="requires_post_2026_reassessment">يحتاج إعادة تقييم بعد 2026</option>
+      </select></Field>
+      <Field label="ملاحظات على المصدر (اختياري)"><input className="input" name="source_notes" placeholder="مصدر النص، تحفظات، سياق"/></Field>
+    </div>
+
+    {method==='file'
+      ? <label className="flex min-h-48 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed bg-slate-50 p-8">
+          <UploadCloud size={38} className="mb-3 text-amber-500"/>
+          <span className="font-bold">اسحب الملفات هنا أو اضغط للاختيار</span>
+          <span className="mt-2 text-sm text-slate-500">DOCX · PDF نصي · HTML · TXT · Markdown</span>
+          <span className="mt-1 text-xs text-slate-400">الـPDF الممسوح ضوئيًا (بلا طبقة نصية) يُرفض ولا يُنشئ سجلًا</span>
+          <input type="file" name="files" multiple accept=".docx,.pdf,.html,.htm,.txt,.md" className="hidden"/>
+        </label>
+      : <Field label="نص المصدر القانوني">
+          <textarea name="content" dir="rtl" rows={16} minLength={20}
+            className="input min-h-80 leading-loose"
+            placeholder="الصق هنا نص الحكم أو المبدأ أو مواد التشريع كما هي حرفيًا، بلا تحرير ولا تلخيص..."/>
+          <span className="text-xs text-slate-500">الحد الأدنى 20 حرفًا، والأقصى 500,000 حرف. يُحفظ النص كما لُصق حرفيًا.</span>
+        </Field>}
+
+    <button disabled={busy} className="w-full rounded-xl bg-slate-950 py-3.5 font-bold text-white disabled:opacity-50">
+      {busy ? 'جارٍ الحفظ...' : 'حفظ وبدء المعالجة'}
+    </button>
+
+    {message && <p className="rounded-xl bg-slate-100 p-4 text-sm">{message}</p>}
+    {error && <p className="flex items-center gap-2 rounded-xl border border-red-300 bg-red-50 p-4 text-sm text-red-900"><XCircle size={16}/>{error}</p>}
+    <ProcessingStatus items={processing}/>
+  </form>;
+}
 function Field({label,children}:{label:string;children:React.ReactNode}) { return <label className="space-y-2"><span className="text-sm font-bold">{label}</span>{children}</label> }
 function KnowledgeTree({groups}:{groups:[string,Topic[]][]}) { return <div className="space-y-5">{groups.length===0?<Empty/>:groups.map(([branch,items])=><section key={branch} className="rounded-2xl border bg-white p-6"><h3 className="mb-4 text-lg font-bold">{branch}</h3><div className="grid grid-cols-2 gap-3">{items.map((t,i)=><div key={i} className="rounded-xl bg-slate-50 p-4"><div className="font-bold">{t.topic||'غير مصنف'}</div><div className="mt-1 text-sm text-slate-600">{t.subtopic||'—'} {t.micro_issue?`← ${t.micro_issue}`:''}</div><div className="mt-2 text-xs text-amber-700">{t.object_count} عنصر</div></div>)}</div></section>)}</div> }
 function DocumentsTable({rows}:{rows:DocumentRow[]}) { return rows.length?<div className="overflow-auto rounded-2xl border bg-white"><table className="w-full text-sm"><thead className="bg-slate-50"><tr>{['المعرف','النوع','الفرع','الموضوع','العنوان','المسألة','الحالة'].map(x=><th key={x} className="p-3 text-right">{x}</th>)}</tr></thead><tbody>{rows.map(r=><tr key={r.id} className="border-t"><td className="p-3 font-mono text-xs">{r.id}</td><td className="p-3">{typeLabel[r.object_type]||r.object_type}</td><td className="p-3">{r.branch}</td><td className="p-3">{r.topic||'—'}</td><td className="p-3">{r.subtopic||'—'}</td><td className="p-3">{r.micro_issue||'—'}</td><td className="p-3">{r.verification_status}</td></tr>)}</tbody></table></div>:<Empty/> }

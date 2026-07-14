@@ -3,8 +3,11 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import secrets
 import shutil
+import unicodedata
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Annotated
 
@@ -26,6 +29,29 @@ ADMIN_USER = os.getenv("LEGALMIND_ADMIN_USER", "admin")
 ADMIN_PASSWORD_HASH = os.getenv("LEGALMIND_ADMIN_PASSWORD_HASH", "")
 MAX_UPLOAD_MB = int(os.getenv("LEGALMIND_MAX_UPLOAD_MB", "100"))
 ALLOWED_EXTENSIONS = {".docx", ".pdf", ".html", ".htm", ".txt", ".md"}
+
+# حدود النص الملصق. الحد الأدنى يمنع الإدخال العابث، والأعلى يمنع إغراق الخادم.
+PASTE_MIN_CHARS = 20
+PASTE_MAX_CHARS = int(os.getenv("LEGALMIND_PASTE_MAX_CHARS", "500000"))
+
+SOURCE_TYPES = {
+    "full_judgment",
+    "judicial_principles_collection",
+    "single_judicial_principle",
+    "legislation",
+    "judicial_template",
+    "legal_memorandum",
+}
+# النص الوارد حرفيًا من مصدره = source_verified. ما يُستنبط آليًا = machine_pending_human.
+# القيم مطابقة لقيد قاعدة البيانات في 003. لا تُوسَّع من الواجهة.
+VERIFICATION_STATUSES = {
+    "source_verified",
+    "operationally_accepted",
+    "machine_pending_human",
+    "historical_only",
+    "requires_post_2026_reassessment",
+}
+PRINCIPLE_TYPES = {"judicial_principles_collection", "single_judicial_principle"}
 
 app = FastAPI(title="LegalMind Admin", docs_url=None, redoc_url=None)
 security = HTTPBasic()
@@ -111,6 +137,54 @@ def documents(limit: int = 200, _: str = Depends(require_auth)) -> list[dict]:
     )
 
 
+def safe_stem(value: str, fallback: str) -> str:
+    """اسم ملف آمن: لا مسارات ولا محارف تحكم. يقبل العربية ويرفض ما عداها من رموز."""
+    value = unicodedata.normalize("NFKC", value).strip()
+    value = re.sub(r"[^\w؀-ۿ \-]+", "", value, flags=re.UNICODE)
+    value = re.sub(r"[\s_]+", "-", value).strip("-.")
+    return value[:80] or fallback
+
+
+def build_metadata(
+    *, source_type: str, branch: str, topic: str, classification_title: str,
+    title: str, micro_issue: str, court_level: str, circuit: str,
+    verification_status: str, source_notes: str, upload_origin: str,
+) -> dict:
+    """حقول التصنيف الإلزامية والاختيارية. مصدر واحد للحقيقة للمسارين معًا."""
+    if source_type not in SOURCE_TYPES:
+        raise HTTPException(400, "نوع المصدر غير مدعوم")
+    if verification_status not in VERIFICATION_STATUSES:
+        raise HTTPException(400, "حالة التوثيق غير معروفة")
+    if not branch.strip() or not topic.strip() or not classification_title.strip():
+        raise HTTPException(400, "الفرع والموضوع وعنوان التصنيف حقول إلزامية")
+    return {
+        "source_type": source_type,
+        "object_type": "judicial_principle" if source_type in PRINCIPLE_TYPES else source_type,
+        "branch": branch.strip(),
+        "topic": topic.strip(),
+        "subtopic": classification_title.strip(),
+        "classification_title": classification_title.strip(),
+        "micro_issue": micro_issue.strip() or None,
+        "court_level": court_level.strip() or None,
+        "circuit": circuit.strip() or None,
+        "title": title.strip(),
+        "verification_status": verification_status,
+        "source_notes": source_notes.strip() or None,
+        "upload_origin": upload_origin,
+        "received_at": datetime.now(timezone.utc).isoformat(),
+        "drafting_status": "blocked_missing_authorities" if source_type in {"judicial_template", "legal_memorandum"} else None,
+    }
+
+
+def reserve_inbox_path(stem: str, suffix: str) -> Path:
+    """مسار فريد داخل inbox. لا يدهس ملفًا قائمًا ولا ينتظر دفعة قيد المعالجة."""
+    INBOX.mkdir(parents=True, exist_ok=True)
+    target = INBOX / f"{stem}{suffix}"
+    if target.exists() or target.with_suffix(target.suffix + ".json").exists():
+        target = INBOX / f"{stem}-{secrets.token_hex(4)}{suffix}"
+    return target
+
+
 @app.post("/api/upload")
 async def upload(
     files: Annotated[list[UploadFile], File(...)],
@@ -118,36 +192,39 @@ async def upload(
     branch: Annotated[str, Form(...)],
     topic: Annotated[str, Form(...)],
     classification_title: Annotated[str, Form(...)],
+    source_title: Annotated[str, Form()] = "",
     micro_issue: Annotated[str, Form()] = "",
     court_level: Annotated[str, Form()] = "",
     circuit: Annotated[str, Form()] = "",
+    verification_status: Annotated[str, Form()] = "source_verified",
+    source_notes: Annotated[str, Form()] = "",
     _: str = Depends(require_auth),
 ) -> JSONResponse:
-    valid_source_types = {
-        "full_judgment",
-        "judicial_principles_collection",
-        "single_judicial_principle",
-        "legislation",
-        "judicial_template",
-        "legal_memorandum",
-    }
-    if source_type not in valid_source_types:
-        raise HTTPException(400, "نوع المصدر غير مدعوم")
-    if not branch.strip() or not topic.strip() or not classification_title.strip():
-        raise HTTPException(400, "الفرع والموضوع وعنوان التصنيف حقول إلزامية")
+    if not files or all(not (f.filename or "").strip() for f in files):
+        raise HTTPException(400, "لم يُرفَع أي ملف")
 
-    INBOX.mkdir(parents=True, exist_ok=True)
     accepted: list[dict] = []
     for item in files:
         original_name = Path(item.filename or "upload").name
         suffix = Path(original_name).suffix.lower()
         if suffix not in ALLOWED_EXTENSIONS:
-            raise HTTPException(400, f"الملف {original_name}: النوع {suffix} غير مدعوم حاليًا")
+            raise HTTPException(
+                400,
+                f"الملف {original_name}: الامتداد {suffix or '(بلا امتداد)'} غير مدعوم. "
+                f"الصيغ المقبولة: {'، '.join(sorted(ALLOWED_EXTENSIONS))}",
+            )
 
-        target = INBOX / original_name
-        if target.exists() or target.with_suffix(target.suffix + ".json").exists():
-            target = INBOX / f"{target.stem}-{secrets.token_hex(4)}{target.suffix}"
+        metadata = build_metadata(
+            source_type=source_type, branch=branch, topic=topic,
+            classification_title=classification_title,
+            title=source_title or Path(original_name).stem,
+            micro_issue=micro_issue, court_level=court_level, circuit=circuit,
+            verification_status=verification_status, source_notes=source_notes,
+            upload_origin="file_upload",
+        )
+        metadata["original_filename"] = original_name
 
+        target = reserve_inbox_path(safe_stem(Path(original_name).stem, "source"), suffix)
         total = 0
         with target.open("wb") as output:
             while chunk := await item.read(1024 * 1024):
@@ -155,28 +232,112 @@ async def upload(
                 if total > MAX_UPLOAD_MB * 1024 * 1024:
                     output.close()
                     target.unlink(missing_ok=True)
-                    raise HTTPException(413, f"الملف {original_name} يتجاوز {MAX_UPLOAD_MB} ميغابايت")
+                    raise HTTPException(413, f"الملف {original_name} يتجاوز الحد المسموح ({MAX_UPLOAD_MB} ميغابايت)")
                 output.write(chunk)
+        if total == 0:
+            target.unlink(missing_ok=True)
+            raise HTTPException(400, f"الملف {original_name} فارغ")
 
-        metadata = {
-            "source_type": source_type,
-            "object_type": "judicial_principle" if source_type in {"judicial_principles_collection", "single_judicial_principle"} else source_type,
-            "branch": branch.strip(),
-            "topic": topic.strip(),
-            "subtopic": classification_title.strip(),
-            "classification_title": classification_title.strip(),
-            "micro_issue": micro_issue.strip() or None,
-            "court_level": court_level.strip() or None,
-            "circuit": circuit.strip() or None,
-            "title": Path(original_name).stem,
-            "upload_origin": "legalmind_admin",
-            "drafting_status": "blocked_missing_authorities" if source_type in {"judicial_template", "legal_memorandum"} else None,
-        }
-        sidecar = target.with_suffix(target.suffix + ".json")
-        sidecar.write_text(json.dumps(metadata, ensure_ascii=False, indent=2), encoding="utf-8")
-        accepted.append({"file": target.name, "size": total, "metadata": metadata})
+        # الـsidecar يُكتب بعد الملف: وجوده يعني أن المصدر مكتمل وجاهز للمعالجة.
+        target.with_suffix(target.suffix + ".json").write_text(
+            json.dumps(metadata, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+        accepted.append({"file_id": target.name, "size_bytes": total, "status": "queued",
+                         "metadata": metadata})
 
     return JSONResponse({"status": "queued", "files": accepted})
+
+
+@app.post("/api/paste-text")
+async def paste_text(
+    content: Annotated[str, Form(...)],
+    source_type: Annotated[str, Form(...)],
+    branch: Annotated[str, Form(...)],
+    topic: Annotated[str, Form(...)],
+    classification_title: Annotated[str, Form(...)],
+    source_title: Annotated[str, Form(...)],
+    micro_issue: Annotated[str, Form()] = "",
+    court_level: Annotated[str, Form()] = "",
+    circuit: Annotated[str, Form()] = "",
+    verification_status: Annotated[str, Form()] = "source_verified",
+    source_notes: Annotated[str, Form()] = "",
+    _: str = Depends(require_auth),
+) -> JSONResponse:
+    """لصق نص قانوني مباشرة. يمرّ على محرك الإدخال نفسه الذي يمرّ عليه الملف."""
+    text = content.strip()
+    if not text:
+        raise HTTPException(400, "النص فارغ. الصق نص المصدر القانوني قبل الحفظ.")
+    if len(text) < PASTE_MIN_CHARS:
+        raise HTTPException(
+            400,
+            f"النص قصير جدًا ({len(text)} حرفًا). الحد الأدنى {PASTE_MIN_CHARS} حرفًا "
+            "حتى لا يُنشأ مصدر بلا مضمون.",
+        )
+    if len(text) > PASTE_MAX_CHARS:
+        raise HTTPException(
+            413,
+            f"النص يتجاوز الحد المسموح ({len(text):,} حرفًا والحد {PASTE_MAX_CHARS:,}). "
+            "قسّمه إلى مصادر أصغر أو ارفعه ملفًا.",
+        )
+    if not source_title.strip():
+        raise HTTPException(400, "عنوان المصدر إلزامي عند لصق النص")
+
+    metadata = build_metadata(
+        source_type=source_type, branch=branch, topic=topic,
+        classification_title=classification_title, title=source_title,
+        micro_issue=micro_issue, court_level=court_level, circuit=circuit,
+        verification_status=verification_status, source_notes=source_notes,
+        upload_origin="pasted_text",
+    )
+    metadata["pasted_chars"] = len(text)
+
+    # الأصل يُحفظ Markdown كما لُصق حرفيًا — لا تحرير ولا تشذيب ولا إعادة صياغة.
+    # التطبيع يجري لاحقًا في المحرك على نسخة، ويبقى هذا الملف أثرًا غير قابل للتغيير.
+    target = reserve_inbox_path(safe_stem(source_title, "pasted-source"), ".md")
+    target.write_text(text + "\n", encoding="utf-8")
+    target.chmod(0o444)
+    target.with_suffix(target.suffix + ".json").write_text(
+        json.dumps(metadata, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+
+    return JSONResponse({
+        "status": "queued",
+        "file_id": target.name,
+        "chars": len(text),
+        "upload_origin": "pasted_text",
+        "metadata": metadata,
+        "message": "حُفظ النص وبدأت معالجته.",
+    })
+
+
+@app.get("/api/file-status/{file_id}")
+def file_status(file_id: str, _: str = Depends(require_auth)) -> dict:
+    """حالة معالجة مصدر بعينه — تتبعها الواجهة بالاستقصاء بعد الحفظ."""
+    file_id = Path(file_id).name
+    rows = db_rows(
+        """SELECT batch_id, status, object_count, report, started_at, completed_at
+           FROM ingestion_batches
+           WHERE report->>'file' = %s ORDER BY started_at DESC LIMIT 1""",
+        (file_id,),
+    )
+    if rows:
+        row = rows[0]
+        report = row.get("report") or {}
+        return {
+            "file_id": file_id,
+            "status": row["status"],
+            "batch_id": row["batch_id"],
+            "object_count": row["object_count"],
+            "duplicate_of": report.get("duplicate_of"),
+            "error": report.get("error"),
+            "content_sha256": report.get("content_sha256"),
+        }
+    if (INBOX / file_id).exists():
+        return {"file_id": file_id, "status": "queued"}
+    if (FAILED / file_id).exists():
+        return {"file_id": file_id, "status": "failed",
+                "error": "فشلت المعالجة. راجع سجل الخدمة legalmind-ingest."}
+    return {"file_id": file_id, "status": "unknown"}
 
 
 @app.post("/api/requeue/{batch_id}")

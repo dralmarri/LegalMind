@@ -22,3 +22,8 @@ web/next-env.d.ts
 
 # نظام التشغيل
 .DS_Store
+
+# مخرجات بناء Next.js
+web/tsconfig.tsbuildinfo
+web/out/
+web/.next/

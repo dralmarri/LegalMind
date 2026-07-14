@@ -26,10 +26,17 @@
 
     <section id="upload" class="view">
       <div class="panel">
-        <h2>رفع ملفات بحسب موضوع محكمة التمييز</h2>
-        <p class="hint">يُحفظ عنوان التصنيف الذي وضعته محكمة التمييز باعتباره المفتاح الأساسي للاسترجاع. الملفات المدعومة حاليًا: DOCX وTXT وMarkdown.</p>
-        <form id="upload-form">
+        <h2>إضافة مصدر قانوني</h2>
+        <p class="hint">اختر طريقة واحدة: رفع ملف أو لصق نص. يُحفظ عنوان التصنيف الذي وضعته محكمة التمييز باعتباره المفتاح الأساسي للاسترجاع. الصيغ المدعومة: DOCX، PDF نصي، HTML، TXT، Markdown. الـPDF الممسوح ضوئيًا (بلا طبقة نصية) يُرفض ولا يُنشئ سجلًا.</p>
+
+        <div class="methods">
+          <button type="button" class="method active" data-method="file">رفع ملف</button>
+          <button type="button" class="method" data-method="paste">لصق نص</button>
+        </div>
+
+        <form id="source-form">
           <div class="grid two">
+            <label>عنوان المصدر<input name="source_title" id="source-title" placeholder="مثال: الطعن رقم 145 لسنة 2023 أحوال شخصية"></label>
             <label>نوع المصدر<select name="source_type" required>
               <option value="judicial_principles_collection">مجموعة مبادئ قضائية مختصرة</option>
               <option value="single_judicial_principle">مبدأ قضائي منفرد</option>
@@ -43,14 +50,34 @@
             </select></label>
             <label>الموضوع<input name="topic" placeholder="مثال: الحضانة" required></label>
             <label>عنوان تصنيف محكمة التمييز<input name="classification_title" placeholder="مثال: سقوط الحضانة" required></label>
-            <label>المسألة الدقيقة<input name="micro_issue" placeholder="مثال: زواج الحاضنة"></label>
-            <label>الدائرة<input name="circuit" placeholder="مثال: أحوال شخصية / تجاري"></label>
-            <label>درجة المحكمة<input name="court_level" placeholder="أول درجة / استئناف / تمييز"></label>
+            <label>المسألة الدقيقة <span class="opt">(اختياري)</span><input name="micro_issue" placeholder="مثال: زواج الحاضنة"></label>
+            <label>الدائرة <span class="opt">(اختياري)</span><input name="circuit" placeholder="مثال: أحوال شخصية"></label>
+            <label>درجة المحكمة <span class="opt">(اختياري)</span><input name="court_level" placeholder="أول درجة / استئناف / تمييز"></label>
+            <label>حالة التوثيق<select name="verification_status" required>
+              <option value="source_verified">موثّق من مصدره — نص أصلي حرفي</option>
+              <option value="operationally_accepted">مقبول عمليًا — راجعه إنسان</option>
+              <option value="machine_pending_human">مستنبط آليًا — بانتظار مراجعة بشرية</option>
+              <option value="historical_only">تاريخي فقط</option>
+              <option value="requires_post_2026_reassessment">يحتاج إعادة تقييم بعد 2026</option>
+            </select></label>
           </div>
-          <label class="drop">اختر الملفات أو اسحبها هنا<input type="file" name="files" multiple accept=".docx,.txt,.md" required></label>
-          <div id="selected-files" class="file-list"></div>
-          <button class="primary" type="submit">رفع وبدء المعالجة</button>
+          <label>ملاحظات على المصدر <span class="opt">(اختياري)</span><textarea name="source_notes" rows="2" placeholder="ملاحظات توثيقية: مصدر النص، تحفظات، سياق"></textarea></label>
+
+          <div id="method-file" class="method-pane">
+            <label class="drop">اختر الملفات أو اسحبها هنا<input type="file" name="files" id="file-input" multiple accept=".docx,.pdf,.html,.htm,.txt,.md"></label>
+            <div id="selected-files" class="file-list"></div>
+          </div>
+
+          <div id="method-paste" class="method-pane hidden">
+            <label>نص المصدر القانوني
+              <textarea name="content" id="paste-content" rows="16" dir="rtl" placeholder="الصق هنا نص الحكم أو المبدأ أو مواد التشريع كما هي حرفيًا، بلا تحرير ولا تلخيص..."></textarea>
+            </label>
+            <div class="counter"><span id="paste-count">0</span> حرفًا — الحد الأدنى 20، والأقصى 500,000</div>
+          </div>
+
+          <button class="primary" type="submit" id="submit-btn">حفظ وبدء المعالجة</button>
           <div id="upload-result"></div>
+          <div id="processing-status"></div>
         </form>
       </div>
     </section>
@@ -61,7 +88,16 @@
   </main>
 <script>
 const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
-const api=async(url,opts={})=>{const r=await fetch(url,opts); if(!r.ok) throw new Error((await r.text())||r.statusText); return r.json()};
+// رسالة الخطأ تُعرض كما كتبها الخادم بالعربية، لا JSON خامًا في وجه المستخدم.
+const api=async(url,opts={})=>{
+  const r=await fetch(url,opts);
+  if(!r.ok){
+    let msg=r.statusText;
+    try{const b=await r.json(); msg=(typeof b.detail==='string'?b.detail:JSON.stringify(b.detail))||msg}catch{}
+    throw new Error(msg);
+  }
+  return r.json();
+};
 const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 function table(rows, cols){if(!rows.length)return '<p class="empty">لا توجد بيانات</p>';return `<div class="table-wrap"><table><thead><tr>${cols.map(c=>`<th>${c[0]}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${cols.map(c=>`<td>${esc(r[c[1]])}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`}
 async function loadStats(){const s=await api('/api/stats'); const cards=[['التشريعات',s.objects.legislation||0],['المبادئ',s.objects.judicial_principle||0],['الأحكام الكاملة',s.objects.full_judgment||0],['النماذج',s.objects.judicial_template||0],['قيد الانتظار',s.inbox],['فشل',s.failed]]; $('#stats').innerHTML=cards.map(x=>`<div class="card"><span>${x[0]}</span><strong>${x[1]}</strong></div>`).join(''); const jobs=await api('/api/jobs?limit=8'); $('#recent-jobs').innerHTML=table(jobs,[['الدفعة','batch_id'],['الحالة','status'],['العناصر','object_count'],['البداية','started_at']]);}
@@ -71,8 +107,66 @@ async function loadDocuments(){const r=await api('/api/documents'); $('#document
 async function refreshAll(){try{await Promise.all([loadStats(),loadJobs(),loadTopics(),loadDocuments()])}catch(e){console.error(e)}}
 $$('.nav').forEach(b=>b.onclick=()=>{$$('.nav,.view').forEach(x=>x.classList.remove('active'));b.classList.add('active');$('#'+b.dataset.view).classList.add('active');$('#page-title').textContent=b.textContent;});
 $('#refresh').onclick=refreshAll;
-const fileInput=$('input[type=file]'); fileInput.onchange=()=>$('#selected-files').innerHTML=[...fileInput.files].map(f=>`<span>${esc(f.name)} — ${(f.size/1024/1024).toFixed(2)} MB</span>`).join('');
-$('#upload-form').onsubmit=async e=>{e.preventDefault(); const out=$('#upload-result'); out.innerHTML='<p class="loading">جارٍ رفع الملفات...</p>'; try{const data=await api('/api/upload',{method:'POST',body:new FormData(e.target)}); out.innerHTML=`<p class="success">تم وضع ${data.files.length} ملف/ملفات في طابور المعالجة.</p>`; e.target.reset(); $('#selected-files').innerHTML=''; setTimeout(refreshAll,1500);}catch(err){out.innerHTML=`<p class="error">${esc(err.message)}</p>`}};
+
+// ── طريقة الإدخال: واحدة لا اثنتان ────────────────────────────────
+// الحقول المخفية تُعطَّل حتى لا تُرسَل، فلا يصل ملف ونص معًا في طلب واحد.
+let method='file';
+const fileInput=$('#file-input'), pasteBox=$('#paste-content');
+function setMethod(m){
+  method=m;
+  $$('.method').forEach(b=>b.classList.toggle('active', b.dataset.method===m));
+  $('#method-file').classList.toggle('hidden', m!=='file');
+  $('#method-paste').classList.toggle('hidden', m!=='paste');
+  fileInput.disabled = m!=='file';
+  pasteBox.disabled  = m!=='paste';
+  $('#upload-result').innerHTML=''; $('#processing-status').innerHTML='';
+}
+$$('.method').forEach(b=>b.onclick=()=>setMethod(b.dataset.method));
+fileInput.onchange=()=>$('#selected-files').innerHTML=[...fileInput.files].map(f=>`<span>${esc(f.name)} — ${(f.size/1024/1024).toFixed(2)} MB</span>`).join('');
+pasteBox.oninput=()=>{const n=pasteBox.value.trim().length; $('#paste-count').textContent=n.toLocaleString('ar-EG'); $('#paste-count').className=(n&&n<20)||n>500000?'bad':'';};
+
+// ── متابعة حالة المعالجة ──────────────────────────────────────────
+const LABEL={queued:'في طابور المعالجة',started:'قيد المعالجة',completed:'اكتملت المعالجة',failed:'فشلت المعالجة',duplicate:'مكرر — لم تُنشأ نسخة',unknown:'غير معروفة'};
+function renderStatus(items){
+  $('#processing-status').innerHTML='<div class="panel inner"><h3>حالة المعالجة</h3>'+items.map(s=>{
+    const cls=s.status==='completed'?'success':s.status==='failed'?'error':s.status==='duplicate'?'warn':'loading';
+    let detail='';
+    if(s.status==='completed') detail=` — ${s.object_count} كائنًا قانونيًا، الدفعة ${esc(s.batch_id)}`;
+    if(s.status==='duplicate'&&s.duplicate_of) detail=` — النص مُدخل مسبقًا تحت الفرع والموضوع نفسيهما. الدفعة السابقة: ${esc(s.duplicate_of.first_batch_id)} (${esc(s.duplicate_of.object_count)} كائنًا، بتاريخ ${esc((s.duplicate_of.ingested_at||'').slice(0,16))})`;
+    if(s.status==='failed'&&s.error) detail=` — ${esc(s.error)}`;
+    return `<p class="${cls}"><strong>${esc(s.file_id)}</strong>: ${LABEL[s.status]||esc(s.status)}${detail}</p>`;
+  }).join('')+'</div>';
+}
+async function trackFiles(ids){
+  const done=new Set();
+  for(let i=0;i<40 && done.size<ids.length;i++){
+    const items=await Promise.all(ids.map(id=>api('/api/file-status/'+encodeURIComponent(id)).catch(()=>({file_id:id,status:'unknown'}))));
+    items.forEach(s=>{if(['completed','failed','duplicate'].includes(s.status)) done.add(s.file_id)});
+    renderStatus(items);
+    if(done.size===ids.length) break;
+    await new Promise(r=>setTimeout(r,2000));
+  }
+  refreshAll();
+}
+
+$('#source-form').onsubmit=async e=>{
+  e.preventDefault();
+  const out=$('#upload-result'), btn=$('#submit-btn');
+  $('#processing-status').innerHTML='';
+  if(method==='file' && !fileInput.files.length){out.innerHTML='<p class="error">اختر ملفًا واحدًا على الأقل.</p>';return}
+  if(method==='paste' && pasteBox.value.trim().length<20){out.innerHTML='<p class="error">النص فارغ أو أقصر من 20 حرفًا.</p>';return}
+  btn.disabled=true; out.innerHTML='<p class="loading">جارٍ الحفظ...</p>';
+  try{
+    const url = method==='paste' ? '/api/paste-text' : '/api/upload';
+    const data = await api(url,{method:'POST',body:new FormData(e.target)});
+    const ids = method==='paste' ? [data.file_id] : data.files.map(f=>f.file_id);
+    out.innerHTML=`<p class="success">حُفظ المصدر (${ids.length}) وبدأت المعالجة.</p>`;
+    e.target.reset(); $('#selected-files').innerHTML=''; $('#paste-count').textContent='0';
+    trackFiles(ids);
+  }catch(err){out.innerHTML=`<p class="error">${esc(err.message)}</p>`}
+  finally{btn.disabled=false}
+};
+setMethod('file');
 refreshAll(); setInterval(loadStats,15000);
 </script>
 </body></html>

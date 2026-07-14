@@ -65,6 +65,17 @@ class CaseUpdate(BaseModel):
     notes: str | None = None
 
 
+def evaluate_drafting_gate(legislation: int, principles: int, templates: int) -> str:
+    """بوابة الصياغة المسندة: لا تُفتح إلا بتشريع ومبدأ قضائي ونموذج معًا.
+
+    غياب أي ركن يُبقيها مغلقة. الصياغة بلا سند تُنتج نصًا يبدو قانونيًا وليس كذلك،
+    وهو أخطر من الامتناع عن الصياغة. لذا الشرط اجتماعي لا تخييري.
+    """
+    if legislation > 0 and principles > 0 and templates > 0:
+        return "ready_for_grounded_draft"
+    return "blocked_missing_authorities"
+
+
 def _case_key() -> str:
     return f"CASE-{datetime.now(timezone.utc).strftime('%Y%m%d')}-{secrets.token_hex(4).upper()}"
 
@@ -143,11 +154,12 @@ def case_coverage(case_id: str):
     legislation = by_type.get("legislation", 0)
     principles = by_type.get("judicial_principle", 0)
     templates = by_type.get("judicial_template", 0) + by_type.get("legal_memorandum", 0)
-    ready = legislation > 0 and principles > 0 and templates > 0
+    status = evaluate_drafting_gate(legislation, principles, templates)
+    ready = status == "ready_for_grounded_draft"
     return {
         "counts": by_type,
         "drafting_ready": ready,
-        "drafting_status": "ready_for_grounded_draft" if ready else "blocked_missing_authorities",
+        "drafting_status": status,
         "missing": [name for name, ok in {
             "تشريع": legislation > 0,
             "مبدأ قضائي": principles > 0,
