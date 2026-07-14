@@ -1,0 +1,24 @@
+# الأسرار — لا تُلتزم أبدًا
+deploy/.env
+deploy/admin.env
+*.env
+!*.env.example
+
+# بيئات Python
+.venv/
+admin/.venv/
+__pycache__/
+*.pyc
+
+# Node / Next.js
+node_modules/
+web/node_modules/
+web/.next/
+web/out/
+web/next-env.d.ts
+
+# إعدادات محلية للأدوات
+.claude/settings.local.json
+
+# نظام التشغيل
+.DS_Store
