@@ -11,9 +11,11 @@ from __future__ import annotations
 import argparse
 import base64
 import os
+import secrets
 import subprocess
 import sys
 import tempfile
+import time
 import urllib.error
 import urllib.request
 from getpass import getpass
@@ -28,6 +30,8 @@ USER_KEY = "LEGALMIND_ADMIN_USER"
 HASH_KEY = "LEGALMIND_ADMIN_PASSWORD_HASH"
 LEGACY_PLAINTEXT_KEY = "LEGALMIND_ADMIN_PASSWORD"
 MIN_LENGTH = 12
+# مغلف تسليم لمرة واحدة: يُستخدم فقط مع --generate حين لا يوجد مشغّل بشري أمام الطرفية.
+DELIVERY_FILE = Path("/root/legalmind-admin-initial-password")
 
 
 def read_env(path: Path) -> dict[str, str]:
@@ -75,6 +79,29 @@ def probe(username: str, password: str, path: str = "/api/stats") -> int:
         return 0
 
 
+def wait_until_ready(attempts: int = 40, delay: float = 0.25) -> bool:
+    """systemctl restart يعود قبل أن يبدأ uvicorn الإنصات، فننتظر /health فعليًا."""
+    for _ in range(attempts):
+        try:
+            with urllib.request.urlopen(f"{BASE_URL}/health", timeout=2) as response:
+                if response.status == 200:
+                    return True
+        except (urllib.error.HTTPError, OSError):
+            pass
+        time.sleep(delay)
+    return False
+
+
+def previous_delivery_secret() -> str:
+    """كلمة المرور المفعّلة سابقًا من مغلف التسليم، لإثبات رفضها بعد التدوير."""
+    if not DELIVERY_FILE.exists():
+        return ""
+    for line in DELIVERY_FILE.read_text(encoding="utf-8").splitlines():
+        if line.startswith("كلمة المرور المؤقتة:"):
+            return line.split(":", 1)[1].strip()
+    return ""
+
+
 def prompt_password() -> str:
     while True:
         first = getpass("كلمة مرور المدير الجديدة (لن تظهر): ")
@@ -91,6 +118,11 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="تغيير بيانات حساب مدير LegalMind")
     parser.add_argument("--username", required=True, help="اسم المستخدم الجديد للمدير")
     parser.add_argument("--no-restart", action="store_true", help="لا تُعد تشغيل الخدمة")
+    parser.add_argument(
+        "--generate",
+        action="store_true",
+        help=f"ولّد كلمة مرور عشوائية وسلّمها في {DELIVERY_FILE} (600) بدل سؤال getpass",
+    )
     args = parser.parse_args()
 
     if not ENV_FILE.exists():
@@ -100,19 +132,35 @@ def main() -> int:
     env = read_env(ENV_FILE)
     old_username = env.get(USER_KEY, "")
     # نحتفظ بالسر القديم في الذاكرة فقط لإثبات أنه صار مرفوضًا بعد التغيير.
-    old_secret = env.get(LEGACY_PLAINTEXT_KEY, "")
+    old_secret = env.get(LEGACY_PLAINTEXT_KEY, "") or previous_delivery_secret()
     old_hash = env.get(HASH_KEY, "")
 
-    new_password = prompt_password()
-    if verify_password(new_password, old_hash) if old_hash else (new_password == old_secret and old_secret):
-        print("✗ كلمة المرور الجديدة مطابقة للقديمة.", file=sys.stderr)
-        return 1
+    if args.generate:
+        new_password = secrets.token_urlsafe(24)
+    else:
+        new_password = prompt_password()
+        if verify_password(new_password, old_hash) if old_hash else (new_password == old_secret and old_secret):
+            print("✗ كلمة المرور الجديدة مطابقة للقديمة.", file=sys.stderr)
+            return 1
 
     env[USER_KEY] = args.username
     env[HASH_KEY] = hash_password(new_password)
     env.pop(LEGACY_PLAINTEXT_KEY, None)  # إزالة النص الصريح نهائيًا
     write_env(ENV_FILE, env)
     print(f"✓ حُدِّث {ENV_FILE.name} (تجزئة فقط، لا نص صريح، صلاحيات 600)")
+
+    if args.generate:
+        fd = os.open(DELIVERY_FILE, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+        with os.fdopen(fd, "w", encoding="utf-8") as handle:
+            handle.write(
+                f"المستخدم: {args.username}\n"
+                f"كلمة المرور المؤقتة: {new_password}\n\n"
+                "بعد تسجيل الدخول، دوّرها بكلمة مرور من اختيارك ثم احذف هذا الملف:\n"
+                "  cd /opt/LegalMind && admin/.venv/bin/python -m admin.manage_admin_credentials "
+                f"--username {args.username}\n"
+                f"  shred -u {DELIVERY_FILE}\n"
+            )
+        print(f"✓ كلمة المرور المؤقتة في {DELIVERY_FILE} (600، لِـ root فقط، خارج Git)")
 
     if args.no_restart:
         print("… تخطّي إعادة التشغيل بناءً على الطلب.")
@@ -121,13 +169,17 @@ def main() -> int:
     # إعادة التشغيل تُلغي كل بيانات الاعتماد القديمة فورًا (Basic بلا حالة على الخادم).
     subprocess.run(["systemctl", "restart", SERVICE], check=True)
     subprocess.run(["systemctl", "is-active", "--quiet", SERVICE], check=True)
-    print(f"✓ أُعيد تشغيل {SERVICE}")
+    if not wait_until_ready():
+        print(f"✗ الخدمة لم تستجب بعد إعادة التشغيل. راجع: journalctl -u {SERVICE}", file=sys.stderr)
+        return 1
+    print(f"✓ أُعيد تشغيل {SERVICE} وهو يستجيب")
 
     checks = [
         ("الدخول باسم المستخدم الجديد + كلمة المرور الجديدة", probe(args.username, new_password), 200),
         ("صلاحيات المدير (‎/api/stats)", probe(args.username, new_password, "/api/stats"), 200),
-        ("رفض اسم المستخدم القديم", probe(old_username, new_password), 401),
     ]
+    if old_username and old_username != args.username:
+        checks.append(("رفض اسم المستخدم القديم", probe(old_username, new_password), 401))
     if old_secret:
         checks.append(("رفض كلمة المرور القديمة", probe(args.username, old_secret), 401))
     checks.append(("رفض كلمة مرور عشوائية خاطئة", probe(args.username, "wrong-" + os.urandom(4).hex()), 401))
