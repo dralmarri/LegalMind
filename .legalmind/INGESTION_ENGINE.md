@@ -1,24 +1,32 @@
 # INGESTION_ENGINE — محرك الإدخال
 
-**الملف:** `engine/legalmind_engine.py` (273 سطرًا) — **✅ يعمل ومُثبت من طرف إلى طرف**
+**الملف:** `engine/legalmind_engine.py`
 **الخدمة:** `legalmind-ingest.service` (active) — حلقة `watch` كل 10 ثوانٍ
+**الحالة:** ✅ **يعمل — مُثبت فعليًا** (إدخال HTML من طرف إلى طرف + اختبار حلقة المراقبة الحية)
+
+> 🔴 **تاريخيًا:** كان هذا المحرك **معطّلًا تمامًا** في `HEAD` منذ commit `7e28704` — `NameError` على `source_type` في آخر خطوة من **كل** عملية إدخال. لم يظهر العطل لأن **لا ملف أُدخل بعده قط**. أُصلح في 2026-07-14.
+>
+> **الدرس:** كود بلا اختبار ليس كودًا يعمل، بل كودًا لم يفشل بعد.
 
 ## 1. المسار
 
 ```text
 /opt/legalmind-ingest/inbox/
-   file.docx  +  file.docx.json  (sidecar metadata)
+   file.{docx|pdf|html|txt|md}  +  file.<ext>.json  (sidecar)
         │
-        ├── read_source()      .docx | .txt | .md   ← لا PDF
-        ├── normalize_text()   NFKC، حذف التطويل (ـ)، ضغط المسافات
+        ├── normalize()        ← طبقة التطبيع [[NORMALIZER]]
+        │      أي صيغة → Canonical Markdown
+        │      ما بعدها لا يعرف صيغة المصدر
+        │
         ├── classify()         حسب source_type في الـ sidecar
         │      ├── legislation          → split_articles()   ^المادة N$
         │      ├── judicial_principle   → split_principles()  ^N-
         │      ├── full_judgment        → كائن واحد
         │      └── template/memorandum  → كائن واحد
         ├── PostgreSQL: sources + knowledge_objects + ingestion_batches
-        ├── Qdrant:     PUT points (hash_embedding)
-        └── shutil.move → archive/   |   عند الخطأ → failed/
+        ├── Qdrant:     PUT points (hash_embedding ⚠️ ليس دلاليًا)
+        └── archive/    الأصل + *.canonical.md (أثر تدقيق)
+             عند الخطأ → failed/ + وسم الدفعة `failed` في قاعدة البيانات
 ```
 
 ## 2. عقد الـ Sidecar
@@ -54,7 +62,7 @@
 
 | القيد | الأثر |
 |---|---|
-| ❌ لا PDF، لا OCR | **المصادر القضائية الكويتية الواقعية PDF ممسوح.** فجوة تشغيلية حتمية. |
+| ⚠️ لا OCR | PDF **النصي** مدعوم. **الممسوح ضوئيًا يُرفض صراحةً** ولا يمر بنص فارغ. فجوة معروفة ومعلنة. |
 | ❌ لا `synthesized_rule` | القواعد الجامعة الست لا يمكن حقنها بالمحرك الحالي |
 | ❌ لا يكتب `relationships` | `relationship_count` يبقى 0 دائمًا |
 | ❌ لا يكتب `verification_issues` | طابور التوثيق خارج قاعدة البيانات |

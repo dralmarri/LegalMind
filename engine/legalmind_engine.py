@@ -10,15 +10,15 @@ import re
 import shutil
 import sys
 import time
-import unicodedata
 import urllib.request
-import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
-from xml.etree import ElementTree as ET
 
 import psycopg
 from psycopg.types.json import Jsonb
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from normalizer import SUPPORTED_EXTENSIONS, normalize, normalize_text
 
 ARTICLE_RE = re.compile(r"(?m)^\s*(?:المادة|مادة)\s+([0-9٠-٩]+(?:\s+مكرر(?:اً|ا|ة)?(?:\s*\([^)]*\))?)?)\s*$")
 PRINCIPLE_RE = re.compile(r"(?m)^\s*(\d+)\s*[-–.)]\s+")
@@ -29,36 +29,6 @@ COLLECTION = os.getenv("QDRANT_COLLECTION", "legalmind_objects_v1")
 
 def now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
-
-
-def read_docx(path: Path) -> str:
-    with zipfile.ZipFile(path) as zf:
-        xml = zf.read("word/document.xml")
-    root = ET.fromstring(xml)
-    ns = {"w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"}
-    paras: list[str] = []
-    for p in root.findall(".//w:p", ns):
-        text = "".join((t.text or "") for t in p.findall(".//w:t", ns)).strip()
-        if text:
-            paras.append(text)
-    return "\n".join(paras)
-
-
-def read_source(path: Path) -> str:
-    suffix = path.suffix.lower()
-    if suffix == ".docx":
-        return read_docx(path)
-    if suffix in {".txt", ".md"}:
-        return path.read_text(encoding="utf-8")
-    raise ValueError(f"Unsupported file type: {suffix}")
-
-
-def normalize_text(text: str) -> str:
-    text = unicodedata.normalize("NFKC", text)
-    text = text.replace("\u0640", "")
-    text = re.sub(r"[ \t]+", " ", text)
-    text = re.sub(r"\n{3,}", "\n\n", text)
-    return text.strip()
 
 
 def slug(value: str) -> str:
@@ -163,10 +133,13 @@ def database_url() -> str:
 
 def ingest_file(path: Path, archive_root: Path, failed_root: Path) -> dict:
     started = now_iso()
-    raw_bytes = path.read_bytes()
-    digest = hashlib.sha256(raw_bytes).hexdigest()
     metadata = load_metadata(path)
-    text = normalize_text(read_source(path))
+
+    # طبقة التطبيع: أي صيغة → Canonical Markdown. ما بعدها لا يعرف صيغة المصدر.
+    canonical = normalize(path)
+    digest = canonical.source_sha256
+    text = canonical.body
+
     object_type, chunks = classify(path, text, metadata)
     branch = metadata.get("branch", "أحوال شخصية")
     topic = metadata.get("topic")
@@ -193,7 +166,10 @@ def ingest_file(path: Path, archive_root: Path, failed_root: Path) -> dict:
                        VALUES (%s,%s,%s,%s,%s,%s,%s)
                        ON CONFLICT (source_key) DO UPDATE SET title=EXCLUDED.title,file_name=EXCLUDED.file_name,
                        sha256=EXCLUDED.sha256,metadata=EXCLUDED.metadata,updated_at=now()""",
-                    (source_key, object_type, title, path.name, digest, "operationally_accepted", Jsonb(metadata)),
+                    (source_key, object_type, title, path.name, digest, "operationally_accepted",
+                     Jsonb({**metadata, "source_format": canonical.source_format,
+                            "normalizer_version": canonical.normalizer_version,
+                            "normalizer_warnings": canonical.warnings})),
                 )
                 points: list[dict] = []
                 for chunk in chunks:
@@ -219,19 +195,45 @@ def ingest_file(path: Path, archive_root: Path, failed_root: Path) -> dict:
                     points.append({"id": point_id, "vector": hash_embedding(chunk["text"]), "payload": {"object_id": object_id, "object_type": object_type, "branch": branch, "topic": topic, "subtopic": subtopic, "micro_issue": micro_issue, "title": chunk["title"], "source_key": source_key}})
                 cur.execute(
                     """UPDATE ingestion_batches SET status='completed',object_count=%s,report=%s,completed_at=now() WHERE batch_id=%s""",
-                    (len(inserted_ids), Jsonb({"file": path.name, "sha256": digest, "objects": inserted_ids, "source_type": source_type}), batch_id),
+                    (len(inserted_ids), Jsonb({
+                        "file": path.name,
+                        "sha256": digest,
+                        "objects": inserted_ids,
+                        "source_type": metadata.get("source_type"),
+                        "source_format": canonical.source_format,
+                        "normalizer_warnings": canonical.warnings,
+                    }), batch_id),
                 )
             conn.commit()
         if points:
             qdrant_request("PUT", f"/collections/{COLLECTION}/points?wait=true", {"points": points})
+
         archive_root.mkdir(parents=True, exist_ok=True)
-        destination = archive_root / f"{batch_id}__{path.name}"
-        shutil.move(str(path), destination)
+        # الصيغة الموحدة تُؤرشف بجوار الأصل: أثر تدقيق لما رآه المستخرج فعلًا.
+        (archive_root / f"{batch_id}__{path.stem}.canonical.md").write_text(
+            canonical.to_markdown(), encoding="utf-8"
+        )
+        shutil.move(str(path), archive_root / f"{batch_id}__{path.name}")
         sidecar = path.with_suffix(path.suffix + ".json")
         if sidecar.exists():
             shutil.move(str(sidecar), archive_root / f"{batch_id}__{sidecar.name}")
-        return {"batch_id": batch_id, "source_key": source_key, "status": "completed", "object_type": object_type, "object_count": len(inserted_ids), "objects": inserted_ids}
+        return {"batch_id": batch_id, "source_key": source_key, "status": "completed",
+                "object_type": object_type, "source_format": canonical.source_format,
+                "object_count": len(inserted_ids), "objects": inserted_ids,
+                "warnings": canonical.warnings}
     except Exception as exc:
+        # الدفعة الفاشلة تُوسم فاشلة في قاعدة البيانات. دفعة عالقة على 'started' كذبة إحصائية.
+        try:
+            with psycopg.connect(database_url()) as conn:
+                with conn.cursor() as cur:
+                    cur.execute(
+                        """UPDATE ingestion_batches SET status='failed',report=%s,completed_at=now()
+                           WHERE batch_id=%s AND status<>'completed'""",
+                        (Jsonb({"file": path.name, "error": str(exc)}), batch_id),
+                    )
+                conn.commit()
+        except Exception:
+            pass
         failed_root.mkdir(parents=True, exist_ok=True)
         if path.exists():
             shutil.move(str(path), failed_root / path.name)
@@ -240,9 +242,9 @@ def ingest_file(path: Path, archive_root: Path, failed_root: Path) -> dict:
 
 def watch(inbox: Path, archive: Path, failed: Path, interval: int) -> None:
     inbox.mkdir(parents=True, exist_ok=True)
-    print(f"Watching {inbox}", flush=True)
+    print(f"Watching {inbox} — formats: {', '.join(sorted(SUPPORTED_EXTENSIONS))}", flush=True)
     while True:
-        files = [p for p in sorted(inbox.iterdir()) if p.is_file() and p.suffix.lower() in {".docx", ".txt", ".md"}]
+        files = [p for p in sorted(inbox.iterdir()) if p.is_file() and p.suffix.lower() in SUPPORTED_EXTENSIONS]
         for path in files:
             try:
                 result = ingest_file(path, archive, failed)

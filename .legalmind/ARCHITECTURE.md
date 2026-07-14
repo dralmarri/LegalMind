@@ -77,7 +77,10 @@ inbox/file.docx + file.docx.json (sidecar metadata)
    → shutil.move → archive/  (أو failed/ عند الخطأ)
 ```
 
-**الأنواع المدعومة:** `.docx`, `.txt`, `.md` فقط. لا PDF. لا OCR.
+**الصيغ المدعومة (بعد [[NORMALIZER]]):** `.docx` · `.pdf` (نصي) · `.html`/`.htm` · `.txt` · `.md`
+**PDF الممسوح ضوئيًا يُرفض صراحةً** — لا OCR بعد.
+
+> 🔴 كان هذا المحرك **معطّلًا في `HEAD`** (`NameError` في كل إدخال، منذ `7e28704`). أُصلح وأُثبت عمليًا 2026-07-14.
 
 ### 3.2 طبقة التخزين — PostgreSQL ✅ + Qdrant ⚠️
 

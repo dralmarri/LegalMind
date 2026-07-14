@@ -1,39 +1,30 @@
 {
   "batch_id": "BATCH-20260713-PS-LEG-0002",
-  "status": "generated_and_locally_validated",
-  "storage_format": "jsonl",
-  "total_legislation_objects": 869,
-  "laws": [
-    {
-      "law_id": "KW-51-1984",
-      "article_count_detected": 344,
-      "source_sha256": "95da23be6b4621bde6f771566271ce2c8ab93991ec4f054197d8c6fac4445645"
-    },
-    {
-      "law_id": "KW-124-2019",
-      "article_count_detected": 494,
-      "source_sha256": "474cfaa09bff803e111e1a44bf1674e466d0a622077d5f8fefd605d9623d4424"
-    },
-    {
-      "law_id": "KW-12-2015",
-      "article_count_detected": 11,
-      "source_sha256": "317d9655f890a0a0bc2ebaaed931b92e4c4110ca5c0a6d1db603bc8a753ee5fd"
-    },
-    {
-      "law_id": "KW-53-2026",
-      "article_count_detected": 20,
-      "source_sha256": "7df6d5b51e9aaef7307f1ad5359123caa991a5d587336d581eb814285ed5833e"
-    }
+  "status": "retracted_artifacts_missing",
+  "retracted_at": "2026-07-14",
+  "retracted_by": "BATCH-20260714-AUDIT-0001",
+  "retraction_reason": "أعلن هذا التقرير 869 كائنًا تشريعيًا مع نتيجة تدقيق ناجحة، ولا وجود لأي من مخرجاته. لا ملف .jsonl واحد ولا KW-*.index.json في المستودع كله. العدد الحقيقي صفر. التقرير محفوظ موسومًا كسجل لما حدث، ولا يُقرأ منه أي عدد.",
+  "authoritative_counter": "engine/truth_report.py — المصدر: PostgreSQL وحدها",
+  "verified_object_count": 0,
+  "retracted_claims": {
+    "total_legislation_objects": 869,
+    "validation_result": "OK: 869 legislation objects validated",
+    "storage_format": "jsonl"
+  },
+  "laws_described_but_not_ingested": [
+    { "law_id": "KW-51-1984", "claimed_article_count": 344, "actual_objects_in_database": 0 },
+    { "law_id": "KW-124-2019", "claimed_article_count": 494, "actual_objects_in_database": 0 },
+    { "law_id": "KW-12-2015", "claimed_article_count": 11, "actual_objects_in_database": 0 },
+    { "law_id": "KW-53-2026", "claimed_article_count": 20, "actual_objects_in_database": 0 }
   ],
-  "validation_result": "OK: 869 legislation objects validated",
-  "source_issue_count": 1,
-  "source_issues": [
+  "note_on_claimed_hashes": "بصمات SHA-256 المسجلة سابقًا تخص ملفات مصدر غير موجودة في المستودع. لا يُعوّل عليها للتحقق، ولا تُستخدم لإثبات أن مصدرًا ما أُدخل.",
+  "source_issues_carried_forward": [
     {
       "law_id": "KW-51-1984",
       "article": "336",
       "issue": "duplicate article heading in uploaded source",
-      "handling": "second occurrence retained as LEG-KW-51-1984-ART-336-OCC-2 and marked needs_source_review"
+      "handling": "يُعاد تقييمه عند الإدخال الفعلي (T-11). المحرك يعالج التكرار بلاحقة -OCC-2."
     }
   ],
-  "bundle_sha256": "a7a7d2594e4a00cc017e7c60b89fff9cfc6c9b7186453faab9da4a94d4214c76"
+  "next_action": "T-11 في .legalmind/TASKS/0001.md — رفع النصوص التشريعية الفعلية وإدخالها عبر طبقة التطبيع."
 }

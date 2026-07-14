@@ -3,10 +3,10 @@ on:
   push:
     paths:
       - 'knowledge-system/**'
+      - 'engine/**'
+      - 'admin/**'
       - '.github/workflows/legal-knowledge-validation.yml'
   pull_request:
-    paths:
-      - 'knowledge-system/**'
   workflow_dispatch:
 
 jobs:
@@ -17,7 +17,19 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Validate knowledge data
+
+      - name: Install engine dependencies
+        run: pip install -r engine/requirements.txt
+
+      # T-00: فحص بنيوي فقط. لا يعدّ الكائنات — العدّ من PostgreSQL عبر engine/truth_report.py
+      - name: Validate knowledge structure (no phantom counts)
         run: python knowledge-system/scripts/validate_knowledge.py
-      - name: Compile ingestion scripts
-        run: python -m py_compile knowledge-system/scripts/*.py
+
+      - name: Test normalizer layer
+        run: python engine/test_normalizer.py
+
+      - name: Compile sources
+        run: |
+          python -m py_compile knowledge-system/scripts/*.py
+          python -m py_compile engine/*.py engine/normalizer/*.py
+          python -m py_compile admin/*.py

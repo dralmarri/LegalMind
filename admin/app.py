@@ -23,7 +23,7 @@ DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://legalmind:legalmind@127.0
 ADMIN_USER = os.getenv("LEGALMIND_ADMIN_USER", "admin")
 ADMIN_PASSWORD = os.getenv("LEGALMIND_ADMIN_PASSWORD", "change-me")
 MAX_UPLOAD_MB = int(os.getenv("LEGALMIND_MAX_UPLOAD_MB", "100"))
-ALLOWED_EXTENSIONS = {".docx", ".txt", ".md"}
+ALLOWED_EXTENSIONS = {".docx", ".pdf", ".html", ".htm", ".txt", ".md"}
 
 app = FastAPI(title="LegalMind Admin", docs_url=None, redoc_url=None)
 security = HTTPBasic()

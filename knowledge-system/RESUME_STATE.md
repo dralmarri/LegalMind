@@ -12,29 +12,44 @@
 - `last_saved_object`: .legalmind/CURRENT_PROJECT_AUDIT.md
 - `ontology_version`: 2.0
 
-## الأرقام المُصحَّحة بعد التدقيق 🔴
+## ⚠️ T-00 — الإحصاءات لا تُقرأ من هنا
+
+**PostgreSQL هو المصدر الوحيد للحقيقة.** لا عدّاد في Markdown يُعتد به.
+
+```bash
+python3 engine/truth_report.py      # العدّاد الوحيد المعتمد
+```
+
+`validate_knowledge.py` يفشل CI إن عاد أي عدّاد تشريعي غير صفري إلى هذا الملف.
+
+## الأرقام (وصفية — المرجع قاعدة البيانات)
 
 - `judicial_principles_in_markdown`: 23
-- `judicial_principles_in_database`: **0** ← غير محقونة
+- `judicial_principles_in_database`: **0** ← غير محقونة (T-07)
 - `synthesized_rules_in_markdown`: 6
-- `synthesized_rules_in_database`: **0** ← غير محقونة
+- `synthesized_rules_in_database`: **0** ← غير محقونة (T-06/T-07)
 - `legislation_sources_described`: 4
-- `legislation_objects_generated`: **0**
-  - ⛔ **مسحوب.** كان مُعلنًا `869`. **لا توجد ولا ملف `.jsonl` ولا `KW-*.index.json` في المستودع.**
-  - `validate_knowledge.py` يؤكد: `Expected total 869, got 0` → **exit 1**
-- `knowledge_objects_in_database`: **2** ← كلاهما تجريبي (`branch = اختبار`)
-- `qdrant_points`: **2** ← تجريبية
-- `real_legal_knowledge_in_database`: **0**
+- `legislation_objects_generated`: 0
+  - ⛔ **مسحوب.** كان مُعلنًا `869`. لا وجود لأي `.jsonl` ولا `KW-*.index.json`.
+  - `INGESTION_REPORT.json` وُسم `retracted_artifacts_missing`.
+- `real_legal_knowledge_in_database`: **0** ← صفر نظيف بعد T-05
+
+## الحالة بعد المرحلة أ ✅
+
+- `ci_status`: **green** ✅ (كان exit 1) — مدقق بنيوي + 19 اختبار تطبيع
+- `backup_service`: **working** ✅ — والاستعادة **مُختبَرة فعليًا**
+- `ingestion_engine`: **fixed** ✅ — كان `NameError` في كل إدخال منذ `7e28704`
+- `normalizer`: **built** ✅ — DOCX · PDF · HTML · TXT · MD
+- `test_data`: **purged** ✅ — PostgreSQL + Qdrant
 
 ## الأعطال المفتوحة
 
-- `ci_status`: **red** — `validate_knowledge.py` exit 1
-- `backup_service`: **failed** — `203/EXEC` (`deploy/backup.sh` صلاحياته 644، غير تنفيذي)
-- `embedding_model`: **none** — `hash_embedding` هو hashing trick لا نموذج دلالي
-- `retrieval_engine`: **not_built** — لا كود يقرأ من Qdrant
+- `embedding_model`: **none** — `hash_embedding` هو hashing trick لا نموذج دلالي (T-12)
+- `retrieval_engine`: **not_built** — لا كود يقرأ من Qdrant (T-13)
 - `drafting_engine`: **not_built**
+- `ocr`: **not_supported** — PDF الممسوح ضوئيًا يُرفض صراحةً
 
-- `pipeline_status`: infrastructure_ready_knowledge_empty
+- `pipeline_status`: pipeline_working_knowledge_empty_awaiting_T-11
 - `engine_script`: engine/legalmind_engine.py
 - `admin_backend`: admin/app.py
 - `admin_frontend`: admin/static/index.html
