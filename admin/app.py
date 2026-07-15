@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import os
 import re
 import secrets
@@ -52,6 +53,7 @@ VERIFICATION_STATUSES = {
     "requires_post_2026_reassessment",
 }
 PRINCIPLE_TYPES = {"judicial_principles_collection", "single_judicial_principle"}
+DEFAULT_SOURCE_TYPE = "single_judicial_principle" if "single_judicial_principle" in SOURCE_TYPES else next(iter(SOURCE_TYPES))
 
 app = FastAPI(title="LegalMind Admin", docs_url=None, redoc_url=None)
 security = HTTPBasic()
@@ -151,12 +153,17 @@ def build_metadata(
     verification_status: str, source_notes: str, upload_origin: str,
 ) -> dict:
     """حقول التصنيف الإلزامية والاختيارية. مصدر واحد للحقيقة للمسارين معًا."""
+    if not source_type.strip():
+        source_type = DEFAULT_SOURCE_TYPE
     if source_type not in SOURCE_TYPES:
         raise HTTPException(400, "نوع المصدر غير مدعوم")
     if verification_status not in VERIFICATION_STATUSES:
         raise HTTPException(400, "حالة التوثيق غير معروفة")
-    if not branch.strip() or not topic.strip() or not classification_title.strip():
-        raise HTTPException(400, "الفرع والموضوع وعنوان التصنيف حقول إلزامية")
+    if not branch.strip() or not topic.strip():
+        raise HTTPException(400, "الفرع والموضوع حقلان إلزاميان")
+    # عنوان التصنيف اختياري: إن غاب يُشتق من الموضوع، ويبقى تحليلًا معلقًا للمراجعة.
+    if not classification_title.strip():
+        classification_title = topic.strip()
     return {
         "source_type": source_type,
         "object_type": "judicial_principle" if source_type in PRINCIPLE_TYPES else source_type,
@@ -251,11 +258,11 @@ async def upload(
 @app.post("/api/paste-text")
 async def paste_text(
     content: Annotated[str, Form(...)],
-    source_type: Annotated[str, Form(...)],
     branch: Annotated[str, Form(...)],
     topic: Annotated[str, Form(...)],
-    classification_title: Annotated[str, Form(...)],
-    source_title: Annotated[str, Form(...)],
+    source_type: Annotated[str, Form()] = "",
+    classification_title: Annotated[str, Form()] = "",
+    source_title: Annotated[str, Form()] = "",
     micro_issue: Annotated[str, Form()] = "",
     court_level: Annotated[str, Form()] = "",
     circuit: Annotated[str, Form()] = "",
@@ -280,7 +287,9 @@ async def paste_text(
             "قسّمه إلى مصادر أصغر أو ارفعه ملفًا.",
         )
     if not source_title.strip():
-        raise HTTPException(400, "عنوان المصدر إلزامي عند لصق النص")
+        _first = next((ln.strip() for ln in text.splitlines() if ln.strip()), "")
+        source_title = (_first[:120] if _first
+                        else "مصدر-ملصوق-" + hashlib.sha256(text.encode("utf-8")).hexdigest()[:12])
 
     metadata = build_metadata(
         source_type=source_type, branch=branch, topic=topic,

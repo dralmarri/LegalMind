@@ -247,8 +247,8 @@ function UploadPanel({onSubmit,message,error,method,setMethod,processing,busy}:{
     <div className="flex gap-3">{tab('file','رفع ملف')}{tab('paste','لصق نص')}</div>
 
     <div className="grid grid-cols-2 gap-5">
-      <Field label="عنوان المصدر"><input className="input" name="source_title" required={method==='paste'} placeholder="مثال: الطعن رقم 145 لسنة 2023"/></Field>
-      <Field label="نوع المصدر"><select name="source_type" required className="input">
+      <Field label="عنوان المصدر"><input className="input" name="source_title" placeholder="مثال: الطعن رقم 145 لسنة 2023"/></Field>
+      <Field label="نوع المصدر"><select name="source_type" className="input">
         <option value="judicial_principles_collection">مجموعة مبادئ قضائية مختصرة</option>
         <option value="single_judicial_principle">مبدأ قضائي منفرد</option>
         <option value="full_judgment">حكم كامل</option>
@@ -262,7 +262,7 @@ function UploadPanel({onSubmit,message,error,method,setMethod,processing,busy}:{
         <option>دستوري</option><option>مرافعات</option><option>إثبات</option><option>تنفيذ</option>
       </select></Field>
       <Field label="الموضوع"><input className="input" name="topic" required placeholder="مثال: الحضانة"/></Field>
-      <Field label="عنوان تصنيف محكمة التمييز"><input className="input" name="classification_title" required placeholder="مثال: سقوط الحضانة"/></Field>
+      <Field label="عنوان تصنيف محكمة التمييز"><input className="input" name="classification_title" placeholder="مثال: سقوط الحضانة"/></Field>
       <Field label="المسألة الدقيقة (اختياري)"><input className="input" name="micro_issue" placeholder="مثال: زواج الحاضنة"/></Field>
       <Field label="الدائرة (اختياري)"><input className="input" name="circuit"/></Field>
       <Field label="درجة المحكمة (اختياري)"><input className="input" name="court_level" placeholder="أول درجة / استئناف / تمييز"/></Field>
