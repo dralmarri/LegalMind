@@ -371,3 +371,90 @@ def requeue(batch_id: str, _: str = Depends(require_auth)) -> dict:
 @app.get("/health")
 def health() -> dict:
     return {"status": "ok"}
+
+
+# ─── البحث الدلالي (استرجاع لا توليد) ───────────────────────────────────────
+import subprocess
+import urllib.request as _urlreq
+
+QDRANT_URL = os.getenv("QDRANT_URL", "http://127.0.0.1:6333")
+COLLECTION = os.getenv("LEGALMIND_COLLECTION", "legalmind_multilingual_e5_base_v1")
+ENGINE_PY = "/opt/LegalMind/.venv/bin/python"
+EMBED_CLI = "/opt/LegalMind/engine/embed_query_cli.py"
+
+
+def _embed_query(text: str) -> list[float]:
+    """يولّد متجه السؤال عبر مفسّر المحرّك (حيث sentence_transformers)."""
+    proc = subprocess.run([ENGINE_PY, EMBED_CLI], input=text,
+                          capture_output=True, text=True, timeout=120)
+    if proc.returncode != 0:
+        raise HTTPException(500, f"تعذّر توليد متجه السؤال: {proc.stderr[-300:]}")
+    vec = json.loads(proc.stdout.strip() or "[]")
+    if not vec:
+        raise HTTPException(400, "سؤال فارغ")
+    return vec
+
+
+def _qdrant_search(vector: list[float], limit: int, flt: dict | None) -> list[dict]:
+    body = {"vector": vector, "limit": limit, "with_payload": True}
+    if flt:
+        body["filter"] = flt
+    data = json.dumps(body).encode("utf-8")
+    req = _urlreq.Request(f"{QDRANT_URL}/collections/{COLLECTION}/points/search",
+                          data=data, method="POST",
+                          headers={"Content-Type": "application/json"})
+    with _urlreq.urlopen(req, timeout=20) as resp:
+        return json.loads(resp.read()).get("result", [])
+
+
+@app.get("/api/search")
+def search(q: str, branch: str = "", topic: str = "", limit: int = 10,
+           _: str = Depends(require_auth)) -> dict:
+    """بحث دلالي: يُرجع النص الأصلي الموثّق مرتّبًا بالتشابه. لا يولّد استنباطًا."""
+    q = (q or "").strip()
+    if len(q) < 2:
+        raise HTTPException(400, "اكتب سؤالًا لا يقل عن حرفين")
+    limit = max(1, min(limit, 50))
+    vector = _embed_query(q)
+
+    must = []
+    if branch.strip():
+        must.append({"key": "branch", "match": {"value": branch.strip()}})
+    if topic.strip():
+        must.append({"key": "topic", "match": {"value": topic.strip()}})
+    flt = {"must": must} if must else None
+
+    hits = _qdrant_search(vector, limit, flt)
+    if not hits:
+        return {"query": q, "count": 0, "results": []}
+
+    # اجلب النصوص الكاملة من PostgreSQL (مصدر الحقيقة) بمعرّفات النتائج
+    ids = [h["payload"].get("object_id") for h in hits if h.get("payload", {}).get("object_id")]
+    rows = db_rows(
+        """SELECT id, object_type, branch, topic, subtopic, micro_issue, title,
+                  original_text, source_key, verification_status, authority_status,
+                  usable_as_citation
+           FROM knowledge_objects WHERE id = ANY(%s)""",
+        (ids,),
+    )
+    by_id = {r["id"]: r for r in rows}
+    results = []
+    for h in hits:
+        oid = h["payload"].get("object_id")
+        row = by_id.get(oid)
+        if not row:
+            continue
+        results.append({
+            "score": round(h.get("score", 0), 4),
+            "object_id": oid,
+            "object_type": row["object_type"],
+            "branch": row["branch"], "topic": row["topic"],
+            "subtopic": row["subtopic"], "micro_issue": row["micro_issue"],
+            "title": row["title"],
+            "text": row["original_text"],
+            "source_key": row["source_key"],
+            "verification_status": row["verification_status"],
+            "authority_status": row["authority_status"],
+            "usable_as_citation": row["usable_as_citation"],
+        })
+    return {"query": q, "count": len(results), "results": results}

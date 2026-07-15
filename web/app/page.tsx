@@ -164,7 +164,7 @@ export default function Home() {
         {view==='dashboard'&&<Dashboard stats={stats} jobs={jobs} cases={cases} setView={setView}/>} 
         {view==='cases'&&<CasesView cases={cases} onOpen={openCase} onCreate={submitCase}/>} 
         {view==='workspace'&&selectedCase&&<CaseWorkspace item={selectedCase} coverage={coverage} onSave={saveCase} setView={setView}/>} 
-        {view==='research'&&<ResearchView rows={filteredDocuments} query={query}/>} 
+        {view==='research'&&<ResearchView/>} 
         {view==='drafting'&&<DraftingView cases={cases} onOpen={openCase}/>} 
         {view==='review'&&<ReviewView cases={cases} onOpen={openCase}/>} 
         {view==='upload'&&<UploadPanel topics={topics} onSubmit={submitSource} message={uploadMessage} error={uploadError}
@@ -192,7 +192,49 @@ function CaseWorkspace({item,coverage,onSave,setView}:{item:LegalCase;coverage:C
   return <div className="space-y-6"><section className="rounded-3xl bg-slate-950 p-7 text-white"><div className="flex justify-between"><div><div className="text-sm text-amber-400">{item.case_key}</div><h2 className="mt-2 text-2xl font-bold">{item.title}</h2><p className="mt-2 text-slate-300">{item.branch} · {item.topic||'غير محدد'} · {item.subtopic||'غير محدد'}</p></div><div className="text-left"><div className={`rounded-full px-4 py-2 text-sm ${coverage?.drafting_ready?'bg-emerald-500/20 text-emerald-300':'bg-amber-500/20 text-amber-300'}`}>{coverage?.drafting_ready?'جاهزة لمسودة مسندة':'الصياغة مقيدة بنقص المصادر'}</div></div></div></section><div className="grid grid-cols-[1fr_360px] gap-6"><form onSubmit={onSave} className="space-y-5 rounded-2xl border bg-white p-6"><h3 className="text-lg font-bold">ملف القضية</h3><div className="grid grid-cols-2 gap-4"><input className="input" name="title" defaultValue={item.title}/><input className="input" name="status" defaultValue={item.status}/><input className="input" name="topic" defaultValue={item.topic}/><input className="input" name="subtopic" defaultValue={item.subtopic}/><input className="input" name="client_name" defaultValue={item.client_name} placeholder="الموكل"/><input className="input" name="client_capacity" defaultValue={item.client_capacity} placeholder="الصفة"/><input className="input" name="opponent_name" defaultValue={item.opponent_name} placeholder="الخصم"/><input className="input" name="court_name" defaultValue={item.court_name} placeholder="المحكمة"/></div><label className="block"><span className="mb-2 block font-bold">الوقائع</span><textarea className="input min-h-44" name="facts" defaultValue={item.facts}/></label><label className="block"><span className="mb-2 block font-bold">الطلبات</span><textarea className="input min-h-32" name="requests" defaultValue={item.requests}/></label><label className="block"><span className="mb-2 block font-bold">ملاحظات العمل</span><textarea className="input min-h-24" name="notes" defaultValue={item.notes}/></label><button className="rounded-xl bg-slate-950 px-6 py-3 font-bold text-white">حفظ التعديلات</button></form><aside className="space-y-5"><div className="rounded-2xl border bg-white p-5"><h3 className="font-bold">تغطية المعرفة</h3><div className="mt-4 space-y-3">{Object.entries(coverage?.counts||{}).map(([k,v])=><div key={k} className="flex justify-between text-sm"><span>{typeLabel[k]||k}</span><strong>{v}</strong></div>)}</div>{coverage?.missing?.length?<div className="mt-4 rounded-xl bg-amber-50 p-3 text-sm text-amber-900">ناقص: {coverage.missing.join('، ')}</div>:null}</div><button onClick={()=>setView('research')} className="w-full rounded-xl border bg-white py-3 font-bold">بحث مرتبط بالقضية</button><button onClick={()=>setView('drafting')} className="w-full rounded-xl bg-amber-400 py-3 font-bold text-slate-950">فتح استوديو الصياغة</button><div className="rounded-2xl border bg-white p-5 text-sm text-slate-600">{coverage?.note||'يجري حساب التغطية...'}</div></aside></div></div>
 }
 
-function ResearchView({rows,query}:{rows:DocumentRow[];query:string}) { return <div className="space-y-5"><div className="rounded-2xl border bg-white p-6"><h2 className="text-xl font-bold">البحث القانوني</h2><p className="mt-2 text-slate-500">استخدم مربع البحث العلوي للبحث في المعرف والعنوان والفرع والموضوع والمسألة الدقيقة.</p></div><DocumentsTable rows={rows.slice(0,300)}/>{!query&&<p className="text-center text-sm text-slate-500">أدخل عبارة بحث لخفض النتائج.</p>}</div> }
+function ResearchView() {
+  const [q,setQ]=useState(''); const [busy,setBusy]=useState(false);
+  const [err,setErr]=useState(''); const [res,setRes]=useState<any[]|null>(null);
+  const run=async(e:React.FormEvent)=>{
+    e.preventDefault(); const query=q.trim();
+    if(query.length<2){setErr('اكتب سؤالًا لا يقل عن حرفين');return;}
+    setBusy(true); setErr(''); setRes(null);
+    try{
+      const data=await api<{count:number;results:any[]}>(`/api/search?q=${encodeURIComponent(query)}&limit=15`);
+      setRes(data.results);
+    }catch(ex:any){setErr(ex?.message||'تعذّر البحث');}
+    finally{setBusy(false);}
+  };
+  const vlabel:Record<string,string>={source_verified:'موثّق من مصدره',machine_pending_human:'بانتظار مراجعة بشرية',operationally_accepted:'مقبول تشغيليًا',historical_only:'تاريخي فقط'};
+  return <div className="space-y-5">
+    <form onSubmit={run} className="rounded-2xl border bg-white p-6">
+      <h2 className="text-xl font-bold">البحث القانوني الدلالي</h2>
+      <p className="mt-1 text-sm text-slate-500">بحث بالمعنى في المبادئ المخزّنة — استرجاع النص الأصلي، لا صياغة مولّدة.</p>
+      <div className="mt-4 flex gap-3">
+        <input value={q} onChange={e=>setQ(e.target.value)} className="input flex-1" placeholder="مثال: شروط استحقاق الحضانة"/>
+        <button disabled={busy} className="rounded-xl bg-slate-950 px-8 py-3 font-bold text-white disabled:opacity-50">{busy?'يبحث…':'بحث'}</button>
+      </div>
+      {err&&<p className="mt-3 rounded-xl bg-rose-50 px-4 py-2 text-sm text-rose-700">{err}</p>}
+    </form>
+    {res&&res.length===0&&<p className="rounded-2xl border bg-white p-6 text-center text-slate-500">لا نتائج مطابقة. جرّب صياغة أخرى.</p>}
+    {res&&res.length>0&&<div className="space-y-3">
+      <p className="text-sm text-slate-500">{res.length} نتيجة مرتّبة بدرجة التشابه الدلالي.</p>
+      {res.map((h:any,i:number)=><div key={i} className="rounded-2xl border bg-white p-5">
+        <div className="mb-2 flex items-center justify-between gap-3">
+          <div className="text-sm text-slate-500">{h.branch} · {h.topic||'—'}{h.subtopic?` · ${h.subtopic}`:''}</div>
+          <div className="flex items-center gap-2">
+            <span className="rounded-full bg-slate-100 px-3 py-1 text-xs">{(h.score*100).toFixed(1)}%</span>
+            <span className={`rounded-full px-3 py-1 text-xs ${h.verification_status==='source_verified'?'bg-emerald-50 text-emerald-700':'bg-amber-50 text-amber-700'}`}>{vlabel[h.verification_status]||h.verification_status}</span>
+          </div>
+        </div>
+        {h.title&&<div className="font-bold">{h.title}</div>}
+        <p className="mt-1 whitespace-pre-wrap text-sm leading-7 text-slate-800">{h.text}</p>
+        <div className="mt-2 text-xs text-slate-400">{h.object_id}</div>
+      </div>)}
+    </div>}
+  </div>;
+}
+
 function DraftingView({cases,onOpen}:{cases:LegalCase[];onOpen:(c:LegalCase)=>void}) { return <div className="rounded-2xl border bg-white p-7"><h2 className="text-2xl font-bold">استوديو الصياغة</h2><p className="mt-2 text-slate-500">اختر قضية لفتح ملفها وفحص جاهزية مصادرها قبل إنشاء صحيفة أو مذكرة.</p><div className="mt-6 grid grid-cols-2 gap-4">{cases.map(c=><button key={c.id} onClick={()=>onOpen(c)} className="rounded-2xl border p-5 text-right hover:border-amber-400"><div className="font-bold">{c.title}</div><div className="mt-2 text-sm text-slate-500">{c.branch} · {c.topic||'—'}</div></button>)}</div></div> }
 function ReviewView({cases,onOpen}:{cases:LegalCase[];onOpen:(c:LegalCase)=>void}) { return <div className="rounded-2xl border bg-white p-7"><h2 className="text-2xl font-bold">مراجعة الأسانيد</h2><p className="mt-2 text-slate-500">تعرض هذه المرحلة مدى وجود التشريع والمبدأ والنموذج لكل قضية. افتح القضية لعرض تقرير التغطية.</p><div className="mt-6 space-y-3">{cases.map(c=><button key={c.id} onClick={()=>onOpen(c)} className="flex w-full justify-between rounded-xl border p-4"><span>{c.title}</span><span className="text-slate-500">فتح التقرير</span></button>)}</div></div> }
 
