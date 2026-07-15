@@ -307,7 +307,8 @@ def ingest_file(path: Path, archive_root: Path, failed_root: Path) -> dict:
                         "legal_memorandum": f"MEMO-{slug(branch)}-{slug(topic or title)}",
                     }
                     prefix = metadata.get("id_prefix", default_prefixes.get(object_type, f"OBJ-{slug(branch)}-{slug(topic or title)}"))
-                    object_id = prefix + "-" + chunk["local_id"]
+                    _chash = hashlib.sha256(normalize_text(chunk["text"]).encode("utf-8")).hexdigest()[:16]
+                    object_id = prefix + "-" + chunk["local_id"] + "-" + _chash
                     obj_metadata = {**metadata, **{k: v for k, v in chunk.items() if k not in {"text", "title", "local_id"}}, "batch_id": batch_id, "sha256": digest, "content_sha256": content_sha}
                     # حالة التوثيق تأتي من المصدر، والسلطة تُشتق منها لا تُعلن.
                     # المستنبط آليًا لا يصير مستشهدًا به بمجرد رفعه من الواجهة.
