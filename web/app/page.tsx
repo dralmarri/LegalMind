@@ -167,7 +167,7 @@ export default function Home() {
         {view==='research'&&<ResearchView rows={filteredDocuments} query={query}/>} 
         {view==='drafting'&&<DraftingView cases={cases} onOpen={openCase}/>} 
         {view==='review'&&<ReviewView cases={cases} onOpen={openCase}/>} 
-        {view==='upload'&&<UploadPanel onSubmit={submitSource} message={uploadMessage} error={uploadError}
+        {view==='upload'&&<UploadPanel topics={topics} onSubmit={submitSource} message={uploadMessage} error={uploadError}
           method={uploadMethod} setMethod={m=>{setUploadMethod(m);setUploadMessage('');setUploadError('');setProcessing([]);}}
           processing={processing} busy={uploading}/>}
         {view==='knowledge'&&<KnowledgeTree groups={groupedTopics}/>} 
@@ -230,8 +230,8 @@ function ProcessingStatus({items}:{items:FileStatus[]}) {
   </div>;
 }
 
-function UploadPanel({onSubmit,message,error,method,setMethod,processing,busy}:{
-  onSubmit:(e:React.FormEvent<HTMLFormElement>)=>void; message:string; error:string;
+function UploadPanel({topics,onSubmit,message,error,method,setMethod,processing,busy}:{
+  topics:Topic[]; onSubmit:(e:React.FormEvent<HTMLFormElement>)=>void; message:string; error:string;
   method:UploadMethod; setMethod:(m:UploadMethod)=>void; processing:FileStatus[]; busy:boolean;
 }) {
   const tab = (id:UploadMethod, label:string) =>
@@ -261,9 +261,9 @@ function UploadPanel({onSubmit,message,error,method,setMethod,processing,busy}:{
         <option>عمالي</option><option>جزائي</option><option>إداري</option>
         <option>دستوري</option><option>مرافعات</option><option>إثبات</option><option>تنفيذ</option>
       </select></Field>
-      <Field label="الموضوع"><input className="input" name="topic" required placeholder="مثال: الحضانة"/></Field>
-      <Field label="عنوان تصنيف محكمة التمييز"><input className="input" name="classification_title" placeholder="مثال: سقوط الحضانة"/></Field>
-      <Field label="المسألة الدقيقة (اختياري)"><input className="input" name="micro_issue" placeholder="مثال: زواج الحاضنة"/></Field>
+      <Field label="الموضوع"><input className="input" name="topic" required list="dl-topics" placeholder="مثال: الحضانة"/><datalist id="dl-topics">{[...new Set(topics.map(t=>t.topic).filter(Boolean))].map(t=><option key={t} value={t}/>)}</datalist></Field>
+      <Field label="عنوان تصنيف محكمة التمييز"><input className="input" name="classification_title" list="dl-cls" placeholder="مثال: سقوط الحضانة"/><datalist id="dl-cls">{[...new Set(topics.map(t=>t.subtopic).filter(Boolean))].map(t=><option key={t} value={t}/>)}</datalist></Field>
+      <Field label="المسألة الدقيقة (اختياري)"><input className="input" name="micro_issue" list="dl-mi" placeholder="مثال: زواج الحاضنة"/><datalist id="dl-mi">{[...new Set(topics.map(t=>t.micro_issue).filter(Boolean))].map(t=><option key={t} value={t}/>)}</datalist></Field>
       <Field label="الدائرة (اختياري)"><input className="input" name="circuit"/></Field>
       <Field label="درجة المحكمة (اختياري)"><input className="input" name="court_level" placeholder="أول درجة / استئناف / تمييز"/></Field>
       <Field label="حالة التوثيق"><select name="verification_status" required className="input" defaultValue="source_verified">
