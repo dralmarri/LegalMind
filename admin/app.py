@@ -458,3 +458,55 @@ def search(q: str, branch: str = "", topic: str = "", limit: int = 10,
             "usable_as_citation": row["usable_as_citation"],
         })
     return {"query": q, "count": len(results), "results": results}
+
+
+# ─── رفع مستند DOCX هرمي: معاينة ثم اعتماد ثم إدخال ─────────────────────────
+import sys as _sys
+if "/opt/LegalMind/tools" not in _sys.path:
+    _sys.path.insert(0, "/opt/LegalMind/tools")
+import kpkg_docx
+
+SESS_DIR = INGEST_ROOT / ".docx_sessions"
+
+
+@app.post("/api/docx/preview")
+async def docx_preview(file: Annotated[UploadFile, File(...)],
+                       _: str = Depends(require_auth)) -> dict:
+    """يرفع DOCX، يحلّله هرميًّا، يعيد شجرة المواضيع للمعاينة (بلا إدخال)."""
+    data = await file.read()
+    if len(data) > MAX_UPLOAD_MB * 1024 * 1024:
+        raise HTTPException(413, f"الملف يتجاوز {MAX_UPLOAD_MB} ميغابايت")
+    if not data:
+        raise HTTPException(400, "ملف فارغ")
+    SESS_DIR.mkdir(parents=True, exist_ok=True)
+    token = secrets.token_hex(8)
+    tmp = SESS_DIR / f"{token}.docx"
+    tmp.write_bytes(data)
+    try:
+        branch, records = kpkg_docx.parse(str(tmp))
+    except Exception as exc:
+        tmp.unlink(missing_ok=True)
+        raise HTTPException(400, f"تعذّر تحليل الملف: {str(exc)[:150]}")
+    finally:
+        tmp.unlink(missing_ok=True)
+    if not records:
+        raise HTTPException(400, "لم تُكتشف مبادئ مرقّمة في الملف")
+    (SESS_DIR / f"{token}.json").write_text(
+        json.dumps({"branch": branch, "records": records}, ensure_ascii=False),
+        encoding="utf-8")
+    return {"token": token, "branch": branch,
+            "principle_count": len(records), "tree": kpkg_docx.tree(records)}
+
+
+@app.post("/api/docx/ingest")
+async def docx_ingest(body: dict, _: str = Depends(require_auth)) -> dict:
+    """يعتمد الشجرة (مع تصحيحاتها) ويولّد ملفات inbox ليعالجها المحرّك."""
+    token = str(body.get("token", ""))
+    overrides = body.get("overrides") or None
+    sess = SESS_DIR / f"{token}.json"
+    if not token or not sess.exists():
+        raise HTTPException(404, "جلسة المعاينة غير موجودة أو انتهت — أعد رفع الملف")
+    data = json.loads(sess.read_text(encoding="utf-8"))
+    res = kpkg_docx.generate_inbox(data["records"], str(INBOX), overrides=overrides)
+    sess.unlink(missing_ok=True)
+    return {"status": "queued", "files": res["files"], "principles": res["principles"]}

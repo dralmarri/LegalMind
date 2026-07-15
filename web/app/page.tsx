@@ -13,7 +13,7 @@ type Topic = { branch: string; topic?: string; subtopic?: string; micro_issue?: 
 type DocumentRow = { id: string; object_type: string; branch: string; topic?: string; subtopic?: string; micro_issue?: string; title?: string; verification_status: string };
 type LegalCase = { id: string; case_key: string; title: string; branch: string; topic?: string; subtopic?: string; client_name?: string; client_capacity?: string; opponent_name?: string; court_name?: string; court_level?: string; status: string; facts?: string; requests?: string; notes?: string; updated_at: string; authorities?: unknown[]; drafts?: unknown[] };
 type Coverage = { counts: Record<string, number>; drafting_ready: boolean; drafting_status: string; missing: string[]; note: string };
-type View = 'dashboard' | 'cases' | 'workspace' | 'research' | 'drafting' | 'review' | 'upload' | 'knowledge' | 'documents' | 'jobs' | 'graph';
+type View = 'dashboard' | 'cases' | 'workspace' | 'research' | 'drafting' | 'review' | 'upload' | 'docx' | 'knowledge' | 'documents' | 'jobs' | 'graph';
 type UploadMethod = 'file' | 'paste';
 type DuplicateOf = { first_batch_id: string; object_count: number; ingested_at?: string; title?: string };
 type FileStatus = { file_id: string; status: string; batch_id?: string; object_count?: number; duplicate_of?: DuplicateOf; error?: string };
@@ -22,6 +22,7 @@ const nav = [
   ['dashboard', 'الرئيسية', LayoutDashboard],
   ['cases', 'القضايا', BriefcaseBusiness],
   ['research', 'البحث القانوني', FileSearch],
+  ['docx', 'رفع مستند هرمي', UploadCloud],
   ['drafting', 'استوديو الصياغة', PenLine],
   ['review', 'مراجعة الأسانيد', ClipboardCheck],
   ['knowledge', 'شجرة المعرفة', FolderTree],
@@ -164,7 +165,8 @@ export default function Home() {
         {view==='dashboard'&&<Dashboard stats={stats} jobs={jobs} cases={cases} setView={setView}/>} 
         {view==='cases'&&<CasesView cases={cases} onOpen={openCase} onCreate={submitCase}/>} 
         {view==='workspace'&&selectedCase&&<CaseWorkspace item={selectedCase} coverage={coverage} onSave={saveCase} setView={setView}/>} 
-        {view==='research'&&<ResearchView/>} 
+        {view==='research'&&<ResearchView/>}
+        {view==='docx'&&<DocxView/>} 
         {view==='drafting'&&<DraftingView cases={cases} onOpen={openCase}/>} 
         {view==='review'&&<ReviewView cases={cases} onOpen={openCase}/>} 
         {view==='upload'&&<UploadPanel topics={topics} onSubmit={submitSource} message={uploadMessage} error={uploadError}
@@ -190,6 +192,54 @@ function CasesView({cases,onOpen,onCreate}:{cases:LegalCase[];onOpen:(c:LegalCas
 
 function CaseWorkspace({item,coverage,onSave,setView}:{item:LegalCase;coverage:Coverage|null;onSave:(e:React.FormEvent<HTMLFormElement>)=>void;setView:(v:View)=>void}) {
   return <div className="space-y-6"><section className="rounded-3xl bg-slate-950 p-7 text-white"><div className="flex justify-between"><div><div className="text-sm text-amber-400">{item.case_key}</div><h2 className="mt-2 text-2xl font-bold">{item.title}</h2><p className="mt-2 text-slate-300">{item.branch} · {item.topic||'غير محدد'} · {item.subtopic||'غير محدد'}</p></div><div className="text-left"><div className={`rounded-full px-4 py-2 text-sm ${coverage?.drafting_ready?'bg-emerald-500/20 text-emerald-300':'bg-amber-500/20 text-amber-300'}`}>{coverage?.drafting_ready?'جاهزة لمسودة مسندة':'الصياغة مقيدة بنقص المصادر'}</div></div></div></section><div className="grid grid-cols-[1fr_360px] gap-6"><form onSubmit={onSave} className="space-y-5 rounded-2xl border bg-white p-6"><h3 className="text-lg font-bold">ملف القضية</h3><div className="grid grid-cols-2 gap-4"><input className="input" name="title" defaultValue={item.title}/><input className="input" name="status" defaultValue={item.status}/><input className="input" name="topic" defaultValue={item.topic}/><input className="input" name="subtopic" defaultValue={item.subtopic}/><input className="input" name="client_name" defaultValue={item.client_name} placeholder="الموكل"/><input className="input" name="client_capacity" defaultValue={item.client_capacity} placeholder="الصفة"/><input className="input" name="opponent_name" defaultValue={item.opponent_name} placeholder="الخصم"/><input className="input" name="court_name" defaultValue={item.court_name} placeholder="المحكمة"/></div><label className="block"><span className="mb-2 block font-bold">الوقائع</span><textarea className="input min-h-44" name="facts" defaultValue={item.facts}/></label><label className="block"><span className="mb-2 block font-bold">الطلبات</span><textarea className="input min-h-32" name="requests" defaultValue={item.requests}/></label><label className="block"><span className="mb-2 block font-bold">ملاحظات العمل</span><textarea className="input min-h-24" name="notes" defaultValue={item.notes}/></label><button className="rounded-xl bg-slate-950 px-6 py-3 font-bold text-white">حفظ التعديلات</button></form><aside className="space-y-5"><div className="rounded-2xl border bg-white p-5"><h3 className="font-bold">تغطية المعرفة</h3><div className="mt-4 space-y-3">{Object.entries(coverage?.counts||{}).map(([k,v])=><div key={k} className="flex justify-between text-sm"><span>{typeLabel[k]||k}</span><strong>{v}</strong></div>)}</div>{coverage?.missing?.length?<div className="mt-4 rounded-xl bg-amber-50 p-3 text-sm text-amber-900">ناقص: {coverage.missing.join('، ')}</div>:null}</div><button onClick={()=>setView('research')} className="w-full rounded-xl border bg-white py-3 font-bold">بحث مرتبط بالقضية</button><button onClick={()=>setView('drafting')} className="w-full rounded-xl bg-amber-400 py-3 font-bold text-slate-950">فتح استوديو الصياغة</button><div className="rounded-2xl border bg-white p-5 text-sm text-slate-600">{coverage?.note||'يجري حساب التغطية...'}</div></aside></div></div>
+}
+
+function DocxView() {
+  const [busy,setBusy]=useState(false); const [err,setErr]=useState('');
+  const [prev,setPrev]=useState<any>(null); const [done,setDone]=useState<any>(null);
+  const onFile=async(e:React.ChangeEvent<HTMLInputElement>)=>{
+    const f=e.target.files?.[0]; if(!f)return;
+    setBusy(true); setErr(''); setPrev(null); setDone(null);
+    try{ const fd=new FormData(); fd.append('file',f);
+      const r=await api<any>('/api/docx/preview',{method:'POST',body:fd}); setPrev(r);
+    }catch(ex:any){setErr(ex?.message||'تعذّر التحليل');} finally{setBusy(false);}
+  };
+  const ingest=async()=>{ if(!prev)return; setBusy(true); setErr('');
+    try{ const r=await api<any>('/api/docx/ingest',{method:'POST',
+        headers:{'Content-Type':'application/json'},body:JSON.stringify({token:prev.token})});
+      setDone(r); setPrev(null);
+    }catch(ex:any){setErr(ex?.message||'تعذّر الإدخال');} finally{setBusy(false);}
+  };
+  return <div className="space-y-5">
+    <div className="rounded-2xl border bg-white p-6">
+      <h2 className="text-xl font-bold">رفع مستند هرمي (DOCX)</h2>
+      <p className="mt-1 text-sm text-slate-500">ارفع ملف Word فيه عناوين متعددة المستويات ومبادئ مرقّمة. يُحلَّل هرميًّا، تعاين الشجرة، ثم تعتمدها فتُدخَل بمواضيعها الصحيحة.</p>
+      <label className="mt-4 inline-block cursor-pointer rounded-xl bg-slate-950 px-6 py-3 font-bold text-white">
+        {busy?'يعالج…':'اختر ملف DOCX'}
+        <input type="file" accept=".docx" className="hidden" onChange={onFile} disabled={busy}/>
+      </label>
+      {err&&<p className="mt-3 rounded-xl bg-rose-50 px-4 py-2 text-sm text-rose-700">{err}</p>}
+    </div>
+    {done&&<div className="rounded-2xl border bg-emerald-50 p-6 text-emerald-800">
+      <div className="font-bold">تم الإدخال ✓</div>
+      <div className="mt-1 text-sm">وُلّد {done.files} ملفًا موضوعيًّا، {done.principles} مبدأً — يعالجها المحرّك الآن ويفهرسها.</div>
+    </div>}
+    {prev&&<div className="rounded-2xl border bg-white p-6">
+      <div className="flex items-center justify-between">
+        <div><span className="font-bold">{prev.branch}</span> — {prev.principle_count} مبدأً، {prev.tree.length} مسارًا موضوعيًّا</div>
+        <button onClick={ingest} disabled={busy} className="rounded-xl bg-amber-400 px-6 py-3 font-bold text-slate-950 disabled:opacity-50">اعتمد وأدخِل</button>
+      </div>
+      <p className="mt-2 text-sm text-slate-500">راجع الشجرة قبل الاعتماد. النصوص الأصلية تُحفظ حرفيًّا بترقيم مستقل لكل موضوع.</p>
+      <div className="mt-4 max-h-96 overflow-auto rounded-xl border">
+        <table className="w-full text-sm"><thead className="bg-slate-50"><tr>
+          <th className="p-2 text-right">الموضوع</th><th className="p-2 text-right">الفرعي</th><th className="p-2 text-right">المسألة</th><th className="p-2">عدد</th></tr></thead>
+          <tbody>{prev.tree.map((r:any,i:number)=><tr key={i} className="border-t">
+            <td className="p-2">{r.topic||'—'}</td><td className="p-2">{r.subtopic||'—'}</td>
+            <td className="p-2">{r.micro_issue||'—'}</td><td className="p-2 text-center font-bold">{r.count}</td></tr>)}</tbody>
+        </table>
+      </div>
+    </div>}
+  </div>;
 }
 
 function ResearchView() {
