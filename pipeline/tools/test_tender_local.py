@@ -7,10 +7,10 @@ import ast, re, sys
 
 SRC = open("/tmp/app_patched.py", encoding="utf-8").read()
 TREE = ast.parse(SRC)
-WANT_FN = {"_draft_norm_ar", "_kmatch", "_kmatch_w", "_tender_ids"}
+WANT_FN = {"_draft_norm_ar", "_kmatch", "_kmatch_w", "_tender_ids", "_with_lta"}
 WANT_VAR = {"_AR_DIAC", "_BR_PFX", "_BR_MCACHE", "_PEN_BND",
             "_TENDER_STRONG", "_TENDER_ENT", "_TENDER_ACT", "_TENDER_TERM", "_TENDER_CTX",
-            "_TENDER_CORE", "_TENDER_P"}
+            "_TENDER_CORE", "_TENDER_P", "_LTA_P", "_LTA_OF", "_LTA_CAP"}
 picked, got = [], set()
 for n in TREE.body:
     if isinstance(n, ast.FunctionDef) and n.name in WANT_FN:
@@ -65,6 +65,41 @@ case("هل يسري قانون المناقصات على مشتريات مؤسس
      [P % "m2", P % "m3"], lbl="نطاقُ السريان")
 case("ما هو قانون المناقصات العامة في الكويت؟",
      [P % "m2", P % "m13", P % "m79"], lbl="سؤالٌ عامّ")
+
+R = "reg-30-2017-m%s"
+print("\n== جسرُ اللائحة: النصُّ وتفصيلُه معًا ==")
+for q, pairs, lbl in (
+    ("كم نسبة التأمين النهائي في مناقصة عامة؟ وهل ترد بعد التنفيذ؟",
+     [(P % "m65", R % "42")], "التأمين النهائي"),
+    ("كم قيمة التأمين الأولي المطلوب مع العطاء ولصالح من يحرر خطاب الضمان؟",
+     [(P % "m45", R % "30")], "التأمين الأولي"),
+    ("ما نسبة أفضلية المنتج الوطني في مناقصات التوريد؟",
+     [(P % "m62", R % "40")], "أفضلية المنتج الوطني"),
+    ("كم المدة المقررة لقبول أو استبعاد العروض الفنية في المناقصة؟",
+     [(P % "m50", R % "32")], "مدّة الفحص الفنّيّ"),
+    ("ما ميعاد التظلم من قرار الترسية وأمام من؟",
+     [(P % "m78", R % "44"), (P % "m77", R % "43")], "مواعيد التظلّم"),
+    ("كيف أتظلم من قرار لجنة التصنيف الذي وضع شركتي في فئة أدنى؟",
+     [(P % "m27", R % "20")], "تظلّمُ التصنيف")):
+    ids = T(q); short = [i.replace("legis-49-2016-", "ق").replace("reg-30-2017-", "ل") for i in ids]
+    for law, reg in pairs:
+        if law not in ids:
+            fails.append("%s: القانون مفقود %s" % (lbl, law)); continue
+        if reg not in ids:
+            fails.append("%s: اللائحة مفقودة %s" % (lbl, reg)); continue
+        il, ir = ids.index(law), ids.index(reg)
+        if not (il < ir <= il + 2):   # لائحتان على الأكثر تليان مادّتَهما
+            fails.append("%s: اللائحة ليست ملاصقةً (%d ثم %d)" % (lbl, il, ir))
+        if il >= 18 or ir >= 18:
+            fails.append("%s: الزوجُ خارج النافذة (%d، %d)" % (lbl, il, ir))
+    print("• %-22s %2d معرّفًا | %s" % (lbl, len(ids), ", ".join(short[:12])))
+
+print("\n== لا تسرّبَ للائحة حيث لا قانون ==")
+for q, lbl in (("ما عقوبةُ السرقة من منزلٍ مسكونٍ ليلًا؟", "سرقة"),
+               ("أي محكمة تختص بدعوى تعويض ضد وزارة الصحة عن خطأ طبي؟", "خطأ طبّيّ")):
+    leak = [i for i in T(q) if i.startswith("reg-30-2017")]
+    if leak: fails.append("تسرّبُ لائحةٍ في %s: %s" % (lbl, leak[:3]))
+    print("• %-12s %s" % (lbl, "صامت ✓" if not leak else "نطق ✗"))
 
 print("\n== الصمتُ الواجب ==")
 for q, lbl in (("ما عقوبةُ السرقة من منزلٍ مسكونٍ ليلًا؟", "سرقة"),
