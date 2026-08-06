@@ -120,6 +120,24 @@ HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 \
 
 ---
 
+## 6-مكرر) بطارية القياس (صمام الانتكاس الدائم)
+
+`/opt/LegalMind/battery.json` (10 قضايا معيارية عبر كل الفروع بشروط نجاح صريحة: مواد واجبة
+`must` / بدائل `any` / حد أدنى لتمثيل قانون `law_min` / **ضمانة مادة النفاذ ديناميكيًا** `must_last`
+تُقرأ آخر مادة من القاعدة لا من رقم مخمن) + المشغل `/opt/LegalMind/tools/battery_run.py` —
+يجري خط الاسترجاع كاملًا (محاور Haiku + متجهات + حزم + محلّ + فصول + معجمي) **بلا نداء صياغة**
+(3-5 دقائق، كلفة فلسات). التشغيل:
+
+```bash
+cd /opt/LegalMind; set -a; . deploy/.env; set +a
+/opt/LegalMind/admin/.venv/bin/python /opt/LegalMind/tools/battery_run.py
+```
+
+النجاح = `BATTERY_PASS` (خط الأساس 10/10 اعتُمد 2026-08-06). **تُشغَّل بعد أي دفعة بيانات أو
+فهرسة كاملة أو تعديل على الاستوديو — لا حاجة لها في الاستعمال اليومي.** عند `BATTERY_FAIL`
+السطر يسمي العطب (must/any/law/last). نسخ البطارية محفوظة في المستودع (`battery.json` +
+`tools/battery_run.py`).
+
 ## 7) أوامر التشغيل الشائعة
 
 ```bash
