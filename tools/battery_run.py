@@ -42,6 +42,7 @@ def main():
         for mid in c.get("must", []):
             if mid not in picked: fails.append("must:" + mid)
         for grp in c.get("any", []):
+            if isinstance(grp, str): grp = [grp]
             if grp and not any(g in picked for g in grp): fails.append("any:" + "/".join(g.rsplit("-",1)[1] for g in grp[:3]))
         for pref in c.get("must_last", []):
             import os, psycopg
