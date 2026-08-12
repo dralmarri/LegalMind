@@ -82,18 +82,25 @@ def _structure(path, text, tax, metadata, progress=None):
     open(p, "w", encoding="utf-8").write(src)
     print("رُكب المقسم النصي ✓")
 PYEOF
-/opt/LegalMind/.venv/bin/python -m py_compile /opt/LegalMind/engine/claude_reader.py &amp;&amp; echo "الكود سليم ✓"
+/opt/LegalMind/.venv/bin/python -m py_compile /opt/LegalMind/engine/claude_reader.py
+echo "الكود سليم ✓"
 systemctl restart legalmind-ingest
 echo "========== تنظيف دفعة القانون البحري الناقصة وإعادته =========="
 BID=$(docker exec legalmind-postgres psql -U legalmind -d legalmind -Atc "SELECT batch_id FROM ingestion_batches WHERE object_count=20 ORDER BY started_at DESC LIMIT 1;")
 echo "الدفعة: $BID"
 if [ -n "$BID" ]; then
   IDS=$(docker exec legalmind-postgres psql -U legalmind -d legalmind -Atc "SELECT string_agg('\"'||id||'\"', ',') FROM knowledge_objects WHERE metadata->>'batch_id'='$BID';")
-  [ -n "$IDS" ] &amp;&amp; curl -s -X POST http://127.0.0.1:6333/collections/legalmind_multilingual_e5_base_v1/points/delete -H 'Content-Type: application/json' -d "{\"filter\":{\"must\":[{\"key\":\"object_id\",\"match\":{\"any\":[$IDS]}}]}}" >/dev/null &amp;&amp; echo "نُظف الفهرس"
+  if [ -n "$IDS" ]; then
+    curl -s -X POST http://127.0.0.1:6333/collections/legalmind_multilingual_e5_base_v1/points/delete -H 'Content-Type: application/json' -d "{\"filter\":{\"must\":[{\"key\":\"object_id\",\"match\":{\"any\":[$IDS]}}]}}" >/dev/null
+    echo "نُظف الفهرس"
+  fi
   docker exec legalmind-postgres psql -U legalmind -d legalmind -c "DELETE FROM knowledge_objects WHERE metadata->>'batch_id'='$BID'; DELETE FROM sources WHERE source_key IN (SELECT source_key FROM ingestion_batches WHERE batch_id='$BID'); DELETE FROM ingestion_batches WHERE batch_id='$BID';"
   F=$(ls /opt/legalmind-ingest/archive/${BID}__*.pdf 2>/dev/null | head -1)
   echo "الملف الأرشيفي: $F"
-  [ -n "$F" ] &amp;&amp; cp "$F" "/opt/legalmind-ingest/inbox/$(basename "$F" | sed 's/^[^_]*__//')" &amp;&amp; echo "أُعيد للطابور ✓ — تابع الأجزاء من مركز المصادر"
+  if [ -n "$F" ]; then
+    cp "$F" "/opt/legalmind-ingest/inbox/$(basename "$F" | sed 's/^[^_]*__//')"
+    echo "أُعيد للطابور — تابع الأجزاء من مركز المصادر"
+  fi
 else
   echo "!! لم أجد دفعة بعشرين كائناً — أخبر كلود"
 fi
