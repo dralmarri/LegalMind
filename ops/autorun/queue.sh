@@ -1,5 +1,5 @@
 #!/bin/bash
-# أمر آلي 62: إدخال الكتاب العاشر (الإفصاح والشفافية) إلى بطاقة هيئة أسواق المال — 73 كائناً مدققاً بصرياً
+# أمر آلي 62ب: إدخال الكتاب العاشر (الإفصاح والشفافية) إلى بطاقة هيئة أسواق المال — 73 كائناً مدققاً بصرياً
 set -e
 set -a; source /opt/LegalMind/deploy/.env; set +a
 PY=/opt/LegalMind/.venv/bin/python
@@ -12,6 +12,10 @@ $PY - <<'PYEOF'
 import sys, json
 sys.path.insert(0, "/opt/LegalMind/engine")
 import legalmind_engine as eng
+from psycopg.types.json import Json
+
+def adapt(v):
+    return Json(v) if isinstance(v, (dict, list)) else v
 
 DOC_PART = 'اللائحة التنفيذية — الكتاب العاشر — الإفصاح والشفافية'
 SHA = '1ef7a6674bc54175c6c4455a3512d82d5696f17af31977619eca0012c4a6d749'
@@ -56,7 +60,7 @@ with eng.psycopg.connect(eng.database_url()) as conn:
             if cur.fetchone()[0] == 0:
                 ks = list(sdict.keys())
                 cur.execute("INSERT INTO sources (" + ",".join(ks) + ") VALUES (" + ",".join(["%s"] * len(ks)) + ")",
-                            [sdict[k] for k in ks])
+                            [adapt(sdict[k]) for k in ks])
             print("سجل المصدر جاهز ✓", flush=True)
     except Exception as e:
         src_key = tpl['source_key']
@@ -101,13 +105,13 @@ with eng.psycopg.connect(eng.database_url()) as conn:
         if labels:
             meta['article_number'] = labels[-1]
             meta['article_numbers'] = labels
-        row['metadata'] = json.dumps(meta, ensure_ascii=False)
+        row['metadata'] = Json(meta)
         for tcol in ('created_at', 'updated_at'):
             if tcol in row:
                 del row[tcol]
         ks = list(row.keys())
         cur.execute("INSERT INTO knowledge_objects (" + ",".join(ks) + ",created_at,updated_at) VALUES ("
-                    + ",".join(["%s"] * len(ks)) + ",now(),now())", [row[k] for k in ks])
+                    + ",".join(["%s"] * len(ks)) + ",now(),now())", [adapt(row[k]) for k in ks])
         inserted += 1
     print("أُدخل:", inserted, "كائناً ✓", flush=True)
 
@@ -120,4 +124,4 @@ with eng.psycopg.connect(eng.database_url()) as conn:
         print("  %s : %d" % (p, c), flush=True)
     print("الإجمالي:", total, flush=True)
 PYEOF
-echo "===== اكتمل الأمر 62 ====="
+echo "===== اكتمل الأمر 62ب ====="
