@@ -1,56 +1,68 @@
 #!/bin/bash
-# أمر آلي 22: تصحيح العنصر الوحيد المتبقي (الكتاب العاشر) — قاعدة بيانات فقط، صفر تكلفة
+# أمر آلي 23: إصلاح عطل typo_fixer (نفس فئة خطأ 'str' has no attribute 'get') + استئناف الجدولتين الدائمتين
 set -e
 set -a; source /opt/LegalMind/deploy/.env; set +a
 
+echo "== إصلاح عطل typo_fixer.py (تنقية عناصر غير سليمة من رد النموذج) =="
 python3 - <<'PYEOF'
 # -*- coding: utf-8 -*-
-import sys
-sys.path.insert(0, "/opt/LegalMind/engine")
-import legalmind_engine as eng
+p = "/opt/LegalMind/tools/typo_fixer.py"
+src = open(p, encoding="utf-8").read()
 
-with eng.psycopg.connect(eng.database_url()) as conn:
-    conn.autocommit = True
-    cur = conn.cursor()
-    cur.execute("""SELECT source_key FROM sources
-                   WHERE file_name ILIKE '%الكتاب-العاشر-اسواق-المال%' LIMIT 1""")
-    r = cur.fetchone()
-    if not r:
-        print("لم أجد مصدر الكتاب العاشر بهذا الاسم")
-    else:
-        sk = r[0]
-        print("مفتاح الكتاب العاشر:", sk)
-        cur.execute("""SELECT id, title FROM knowledge_objects
-                       WHERE source_key=%s AND object_type='judicial_principle'""", (sk,))
-        rows = cur.fetchall()
-        print("عناصر مصنّفة خطأً وجدتها:", rows)
-
-        cur.execute("""UPDATE knowledge_objects
-                       SET object_type='legislation_article',
-                           metadata = metadata || '{"reclassified_from":"judicial_principle","reclass_method":"manual_single_fix"}'::jsonb,
-                           updated_at=now()
-                       WHERE source_key=%s AND object_type='judicial_principle'""", (sk,))
-        print("عُدّل:", cur.rowcount, "صف")
-
-        cur.execute("""SELECT id, title, original_text, object_type, branch, topic, subtopic,
-                              metadata->>'micro_issue', source_key
-                       FROM knowledge_objects WHERE source_key=%s""", (sk,))
-        allr = cur.fetchall()
-        if allr:
-            common = {"object_type": allr[0][3], "branch": allr[0][4], "topic": allr[0][5],
-                      "subtopic": allr[0][6], "micro_issue": allr[0][7], "source_key": allr[0][8]}
-            eng.qdrant_request("PUT", "/collections/" + eng.COLLECTION + "/points?wait=true",
-                               {"points": eng.build_points([(x[0], x[1], x[2]) for x in allr], common)})
-            print("أُعيدت فهرسة %d كائن (محلياً، بلا تكلفة) ✓" % len(allr))
-
-    cur.execute("SELECT object_type, count(*) FROM knowledge_objects WHERE object_type='judicial_principle' GROUP BY 1")
-    print("\nتحقق أخير: إجمالي المتبقي 'مبدأ قضائي' في كل القاعدة:")
-    cur.execute("SELECT count(*) FROM knowledge_objects WHERE object_type='judicial_principle'")
-    print(" ", cur.fetchone()[0])
+OLD = '''            for blk in res.get("content", []):
+                if blk.get("type") == "tool_use":
+                    return blk["input"].get("fixes", [])
+            return []'''
+NEW = '''            for blk in res.get("content", []):
+                if blk.get("type") == "tool_use":
+                    raw = blk["input"].get("fixes", [])
+                    clean = [x for x in raw if isinstance(x, dict)]
+                    if len(clean) != len(raw):
+                        print("    تجاهلت %d عنصراً غير سليم النوع" % (len(raw) - len(clean)), flush=True)
+                    return clean
+            return []'''
+if OLD in src:
+    src = src.replace(OLD, NEW, 1)
+    open(p, "w", encoding="utf-8").write(src)
+    print("أُصلح ✓")
+else:
+    print("مُصلح مسبقاً أو الكود مختلف — تحقق يدوي لاحقاً")
 PYEOF
+/opt/LegalMind/.venv/bin/python -m py_compile /opt/LegalMind/tools/typo_fixer.py && echo "الكود سليم ✓"
+
+echo ""
+echo "== استئناف الجدولتين الدائمتين =="
+cat > /etc/cron.d/legalmind-autoreview <<'EOF'
+*/20 * * * * root flock -n /var/lock/lmreview.lock /opt/LegalMind/tools/run_reviewer.sh >> /root/reviewer.log 2>&1
+EOF
+chmod 644 /etc/cron.d/legalmind-autoreview
+echo "خدمة المراجعة الدورية (كل 20 دقيقة) مفعّلة ✓"
+
+cat > /etc/cron.d/legalmind-typofix <<'EOF'
+7,37 * * * * root flock -n /var/lock/lmtypofix.lock /opt/LegalMind/tools/run_typo_fixer.sh >> /root/typofix.log 2>&1
+EOF
+chmod 644 /etc/cron.d/legalmind-typofix
+echo "خدمة التنظيف الطباعي (كل 30 دقيقة) مفعّلة ✓"
+
+echo ""
+echo "== تشغيل تجريبي فوري لكل منهما للتأكد من عدم وجود عطل =="
+timeout 200 /opt/LegalMind/tools/run_reviewer.sh > /root/reviewer-resume-test.log 2>&1 || true
+echo "-- المراجعة الدورية --"
+tail -15 /root/reviewer-resume-test.log
+
+timeout 200 /opt/LegalMind/tools/run_typo_fixer.sh > /root/typofix-resume-test.log 2>&1 || true
+echo "-- التنظيف الطباعي --"
+tail -15 /root/typofix-resume-test.log
 
 {
-  echo "=== تصحيح العنصر الأخير (الكتاب العاشر) — صفر تكلفة — $(date -u +%F' '%T) UTC ==="
-  echo "اكتمل التصحيح ✓ — راجع المخرجات أعلاه في هذا السجل"
+  echo "=== استئناف الخدمتين التلقائيتين — $(date -u +%F' '%T) UTC ==="
+  echo "المراجعة الدورية: كل 20 دقيقة | التنظيف الطباعي: كل 30 دقيقة"
+  echo "الطابور الحالي صغير جداً (~230 عنصراً فقط) — استهلاك متوقع منخفض من الآن فصاعداً"
+  echo ""
+  echo "-- اختبار المراجعة الدورية --"
+  cat /root/reviewer-resume-test.log
+  echo ""
+  echo "-- اختبار التنظيف الطباعي --"
+  cat /root/typofix-resume-test.log
 } > "/var/www/legalmind-v3/review-$(cat /opt/legalmind-autopilot/token).txt"
-echo "===== نُشرت النتيجة ====="
+echo "===== نُشرت نتيجة الاستئناف ====="
