@@ -1,5 +1,5 @@
 #!/bin/bash
-# أمر آلي 64: (أ) فهرسة دلالية محلية لمواد الكتاب العاشر والمادتين المعدلتين (ب) اعتماد المبادئ المعلقة بالمطابقة النصية الحتمية
+# أمر آلي 65: (أ) فهرسة دلالية محلية لمواد الكتاب العاشر والمادتين المعدلتين (ب) اعتماد المبادئ المعلقة بالمطابقة النصية الحتمية
 set -e
 set -a; source /opt/LegalMind/deploy/.env; set +a
 PY=/opt/LegalMind/.venv/bin/python
@@ -9,36 +9,6 @@ $PY - <<'PYEOF'
 import sys, re, os, glob
 sys.path.insert(0, "/opt/LegalMind/engine")
 import legalmind_engine as eng
-import embedding
-
-print("== (أ) الفهرسة الدلالية المحلية ==", flush=True)
-with eng.psycopg.connect(eng.database_url()) as conn:
-    conn.autocommit = True
-    cur = conn.cursor()
-    cur.execute("""SELECT id, title, original_text, object_type, branch, topic, subtopic, micro_issue, source_key
-                   FROM knowledge_objects
-                   WHERE id LIKE 'legis-b10-cma-%%'
-                      OR id IN ('legis-152-2023-m18','legis-152-2023-m22')
-                   ORDER BY id""")
-    rows = cur.fetchall()
-print("المستهدف:", len(rows), flush=True)
-eng.ensure_collection()
-B = 32
-upserted = 0
-for s in range(0, len(rows), B):
-    win = rows[s:s+B]
-    vecs = embedding.embed_passages([r[2] or '' for r in win])
-    points = []
-    for r, v in zip(win, vecs):
-        oid, title, text, otype, branch, topic, subtopic, micro, skey = r
-        points.append({"id": embedding.point_id(oid), "vector": v,
-                       "payload": {"object_type": otype, "branch": branch, "topic": topic,
-                                   "subtopic": subtopic, "micro_issue": micro,
-                                   "source_key": skey, "title": title}})
-    eng.qdrant_request("PUT", "/collections/%s/points?wait=true" % eng.COLLECTION, {"points": points})
-    upserted += len(points)
-    print("  فُهرس حتى الآن:", upserted, flush=True)
-print("اكتملت الفهرسة الدلالية: %d ✓" % upserted, flush=True)
 
 print("\n== (ب) المبادئ المعلقة: المطابقة النصية الحتمية ==", flush=True)
 try:
@@ -67,7 +37,7 @@ with eng.psycopg.connect(eng.database_url()) as conn:
 
     cur.execute("""SELECT id, coalesce(normalized_text, original_text, ''), coalesce(source_key,'')
                    FROM knowledge_objects
-                   WHERE coalesce(verification_status,'') = 'pending'""")
+                   WHERE coalesce(verification_status,'') = 'machine_pending_human'""")
     pending = cur.fetchall()
     print("المعلقة:", len(pending), flush=True)
     if pending:
@@ -128,4 +98,4 @@ with eng.psycopg.connect(eng.database_url()) as conn:
         if failed or nofile:
             print("هذه البقية تحتاج تحققاً بصرياً بالنموذج — سأقدر تكلفتها بدقة قبل أي تنفيذ.", flush=True)
 PYEOF
-echo "===== اكتمل الأمر 64 ====="
+echo "===== اكتمل الأمر 65 ====="
