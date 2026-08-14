@@ -1,5 +1,5 @@
 #!/bin/bash
-# أمر آلي 73: دمج كائنات «مرجع المبدأ» داخل مبادئها ثم حذف المكرر وتحديث الفهرس الدلالي محلياً
+# أمر آلي 74: دمج المراجع بمبادئها عبر تسلسل المعرفات (مرجع = تسلسل المبدأ + 1 وبنفس بصمة الملف)
 set -e
 set -a; source /opt/LegalMind/deploy/.env; set +a
 PY=/opt/LegalMind/.venv/bin/python
@@ -11,72 +11,40 @@ sys.path.insert(0, "/opt/LegalMind/engine")
 import legalmind_engine as eng
 import embedding
 
-ONES = {'الأول':1,'الاول':1,'الحادي':1,'الثاني':2,'الثالث':3,'الرابع':4,'الخامس':5,
-        'السادس':6,'السابع':7,'الثامن':8,'التاسع':9,'العاشر':10}
-def parse_num(t):
-    t = t.replace('مرجع المبدأ','').replace('المبدأ','').strip().rstrip(':').strip()
-    m = re.search(r'\d+', t.translate(str.maketrans('٠١٢٣٤٥٦٧٨٩','0123456789')))
-    if m:
-        return int(m.group(0))
-    n = 0
-    words = t.split()
-    for w in words:
-        w2 = w.lstrip('و')
-        if w2 in ONES:
-            n += ONES[w2]
-        elif w2 == 'عشر':
-            n += 10
-        elif w2 in ('العشرين','العشرون'):
-            n += 20
-        elif w2 in ('الثلاثين','الثلاثون'):
-            n += 30
-        elif w2 in ('الأربعين','الأربعون'):
-            n += 40
-    return n or None
-
 with eng.psycopg.connect(eng.database_url()) as conn:
     conn.autocommit = True
     cur = conn.cursor()
 
-    cur.execute("""SELECT id, coalesce(title,''), coalesce(original_text,''), coalesce(source_key,'')
+    cur.execute("""SELECT id, coalesce(title,''), coalesce(original_text,'')
                    FROM knowledge_objects
                    WHERE object_type='judicial_principle' AND title LIKE 'مرجع المبدأ%%'""")
     refs = cur.fetchall()
-    print("كائنات المراجع المنفصلة:", len(refs), flush=True)
-
-    cur.execute("""SELECT id, coalesce(title,''), coalesce(source_key,'')
-                   FROM knowledge_objects
-                   WHERE object_type='judicial_principle' AND title LIKE 'المبدأ%%'""")
-    prin = {}
-    dups = set()
-    for oid, t, sk in cur.fetchall():
-        n = parse_num(t)
-        if n:
-            key = (sk, n)
-            if key in prin:
-                dups.add(key)
-            else:
-                prin[key] = oid
-    print("مبادئ مرقمة قابلة للربط:", len(prin), flush=True)
+    print("المراجع المنفصلة:", len(refs), flush=True)
 
     merged = 0
     unmatched = []
     deleted_ids = []
     updated_ids = []
-    for rid, rt, rtext, rsk in refs:
-        n = parse_num(rt)
-        key = (rsk, n)
-        if not n or key in dups or key not in prin:
-            unmatched.append("%s | %s" % (rid[:40], rt[:40]))
+    for rid, rt, rtext in refs:
+        m = re.match(r'^(.*-)(\d+)-([0-9a-f]{8,})$', rid)
+        if not m:
+            unmatched.append(rid[:50] + " | لا يطابق النمط")
             continue
-        pid = prin[key]
+        prefix, seq, h = m.group(1), int(m.group(2)), m.group(3)
+        pid = "%s%d-%s" % (prefix, seq - 1, h)
+        cur.execute("""SELECT coalesce(title,''), coalesce(original_text,'') FROM knowledge_objects
+                       WHERE id=%s AND object_type='judicial_principle'""", (pid,))
+        row = cur.fetchone()
+        if not row or row[0].startswith('مرجع'):
+            unmatched.append(rid[:50] + " | لا مبدأ عند التسلسل السابق")
+            continue
+        ptitle, ptext = row
         addition = rtext.strip()
         if not addition.startswith('المرجع'):
             addition = 'المرجع: ' + addition
-        cur.execute("SELECT coalesce(original_text,'') FROM knowledge_objects WHERE id=%s", (pid,))
-        ptext = cur.fetchone()[0]
-        if addition[8:40] and addition[8:40] in ptext:
-            pass  # المرجع موجود مسبقاً
+        probe = addition.replace('المرجع: ', '')[:30]
+        if probe and probe in ptext:
+            print("  (المرجع موجود مسبقاً في %s)" % pid[:45], flush=True)
         else:
             cur.execute("""UPDATE knowledge_objects
                            SET original_text = original_text || '\n\n' || %s,
@@ -87,17 +55,16 @@ with eng.psycopg.connect(eng.database_url()) as conn:
         deleted_ids.append(rid)
         updated_ids.append(pid)
         merged += 1
-    print("دُمج وحُذف المكرر:", merged, flush=True)
-    if unmatched:
-        print("لم يُربط (%d) — تُرك كما هو:" % len(unmatched), flush=True)
-        for u in unmatched[:10]:
-            print("  ×", u, flush=True)
+        print("  دُمج: %s → %s (%s)" % (rt[:30], pid[:42], ptitle[:35]), flush=True)
+
+    print("\nدُمج وحُذف:", merged, "| لم يُربط:", len(unmatched), flush=True)
+    for u in unmatched[:10]:
+        print("  ×", u, flush=True)
 
     if deleted_ids:
         eng.qdrant_request("POST", "/collections/%s/points/delete" % eng.COLLECTION,
                            {"points": [embedding.point_id(i) for i in deleted_ids]})
-        print("حُذفت نقاطها من الفهرس الدلالي ✓", flush=True)
-
+        print("نُظف الفهرس الدلالي من المحذوف ✓", flush=True)
     if updated_ids:
         ids = sorted(set(updated_ids))
         cur.execute("""SELECT id, title, original_text, object_type, branch, topic, subtopic, micro_issue, source_key
@@ -114,10 +81,6 @@ with eng.psycopg.connect(eng.database_url()) as conn:
                                         "subtopic": subtopic, "micro_issue": micro,
                                         "source_key": skey, "title": title}})
             eng.qdrant_request("PUT", "/collections/%s/points?wait=true" % eng.COLLECTION, {"points": pts})
-        print("أُعيد تضمين المبادئ المحدثة محلياً: %d ✓" % len(rows), flush=True)
-
-    cur.execute("""SELECT count(*) FROM knowledge_objects
-                   WHERE object_type='judicial_principle' AND topic='مبادئ هيئة أسواق المال'""")
-    print("\nمبادئ هيئة أسواق المال الآن:", cur.fetchone()[0], flush=True)
+        print("أُعيد تضمين المبادئ المحدثة: %d ✓" % len(rows), flush=True)
 PYEOF
-echo "===== اكتمل الأمر 73 ====="
+echo "===== اكتمل الأمر 74 ====="
