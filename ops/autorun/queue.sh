@@ -1,81 +1,43 @@
 #!/bin/bash
-# أمر آلي 60 (يشمل 59): أرشفة نسخة كفاية رأس المال القديمة (إخفاء كامل من المكتبة والبحث) + البحث عن الكتاب العاشر
-set -e
+# أمر آلي 61: هل ملف الكتاب العاشر (الإفصاح والشفافية) محفوظ على الخادم؟ + حجمه وعدد صفحاته لتقدير التكلفة
 set -a; source /opt/LegalMind/deploy/.env; set +a
 PY=/opt/LegalMind/.venv/bin/python
 
+echo "== (أ) جدول المصادر: ملفات تذكر العاشر/الإفصاح =="
 $PY - <<'PYEOF'
 # -*- coding: utf-8 -*-
 import sys
 sys.path.insert(0, "/opt/LegalMind/engine")
 import legalmind_engine as eng
-
-CAP = 'SRC-937A1650BC733E4F20CF'
 with eng.psycopg.connect(eng.database_url()) as conn:
-    conn.autocommit = True
     cur = conn.cursor()
-
-    print("== (أ) أرشفة نسخة كفاية رأس المال القديمة (إخفاء كامل) ==", flush=True)
-    cur.execute("""UPDATE knowledge_objects
-                   SET object_type='legislation_archived',
-                       usable_as_citation=false,
-                       metadata = coalesce(metadata,'{}'::jsonb)
-                         || jsonb_build_object('archived_reason', 'مكررة 96%% مع كتاب 17 الجديد (TBL)'::text),
-                       updated_at=now()
-                   WHERE source_key=%s AND object_type != 'legislation_archived'""", (CAP,))
-    print("أُرشفت (أخفيت من المكتبة والبحث): %d كائناً ✓ (0 = مؤرشفة مسبقاً)" % cur.rowcount, flush=True)
-
-    print("\n== (ب) أين الكتاب العاشر (الإفصاح والشفافية)؟ ==", flush=True)
-    print("-- 1) مجلدات بطاقة هيئة أسواق المال الحالية:", flush=True)
-    cur.execute("""SELECT coalesce(metadata->>'doc_part','(بلا مجلد)'), count(*) FROM knowledge_objects
-                   WHERE metadata->>'library_group'='cma-authority-unified'
-                   GROUP BY 1 ORDER BY 1""")
-    for p, c in cur.fetchall():
-        print("   %s : %d" % (p, c), flush=True)
-
-    print("\n-- 2) كل الكائنات التي تذكر الكتاب العاشر في عناوينها أو ملفها:", flush=True)
-    cur.execute("""SELECT coalesce(source_key,'-'), object_type,
-                          coalesce(metadata->>'library_group','(بلا مجموعة)'),
-                          coalesce(NULLIF(topic,''),'-'), count(*),
-                          min(id), min(coalesce(title, metadata->>'title', ''))
-                   FROM knowledge_objects
-                   WHERE title ILIKE '%%الكتاب العاشر%%'
-                      OR metadata->>'title' ILIKE '%%الكتاب العاشر%%'
-                      OR metadata->>'title' ILIKE '%%العاشر%%اسواق%%'
-                      OR metadata->>'doc_part' ILIKE '%%العاشر%%'
-                   GROUP BY 1,2,3,4 ORDER BY 5 DESC LIMIT 20""")
-    for sk, ot, g, tp, c, mid, mt in cur.fetchall():
-        print("   مصدر=%s | نوع=%s | مجموعة=%s | موضوع=%s | %d | %s | %s"
-              % (sk[:24], ot, g[:28], tp[:28], c, mid[:38], mt[:45]), flush=True)
-
-    print("\n-- 3) كائنات تذكر (الإفصاح والشفافية) خارج بطاقة أسواق المال:", flush=True)
-    cur.execute("""SELECT coalesce(source_key,'-'), object_type,
-                          coalesce(metadata->>'library_group','(بلا مجموعة)'), count(*),
-                          min(id), min(coalesce(title,''))
-                   FROM knowledge_objects
-                   WHERE (title ILIKE '%%الإفصاح والشفافية%%' OR original_text ILIKE '%%كتاب العاشر%%الإفصاح%%')
-                     AND coalesce(metadata->>'library_group','') != 'cma-authority-unified'
-                   GROUP BY 1,2,3 ORDER BY 4 DESC LIMIT 15""")
-    rows = cur.fetchall()
-    if not rows:
-        print("   (لا شيء)", flush=True)
-    for sk, ot, g, c, mid, mt in rows:
-        print("   مصدر=%s | نوع=%s | مجموعة=%s | %d | %s | %s" % (sk[:24], ot, g[:28], c, mid[:38], mt[:45]), flush=True)
-
-    print("\n-- 4) ملفات مصدرية تخص أسواق المال لم يدخل منها شيء للبطاقة:", flush=True)
-    cur.execute("""SELECT source_key, count(*),
-                          min(coalesce(title, metadata->>'title','')),
-                          min(coalesce(verification_status,'-'))
-                   FROM knowledge_objects
-                   WHERE (original_text ILIKE '%%هيئة أسواق المال%%' OR metadata->>'title' ILIKE '%%اسواق المال%%')
-                     AND coalesce(metadata->>'library_group','') NOT IN ('cma-authority-unified','cap-adequacy-legacy')
-                     AND object_type NOT IN ('judicial_principle','judicial_principles_collection','full_judgment','legislation_archived')
-                     AND id NOT LIKE 'LEG-UNKNOWN-%%'
-                   GROUP BY 1 ORDER BY 2 DESC LIMIT 15""")
-    rows = cur.fetchall()
-    if not rows:
-        print("   (لا شيء)", flush=True)
-    for sk, c, mt, vs in rows:
-        print("   مصدر=%s | %d | حالة=%s | %s" % ((sk or '-')[:28], c, vs, mt[:55]), flush=True)
+    cur.execute("""SELECT column_name FROM information_schema.columns
+                   WHERE table_name='sources' ORDER BY ordinal_position""")
+    cols = [r[0] for r in cur.fetchall()]
+    print("أعمدة جدول sources:", ", ".join(cols), flush=True)
+    namecol = next((c for c in ['filename','file_name','name','title','original_name','path'] if c in cols), None)
+    if namecol:
+        cur.execute("SELECT source_key, " + namecol + " FROM sources WHERE " + namecol + " ILIKE '%عاشر%' OR " + namecol + " ILIKE '%10%' OR " + namecol + " ILIKE '%افصاح%' OR " + namecol + " ILIKE '%إفصاح%' LIMIT 20")
+        rows = cur.fetchall()
+        if not rows:
+            print("(لا ملف مطابق في جدول المصادر)", flush=True)
+        for sk, nm in rows:
+            print("  %s | %s" % (sk, str(nm)[:80]), flush=True)
+        cur.execute("SELECT count(*) FROM sources")
+        print("إجمالي الملفات المسجلة:", cur.fetchone()[0], flush=True)
+    else:
+        print("(لا عمود اسم ملف واضح)", flush=True)
 PYEOF
-echo "===== اكتمل الأمر 60 ====="
+
+echo ""
+echo "== (ب) البحث في القرص عن ملف الكتاب العاشر =="
+find /opt/LegalMind /root /home /var/www -maxdepth 4 -type f \
+  \( -iname '*عاشر*' -o -iname '*افصاح*' -o -iname '*إفصاح*' -o -iname '*10*سواق*' -o -iname '*اسواق*10*' \) 2>/dev/null | head -30
+echo "-- مجلدات الرفع المحتملة:"
+for d in /opt/LegalMind/uploads /opt/LegalMind/data/uploads /opt/LegalMind/files /root/uploads /var/www/legalmind-v3/uploads; do
+  [ -d "$d" ] && echo "[$d]" && ls -lat "$d" 2>/dev/null | head -25
+done
+echo ""
+echo "-- كل ملفات PDF وZIP الكبيرة حديثة الرفع على الخادم:"
+find /opt/LegalMind /root -maxdepth 4 -type f \( -iname '*.pdf' -o -iname '*.zip' \) -size +1M -newermt '2026-08-01' 2>/dev/null -printf '%s\t%p\n' | sort -rn | head -25
+echo "===== اكتمل الأمر 61 ====="
