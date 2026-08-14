@@ -1,5 +1,5 @@
 #!/bin/bash
-# أمر آلي 46: (أ) كسر تخزين CDN المؤقت في pull.sh (ب) تثبيت كل عناوين الكتب 5-19 (ج) إلحاق مبدأ 'الكتاب العاشر اسواق المال' بكتابه
+# أمر آلي 47 (يشمل 46): (أ) كسر تخزين CDN (ب) عناوين الكتب 5-19 (ج) المبدأ اليتيم (د) تصحيح فروع المبادئ المدنية/المرافعات/الإثبات
 set -e
 set -a; source /opt/LegalMind/deploy/.env; set +a
 PY=/opt/LegalMind/.venv/bin/python
@@ -27,7 +27,6 @@ chmod 700 /opt/legalmind-autopilot/pull.sh
 echo "أُضيف كسر التخزين المؤقت ✓"
 
 echo ""
-echo "== (ب) تثبيت كل عناوين الكتب 5-19 + (ج) المبدأ اليتيم =="
 $PY - &lt;&lt;'PYEOF'
 # -*- coding: utf-8 -*-
 import sys
@@ -55,6 +54,8 @@ TITLES = {
 with eng.psycopg.connect(eng.database_url()) as conn:
     conn.autocommit = True
     cur = conn.cursor()
+
+    print("== (ب) تثبيت عناوين الكتب 5-19 ==", flush=True)
     done = skipped = 0
     for book, subject in TITLES.items():
         old = "اللائحة التنفيذية — " + book
@@ -66,29 +67,60 @@ with eng.psycopg.connect(eng.database_url()) as conn:
                          AND metadata->>'doc_part' = %s""", (new, old))
         if cur.rowcount:
             done += 1
-            print("ثُبِّت: %s — %s (%d)" % (book, subject[:35], cur.rowcount), flush=True)
+            print("ثُبِّت: %s (%d)" % (book, cur.rowcount), flush=True)
         else:
             skipped += 1
-    print("\nثُبِّت الآن: %d | كان مثبتاً مسبقاً: %d" % (done, skipped), flush=True)
+    print("ثُبِّت الآن: %d | كان مثبتاً مسبقاً: %d" % (done, skipped), flush=True)
 
-    cur.execute("""UPDATE knowledge_objects
-                   SET subtopic='الكتاب العاشر — الإفصاح والشفافية', updated_at=now()
-                   WHERE object_type='judicial_principle'
-                     AND topic='مبادئ هيئة أسواق المال'
-                     AND (subtopic IS NULL OR subtopic='')""")
-    print("مبادئ ألحقت بالكتاب العاشر:", cur.rowcount, flush=True)
-
-    print("\n===== البنية الختامية لبطاقة هيئة أسواق المال =====", flush=True)
     cur.execute("""SELECT metadata->>'doc_part', count(*) FROM knowledge_objects
                    WHERE metadata->>'library_group'='cma-authority-unified'
                    GROUP BY 1 ORDER BY 1""")
     plain = 0
     for p, c in cur.fetchall():
-        mark = ""
         if p and p.startswith("اللائحة") and p.count("—") < 2:
-            mark = "  !! بلا عنوان بعد"
             plain += 1
-        print("  %s : %d%s" % (p, c, mark), flush=True)
-    print("\nمجلدات بلا عنوان متبقية:", plain, flush=True)
+            print("  !! بلا عنوان بعد: %s : %d" % (p, c), flush=True)
+    print("مجلدات بلا عنوان متبقية:", plain, flush=True)
+
+    print("\n== (ج) المبدأ اليتيم -> الكتاب العاشر ==", flush=True)
+    cur.execute("""UPDATE knowledge_objects
+                   SET subtopic='الكتاب العاشر — الإفصاح والشفافية', updated_at=now()
+                   WHERE object_type='judicial_principle'
+                     AND topic='مبادئ هيئة أسواق المال'
+                     AND (subtopic IS NULL OR subtopic='')""")
+    print("ألحق:", cur.rowcount, flush=True)
+
+    print("\n== (د) تصحيح فروع المبادئ المصنفة خطأ تحت تجاري ==", flush=True)
+    CIV = ['التزام', 'الوكالة', 'البطلان', 'أنواع من العقود',
+           'الفعل الضار- العمل غير المشروع', 'الغلط']
+    for topic in CIV:
+        cur.execute("""SELECT min(metadata->>'title') FROM knowledge_objects
+                       WHERE object_type='judicial_principle' AND branch='تجاري' AND topic=%s""",
+                    (topic,))
+        sample = (cur.fetchone()[0] or '-')
+        cur.execute("""UPDATE knowledge_objects SET branch='مدني', updated_at=now()
+                       WHERE object_type='judicial_principle' AND branch='تجاري' AND topic=%s""",
+                    (topic,))
+        print("  -> مدني: '%s' (%d) | مصدر: %s" % (topic, cur.rowcount, sample[:45]), flush=True)
+
+    cur.execute("""UPDATE knowledge_objects SET branch='مرافعات', updated_at=now()
+                   WHERE object_type='judicial_principle' AND branch='تجاري'
+                     AND (topic LIKE 'طرق الطعن%%' OR topic='إجراءات التقاضي')""")
+    print("  -> مرافعات (طرق الطعن + إجراءات التقاضي):", cur.rowcount, flush=True)
+
+    cur.execute("""UPDATE knowledge_objects SET branch='إثبات', updated_at=now()
+                   WHERE object_type='judicial_principle' AND branch='تجاري' AND topic='إثبات'""")
+    print("  -> إثبات:", cur.rowcount, flush=True)
+
+    print("\n== ما بقي تحت تجاري (للمراجعة، مع عينة مصدر لكل موضوع) ==", flush=True)
+    cur.execute("""SELECT topic, count(*), min(metadata->>'title') FROM knowledge_objects
+                   WHERE object_type='judicial_principle' AND branch='تجاري'
+                   GROUP BY 1 ORDER BY 2 DESC LIMIT 40""")
+    for t, c, s in cur.fetchall():
+        print("  '%s' : %d | مصدر: %s" % ((t or 'بلا موضوع')[:45], c, (s or '-')[:45]), flush=True)
+
+    cur.execute("""SELECT count(*) FROM knowledge_objects
+                   WHERE object_type='judicial_principle' AND branch='تجاري'""")
+    print("\nإجمالي مبادئ تجاري الآن:", cur.fetchone()[0], flush=True)
 PYEOF
-echo "===== اكتمل الأمر 46 ====="
+echo "===== اكتمل الأمر 47 ====="
