@@ -1,9 +1,9 @@
 #!/bin/bash
-# أمر آلي 78: إلحاق مراجع مبادئ الكتاب السابع (36 مرجعاً منسوخة بصرياً) بمبادئها في القاعدة
+# أمر آلي 79: إلحاق مراجع مبادئ الكتاب الخامس (84 مرجعاً منسوخة بصرياً) بمبادئها في القاعدة
 set -e
 set -a; source /opt/LegalMind/deploy/.env; set +a
 PY=/opt/LegalMind/.venv/bin/python
-curl -fsSL "https://raw.githubusercontent.com/dralmarri/LegalMind/main/ops/autorun/refs-book7.json?nc=$(date +%s)" -o /tmp/refs-book7.json
+curl -fsSL "https://raw.githubusercontent.com/dralmarri/LegalMind/main/ops/autorun/refs-book5.json?nc=$(date +%s)" -o /tmp/refs-book5.json
 
 $PY - <<'PYEOF'
 # -*- coding: utf-8 -*-
@@ -20,7 +20,7 @@ def sig(w):
 def sigset(t):
     return {sig(x) for x in AR.findall(t) if len(x) >= 3}
 
-entries = json.load(open('/tmp/refs-book7.json', encoding='utf-8'))
+entries = json.load(open('/tmp/refs-book5.json', encoding='utf-8'))
 for e in entries:
     e['sig'] = sigset(e['k'])
 print("مفاتيح المراجع:", len(entries), flush=True)
@@ -30,9 +30,9 @@ with eng.psycopg.connect(eng.database_url()) as conn:
     cur = conn.cursor()
     cur.execute("""SELECT id, coalesce(title,''), coalesce(original_text,'') FROM knowledge_objects
                    WHERE object_type='judicial_principle'
-                     AND metadata->>'title' LIKE '%%الكتاب ٧%%'""")
+                     AND metadata->>'title' LIKE '%%الكتاب ٥%%'""")
     objs = cur.fetchall()
-    print("مبادئ الكتاب السابع في القاعدة:", len(objs), flush=True)
+    print("مبادئ الكتاب الخامس في القاعدة:", len(objs), flush=True)
 
     ok = skipped = amb = 0
     updated_ids = []
@@ -88,4 +88,4 @@ with eng.psycopg.connect(eng.database_url()) as conn:
             eng.qdrant_request("PUT", "/collections/%s/points?wait=true" % eng.COLLECTION, {"points": pts})
         print("أُعيد تضمين المحدثة: %d ✓" % len(rows), flush=True)
 PYEOF
-echo "===== اكتمل الأمر 78 ====="
+echo "===== اكتمل الأمر 79 ====="
