@@ -1,62 +1,42 @@
 #!/bin/bash
-# أمر آلي 40: استخراج عناوين موضوعات الكتب من محتواها + طباعة البنية النهائية للتأكيد
+# أمر آلي 41: تثبيت عناوين الكتب 5-10 (من أغلفتها الرسمية)
 set -e
 set -a; source /opt/LegalMind/deploy/.env; set +a
 PY=/opt/LegalMind/.venv/bin/python
 
 $PY - <<'PYEOF'
 # -*- coding: utf-8 -*-
-import sys, re
+import sys
 sys.path.insert(0, "/opt/LegalMind/engine")
 import legalmind_engine as eng
+
+TITLES = {
+    "الكتاب الخامس":  "أنشطة الأوراق المالية والأشخاص المسجلون",
+    "الكتاب السادس":  "السياسات والإجراءات الداخلية للشخص المرخص له",
+    "الكتاب السابع":  "أموال العملاء وأصولهم",
+    "الكتاب الثامن":  "أخلاقيات العمل",
+    "الكتاب التاسع":  "الاندماج والاستحواذ",
+    "الكتاب العاشر":  "الإفصاح والشفافية",
+}
 
 with eng.psycopg.connect(eng.database_url()) as conn:
     conn.autocommit = True
     cur = conn.cursor()
+    for book, subject in TITLES.items():
+        old = "اللائحة التنفيذية — " + book
+        new = "اللائحة التنفيذية — " + book + " — " + subject
+        cur.execute("""UPDATE knowledge_objects
+                       SET metadata = metadata || jsonb_build_object('doc_part', %s::text),
+                           updated_at=now()
+                       WHERE metadata->>'library_group'='cma-authority-unified'
+                         AND metadata->>'doc_part' = %s""", (new, old))
+        print("%s -> %s | %d كائن" % (book, subject[:40], cur.rowcount), flush=True)
 
-    print("== البنية الحالية لبطاقة هيئة أسواق المال ==", flush=True)
+    print("\n== البنية الآن ==", flush=True)
     cur.execute("""SELECT metadata->>'doc_part', count(*) FROM knowledge_objects
                    WHERE metadata->>'library_group'='cma-authority-unified'
                    GROUP BY 1 ORDER BY 1""")
-    parts = cur.fetchall()
-    for p, c in parts:
+    for p, c in cur.fetchall():
         print("  %s : %d" % (p, c), flush=True)
-
-    print("\n== استخراج عناوين موضوعات الكتب من محتواها المخزن ==", flush=True)
-    for p, c in parts:
-        if not p or not p.startswith("اللائحة التنفيذية — الكتاب") or "—" in p.replace("اللائحة التنفيذية — ", "").replace("الكتاب", ""):
-            continue
-        book_label = p.replace("اللائحة التنفيذية — ", "")
-        # مرشح 1: كائن الغلاف أو المحتويات أو المقدمة
-        cur.execute("""SELECT title, left(original_text, 300) FROM knowledge_objects
-                       WHERE metadata->>'library_group'='cma-authority-unified'
-                         AND metadata->>'doc_part' = %s
-                         AND (title ILIKE 'غلاف%%' OR title ILIKE '%%جدول المحتويات%%'
-                              OR title ILIKE '%%محتويات%%' OR title ILIKE '%%نطاق التطبيق%%'
-                              OR title ILIKE '%%مقدمة%%')
-                       LIMIT 3""", (p,))
-        cands = cur.fetchall()
-        # مرشح 2: البحث في نص أي كائن عن نمط "بشأن ..."
-        cur.execute("""SELECT left(original_text, 400) FROM knowledge_objects
-                       WHERE metadata->>'library_group'='cma-authority-unified'
-                         AND metadata->>'doc_part' = %s
-                         AND original_text ILIKE '%%' || %s || '%%'
-                       LIMIT 2""", (p, book_label))
-        texts = cur.fetchall()
-        print("\n  ▶ %s (%d كائن):" % (book_label, c), flush=True)
-        for t, tx in cands:
-            print("     غلاف/محتويات: %s | %s" % (t[:60], (tx or "").replace("\n", " ")[:90]), flush=True)
-        for (tx,) in texts:
-            # اقتطاع الجملة المحيطة باسم الكتاب
-            i = tx.find(book_label)
-            if i >= 0:
-                print("     سياق: ...%s..." % tx[max(0, i-20):i+120].replace("\n", " "), flush=True)
-
-    print("\n== حماية المستهلك (تأكيد) ==", flush=True)
-    cur.execute("""SELECT branch, metadata->>'doc_part', count(*) FROM knowledge_objects
-                   WHERE metadata->>'library_group'='cp-unified' GROUP BY 1,2""")
-    for b, p, c in cur.fetchall():
-        print("  فرع=%s / %s : %d" % (b, p, c), flush=True)
 PYEOF
-echo ""
-echo "===== انتهى الاستخراج — راجع العناوين المقترحة أعلاه ====="
+echo "===== اكتمل ====="
