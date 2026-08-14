@@ -1,88 +1,117 @@
 #!/bin/bash
-# أمر آلي 54: إلحاق التعريف المضاف بالمادة الأولى + معالجة البند 7 من الملحق رقم 2
+# أمر آلي 55: (أ) فرز المبادئ المتناثرة تحت تجاري إلى فروعها بالكلمات المفتاحية (ب) تسمية بطاقات القوانين بلا اسم
 set -e
 set -a; source /opt/LegalMind/deploy/.env; set +a
 PY=/opt/LegalMind/.venv/bin/python
 
 $PY - <<'PYEOF'
 # -*- coding: utf-8 -*-
-import sys
+import sys, re
+from collections import Counter
 sys.path.insert(0, "/opt/LegalMind/engine")
 import legalmind_engine as eng
 
-DEF_MARK = 'الوحدات الخاضعة لرقابة البنك المركزي'
-DEF_BLOCK = (
-    "\n\n- الوحدات الخاضعة لرقابة البنك المركزي:\n"
-    "1- البنوك المحلية (البنوك الكويتية وفروع البنوك الأجنبية المرخص لها بالعمل داخل دولة الكويت من قبل البنك المركزي).\n"
-    "2- شركات التمويل المنشأة وفقاً للقرار الوزاري رقم (38) لسنة 2011 في شأن تنظيم رقابة البنك المركزي على شركات التمويل.\n"
-    "3- شركات الاستثمار فيما يخص نشاط التمويل الذي تزاوله هذه الشركات.\n"
-    "(أُضيف هذا التعريف بالقرار الوزاري 99/2025)"
-)
-BAND7_NEW = 'يجب على الوحدات التي تخضع لرقابة البنك المركزي الالتزام بتعليماته المتعلقة بتقييم الأصول العقارية'
+KEEP = ['تجاري', 'تجارية', 'شيك', 'كمبيالة', 'شحن', 'سفينة', 'بحري', 'جوي', 'بنك', 'بنوك',
+        'مصرف', 'إفلاس', 'افلاس', 'شرك', 'أسواق المال', 'اسواق المال', 'متجر', 'صراف',
+        'حساب جاري', 'تأمين', 'أوراق مالية', 'سمسرة', 'مضاربة', 'استثمار', 'فوائد', 'رجوع',
+        'أعمال تجارية', 'اعمال تجارية', 'إدراج', 'اكتتاب']
+EVID = ['إثبات', 'اثبات', 'يمين', 'إقرار', 'اقرار', 'قرائن', 'قرينة', 'خبير', 'خبرة',
+        'استجواب', 'تزوير', 'محرر', 'بينة']
+PROC = ['تمييز', 'استئناف', 'استئنا', 'طعن', 'دعوى', 'دعاوى', 'خصوم', 'اختصاص', 'إعلان', 'اعلان',
+        'محكمة', 'حكم', 'قاض', 'قضاة', 'مرافعات', 'تنفيذ', 'أمر أداء', 'أمر الأداء', 'التماس',
+        'رسوم قضائية', 'جلسة', 'حجز', 'تحكيم', 'صحيفة', 'ميعاد', 'إحالة', 'احالة',
+        'قضاء مستعجل', 'أعمال ولائية', 'أوامر ولائية', 'محضر']
+CIV = ['عقد', 'عقود', 'التزام', 'تعويض', 'مسئولية', 'مسؤولية', 'ضرر', 'إيجار', 'ايجار', 'بيع',
+       'ملكية', 'كفالة', 'قرض', 'مقاولة', 'تقادم', 'إثراء', 'اثراء', 'وكالة', 'حوالة', 'رهن',
+       'شيوع', 'قسمة', 'صلح', 'وديعة', 'صورية', 'غلط', 'تدليس', 'إذعان', 'فسخ', 'حراسة',
+       'نظام عام', 'آداب', 'حسن نية', 'حُسن نية', 'سوء نية', 'شرط جزائي', 'مرض الموت', 'تعسف',
+       'إعالة', 'ديات', 'بناء على أرض الغير', 'أتعاب المحاماة']
+
+def classify(t):
+    for k in KEEP:
+        if k in t:
+            return None
+    for k in EVID:
+        if k in t:
+            return 'إثبات'
+    for k in PROC:
+        if k in t:
+            return 'مرافعات'
+    for k in CIV:
+        if k in t:
+            return 'مدني'
+    return None
 
 with eng.psycopg.connect(eng.database_url()) as conn:
     conn.autocommit = True
     cur = conn.cursor()
 
-    print("== (أ) إلحاق التعريف المضاف بالمادة الأولى ==", flush=True)
-    cur.execute("SELECT coalesce(original_text,'') FROM knowledge_objects WHERE id='legis-152-2023-m1'")
-    row = cur.fetchone()
-    if not row:
-        print("!! المادة الأولى غير موجودة", flush=True)
-    elif DEF_MARK in row[0]:
-        print("التعريف ملحق مسبقاً — لا تغيير (منفذ من قبل).", flush=True)
-    else:
-        old = row[0]
-        cur.execute("""UPDATE knowledge_objects
-                       SET original_text = original_text || %s,
-                           normalized_text = coalesce(normalized_text,'') || %s,
-                           metadata = coalesce(metadata,'{}'::jsonb)
-                             || jsonb_build_object('pre_amendment_text', %s::text)
-                             || jsonb_build_object('amended_by', 'القرار الوزاري 99/2025 (إضافة تعريف)'::text),
-                           updated_at=now()
-                       WHERE id='legis-152-2023-m1'""", (DEF_BLOCK, DEF_BLOCK, old))
-        print("أُلحق التعريف بالمادة الأولى ✓ (النص القديم محفوظ احتياطياً)", flush=True)
-
-    print("\n== (ب) البحث عن الملحق رقم (2) في كائنات القرار ==", flush=True)
-    cur.execute("""SELECT id, left(coalesce(original_text,''),120)
-                   FROM knowledge_objects
-                   WHERE (id LIKE %s OR id LIKE %s)
-                     AND (original_text ILIKE %s OR original_text ILIKE %s OR title ILIKE %s)""",
-                ('legis-152-2023-%', 'legis-99-2025-%', '%ملحق رقم (2)%', '%الملحق رقم (2)%', '%ملحق%'))
-    hits = cur.fetchall()
-    annex_obj = None
-    for oid, head in hits:
-        print("  %s | %s" % (oid, head.replace(chr(10),' ')), flush=True)
-        if oid.startswith('legis-152-2023') and not oid.endswith('preamble'):
-            cur.execute("SELECT coalesce(original_text,'') FROM knowledge_objects WHERE id=%s", (oid,))
-            full = cur.fetchone()[0]
-            if 'الملحق رقم (2)' in full or 'ملحق رقم (2)' in full:
-                annex_obj = (oid, full)
-
-    if annex_obj is None:
-        print("الملحق رقم (2) غير مفهرس كنص مستقل ضمن مواد القرار — نصه المعدَّل موثق في مجلد «القرار الوزاري 99/2025 المعدِّل» ويظهر في البحث.", flush=True)
-    else:
-        oid, full = annex_obj
-        if BAND7_NEW in full:
-            print("البند 7 محدث مسبقاً في %s — لا تغيير." % oid, flush=True)
+    print("== (أ) فرز المبادئ المتبقية تحت تجاري ==", flush=True)
+    cur.execute("""SELECT coalesce(topic,''), count(*) FROM knowledge_objects
+                   WHERE object_type='judicial_principle' AND branch='تجاري'
+                   GROUP BY 1""")
+    plan = {'إثبات': [], 'مرافعات': [], 'مدني': []}
+    kept = 0
+    for t, c in cur.fetchall():
+        dest = classify(t)
+        if dest:
+            plan[dest].append(t)
         else:
-            NOTE = ("\n\n(عُدّل البند رقم (7) من الملحق رقم (2) بالقرار الوزاري 99/2025 ليصبح نصه: \"" 
-                    + BAND7_NEW + "\")")
-            cur.execute("""UPDATE knowledge_objects
-                           SET original_text = original_text || %s,
-                               normalized_text = coalesce(normalized_text,'') || %s,
-                               metadata = coalesce(metadata,'{}'::jsonb)
-                                 || jsonb_build_object('amended_by', 'القرار الوزاري 99/2025 (تعديل البند 7 من الملحق 2)'::text),
-                               updated_at=now()
-                           WHERE id=%s""", (NOTE, NOTE, oid))
-            print("أُلحق نص البند 7 المعدَّل بالكائن الحاوي للملحق: %s ✓" % oid, flush=True)
+            kept += c
+    total_moved = 0
+    for dest, topics in plan.items():
+        if not topics:
+            continue
+        cur.execute("""UPDATE knowledge_objects SET branch=%s, updated_at=now()
+                       WHERE object_type='judicial_principle' AND branch='تجاري'
+                         AND topic = ANY(%s)""", (dest, topics))
+        total_moved += cur.rowcount
+        print("-> %s : %d مبدأ (%d موضوعاً)" % (dest, cur.rowcount, len(topics)), flush=True)
+        for s in topics[:8]:
+            print("     مثال: %s" % s[:60], flush=True)
+    print("انتقل: %d | بقي في تجاري: %d" % (total_moved, kept), flush=True)
 
-    print("\n== تأكيد نهائي: حالة مواد القرار المعدلة ==", flush=True)
-    cur.execute("""SELECT id, metadata->>'amended_by', left(coalesce(original_text,''),80)
+    cur.execute("""SELECT branch, count(*) FROM knowledge_objects
+                   WHERE object_type='judicial_principle' GROUP BY 1 ORDER BY 2 DESC""")
+    print("\nالتوزيع النهائي:", flush=True)
+    for b, c in cur.fetchall():
+        print("  %s : %d" % (b or '-', c), flush=True)
+
+    print("\n== (ب) بطاقات القوانين بلا اسم ==", flush=True)
+    cur.execute("""SELECT id, coalesce(title,''), coalesce(metadata->>'library_card_name','')
                    FROM knowledge_objects
-                   WHERE id LIKE %s AND metadata->>'amended_by' IS NOT NULL
-                   ORDER BY id""", ('legis-152-2023-%',))
-    for oid, ab, head in cur.fetchall():
-        print("  %s | %s | %s" % (oid, ab, head.replace(chr(10),' ')), flush=True)
+                   WHERE object_type IN ('legislation_article','legislation',
+                                         'legislation_issuing_article','legislation_preamble')""")
+    groups = {}
+    for oid, title, cardname in cur.fetchall():
+        m = re.match(r'^((?:legis|lreg|regl|reg|TBL)[-][^-]+[-][^-]+)', oid)
+        key = m.group(1) if m else oid.rsplit('-', 1)[0]
+        groups.setdefault(key, []).append((title, cardname))
+    fixed = 0
+    for key, items in sorted(groups.items()):
+        has_card = any(cn for _, cn in items)
+        has_dash = any('—' in t for t, _ in items)
+        if has_card or has_dash:
+            continue
+        names = Counter()
+        for t, _ in items:
+            t = (t or '').strip()
+            mm = re.search(r'((?:قانون|مرسوم|قرار|لائحة|اتفاقية)[^.\n]{5,90})', t)
+            if mm:
+                names[mm.group(1).strip()] += 1
+        print("  المجموعة %s (%d كائناً):" % (key, len(items)), flush=True)
+        if names:
+            best, freq = names.most_common(1)[0]
+            cur.execute("""UPDATE knowledge_objects
+                           SET metadata = coalesce(metadata,'{}'::jsonb)
+                                 || jsonb_build_object('library_card_name', %s::text),
+                               updated_at=now()
+                           WHERE id LIKE %s""", (best[:90], key + '-%'))
+            fixed += 1
+            print("    سُمّيت: '%s' (تكرار الاسم في %d عنواناً، حُدّث %d كائناً) ✓" % (best[:70], freq, cur.rowcount), flush=True)
+        else:
+            samples = [t[:70] for t, _ in items[:3] if t]
+            print("    !! تعذر استخراج اسم آمن — عينات: %s" % (" | ".join(samples) if samples else "(عناوين فارغة)"), flush=True)
+    print("\nبطاقات سُمّيت آلياً:", fixed, flush=True)
 PYEOF
-echo "===== اكتمل الأمر 54 ====="
+echo "===== اكتمل الأمر 55 ====="
