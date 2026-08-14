@@ -1,94 +1,85 @@
 #!/bin/bash
-# أمر آلي 35: إصلاح مستهدف صريح — لا بحث تخميني هذه المرة
+# أمر آلي 36: (أ) تسريع القناة: تنفيذ الأوامر كل دقيقة بدل كل 5 دقائق — لا مزيد من الانتظار
+#            (ب) فصل ملفات المبادئ القانونية نهائياً عن بطاقات القوانين -> تبويب المبادئ والأحكام
 set -e
 set -a; source /opt/LegalMind/deploy/.env; set +a
 PY=/opt/LegalMind/.venv/bin/python
-$PY -c "import psycopg; print('psycopg متاح ✓')"
 
+echo "== (أ) تسريع قناة التنفيذ إلى كل دقيقة =="
+cat > /etc/cron.d/legalmind-autopilot <<'EOF'
+* * * * * root /opt/legalmind-autopilot/pull.sh >/dev/null 2>&1
+* * * * * root /opt/legalmind-autopilot/pushlog.sh >/dev/null 2>&1
+EOF
+chmod 644 /etc/cron.d/legalmind-autopilot
+echo "القناة الآن تلتقط الأوامر خلال دقيقة واحدة ✓"
+
+echo ""
+echo "== (ب) فصل المبادئ عن بطاقات القوانين =="
 $PY - <<'PYEOF'
 # -*- coding: utf-8 -*-
 import sys
 sys.path.insert(0, "/opt/LegalMind/engine")
 import legalmind_engine as eng
 
-LAW_TYPES = ('legislation', 'legislation_article', 'legislation_issuing_article', 'legislation_preamble')
-GEXPR = ("COALESCE(metadata->>'library_group', substring(id from '^(legis-[a-z0-9]+-[0-9]+)'), "
-         "substring(id from '^(lreg-[0-9]+-[0-9]+-k[0-9]+)'), "
-         "substring(id from '^(regl-[0-9]+-[0-9]+)'), "
-         "substring(id from '^(reg-[0-9]+-[0-9]+)'))")
-
 with eng.psycopg.connect(eng.database_url()) as conn:
     conn.autocommit = True
     cur = conn.cursor()
-    ph = ",".join(["%s"] * len(LAW_TYPES))
 
-    print("== 1) تحديد القانون الأساسي لأسواق المال بعنوانه مباشرة (711 كائناً) ==", flush=True)
-    cur.execute(f"""SELECT {GEXPR} AS g, count(*), min(id) FROM knowledge_objects
-                    WHERE object_type IN ({ph})
-                      AND (title ILIKE '%%هيئة أسواق المال%%' OR title ILIKE '%%أسواق المال%%')
-                      AND coalesce(metadata->>'library_group','') <> 'cma-authority-unified'
-                    GROUP BY g ORDER BY count(*) DESC LIMIT 3""", LAW_TYPES)
+    # 1) كل كائن مصدره ملف "المبادئ القانونية ..." أياً كان نوعه الحالي
+    cur.execute("""SELECT id, object_type FROM knowledge_objects
+                   WHERE metadata->>'title' ILIKE '%%المبادئ القانونية%%'""")
     rows = cur.fetchall()
-    print("  مرشحون:", rows, flush=True)
-    if rows:
-        base_g = rows[0][0]
-        print("  عيّنة معرّف من هذه المجموعة:", rows[0][2], flush=True)
-        cur.execute(f"""UPDATE knowledge_objects
-                        SET metadata = metadata || '{{"library_group":"cma-authority-unified",
-                              "library_card_name":"هيئة أسواق المال","doc_part":"القانون"}}'::jsonb
-                        WHERE object_type IN ({ph}) AND {GEXPR} = %s""", LAW_TYPES + (base_g,))
-        print("  دُمج القانون الأساسي:", cur.rowcount, "كائن ✓", flush=True)
-    else:
-        print("  لم يبق شيء غير مدموج — قد يكون اكتمل مسبقاً", flush=True)
+    print("كائنات ملفات المبادئ القانونية (كل الأنواع):", len(rows), flush=True)
+    by_type = {}
+    for _, ot in rows:
+        by_type[ot] = by_type.get(ot, 0) + 1
+    print("توزيعها الحالي:", by_type, flush=True)
 
-    print("\n== 2) دمج حماية المستهلك صراحةً (القانون + اللائحة) ==", flush=True)
-    cur.execute(f"""SELECT {GEXPR} AS g, count(*), min(id) FROM knowledge_objects
-                    WHERE object_type IN ({ph})
-                      AND (title ILIKE '%%حماية المستهلك%%' OR metadata->>'title' ILIKE '%%حماية المستهلك%%')
-                    GROUP BY g""", LAW_TYPES)
-    cp_rows = cur.fetchall()
-    print("  مجموعات حماية المستهلك الحالية:", cp_rows, flush=True)
+    # 2) التصحيح الشامل: نوع=مبدأ قضائي، فرع=تجاري، موضوع=مبادئ هيئة أسواق المال
+    #    وإزالة كل مفاتيح العرض المكتبي حتى تختفي من بطاقات القوانين نهائياً
+    cur.execute("""UPDATE knowledge_objects
+                   SET object_type='judicial_principle', branch='تجاري',
+                       topic='مبادئ هيئة أسواق المال',
+                       metadata = (metadata - 'library_group' - 'library_card_name'
+                                            - 'doc_part' - 'doc_subpart'),
+                       updated_at=now()
+                   WHERE metadata->>'title' ILIKE '%%المبادئ القانونية%%'""")
+    n = cur.rowcount
+    print("عُدِّل:", n, "كائن -> مبدأ قضائي / تجاري / مبادئ هيئة أسواق المال ✓", flush=True)
 
-    UNIFIED_CP = "cp-unified"
-    for g, c, sample_id in cp_rows:
-        cur.execute(f"""SELECT count(*) FROM knowledge_objects
-                        WHERE object_type IN ({ph}) AND {GEXPR} = %s
-                          AND (title ILIKE '%%اللائحة التنفيذية%%' OR metadata->>'title' ILIKE '%%اللائحة التنفيذية%%')""",
-                    LAW_TYPES + (g,))
-        is_bylaw_majority = cur.fetchone()[0] > c / 2
-        part = "اللائحة التنفيذية" if is_bylaw_majority else "القانون"
-        cur.execute(f"""UPDATE knowledge_objects
-                        SET metadata = metadata || jsonb_build_object(
-                              'library_group', %s::text, 'library_card_name', 'قانون حماية المستهلك (39/2014)'::text,
-                              'doc_part', %s::text),
-                            branch='مدني', updated_at=now()
-                        WHERE object_type IN ({ph}) AND {GEXPR} = %s""",
-                    (UNIFIED_CP, part, *LAW_TYPES, g))
-        print("  مجموعة", g[:30] if g else g, "->", part, "|", cur.rowcount, "كائن (وفرع=مدني) ✓", flush=True)
+    # 3) إعادة فهرسة حمولة النوع في محرك البحث (محلي، بلا تكلفة)
+    cur.execute("""SELECT id, coalesce(title,''), coalesce(original_text,''),
+                          object_type, branch, topic, subtopic, metadata->>'micro_issue', source_key
+                   FROM knowledge_objects WHERE metadata->>'title' ILIKE '%%المبادئ القانونية%%'""")
+    allr = cur.fetchall()
+    for s in range(0, len(allr), 48):
+        w = allr[s:s + 48]
+        common = {"object_type": w[0][3], "branch": w[0][4], "topic": w[0][5],
+                  "subtopic": w[0][6], "micro_issue": w[0][7], "source_key": w[0][8]}
+        eng.qdrant_request("PUT", "/collections/" + eng.COLLECTION + "/points?wait=true",
+                           {"points": eng.build_points([(r[0], r[1], r[2]) for r in w], common)})
+    print("أُعيدت فهرسة", len(allr), "كائن بحمولة النوع الجديد ✓", flush=True)
 
-    print("\n== 3) التحقق النهائي: بطاقات كل فرع الآن ==", flush=True)
-    cur.execute(f"""SELECT branch, count(DISTINCT {GEXPR}) FROM knowledge_objects
-                    WHERE object_type IN ({ph}) GROUP BY branch ORDER BY 2 DESC""", LAW_TYPES)
-    for b, c in cur.fetchall():
-        print("  فرع '%s': %d بطاقة" % (b, c), flush=True)
-
-    print("\n== 4) تفصيل بطاقة أسواق المال بعد الدمج ==", flush=True)
-    cur.execute(f"""SELECT metadata->>'doc_part', count(*) FROM knowledge_objects
-                    WHERE object_type IN ({ph}) AND metadata->>'library_group'='cma-authority-unified'
-                    GROUP BY 1""", LAW_TYPES)
-    for p, c in cur.fetchall():
-        print("  ", p, ":", c, flush=True)
+    # 4) تحقق نهائي
+    LAW_TYPES = ('legislation', 'legislation_article', 'legislation_issuing_article', 'legislation_preamble')
+    ph = ",".join(["%s"] * len(LAW_TYPES))
     cur.execute(f"""SELECT count(*) FROM knowledge_objects
-                    WHERE object_type IN ({ph}) AND title ILIKE '%%أسواق المال%%'
-                      AND coalesce(metadata->>'library_group','') <> 'cma-authority-unified'""", LAW_TYPES)
-    print("  متبقٍّ خارج الدمج (يجب أن يكون 0):", cur.fetchone()[0], flush=True)
+                    WHERE object_type IN ({ph}) AND metadata->>'title' ILIKE '%%المبادئ القانونية%%'""",
+                LAW_TYPES)
+    leak = cur.fetchone()[0]
+    print("\nمتبقٍّ داخل أنواع القوانين (يجب أن يكون 0):", leak, flush=True)
 
-    print("\n== 5) تفصيل بطاقة حماية المستهلك بعد الدمج ==", flush=True)
-    cur.execute(f"""SELECT metadata->>'doc_part', branch, count(*) FROM knowledge_objects
-                    WHERE object_type IN ({ph}) AND metadata->>'library_group'='cp-unified'
-                    GROUP BY 1,2""", LAW_TYPES)
-    for p, b, c in cur.fetchall():
-        print("  جزء=%s فرع=%s: %d" % (p, b, c), flush=True)
+    cur.execute("""SELECT metadata->>'doc_part', metadata->>'doc_subpart', count(*)
+                   FROM knowledge_objects
+                   WHERE metadata->>'library_group'='cma-authority-unified'
+                   GROUP BY 1,2 ORDER BY 1,2""")
+    print("\nبنية بطاقة هيئة أسواق المال الآن (يجب ألا تحوي أي 'مبادئ'):", flush=True)
+    for p, sp, c in cur.fetchall():
+        print("  %s / %s : %d" % (p, sp, c), flush=True)
+
+    cur.execute("""SELECT count(*) FROM knowledge_objects
+                   WHERE object_type='judicial_principle' AND topic='مبادئ هيئة أسواق المال'""")
+    print("\nمبادئ هيئة أسواق المال في تبويب المبادئ والأحكام:", cur.fetchone()[0], flush=True)
 PYEOF
 echo ""
-echo "===== اكتمل الإصلاح المستهدف ====="
+echo "===== اكتمل الفصل ====="
