@@ -3,7 +3,7 @@
 set -e
 set -a; source /opt/LegalMind/deploy/.env; set +a
 PY=/opt/LegalMind/.venv/bin/python
-curl -fsSL "https://raw.githubusercontent.com/dralmarri/LegalMind/af43a2e82ca7479e2feb219c170af842e1c34202/ops/autorun/refs-book13.json" -o /tmp/refs-book13.json
+curl -fsSL "https://raw.githubusercontent.com/dralmarri/LegalMind/e9738003a7462282829715aab685ae46712e3797/ops/autorun/refs-book13.json" -o /tmp/refs-book13.json
 
 $PY - <<'PYEOF'
 # -*- coding: utf-8 -*-
