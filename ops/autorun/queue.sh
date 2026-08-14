@@ -1,5 +1,5 @@
 #!/bin/bash
-# أمر آلي 47 (يشمل 46): (أ) كسر تخزين CDN (ب) عناوين الكتب 5-19 (ج) المبدأ اليتيم (د) تصحيح فروع المبادئ المدنية/المرافعات/الإثبات
+# أمر آلي 47ب (يشمل 46): (أ) كسر تخزين CDN (ب) عناوين الكتب 5-19 (ج) المبدأ اليتيم (د) تصحيح فروع المبادئ المدنية/المرافعات/الإثبات
 set -e
 set -a; source /opt/LegalMind/deploy/.env; set +a
 PY=/opt/LegalMind/.venv/bin/python
@@ -27,7 +27,7 @@ chmod 700 /opt/legalmind-autopilot/pull.sh
 echo "أُضيف كسر التخزين المؤقت ✓"
 
 echo ""
-$PY - &lt;&lt;'PYEOF'
+$PY - <<'PYEOF'
 # -*- coding: utf-8 -*-
 import sys
 sys.path.insert(0, "/opt/LegalMind/engine")
@@ -105,7 +105,8 @@ with eng.psycopg.connect(eng.database_url()) as conn:
 
     cur.execute("""UPDATE knowledge_objects SET branch='مرافعات', updated_at=now()
                    WHERE object_type='judicial_principle' AND branch='تجاري'
-                     AND (topic LIKE 'طرق الطعن%%' OR topic='إجراءات التقاضي')""")
+                     AND (topic LIKE %s OR topic=%s)""",
+                ('طرق الطعن%', 'إجراءات التقاضي'))
     print("  -> مرافعات (طرق الطعن + إجراءات التقاضي):", cur.rowcount, flush=True)
 
     cur.execute("""UPDATE knowledge_objects SET branch='إثبات', updated_at=now()
@@ -123,4 +124,4 @@ with eng.psycopg.connect(eng.database_url()) as conn:
                    WHERE object_type='judicial_principle' AND branch='تجاري'""")
     print("\nإجمالي مبادئ تجاري الآن:", cur.fetchone()[0], flush=True)
 PYEOF
-echo "===== اكتمل الأمر 47 ====="
+echo "===== اكتمل الأمر 47ب ====="
