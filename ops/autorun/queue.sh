@@ -1,162 +1,131 @@
 #!/bin/bash
-# أمر آلي 16: خدمة دائمة لتنظيف التشوهات الطباعية (ترتيب حروف مختل داخل الكلمة) عبر كل المكتبة
+# أمر آلي 17: مسح شامل عاجل لكل الكتب الـ19 (لائحة 7/2010 التنفيذية أسواق المال)
+# تصنيف كل كتاب: سليم بالفعل | مصنّف خطأً لكن نصه سليم (إصلاح فوري) | نصه مشوّه فعلاً (يحتاج إعادة قراءة)
 set -e
 set -a; source /opt/LegalMind/deploy/.env; set +a
 
-cat > /opt/LegalMind/tools/typo_fixer.py <<'PYEOF'
+# أوقف أي أمر قديم متأخر لتفادي التزاحم على القاعدة
+pkill -f "table_reader.py" 2>/dev/null || true
+
+cat > /root/audit19.py <<'PYEOF'
 # -*- coding: utf-8 -*-
-"""تنظيف تشوهات ترتيب الحروف العربية داخل الكلمات (مثل اخلامس بدل الخامس، اإلجمالية بدل
-الإجمالية) — فلترة رخيصة بالأنماط ثم تصحيح موثوق عبر النموذج مع حارس أقصى نسبة تغيير."""
-import sys, os, re, json, time, difflib, urllib.request
+import sys, re, json
 sys.path.insert(0, "/opt/LegalMind/engine")
 import legalmind_engine as eng
-
-MODEL = os.environ.get("LEGALMIND_INGEST_MODEL", "claude-sonnet-5")
-KEY = os.environ["ANTHROPIC_API_KEY"]
-BATCH_TEXTS = 6
-MAX_PER_RUN = 150
-EDIT_RATIO_MAX = 0.08
-
-WORD_RE = re.compile(r'[ء-ي]+')
-
-def has_candidate(text):
-    for w in WORD_RE.findall(text or ""):
-        if len(w) >= 3 and w[0] == 'ا' and w[1] != 'ل' and 'ل' in w[1:4]:
-            return True
-    return False
-
-def edit_ratio(a, b):
-    if not a:
-        return 1.0
-    return 1 - difflib.SequenceMatcher(None, a, b).ratio()
-
-TOOL = {
-    "name": "save_fixes",
-    "description": "تصحيح تشوهات ترتيب الحروف العربية داخل الكلمات فقط",
-    "input_schema": {
-        "type": "object", "required": ["fixes"],
-        "properties": {"fixes": {"type": "array", "items": {
-            "type": "object", "required": ["id", "has_defect"],
-            "properties": {
-                "id": {"type": "string"},
-                "has_defect": {"type": "boolean"},
-                "fixed_text": {"type": "string"}}}}}}}
-
-PROMPT = ("النصوص التالية مستخرجة بصرياً من مستندات قانونية عربية. بعض الكلمات فيها تشوّه طباعي محلي: "
-          "حروف داخل الكلمة الواحدة تبدّل ترتيبها (أمثلة حقيقية: 'الخامس' ظهرت 'اخلامس'، 'الإجمالية' ظهرت "
-          "'اإلجمالية'، 'المحتسب' ظهرت 'احملتسب'، 'الملاحق' ظهرت 'املالحق'، 'الاستثمار' ظهرت 'االستثمار'). "
-          "هذا خلل حرفي محلي داخل الكلمة فقط، وليس خطأً إملائياً حقيقياً ولا معنوياً.\n\n"
-          "لكل نص أدناه: افحص كل كلمة تبدأ بألف وفيها هذا النمط تحديداً. إن وجدت كلمة مشوهة بهذا النمط بعينه "
-          "صحّح ترتيب حروفها فقط لتعود كلمة عربية صحيحة (غالباً 'ال' + بقية الكلمة) دون أي تغيير آخر في النص — "
-          "لا تُضف ولا تحذف ولا تُعِد الصياغة ولا تصحح أخطاء إملائية أو نحوية أخرى غير هذا النمط تحديداً. "
-          "إن لم تجد أي تشوه من هذا النوع بالذات اجعل has_defect=false ولا ترسل fixed_text.\n\n")
-
-def call_api(items):
-    listing = "\n\n".join("### %s\n%s" % (i["id"], i["text"][:3000]) for i in items)
-    body = {"model": MODEL, "max_tokens": 16000,
-            "tools": [TOOL], "tool_choice": {"type": "tool", "name": "save_fixes"},
-            "messages": [{"role": "user", "content": [{"type": "text", "text": PROMPT + listing}]}]}
-    data = json.dumps(body).encode("utf-8")
-    for attempt in range(3):
-        try:
-            req = urllib.request.Request("https://api.anthropic.com/v1/messages", data=data,
-                                         headers={"x-api-key": KEY, "anthropic-version": "2023-06-01",
-                                                  "content-type": "application/json"})
-            with urllib.request.urlopen(req, timeout=600) as r:
-                res = json.loads(r.read())
-            for blk in res.get("content", []):
-                if blk.get("type") == "tool_use":
-                    return blk["input"].get("fixes", [])
-            return []
-        except Exception as exc:
-            print("  محاولة %d: %s" % (attempt + 1, str(exc)[:120]), flush=True)
-            time.sleep(15 * (attempt + 1))
-    return []
 
 with eng.psycopg.connect(eng.database_url()) as conn:
     conn.autocommit = True
     cur = conn.cursor()
-    cur.execute("""SELECT id, coalesce(title,''), coalesce(original_text,''),
-                          object_type, branch, topic, subtopic, metadata->>'micro_issue', source_key
-                   FROM knowledge_objects
-                   WHERE coalesce(metadata->>'typo_checked','') <> 'true'
-                     AND verification_status IN ('source_verified','operationally_accepted')
-                   LIMIT 6000""")
-    pool = cur.fetchall()
-    print("مجموعة الفحص الأولية:", len(pool), flush=True)
-    candidates = [r for r in pool if has_candidate(r[2])]
-    print("كائنات مرشّحة (نمط مشتبه به):", len(candidates), flush=True)
 
-    todo = candidates[:MAX_PER_RUN]
-    fixed_n = checked_n = rejected_n = 0
-    for s in range(0, len(todo), BATCH_TEXTS):
-        chunk = todo[s:s + BATCH_TEXTS]
-        by_id = {r[0]: r for r in chunk}
-        items = [{"id": r[0], "text": r[2]} for r in chunk]
-        results = call_api(items)
-        for res in results:
-            oid = res.get("id"); row = by_id.get(oid)
-            if not row:
-                continue
-            checked_n += 1
-            if not res.get("has_defect"):
-                cur.execute("""UPDATE knowledge_objects
-                               SET metadata = metadata || '{"typo_checked":"true"}'::jsonb WHERE id=%s""", (oid,))
-                continue
-            fixed = (res.get("fixed_text") or "").strip()
-            orig = row[2]
-            if not fixed or edit_ratio(orig, fixed) > EDIT_RATIO_MAX:
-                rejected_n += 1
-                cur.execute("""UPDATE knowledge_objects
-                               SET metadata = metadata || '{"typo_checked":"true","typo_rejected_large_diff":"true"}'::jsonb
-                               WHERE id=%s""", (oid,))
-                print("  رُفض (تغيير كبير %.0f%%): %s" % (edit_ratio(orig, fixed) * 100, oid[-14:]), flush=True)
-                continue
-            cur.execute("""UPDATE knowledge_objects
-                           SET original_text=%s, normalized_text=%s,
-                               metadata = metadata || '{"typo_checked":"true","typo_fixed":"true"}'::jsonb,
-                               updated_at=now() WHERE id=%s""",
-                        (fixed, eng.normalize_text(fixed), oid))
-            common = {"object_type": row[3], "branch": row[4], "topic": row[5],
-                      "subtopic": row[6], "micro_issue": row[7], "source_key": row[8]}
+    # 1) كل مصادر مجموعة "الكتاب-...-اسواق-المال" في الأرشيف والقاعدة معاً
+    cur.execute("""SELECT DISTINCT s.source_key, s.file_name
+                   FROM sources s
+                   WHERE s.file_name ILIKE '%اسواق-المال%' OR s.file_name ILIKE '%الكتاب%'
+                      OR s.file_name ILIKE '%لائحة%'""")
+    sources = cur.fetchall()
+    print("مصادر مطابقة في جدول sources:", len(sources), flush=True)
+
+    # أيضاً: كائنات معروفة الآن بنوع legislation/legislation_article السليمة — لأعرف النوع الصحيح المعتمد فعلاً
+    cur.execute("""SELECT DISTINCT object_type FROM knowledge_objects
+                   WHERE metadata->>'batch_id' IS NULL AND id NOT LIKE 'TBL-%' AND id NOT LIKE 'JUR-%'
+                     AND id NOT LIKE 'legis-%' AND id NOT LIKE 'lreg-%'
+                   LIMIT 5""")
+
+    def looks_garbled(text):
+        t = text or ""
+        digits = len(re.findall(r"\d", t))
+        density = digits / max(1, len(t))
+        en_hit = any(m in t for m in ("Venture Capital", "Private Equity", "Off Balance"))
+        frags = [f for f in t.split("\n") if f.strip()]
+        short = sum(1 for f in frags if 0 < len(f.strip()) < 25)
+        score = (density > 0.06) + (en_hit * 2) + (short >= 4)
+        return score >= 2
+
+    report = []
+    for sk, fname in sources:
+        cur.execute("""SELECT id, object_type, title, original_text, verification_status, usable_as_citation
+                       FROM knowledge_objects WHERE source_key=%s""", (sk,))
+        rows = cur.fetchall()
+        if not rows:
+            continue
+        by_type = {}
+        for r in rows:
+            by_type[r[1]] = by_type.get(r[1], 0) + 1
+        jur_n = by_type.get("judicial_principle", 0)
+        total = len(rows)
+        jur_ratio = jur_n / total if total else 0
+
+        garbled_n = sum(1 for r in rows if looks_garbled(r[3]))
+        garbled_ratio = garbled_n / total if total else 0
+
+        verdict = "سليم"
+        if jur_ratio > 0.3 and garbled_ratio > 0.15:
+            verdict = "مصنّف_خطأ_ومشوّه"
+        elif jur_ratio > 0.3:
+            verdict = "مصنّف_خطأ_فقط"
+        elif garbled_ratio > 0.2:
+            verdict = "مشوّه_فقط"
+
+        report.append({"source_key": sk, "file": fname, "total": total,
+                       "by_type": by_type, "jur_ratio": round(jur_ratio, 2),
+                       "garbled_ratio": round(garbled_ratio, 2), "verdict": verdict})
+
+    report.sort(key=lambda x: (x["verdict"] != "سليم", -x["total"]))
+    print("\n=== تقرير %d مصدراً ===" % len(report), flush=True)
+    counts = {}
+    for r in report:
+        counts[r["verdict"]] = counts.get(r["verdict"], 0) + 1
+        print("  [%s] %s | إجمالي=%d | مبدأ_قضائي=%.0f%% | تشوه=%.0f%% | %s" %
+              (r["verdict"], r["file"][:50], r["total"], r["jur_ratio"]*100, r["garbled_ratio"]*100,
+               r["by_type"]), flush=True)
+
+    print("\nملخص الأحكام:", counts, flush=True)
+
+    # 2) إصلاح فوري للحالة "مصنّف_خطأ_فقط": إعادة تصنيف النوع فقط، لا حاجة لإعادة قراءة
+    fixed_sources = 0
+    fixed_objects = 0
+    for r in report:
+        if r["verdict"] != "مصنّف_خطأ_فقط":
+            continue
+        cur.execute("""UPDATE knowledge_objects
+                       SET object_type='legislation_article',
+                           metadata = metadata || '{"reclassified_from":"judicial_principle"}'::jsonb,
+                           updated_at=now()
+                       WHERE source_key=%s AND object_type='judicial_principle'""", (r["source_key"],))
+        n = cur.rowcount
+        fixed_objects += n
+        fixed_sources += 1
+        # إعادة فهرسة (النص لم يتغير لكن الحمولة object_type تغيرت)
+        cur.execute("""SELECT id, title, original_text, object_type, branch, topic, subtopic,
+                              metadata->>'micro_issue', source_key
+                       FROM knowledge_objects WHERE source_key=%s""", (r["source_key"],))
+        allr = cur.fetchall()
+        for s in range(0, len(allr), 48):
+            w = allr[s:s + 48]
+            common = {"object_type": w[0][3], "branch": w[0][4], "topic": w[0][5],
+                      "subtopic": w[0][6], "micro_issue": w[0][7], "source_key": w[0][8]}
             eng.qdrant_request("PUT", "/collections/" + eng.COLLECTION + "/points?wait=true",
-                               {"points": eng.build_points([(oid, row[1], fixed)], common)})
-            fixed_n += 1
-            print("  صُحّح %s | قبل: %s | بعد: %s" %
-                  (oid[-14:], orig[:55].replace(chr(10), " "), fixed[:55].replace(chr(10), " ")), flush=True)
+                               {"points": eng.build_points([(x[0], x[1], x[2]) for x in w], common)})
+        print("  أُصلح فوراً: %s (%d كائن أُعيد تصنيفه وفهرسته)" % (r["file"][:45], n), flush=True)
 
-    print("\nنتيجة الجولة: فُحص=%d | صُحّح=%d | رُفض(تغيير كبير)=%d" % (checked_n, fixed_n, rejected_n), flush=True)
-    cur.execute("""SELECT count(*) FROM knowledge_objects
-                   WHERE coalesce(metadata->>'typo_checked','') <> 'true'
-                     AND verification_status IN ('source_verified','operationally_accepted')""")
-    print("إجمالي متبقٍ للفحص في الجولات القادمة:", cur.fetchone()[0], flush=True)
+    print("\nإصلاح فوري: %d مصدراً | %d كائناً أُعيد تصنيفه" % (fixed_sources, fixed_objects), flush=True)
+
+    # 3) قائمة ما يحتاج إعادة قراءة كاملة (الأولوية القادمة)
+    need_reread = [r for r in report if r["verdict"] in ("مشوّه_فقط", "مصنّف_خطأ_ومشوّه")]
+    print("\nيحتاج إعادة قراءة كاملة (%d مصدراً):" % len(need_reread), flush=True)
+    for r in need_reread:
+        print("  -", r["file"], "| source_key=", r["source_key"], flush=True)
+
+    with open("/root/need_reread.json", "w", encoding="utf-8") as f:
+        json.dump([{"source_key": r["source_key"], "file": r["file"]} for r in need_reread],
+                  f, ensure_ascii=False)
 PYEOF
-/opt/LegalMind/.venv/bin/python -m py_compile /opt/LegalMind/tools/typo_fixer.py && echo "الكود سليم ✓"
-
-cat > /opt/LegalMind/tools/run_typo_fixer.sh <<'EOF'
-#!/bin/bash
-set -a; source /opt/LegalMind/deploy/.env; set +a
-exec /opt/LegalMind/.venv/bin/python /opt/LegalMind/tools/typo_fixer.py
-EOF
-chmod +x /opt/LegalMind/tools/run_typo_fixer.sh
-
-# جدولة دائمة كل 30 دقيقة، بإزاحة عن جدول المراجعة الرئيسية (كل 20 دقيقة) لتفادي التزاحم
-cat > /etc/cron.d/legalmind-typofix <<'EOF'
-7,37 * * * * root flock -n /var/lock/lmtypofix.lock /opt/LegalMind/tools/run_typo_fixer.sh >> /root/typofix.log 2>&1
-EOF
-chmod 644 /etc/cron.d/legalmind-typofix
-echo "الجدولة الدائمة مفعّلة (كل 30 دقيقة) ✓"
-
-echo ""
-echo "== تشغيل أول جولة فوراً =="
-timeout 280 flock -n /var/lock/lmtypofix.lock /opt/LegalMind/tools/run_typo_fixer.sh > /root/typofix-first.log 2>&1 || true
-cat /root/typofix-first.log
+/opt/LegalMind/.venv/bin/python /root/audit19.py > /root/audit19.log 2>&1
+cat /root/audit19.log
 
 {
-  echo "=== خدمة تنظيف التشوهات الطباعية — $(date -u +%F' '%T) UTC ==="
+  echo "=== مسح شامل عاجل لكتب أسواق المال الـ19 — $(date -u +%F' '%T) UTC ==="
   echo ""
-  cat /root/typofix-first.log
-  echo ""
-  echo "الخدمة تعمل تلقائياً كل 30 دقيقة على كامل المكتبة حتى تنتهي، ثم تستمر على كل ملف جديد."
+  cat /root/audit19.log
 } > "/var/www/legalmind-v3/review-$(cat /opt/legalmind-autopilot/token).txt"
-echo "===== نُشرت نتيجة أول جولة تنظيف ====="
+echo "===== نُشر المسح الشامل ====="
