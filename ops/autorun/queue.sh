@@ -1,5 +1,5 @@
 #!/bin/bash
-# أمر آلي 65: (أ) فهرسة دلالية محلية لمواد الكتاب العاشر والمادتين المعدلتين (ب) اعتماد المبادئ المعلقة بالمطابقة النصية الحتمية
+# أمر آلي 66: (أ) فهرسة دلالية محلية لمواد الكتاب العاشر والمادتين المعدلتين (ب) اعتماد المبادئ المعلقة بالمطابقة النصية الحتمية
 set -e
 set -a; source /opt/LegalMind/deploy/.env; set +a
 PY=/opt/LegalMind/.venv/bin/python
@@ -48,7 +48,7 @@ with eng.psycopg.connect(eng.database_url()) as conn:
 
         cur.execute("SELECT column_name FROM information_schema.columns WHERE table_name='sources'")
         scols = [r[0] for r in cur.fetchall()]
-        pathcol = next((c for c in ('archive_path','path','file_path','stored_path','location','filename') if c in scols), None)
+        pathcol = next((c for c in ('archive_path','path','file_path','stored_path','location','file_name','filename') if c in scols), None)
         print("عمود المسار في sources:", pathcol, "| الأعمدة:", ",".join(scols), flush=True)
 
         verified = failed = nofile = 0
@@ -62,8 +62,12 @@ with eng.psycopg.connect(eng.database_url()) as conn:
                     if os.path.exists(cand):
                         fpath = cand
                     else:
-                        g = glob.glob('/opt/LegalMind/**/' + os.path.basename(cand), recursive=True)
-                        fpath = g[0] if g else None
+                        base = os.path.basename(cand)
+                        for root in ('/opt/LegalMind', '/root', '/var/lib/legalmind', '/srv'):
+                            g = glob.glob(root + '/**/' + base, recursive=True)
+                            if g:
+                                fpath = g[0]
+                                break
             if not fpath:
                 print("  !! لا ملف لمصدر %s (%d مبدأ)" % (sk[:30], len(items)), flush=True)
                 nofile += len(items)
@@ -98,4 +102,4 @@ with eng.psycopg.connect(eng.database_url()) as conn:
         if failed or nofile:
             print("هذه البقية تحتاج تحققاً بصرياً بالنموذج — سأقدر تكلفتها بدقة قبل أي تنفيذ.", flush=True)
 PYEOF
-echo "===== اكتمل الأمر 65 ====="
+echo "===== اكتمل الأمر 66 ====="
