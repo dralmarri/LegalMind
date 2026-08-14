@@ -1,98 +1,173 @@
 #!/bin/bash
-# أمر آلي 9: مسح شامل لدفعة "الكتاب السابع عشر - أسواق المال" لاكتشاف كل الجداول المشوهة
+# أمر آلي 10: إعادة رفع "الكتاب السابع عشر - أسواق المال" بقارئ جدولي مخصص (بنية أعمدة/صفوف)
 set -e
 set -a; source /opt/LegalMind/deploy/.env; set +a
 
-cat > /root/scan_batch.py <<'PYEOF'
+SRC_KEY="SRC-937A1650BC733E4F20CF"
+FNAME="الكتاب-السابع-عشر-اسواق-المال.pdf"
+
+echo "== تنظيف بقايا المحاولة الفاشلة أولاً =="
+docker exec legalmind-postgres psql -U legalmind -d legalmind -c \
+  "DELETE FROM knowledge_objects WHERE source_key='$SRC_KEY';"
+docker exec legalmind-postgres psql -U legalmind -d legalmind -c \
+  "DELETE FROM sources WHERE source_key='$SRC_KEY';"
+docker exec legalmind-postgres psql -U legalmind -d legalmind -c \
+  "DELETE FROM ingestion_batches WHERE batch_id='BATCH-20260813-223443-937A1650';"
+echo "نُظّفت بقايا القاعدة ✓"
+
+echo ""
+echo "== البحث عن الملف الأصلي في الأرشيف =="
+SRC=$(ls -1 /opt/legalmind-ingest/archive/*"اسواق-المال"*.pdf 2>/dev/null | grep -v json | grep -v canonical | head -1)
+if [ -z "$SRC" ]; then
+  echo "لم أجد الملف في الأرشيف بهذا الاسم — أبحث بمرونة أكبر..."
+  SRC=$(ls -1 /opt/legalmind-ingest/archive/*.pdf 2>/dev/null | grep -i "اسواق" | head -1)
+fi
+if [ -z "$SRC" ]; then
+  echo "تعذر إيجاد الملف — يلزم إعادة رفعه يدوياً من الهاتف"
+  echo "توقفت العملية" > /root/tables-reingest.log
+else
+  echo "الملف: $SRC"
+  cp -a "$SRC" "/opt/legalmind-ingest/inbox/${FNAME}"
+fi
+
+echo ""
+echo "== تركيب قارئ جدولي مخصص (يحفظ بنية الأعمدة/الصفوف بدل تفكيكها كسرد) =="
+cat > /opt/LegalMind/tools/table_reader.py <<'PYEOF'
 # -*- coding: utf-8 -*-
-import sys, re, json
+"""قارئ مخصص للمستندات الجدولية (تعليمات/جداول تنظيمية): يستخرج كل جدول كوحدة
+منظمة (عنوان الجدول + الأعمدة + الصفوف كـ markdown table) بدل تفكيكه كسرد مبادئ."""
+import sys, os, io, json, base64, hashlib, time, urllib.request
 sys.path.insert(0, "/opt/LegalMind/engine")
 import legalmind_engine as eng
+from pypdf import PdfReader, PdfWriter
 
-SRC_KEY = "SRC-937A1650BC733E4F20CF"
-BID = "BATCH-20260813-223443-937A1650"
+MODEL = os.environ.get("LEGALMIND_INGEST_MODEL", "claude-sonnet-5")
+KEY = os.environ["ANTHROPIC_API_KEY"]
+PAGES_PER_BATCH = 12
 
-with eng.psycopg.connect(eng.database_url()) as conn:
-    conn.autocommit = True
-    cur = conn.cursor()
+TOOL = {
+    "name": "save_tables",
+    "description": "حفظ محتوى الصفحات كوحدات: جداول منظمة أو نصوص سردية عادية",
+    "input_schema": {
+        "type": "object", "required": ["units"],
+        "properties": {"units": {"type": "array", "items": {
+            "type": "object", "required": ["kind", "title", "content"],
+            "properties": {
+                "kind": {"type": "string", "enum": ["table", "narrative", "definition"]},
+                "title": {"type": "string"},
+                "content": {"type": "string",
+                           "description": "للجداول: جدول Markdown كامل بعنوان الأعمدة والصفوف. للنص السردي: الفقرة كاملة."},
+                "notes": {"type": "string"}}}}}}}
 
-    cur.execute("""SELECT id, object_type, title, original_text, verification_status, usable_as_citation
-                   FROM knowledge_objects WHERE source_key=%s""", (SRC_KEY,))
-    rows = cur.fetchall()
-    print("إجمالي كائنات هذا الكتاب:", len(rows), flush=True)
-    by_type = {}
-    for r in rows:
-        by_type[r[1]] = by_type.get(r[1], 0) + 1
-    print("توزيعها حسب النوع:", by_type, flush=True)
+def slice_pdf(reader, a, b):
+    w = PdfWriter()
+    for p in range(max(0, a), min(b, len(reader.pages))):
+        w.add_page(reader.pages[p])
+    buf = io.BytesIO(); w.write(buf)
+    return base64.b64encode(buf.getvalue()).decode("ascii")
 
-    # بصمة الجدول المشوّه: كثافة أرقام/رموز عالية + مصطلحات مالية إنجليزية + قصر الجمل بشكل غير طبيعي
-    EN_MARKERS = ("Venture Capital", "Private Equity", "Off Balance", "off-balance",
-                  "Basel", "IFRS", "VaR")
-    def looks_like_table(text):
-        t = text or ""
-        digits = len(re.findall(r"\d", t))
-        pct = t.count("%")
-        paren_num = len(re.findall(r"\(\s*\d+\s*\)", t))
-        en_hit = any(m in t for m in EN_MARKERS)
-        density = digits / max(1, len(t))
-        # قرائن مركّبة: كثافة أرقام عالية جداً، أو رموز أقواس رقمية متكررة، أو مصطلح إنجليزي داخل نص عربي متصل
-        score = 0
-        if density > 0.06: score += 1
-        if pct >= 2: score += 1
-        if paren_num >= 3: score += 1
-        if en_hit: score += 2
-        # جمل قصيرة جداً متلاحقة (فقرات جدول) — سطور بلا روابط نحوية
-        frags = re.split(r"[\n]", t)
-        short = sum(1 for f in frags if 0 < len(f.strip()) < 25)
-        if short >= 4: score += 1
-        return score, density, pct, paren_num, en_hit
+def call(b64):
+    prompt = ("هذه صفحات من مستند تنظيمي (تعليمات/لوائح) قد تحتوي جداول أرقام ونسب مالية.\n"
+              "لكل عنصر محتوى في هذه الصفحات:\n"
+              "- إن كان جدولاً (أعمدة وصفوف، أرقام، نسب، بنود مرقمة داخل جدول) → "
+              "استخرجه كاملاً بصيغة جدول Markdown (| عمود | عمود |) محافظاً على ترتيب الأعمدة والصفوف "
+              "كما تراه بصرياً في الصفحة تماماً، مع عنوان الجدول إن وُجد، kind=table.\n"
+              "- إن كان نصاً سردياً متصلاً (مادة قانونية، شرح، تعريف) → انسخه حرفياً، kind=narrative أو definition.\n"
+              "لا تخلط عناصر جدول مع سرد في وحدة واحدة. لا تخترع بيانات غير موجودة في الصفحة.")
+    body = {"model": MODEL, "max_tokens": 30000,
+            "tools": [TOOL], "tool_choice": {"type": "tool", "name": "save_tables"},
+            "messages": [{"role": "user", "content": [
+                {"type": "document", "source": {"type": "base64", "media_type": "application/pdf", "data": b64}},
+                {"type": "text", "text": prompt}]}]}
+    data = json.dumps(body).encode("utf-8")
+    for attempt in range(4):
+        try:
+            req = urllib.request.Request("https://api.anthropic.com/v1/messages", data=data,
+                                         headers={"x-api-key": KEY, "anthropic-version": "2023-06-01",
+                                                  "content-type": "application/json"})
+            with urllib.request.urlopen(req, timeout=900) as r:
+                res = json.loads(r.read())
+            for blk in res.get("content", []):
+                if blk.get("type") == "tool_use":
+                    return blk["input"].get("units", [])
+            return []
+        except Exception as exc:
+            print("  محاولة %d: %s" % (attempt + 1, str(exc)[:120]), flush=True)
+            time.sleep(15 * (attempt + 1))
+    return []
 
-    flagged = []
-    for oid, ot, title, text, vs, uc in rows:
-        if vs != "source_verified" or not uc:
-            continue  # سبق حجبها أو لم تُعتمد بعد
-        score, density, pct, paren_num, en_hit = looks_like_table(text)
-        if score >= 2:
-            flagged.append((oid, title, score, density, pct, paren_num, en_hit, (text or "")[:100]))
+def run(path, branch, topic):
+    reader = PdfReader(path)
+    npg = len(reader.pages)
+    print("الملف: %s (%d صفحة)" % (path, npg), flush=True)
+    src_key = "SRC-" + hashlib.sha256(os.path.basename(path).encode()).hexdigest()[:20].upper()
+    all_units = []
+    for p in range(0, npg, PAGES_PER_BATCH):
+        b64 = slice_pdf(reader, p, p + PAGES_PER_BATCH)
+        print("  صفحات %d-%d..." % (p, min(p + PAGES_PER_BATCH, npg)), flush=True)
+        units = call(b64)
+        print("    استُخرج %d عنصراً (%d جدول)" %
+              (len(units), sum(1 for u in units if u.get("kind") == "table")), flush=True)
+        all_units += [(p, u) for u in units]
 
-    flagged.sort(key=lambda x: -x[2])
-    print("\nكائنات مشتبه بها إضافية (موثّقة حالياً وقابلة للاستشهاد):", len(flagged), flush=True)
-    for f in flagged:
-        print("  نقاط=%d كثافة=%.2f%% %%=%d أقواس=%d إنجليزي=%s | %s | %s" %
-              (f[2], f[3]*100, f[4], f[5], f[6], f[1][:40], f[7][:70]), flush=True)
+    with eng.psycopg.connect(eng.database_url()) as conn:
+        conn.autocommit = True
+        cur = conn.cursor()
+        cur.execute("""INSERT INTO sources (source_key, source_type, title, file_name, verification_status, metadata)
+                       VALUES (%s,'document',%s,%s,'source_verified','{}'::jsonb)
+                       ON CONFLICT (source_key) DO NOTHING""",
+                    (src_key, os.path.basename(path), os.path.basename(path)))
+        n = 0
+        for part, u in all_units:
+            title = (u.get("title") or "").strip()[:200] or ("جدول" if u.get("kind") == "table" else "نص")
+            content = (u.get("content") or "").strip()
+            if not content:
+                continue
+            oid = "TBL-%s-P%d-%s" % (os.path.basename(path)[:20], part,
+                                     hashlib.sha256(content.encode()).hexdigest()[:16])
+            otype = "regulatory_table" if u.get("kind") == "table" else "legal_document"
+            cur.execute("""INSERT INTO knowledge_objects
+                           (id, object_type, branch, topic, title, original_text, normalized_text,
+                            source_key, verification_status, usable_as_citation, metadata)
+                           VALUES (%s,%s,%s,%s,%s,%s,%s,%s,'source_verified',true,%s)
+                           ON CONFLICT (id) DO NOTHING""",
+                        (oid, otype, branch, topic, title, content, eng.normalize_text(content),
+                         src_key, json.dumps({"kind": u.get("kind"), "table_reader": True})))
+            n += 1
+        conn.commit()
+        print("\nأُدرج %d كائناً (جداول ونصوص) في القاعدة" % n, flush=True)
 
-    if flagged:
-        ids = [f[0] for f in flagged]
-        cur.execute("""UPDATE knowledge_objects
-                       SET verification_status='machine_pending_human', usable_as_citation=false,
-                           metadata = metadata || '{"quarantined":"table_misread_batch_scan"}'::jsonb,
-                           updated_at=now()
-                       WHERE id = ANY(%s)""", (ids,))
-        for oid in ids:
-            eng.qdrant_request("POST", "/collections/" + eng.COLLECTION + "/points/delete?wait=true",
-                               {"filter": {"must": [{"key": "object_id", "match": {"value": oid}}]}})
-        print("\nحُجب %d كائناً إضافياً ✓" % len(ids), flush=True)
+        cur.execute("""SELECT id, title, original_text, object_type, branch, topic
+                       FROM knowledge_objects WHERE source_key=%s""", (src_key,))
+        rows = cur.fetchall()
+        for s in range(0, len(rows), 40):
+            w = rows[s:s + 40]
+            common = {"object_type": w[0][3], "branch": w[0][4], "topic": w[0][5],
+                      "subtopic": None, "micro_issue": None, "source_key": src_key}
+            eng.qdrant_request("PUT", "/collections/" + eng.COLLECTION + "/points?wait=true",
+                               {"points": eng.build_points([(r[0], r[1], r[2]) for r in w], common)})
+        print("فُهرست %d نقطة في محرك البحث ✓" % len(rows), flush=True)
 
-    # عينة من الكائنات السليمة الباقية (نص سردي طبيعي فعلاً) لتقييم جودة الباقي
-    cur.execute("""SELECT id, title, left(original_text,120) FROM knowledge_objects
-                   WHERE source_key=%s AND verification_status='source_verified' AND usable_as_citation
-                   ORDER BY random() LIMIT 6""", (SRC_KEY,))
-    print("\nعينة عشوائية من الكائنات السليمة الباقية:", flush=True)
-    for oid, t, tx in cur.fetchall():
-        print("  -", t[:50], "|", tx[:70], flush=True)
-
-    cur.execute("""SELECT verification_status, usable_as_citation, count(*)
-                   FROM knowledge_objects WHERE source_key=%s GROUP BY 1,2""", (SRC_KEY,))
-    print("\nالحصيلة النهائية لهذا الكتاب:", flush=True)
-    for vs, uc, c in cur.fetchall():
-        print("  %s | استشهاد=%s | %d" % (vs, uc, c), flush=True)
+if __name__ == "__main__":
+    run(sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else "تجاري",
+        sys.argv[3] if len(sys.argv) > 3 else "أسواق المال")
 PYEOF
-/opt/LegalMind/.venv/bin/python /root/scan_batch.py > /root/scan_batch.log 2>&1
-cat /root/scan_batch.log
 
+if [ -n "$SRC" ]; then
+  nohup /opt/LegalMind/.venv/bin/python /opt/LegalMind/tools/table_reader.py \
+    "/opt/legalmind-ingest/inbox/${FNAME}" "تجاري" "أسواق المال" \
+    > /root/tables-reingest.log 2>&1 &
+  echo "انطلقت إعادة القراءة الجدولية في الخلفية (10-25 دقيقة حسب حجم الملف)"
+fi
+
+# نشر الحالة الحالية فوراً + سيُحدَّث لاحقاً عبر أمر متابعة
 {
-  echo "=== مسح شامل لدفعة أسواق المال — $(date -u +%F' '%T) UTC ==="
+  echo "=== إعادة رفع أسواق المال بقارئ جدولي — $(date -u +%F' '%T) UTC ==="
+  echo "الملف المكتشف: ${SRC:-غير موجود}"
+  echo "انطلقت المعالجة في الخلفية — راقب لاحقاً عبر أمر متابعة"
   echo ""
-  cat /root/scan_batch.log
+  echo "-- سطور أولية من السجل (إن توفرت) --"
+  sleep 20
+  tail -20 /root/tables-reingest.log 2>/dev/null
 } > "/var/www/legalmind-v3/review-$(cat /opt/legalmind-autopilot/token).txt"
-echo "===== نُشرت نتيجة المسح الشامل ====="
+echo "===== دُفعت إعادة الرفع الجدولية ====="
