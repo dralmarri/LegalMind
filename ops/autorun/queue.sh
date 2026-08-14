@@ -1,117 +1,115 @@
 #!/bin/bash
-# أمر آلي 19: عاجل جداً — إيقاف فوري ونهائي لكل عمل يستدعي النموذج تلقائياً (تكلفة حقيقية)
-# لن يُستأنف شيء إلا بطلب صريح من المستخدم. يبقى فقط تصحيح التصنيف (مجاني — قاعدة بيانات فقط).
+# أمر آلي 20: تقرير قراءة فقط — صفر استدعاء للنموذج، صفر تكلفة
+# الصورة الكاملة: أي كتب من 5-19 مفهرسة سليمة، كم بقي، ونسبة العطب
 set -e
 set -a; source /opt/LegalMind/deploy/.env; set +a
 
-echo "===== إيقاف فوري لكل استهلاك تلقائي (الأولوية القصوى) ====="
-
-echo "== 1) تعطيل الجدولة الدائمة (مراجعة + تنظيف طباعي) =="
-rm -f /etc/cron.d/legalmind-autoreview /etc/cron.d/legalmind-typofix
-echo "أُزيلت جداول cron الدائمة نهائياً ✓ (لن تعمل تلقائياً بعد الآن)"
-
-echo ""
-echo "== 2) إنهاء أي عملية تستدعي النموذج تعمل الآن =="
-for p in reviewer.py typo_fixer.py table_reader.py; do
-  pkill -f "$p" 2>/dev/null && echo "  أُنهيت: $p" || echo "  لم تكن تعمل: $p"
-done
-
-echo ""
-echo "== 3) عدد استدعاءات النموذج اليوم (تقدير من السجلات المتاحة) =="
-grep -c "محاولة\|صفحات\|نتيجة الجولة" /root/reviewer.log 2>/dev/null | sed 's/^/  سطور نشاط المراجعة الدائمة: /' || true
-grep -c "محاولة\|فُحص" /root/typofix.log 2>/dev/null | sed 's/^/  سطور نشاط التنظيف الطباعي: /' || true
-ls -la /root/tables-reingest*.log 2>/dev/null | wc -l | sed 's/^/  عدد محاولات إعادة قراءة الكتاب السابع عشر (بصرية، الأعلى تكلفة): /'
-
-echo ""
-echo "===== لن يُستدعى النموذج بعد الآن إلا بأمر صريح جديد منك عبر القناة ====="
-
-echo ""
-echo "== 4) تصحيح التصنيف المتبقي (مجاني تماماً — قاعدة بيانات فقط، صفر استدعاء نموذج) =="
-cat > /root/reclass_free.py <<'PYEOF'
+cat > /root/full_picture.py <<'PYEOF'
 # -*- coding: utf-8 -*-
-import sys
+import sys, re
 sys.path.insert(0, "/opt/LegalMind/engine")
 import legalmind_engine as eng
 
-JUDICIAL_MARKERS = ["الطعن رقم", "الطعن ", "جلسة ", "محكمة التمييز", "محكمة الاستئناف",
-                     "قضت محكمة", "قضت المحكمة", "مج القسم", "مبدأ:", "المبدأ:"]
-BYLAW_MARKERS = ["الفصل ", "المادة ", "اللائحة التنفيذية", "الكتاب ", "جدول المحتويات",
-                 "تعريفات", "الملحق رقم", "الباب "]
+BOOK_NUM = {
+    "التاسع عشر": 19, "الثامن عشر": 18, "السابع عشر": 17, "السادس عشر": 16,
+    "الخامس عشر": 15, "الرابع عشر": 14, "الثالث عشر": 13, "الثاني عشر": 12,
+    "الحادي عشر": 11, "العاشر": 10, "التاسع": 9, "الثامن": 8, "السابع": 7,
+    "السادس": 6, "الخامس": 5, "الرابع": 4, "الثالث": 3, "الثاني": 2,
+    "الاول": 1, "الأول": 1,
+}
 
-def content_kind(text, title):
-    t = (text or "") + " " + (title or "")
-    j = sum(1 for m in JUDICIAL_MARKERS if m in t)
-    b = sum(1 for m in BYLAW_MARKERS if m in t)
-    if j >= 1: return "judicial"
-    if b >= 1: return "bylaw"
-    return "ambiguous"
+def book_number(fname):
+    f = (fname or "").replace("-", " ").replace("_", " ")
+    for key in sorted(BOOK_NUM, key=len, reverse=True):
+        if key in f:
+            return BOOK_NUM[key]
+    return None
 
-with eng.psycopg.connect(eng.database_url()) as conn:
-    conn.autocommit = True
-    cur = conn.cursor()
+def looks_garbled(text):
+    t = text or ""
+    digits = len(re.findall(r"\d", t))
+    density = digits / max(1, len(t))
+    en_hit = any(m in t for m in ("Venture Capital", "Private Equity", "Off Balance"))
+    frags = [x for x in t.split("\n") if x.strip()]
+    short = sum(1 for x in frags if 0 < len(x.strip()) < 25)
+    return ((density > 0.06) + (en_hit * 2) + (short >= 4)) >= 2
 
-    # تراجع عن أي إصلاح سابق أخطأ (لو كان الأمر 17 قد نُفّذ فعلاً بمعيار النسبة الخطر)
-    cur.execute("""SELECT id, title, original_text, object_type, branch, topic, subtopic,
-                          metadata->>'micro_issue', source_key
-                   FROM knowledge_objects
-                   WHERE metadata->>'reclassified_from' = 'judicial_principle'
-                     AND coalesce(metadata->>'reclass_method','') <> 'content_check_v2'""")
-    prev = cur.fetchall()
-    reverted = 0
-    touched_sources = set()
-    for oid, title, text, ot, br, tp, st, mi, sk in prev:
-        if content_kind(text, title) == "judicial":
-            cur.execute("""UPDATE knowledge_objects SET object_type='judicial_principle',
-                           metadata = metadata - 'reclassified_from', updated_at=now() WHERE id=%s""", (oid,))
-            reverted += 1
-            touched_sources.add(sk)
-    print("رُدّ للأصل (كان إصلاحاً خاطئاً بمعيار النسبة القديم):", reverted, flush=True)
+with eng.psycopg.connect(eng.database_url()) as conn, conn.cursor() as cur:
+    cur.execute("""SELECT source_key, file_name FROM sources
+                   WHERE file_name ILIKE '%الكتاب%' AND file_name ILIKE '%اسواق-المال%'""")
+    sources = cur.fetchall()
+    print("مصادر كتب موجودة في سجل sources بنمط 'الكتاب...اسواق-المال':", len(sources), flush=True)
 
-    # التصحيح الصحيح بمعيار المحتوى فقط
-    cur.execute("""SELECT id, title, original_text, object_type, branch, topic, subtopic,
-                          metadata->>'micro_issue', source_key
-                   FROM knowledge_objects WHERE object_type='judicial_principle'""")
-    rows = cur.fetchall()
-    fixed = 0
-    for oid, title, text, ot, br, tp, st, mi, sk in rows:
-        if content_kind(text, title) == "bylaw":
-            cur.execute("""UPDATE knowledge_objects SET object_type='legislation_article',
-                           metadata = metadata || '{"reclassified_from":"judicial_principle","reclass_method":"content_check_v2"}'::jsonb,
-                           updated_at=now() WHERE id=%s""", (oid,))
-            fixed += 1
-            touched_sources.add(sk)
-    print("أُعيد تصنيفه بثقة (نص لائحة صريح بلا أثر قضائي):", fixed, flush=True)
-
-    for sk in touched_sources:
-        cur.execute("""SELECT id, title, original_text, object_type, branch, topic, subtopic,
-                              metadata->>'micro_issue', source_key
+    books = {}
+    for sk, fname in sources:
+        n = book_number(fname)
+        cur.execute("""SELECT object_type, verification_status, usable_as_citation, original_text
                        FROM knowledge_objects WHERE source_key=%s""", (sk,))
-        allr = cur.fetchall()
-        for s in range(0, len(allr), 48):
-            w = allr[s:s + 48]
-            common = {"object_type": w[0][3], "branch": w[0][4], "topic": w[0][5],
-                      "subtopic": w[0][6], "micro_issue": w[0][7], "source_key": w[0][8]}
-            eng.qdrant_request("PUT", "/collections/" + eng.COLLECTION + "/points?wait=true",
-                               {"points": eng.build_points([(x[0], x[1], x[2]) for x in w], common)})
-    print("أُعيدت فهرسة %d مصدراً متأثراً (فهرسة عادية، بلا تكلفة نموذج)" % len(touched_sources), flush=True)
+        rows = cur.fetchall()
+        garbled = sum(1 for r in rows if looks_garbled(r[3]))
+        by_type = {}
+        for r in rows:
+            by_type[r[0]] = by_type.get(r[0], 0) + 1
+        books[n or fname] = {"file": fname, "total": len(rows), "garbled": garbled,
+                             "by_type": by_type, "sk": sk}
 
-    cur.execute("""SELECT object_type, count(*) FROM knowledge_objects
-                   WHERE object_type IN ('judicial_principle','legislation_article','legislation','regulatory_table')
-                   GROUP BY 1 ORDER BY 2 DESC""")
-    print("\nتوزيع الأنواع الآن:", flush=True)
-    for ot, c in cur.fetchall():
-        print("  %s: %d" % (ot, c), flush=True)
+    print("\n=== حالة كل كتاب (5 إلى 19) ===", flush=True)
+    healthy = missing = garbled_books = misclassified = 0
+    for n in range(5, 20):
+        b = books.get(n)
+        if not b:
+            print("  كتاب %d: غير مرفوع إطلاقاً ✗" % n, flush=True)
+            missing += 1
+            continue
+        gr = b["garbled"] / b["total"] if b["total"] else 0
+        jur = b["by_type"].get("judicial_principle", 0)
+        jur_ratio = jur / b["total"] if b["total"] else 0
+        if gr > 0.15:
+            status = "مشوّه (يحتاج إعادة قراءة مكلفة)"
+            garbled_books += 1
+        elif jur_ratio > 0.1:
+            status = "بقي فيه تصنيف خاطئ (يحتاج مراجعة)"
+            misclassified += 1
+        else:
+            status = "سليم ✓"
+            healthy += 1
+        print("  كتاب %d: %d كائن | عطب=%.0f%% | مبدأ_قضائي_متبقٍ=%d | %s | %s" %
+              (n, b["total"], gr * 100, jur, status, b["file"][:45]), flush=True)
+
+    total_books = 15  # من 5 إلى 19
+    print("\n=== الخلاصة (من أصل %d كتاباً: 5 إلى 19) ===" % total_books, flush=True)
+    print("  سليمة تماماً: %d" % healthy, flush=True)
+    print("  غير مرفوعة إطلاقاً: %d" % missing, flush=True)
+    print("  مشوّهة (تحتاج إعادة قراءة بصرية مكلفة): %d" % garbled_books, flush=True)
+    print("  يبقى فيها تصنيف خاطئ بسيط (قابل للإصلاح المجاني): %d" % misclassified, flush=True)
+    if garbled_books:
+        print("  نسبة الكتب المعطوبة فعلاً: %.0f%%" % (garbled_books / total_books * 100), flush=True)
+
+    # ملفات المبادئ القضائية المنفصلة (مجلس التأديب) — للتأكد أنها سليمة ولم تُمس
+    cur.execute("""SELECT count(*) FROM knowledge_objects
+                   WHERE object_type='judicial_principle'
+                     AND (original_text ILIKE '%جلسة%' OR original_text ILIKE '%مجلس التأديب%'
+                          OR original_text ILIKE '%الطعن%')""")
+    real_principles = cur.fetchone()[0]
+    print("\nمبادئ قضائية حقيقية سليمة (فيها جلسة/قرار مجلس تأديب/طعن):", real_principles, flush=True)
+
+    cur.execute("SELECT count(*) FROM knowledge_objects WHERE object_type='judicial_principle'")
+    total_jur = cur.fetchone()[0]
+    print("إجمالي المصنّف حالياً 'مبدأ قضائي' في كل القاعدة:", total_jur,
+          "(منها %d مؤكد سليم، والباقي إما مبادئ أخرى أو محتاج مراجعة)" % real_principles, flush=True)
+
+    # الحالة العامة لكل القاعدة (ليست مقتصرة على أسواق المال)
+    cur.execute("""SELECT verification_status, count(*) FROM knowledge_objects GROUP BY 1 ORDER BY 2 DESC""")
+    print("\nحالة التوثيق في كامل مكتبتك (كل الفروع):", flush=True)
+    for vs, c in cur.fetchall():
+        print("  %s: %d" % (vs, c), flush=True)
 PYEOF
-/opt/LegalMind/.venv/bin/python /root/reclass_free.py > /root/reclass_free.log 2>&1
-cat /root/reclass_free.log
+/opt/LegalMind/.venv/bin/python /root/full_picture.py > /root/full_picture.log 2>&1
+cat /root/full_picture.log
 
 {
-  echo "=== إيقاف طارئ لكل استهلاك تلقائي + تصحيح مجاني — $(date -u +%F' '%T) UTC ==="
+  echo "=== الصورة الكاملة (قراءة فقط — صفر تكلفة) — $(date -u +%F' '%T) UTC ==="
   echo ""
-  echo "تم إيقاف نهائياً: خدمة المراجعة الدورية، خدمة التنظيف الطباعي، أي إعادة قراءة جارية."
-  echo "لن يُستدعى نموذج الذكاء الاصطناعي بعد الآن إلا بأمر صريح جديد."
-  echo ""
-  echo "-- التصحيح المجاني المتبقي (قاعدة بيانات فقط) --"
-  cat /root/reclass_free.log
+  cat /root/full_picture.log
 } > "/var/www/legalmind-v3/review-$(cat /opt/legalmind-autopilot/token).txt"
-echo "===== نُشر تقرير الإيقاف الطارئ ====="
+echo "===== نُشر تقرير الصورة الكاملة ====="
