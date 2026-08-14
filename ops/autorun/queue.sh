@@ -1,150 +1,96 @@
 #!/bin/bash
-# أمر آلي 52: تشخيص + تطبيق تعديل 99/2025 على متن 152/2023 (استبدال/إكمال) بضمانات كاملة
+# أمر آلي 53: استبدال نصوص المواد المعدلة بالقرار 99/2025 داخل متن 152/2023 + دمج البطاقتين + تسمية بطاقة 109/2026
 set -e
 set -a; source /opt/LegalMind/deploy/.env; set +a
 PY=/opt/LegalMind/.venv/bin/python
 
 $PY - <<'PYEOF'
 # -*- coding: utf-8 -*-
-import sys
+import sys, re
 sys.path.insert(0, "/opt/LegalMind/engine")
 import legalmind_engine as eng
 
 AR = str.maketrans('٠١٢٣٤٥٦٧٨٩', '0123456789')
-def norm_num(s):
-    s = (s or '').strip().translate(AR)
-    digits = ''.join(ch for ch in s if ch.isdigit())
-    return digits
 
 with eng.psycopg.connect(eng.database_url()) as conn:
     conn.autocommit = True
     cur = conn.cursor()
 
-    cur.execute("""SELECT column_name FROM information_schema.columns
-                   WHERE table_name='knowledge_objects' ORDER BY ordinal_position""")
-    cols = [r[0] for r in cur.fetchall()]
-    print("== أعمدة الجدول ==", flush=True)
-    print("  " + ", ".join(cols), flush=True)
-    TEXTCOL = next((c for c in ['content','text','body','raw_text','chunk_text',
-                                'document_text','markdown','payload'] if c in cols), None)
-    print("عمود النص:", TEXTCOL, flush=True)
-    if not TEXTCOL:
-        print("!! لا عمود نص معروف — توقف.", flush=True)
-        raise SystemExit(0)
+    cur.execute("""SELECT id, coalesce(original_text,'') FROM knowledge_objects
+                   WHERE id LIKE 'legis-99-2025-issue-%%' ORDER BY id""")
+    issues = cur.fetchall()
+    print("== نصوص مواد إصدار القرار 99/2025 (%d) ==" % len(issues), flush=True)
 
-    hay = "coalesce(metadata->>'library_card_name','') || ' ' || coalesce(metadata->>'title','')"
-    if 'title' in cols:
-        hay += " || ' ' || coalesce(title,'')"
-    hay += " || ' ' || left(coalesce(" + TEXTCOL + ",''),200)"
+    cur.execute("""SELECT id FROM knowledge_objects WHERE id LIKE 'legis-152-2023-m%%'""")
+    base_ids = {r[0] for r in cur.fetchall()}
+    print("مواد القرار الأصلي:", len(base_ids), flush=True)
 
-    print("\n== المجموعات المطابقة ==", flush=True)
-    cur.execute("""SELECT coalesce(metadata->>'library_group','(بلا مجموعة)'), count(*),
-                          min(coalesce(metadata->>'library_card_name', metadata->>'title', '-'))
-                   FROM knowledge_objects
-                   WHERE """ + hay + """ ILIKE %s OR """ + hay + """ ILIKE %s
-                   GROUP BY 1 ORDER BY 2 DESC""",
-                ('%مقيمي العقار%', '%99/2025%'))
-    rows = cur.fetchall()
-    base_g = amend_g = None
-    for g, c, nm in rows:
-        print("  مجموعة=%s | %d | %s" % (g[:50], c, nm[:60]), flush=True)
-        if c > 10 and base_g is None:
-            base_g = g
-        if c <= 10 and amend_g is None and g != '(بلا مجموعة)':
-            amend_g = g
+    NEWNAME = 'تنظيم مهنة مقيمي العقار ومقدمي خدمات التقييم (152/2023 وتعديله بالقرار 99/2025)'
+    replaced = []
+    unparsed = []
+    for oid, txt in issues:
+        t = txt.strip()
+        print("\n--- %s ---" % oid, flush=True)
+        print(t[:2000], flush=True)
+        segs = re.split(r'(?:^|\n)\s*(?:مادة|المادة)\s*\(?\s*([0-9٠-٩]+)\s*\)?\s*(?:مكرر[اً]?\s*)?[:\-–—]?\s*\n?', t)
+        # segs = [مقدمة إجرائية, رقم1, نص1, رقم2, نص2, ...]
+        pairs = []
+        for i in range(1, len(segs) - 1, 2):
+            num = segs[i].translate(AR)
+            body = (segs[i + 1] or '').strip()
+            if num.isdigit() and len(body) >= 80:
+                pairs.append((num, body))
+        if not pairs:
+            unparsed.append(oid)
+            print(">> لا نص مادة قابل للاستخراج آلياً من هذا الكائن (إجرائي غالباً).", flush=True)
+            continue
+        for num, body in pairs:
+            tgt = 'legis-152-2023-m' + num
+            if tgt in base_ids:
+                cur.execute("SELECT coalesce(original_text,'') FROM knowledge_objects WHERE id=%s", (tgt,))
+                old_txt = cur.fetchone()[0]
+                cur.execute("""UPDATE knowledge_objects
+                               SET original_text=%s, normalized_text=%s,
+                                   metadata = coalesce(metadata,'{}'::jsonb)
+                                     || jsonb_build_object('pre_amendment_text', %s::text)
+                                     || jsonb_build_object('amended_by', 'القرار الوزاري 99/2025'::text),
+                                   updated_at=now()
+                               WHERE id=%s""", (body, body, old_txt, tgt))
+                replaced.append(num)
+                print(">> استُبدل نص المادة %s في القرار الأصلي (القديم محفوظ احتياطياً) ✓" % num, flush=True)
+            else:
+                print(">> المادة %s غير موجودة في الأصل — تُركت داخل مجلد القرار المعدِّل (لا إنشاء آلياً)." % num, flush=True)
 
-    # مجموعة التعديل قد تكون بلا library_group — نلتقط كائناتها بالمحتوى
-    if amend_g:
-        cur.execute("""SELECT id FROM knowledge_objects
-                       WHERE metadata->>'library_group' = %s ORDER BY id""", (amend_g,))
-        amend_ids = [r[0] for r in cur.fetchall()]
-    else:
-        cur.execute("""SELECT id FROM knowledge_objects
-                       WHERE metadata->>'library_group' IS NULL
-                         AND (""" + hay + """ ILIKE %s)
-                       ORDER BY id LIMIT 10""", ('%99/2025%',))
-        amend_ids = [r[0] for r in cur.fetchall()]
-
-    if base_g is None or base_g == '(بلا مجموعة)' or not amend_ids or len(amend_ids) > 10:
-        print("\n!! لم تتحقق شروط الأمان (base=%s, amend=%d) — تشخيص فقط دون تغيير." % (base_g, len(amend_ids)), flush=True)
-        for oid in amend_ids[:10]:
-            cur.execute("SELECT coalesce(metadata->>'article_number','؟'), coalesce(metadata->>'title','-'), left(coalesce(" + TEXTCOL + ",''),1500) FROM knowledge_objects WHERE id=%s", (oid,))
-            an, t, txt = cur.fetchone()
-            print("\n--- %s | مادة=%s | %s\n%s" % (oid[:50], an, t[:60], txt), flush=True)
-        raise SystemExit(0)
-
-    print("\nالمجموعة الأساس: %s | كائنات التعديل: %d" % (base_g[:50], len(amend_ids)), flush=True)
-
-    # مواد الأساس: رقم -> id
-    cur.execute("""SELECT id, coalesce(metadata->>'article_number','') FROM knowledge_objects
-                   WHERE metadata->>'library_group' = %s""", (base_g,))
-    base_arts = {}
-    for oid, an in cur.fetchall():
-        n = norm_num(an)
-        if n:
-            base_arts.setdefault(n, oid)
-    print("مواد الأساس المرقمة: %d" % len(base_arts), flush=True)
-
-    NEWNAME = 'تنظيم مهنة مقيمي العقار ومقدمي خدمات التقييم (152/2023 وتعديله)'
-    replaced = added = flagged = 0
-    for oid in amend_ids:
-        cur.execute("SELECT coalesce(metadata->>'article_number',''), coalesce(metadata->>'title','-'), coalesce(" + TEXTCOL + ",'') FROM knowledge_objects WHERE id=%s", (oid,))
-        an, t, txt = cur.fetchone()
-        n = norm_num(an)
-        head = txt.strip()[:100]
-        print("\n--- تعديل: %s | مادة=%s | %s" % (oid[:45], an, t[:50]), flush=True)
-        print(txt.strip()[:1500], flush=True)
-        procedural = any(k in head for k in ('يُستبدل', 'يستبدل', 'يُضاف', 'يضاف', 'يُلغى', 'يلغى', 'يُنشر', 'ينشر', 'على جهات الاختصاص'))
-        if n and n in base_arts and not procedural:
-            tgt = base_arts[n]
-            cur.execute("SELECT coalesce(" + TEXTCOL + ",'') FROM knowledge_objects WHERE id=%s", (tgt,))
-            old_txt = cur.fetchone()[0]
-            cur.execute("""UPDATE knowledge_objects
-                           SET """ + TEXTCOL + """ = %s,
-                               metadata = metadata
-                                 || jsonb_build_object('pre_amendment_text', %s::text)
-                                 || jsonb_build_object('amended_by', 'القرار الوزاري 99/2025'::text),
-                               updated_at=now()
-                           WHERE id=%s""", (txt, old_txt, tgt))
-            replaced += 1
-            print(">> استُبدلت المادة %s في القرار الأصلي (النص القديم محفوظ احتياطياً) ✓" % n, flush=True)
-        elif n and n not in base_arts and not procedural:
-            cur.execute("""UPDATE knowledge_objects
-                           SET metadata = metadata
-                                 || jsonb_build_object('library_group', %s::text)
-                                 || jsonb_build_object('doc_part', 'القرار 152/2023'::text)
-                                 || jsonb_build_object('added_by', 'القرار الوزاري 99/2025'::text)
-                                 || jsonb_build_object('library_card_name', %s::text),
-                               updated_at=now()
-                           WHERE id=%s""", (base_g, NEWNAME, oid))
-            added += 1
-            print(">> أُلحقت المادة %s الجديدة بمواد القرار ✓" % n, flush=True)
-        else:
-            cur.execute("""UPDATE knowledge_objects
-                           SET metadata = metadata
-                                 || jsonb_build_object('library_group', %s::text)
-                                 || jsonb_build_object('doc_part', 'القرار الوزاري 99/2025 المعدِّل'::text)
-                                 || jsonb_build_object('library_card_name', %s::text),
-                               updated_at=now()
-                           WHERE id=%s""", (base_g, NEWNAME, oid))
-            flagged += 1
-            print(">> مادة إجرائية/غير مرقمة — وُضعت في مجلد القرار المعدِّل داخل البطاقة نفسها.", flush=True)
-
+    print("\n== دمج البطاقتين في بطاقة واحدة بمجلدين ==", flush=True)
     cur.execute("""UPDATE knowledge_objects
-                   SET metadata = metadata
-                         || jsonb_build_object('library_card_name', %s::text)
-                         || (CASE WHEN coalesce(metadata->>'doc_part','')='' THEN jsonb_build_object('doc_part','القرار 152/2023'::text) ELSE '{}'::jsonb END),
+                   SET metadata = coalesce(metadata,'{}'::jsonb)
+                         || jsonb_build_object('library_group', 'legis-152-2023'::text)
+                         || jsonb_build_object('doc_part', 'القرار الوزاري 99/2025 المعدِّل'::text)
+                         || jsonb_build_object('library_card_name', %s::text),
                        updated_at=now()
-                   WHERE metadata->>'library_group' = %s""", (NEWNAME, base_g))
-    print("\nوحّد اسم البطاقة على %d كائناً ✓" % cur.rowcount, flush=True)
-    print("النتيجة: استُبدل %d | أُضيف %d | إجرائي %d" % (replaced, added, flagged), flush=True)
-
-    print("\n== بطاقة توصيل الطلبات: تصحيح الاسم ==", flush=True)
+                   WHERE id LIKE 'legis-99-2025-%%'""", (NEWNAME,))
+    print("كائنات القرار المعدِّل المنقولة إلى البطاقة: %d ✓" % cur.rowcount, flush=True)
     cur.execute("""UPDATE knowledge_objects
-                   SET metadata = metadata || jsonb_build_object('library_card_name',
-                        'القرار 109/2026 — تنظيم قطاع توصيل الطلبات عبر المنصات'::text),
+                   SET metadata = coalesce(metadata,'{}'::jsonb)
+                         || jsonb_build_object('doc_part', 'القرار 152/2023'::text)
+                         || jsonb_build_object('library_card_name', %s::text),
                        updated_at=now()
-                   WHERE """ + hay + """ ILIKE %s""", ('%توصيل الطلبات%',))
+                   WHERE id LIKE 'legis-152-2023-%%'""", (NEWNAME,))
+    print("كائنات القرار الأصلي الموسومة: %d ✓" % cur.rowcount, flush=True)
+
+    print("\n== تسمية بطاقة القرار 109/2026 (توصيل الطلبات) ==", flush=True)
+    cur.execute("""UPDATE knowledge_objects
+                   SET metadata = coalesce(metadata,'{}'::jsonb)
+                         || jsonb_build_object('library_card_name',
+                              'القرار 109/2026 — تنظيم قطاع توصيل الطلبات عبر المنصات'::text),
+                       updated_at=now()
+                   WHERE id LIKE 'legis-109-2026-%%'""")
     print("سُمّيت (%d كائناً) ✓" % cur.rowcount, flush=True)
+
+    print("\n===== الخلاصة =====", flush=True)
+    print("مواد استُبدل نصها: %s" % (", ".join(replaced) if replaced else "لا شيء"), flush=True)
+    print("كائنات إصدار بقيت للاطلاع اليدوي: %s" % (", ".join(unparsed) if unparsed else "لا شيء"), flush=True)
+    if replaced:
+        print("ملاحظة: المواد المستبدلة قد تحتاج إعادة فهرسة دلالية لاحقاً (بتكلفة رمزية) — لن أفعلها إلا بموافقتك.", flush=True)
 PYEOF
-echo "===== اكتمل الأمر 52 ====="
+echo "===== اكتمل الأمر 53 ====="
