@@ -1,96 +1,88 @@
 #!/bin/bash
-# أمر آلي 53: استبدال نصوص المواد المعدلة بالقرار 99/2025 داخل متن 152/2023 + دمج البطاقتين + تسمية بطاقة 109/2026
+# أمر آلي 54: إلحاق التعريف المضاف بالمادة الأولى + معالجة البند 7 من الملحق رقم 2
 set -e
 set -a; source /opt/LegalMind/deploy/.env; set +a
 PY=/opt/LegalMind/.venv/bin/python
 
 $PY - <<'PYEOF'
 # -*- coding: utf-8 -*-
-import sys, re
+import sys
 sys.path.insert(0, "/opt/LegalMind/engine")
 import legalmind_engine as eng
 
-AR = str.maketrans('٠١٢٣٤٥٦٧٨٩', '0123456789')
+DEF_MARK = 'الوحدات الخاضعة لرقابة البنك المركزي'
+DEF_BLOCK = (
+    "\n\n- الوحدات الخاضعة لرقابة البنك المركزي:\n"
+    "1- البنوك المحلية (البنوك الكويتية وفروع البنوك الأجنبية المرخص لها بالعمل داخل دولة الكويت من قبل البنك المركزي).\n"
+    "2- شركات التمويل المنشأة وفقاً للقرار الوزاري رقم (38) لسنة 2011 في شأن تنظيم رقابة البنك المركزي على شركات التمويل.\n"
+    "3- شركات الاستثمار فيما يخص نشاط التمويل الذي تزاوله هذه الشركات.\n"
+    "(أُضيف هذا التعريف بالقرار الوزاري 99/2025)"
+)
+BAND7_NEW = 'يجب على الوحدات التي تخضع لرقابة البنك المركزي الالتزام بتعليماته المتعلقة بتقييم الأصول العقارية'
 
 with eng.psycopg.connect(eng.database_url()) as conn:
     conn.autocommit = True
     cur = conn.cursor()
 
-    cur.execute("""SELECT id, coalesce(original_text,'') FROM knowledge_objects
-                   WHERE id LIKE 'legis-99-2025-issue-%%' ORDER BY id""")
-    issues = cur.fetchall()
-    print("== نصوص مواد إصدار القرار 99/2025 (%d) ==" % len(issues), flush=True)
+    print("== (أ) إلحاق التعريف المضاف بالمادة الأولى ==", flush=True)
+    cur.execute("SELECT coalesce(original_text,'') FROM knowledge_objects WHERE id='legis-152-2023-m1'")
+    row = cur.fetchone()
+    if not row:
+        print("!! المادة الأولى غير موجودة", flush=True)
+    elif DEF_MARK in row[0]:
+        print("التعريف ملحق مسبقاً — لا تغيير (منفذ من قبل).", flush=True)
+    else:
+        old = row[0]
+        cur.execute("""UPDATE knowledge_objects
+                       SET original_text = original_text || %s,
+                           normalized_text = coalesce(normalized_text,'') || %s,
+                           metadata = coalesce(metadata,'{}'::jsonb)
+                             || jsonb_build_object('pre_amendment_text', %s::text)
+                             || jsonb_build_object('amended_by', 'القرار الوزاري 99/2025 (إضافة تعريف)'::text),
+                           updated_at=now()
+                       WHERE id='legis-152-2023-m1'""", (DEF_BLOCK, DEF_BLOCK, old))
+        print("أُلحق التعريف بالمادة الأولى ✓ (النص القديم محفوظ احتياطياً)", flush=True)
 
-    cur.execute("""SELECT id FROM knowledge_objects WHERE id LIKE 'legis-152-2023-m%%'""")
-    base_ids = {r[0] for r in cur.fetchall()}
-    print("مواد القرار الأصلي:", len(base_ids), flush=True)
+    print("\n== (ب) البحث عن الملحق رقم (2) في كائنات القرار ==", flush=True)
+    cur.execute("""SELECT id, left(coalesce(original_text,''),120)
+                   FROM knowledge_objects
+                   WHERE (id LIKE %s OR id LIKE %s)
+                     AND (original_text ILIKE %s OR original_text ILIKE %s OR title ILIKE %s)""",
+                ('legis-152-2023-%', 'legis-99-2025-%', '%ملحق رقم (2)%', '%الملحق رقم (2)%', '%ملحق%'))
+    hits = cur.fetchall()
+    annex_obj = None
+    for oid, head in hits:
+        print("  %s | %s" % (oid, head.replace(chr(10),' ')), flush=True)
+        if oid.startswith('legis-152-2023') and not oid.endswith('preamble'):
+            cur.execute("SELECT coalesce(original_text,'') FROM knowledge_objects WHERE id=%s", (oid,))
+            full = cur.fetchone()[0]
+            if 'الملحق رقم (2)' in full or 'ملحق رقم (2)' in full:
+                annex_obj = (oid, full)
 
-    NEWNAME = 'تنظيم مهنة مقيمي العقار ومقدمي خدمات التقييم (152/2023 وتعديله بالقرار 99/2025)'
-    replaced = []
-    unparsed = []
-    for oid, txt in issues:
-        t = txt.strip()
-        print("\n--- %s ---" % oid, flush=True)
-        print(t[:2000], flush=True)
-        segs = re.split(r'(?:^|\n)\s*(?:مادة|المادة)\s*\(?\s*([0-9٠-٩]+)\s*\)?\s*(?:مكرر[اً]?\s*)?[:\-–—]?\s*\n?', t)
-        # segs = [مقدمة إجرائية, رقم1, نص1, رقم2, نص2, ...]
-        pairs = []
-        for i in range(1, len(segs) - 1, 2):
-            num = segs[i].translate(AR)
-            body = (segs[i + 1] or '').strip()
-            if num.isdigit() and len(body) >= 80:
-                pairs.append((num, body))
-        if not pairs:
-            unparsed.append(oid)
-            print(">> لا نص مادة قابل للاستخراج آلياً من هذا الكائن (إجرائي غالباً).", flush=True)
-            continue
-        for num, body in pairs:
-            tgt = 'legis-152-2023-m' + num
-            if tgt in base_ids:
-                cur.execute("SELECT coalesce(original_text,'') FROM knowledge_objects WHERE id=%s", (tgt,))
-                old_txt = cur.fetchone()[0]
-                cur.execute("""UPDATE knowledge_objects
-                               SET original_text=%s, normalized_text=%s,
-                                   metadata = coalesce(metadata,'{}'::jsonb)
-                                     || jsonb_build_object('pre_amendment_text', %s::text)
-                                     || jsonb_build_object('amended_by', 'القرار الوزاري 99/2025'::text),
-                                   updated_at=now()
-                               WHERE id=%s""", (body, body, old_txt, tgt))
-                replaced.append(num)
-                print(">> استُبدل نص المادة %s في القرار الأصلي (القديم محفوظ احتياطياً) ✓" % num, flush=True)
-            else:
-                print(">> المادة %s غير موجودة في الأصل — تُركت داخل مجلد القرار المعدِّل (لا إنشاء آلياً)." % num, flush=True)
+    if annex_obj is None:
+        print("الملحق رقم (2) غير مفهرس كنص مستقل ضمن مواد القرار — نصه المعدَّل موثق في مجلد «القرار الوزاري 99/2025 المعدِّل» ويظهر في البحث.", flush=True)
+    else:
+        oid, full = annex_obj
+        if BAND7_NEW in full:
+            print("البند 7 محدث مسبقاً في %s — لا تغيير." % oid, flush=True)
+        else:
+            NOTE = ("\n\n(عُدّل البند رقم (7) من الملحق رقم (2) بالقرار الوزاري 99/2025 ليصبح نصه: \"" 
+                    + BAND7_NEW + "\")")
+            cur.execute("""UPDATE knowledge_objects
+                           SET original_text = original_text || %s,
+                               normalized_text = coalesce(normalized_text,'') || %s,
+                               metadata = coalesce(metadata,'{}'::jsonb)
+                                 || jsonb_build_object('amended_by', 'القرار الوزاري 99/2025 (تعديل البند 7 من الملحق 2)'::text),
+                               updated_at=now()
+                           WHERE id=%s""", (NOTE, NOTE, oid))
+            print("أُلحق نص البند 7 المعدَّل بالكائن الحاوي للملحق: %s ✓" % oid, flush=True)
 
-    print("\n== دمج البطاقتين في بطاقة واحدة بمجلدين ==", flush=True)
-    cur.execute("""UPDATE knowledge_objects
-                   SET metadata = coalesce(metadata,'{}'::jsonb)
-                         || jsonb_build_object('library_group', 'legis-152-2023'::text)
-                         || jsonb_build_object('doc_part', 'القرار الوزاري 99/2025 المعدِّل'::text)
-                         || jsonb_build_object('library_card_name', %s::text),
-                       updated_at=now()
-                   WHERE id LIKE 'legis-99-2025-%%'""", (NEWNAME,))
-    print("كائنات القرار المعدِّل المنقولة إلى البطاقة: %d ✓" % cur.rowcount, flush=True)
-    cur.execute("""UPDATE knowledge_objects
-                   SET metadata = coalesce(metadata,'{}'::jsonb)
-                         || jsonb_build_object('doc_part', 'القرار 152/2023'::text)
-                         || jsonb_build_object('library_card_name', %s::text),
-                       updated_at=now()
-                   WHERE id LIKE 'legis-152-2023-%%'""", (NEWNAME,))
-    print("كائنات القرار الأصلي الموسومة: %d ✓" % cur.rowcount, flush=True)
-
-    print("\n== تسمية بطاقة القرار 109/2026 (توصيل الطلبات) ==", flush=True)
-    cur.execute("""UPDATE knowledge_objects
-                   SET metadata = coalesce(metadata,'{}'::jsonb)
-                         || jsonb_build_object('library_card_name',
-                              'القرار 109/2026 — تنظيم قطاع توصيل الطلبات عبر المنصات'::text),
-                       updated_at=now()
-                   WHERE id LIKE 'legis-109-2026-%%'""")
-    print("سُمّيت (%d كائناً) ✓" % cur.rowcount, flush=True)
-
-    print("\n===== الخلاصة =====", flush=True)
-    print("مواد استُبدل نصها: %s" % (", ".join(replaced) if replaced else "لا شيء"), flush=True)
-    print("كائنات إصدار بقيت للاطلاع اليدوي: %s" % (", ".join(unparsed) if unparsed else "لا شيء"), flush=True)
-    if replaced:
-        print("ملاحظة: المواد المستبدلة قد تحتاج إعادة فهرسة دلالية لاحقاً (بتكلفة رمزية) — لن أفعلها إلا بموافقتك.", flush=True)
+    print("\n== تأكيد نهائي: حالة مواد القرار المعدلة ==", flush=True)
+    cur.execute("""SELECT id, metadata->>'amended_by', left(coalesce(original_text,''),80)
+                   FROM knowledge_objects
+                   WHERE id LIKE %s AND metadata->>'amended_by' IS NOT NULL
+                   ORDER BY id""", ('legis-152-2023-%',))
+    for oid, ab, head in cur.fetchall():
+        print("  %s | %s | %s" % (oid, ab, head.replace(chr(10),' ')), flush=True)
 PYEOF
-echo "===== اكتمل الأمر 53 ====="
+echo "===== اكتمل الأمر 54 ====="
