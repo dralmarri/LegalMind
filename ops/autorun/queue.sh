@@ -1,16 +1,11 @@
 #!/bin/bash
-# أمر آلي 30: التصحيح الجذري — الأوامر 26 و27 كانت تستخدم python3 النظام بدل بيئة النظام
-# الافتراضية (venv) فتعطّلت فوراً بـ ModuleNotFoundError ولم تُنفَّذ إطلاقاً. هذا هو السبب
-# الحقيقي الوحيد وراء عدم ظهور البطاقات طوال الوقت. الإصلاح الآن بالمفسّر الصحيح.
+# أمر آلي 31: تصحيح % → %% في كل أنماط ILIKE (سبب UnicodeDecodeError السابق)
 set -e
 set -a; source /opt/LegalMind/deploy/.env; set +a
 PY=/opt/LegalMind/.venv/bin/python
 
-echo "== التحقق من المفسّر الصحيح =="
 $PY -c "import psycopg; print('psycopg متاح ✓')"
 
-echo ""
-echo "== تنفيذ الإصلاح الكامل بالمفسّر الصحيح =="
 $PY - <<'PYEOF'
 # -*- coding: utf-8 -*-
 import sys, re
@@ -18,6 +13,7 @@ sys.path.insert(0, "/opt/LegalMind/engine")
 import legalmind_engine as eng
 
 LAW_TYPES = ('legislation', 'legislation_article', 'legislation_issuing_article', 'legislation_preamble')
+PAT = '%%اسواق%%المال%%'   # % مضاعفة لأنها تمر عبر محرك المعاملات
 
 with eng.psycopg.connect(eng.database_url()) as conn:
     conn.autocommit = True
@@ -26,21 +22,20 @@ with eng.psycopg.connect(eng.database_url()) as conn:
 
     print("== 1) حالة branch قبل الإصلاح ==", flush=True)
     cur.execute(f"""SELECT coalesce(branch,'(NULL)'), count(*) FROM knowledge_objects
-                    WHERE object_type IN ({ph}) AND metadata->>'title' ILIKE '%اسواق%المال%'
+                    WHERE object_type IN ({ph}) AND metadata->>'title' ILIKE '{PAT}'
                     GROUP BY 1 ORDER BY 2 DESC""", LAW_TYPES)
-    before_branch = cur.fetchall()
-    for b, c in before_branch:
+    for b, c in cur.fetchall():
         print("  branch='%s' | %d" % (b, c), flush=True)
 
     print("\n== 2) تصحيح branch إلى 'تجاري' حيث يلزم ==", flush=True)
     cur.execute(f"""UPDATE knowledge_objects SET branch='تجاري', updated_at=now()
-                    WHERE object_type IN ({ph}) AND metadata->>'title' ILIKE '%اسواق%المال%'
+                    WHERE object_type IN ({ph}) AND metadata->>'title' ILIKE '{PAT}'
                       AND (branch IS NULL OR branch <> 'تجاري')""", LAW_TYPES)
     print("  عُدِّل:", cur.rowcount, "كائن", flush=True)
 
     print("\n== 3) إضافة library_group + library_card_name ==", flush=True)
     cur.execute(f"""SELECT DISTINCT metadata->>'title' FROM knowledge_objects
-                    WHERE object_type IN ({ph}) AND metadata->>'title' ILIKE '%اسواق%المال%'
+                    WHERE object_type IN ({ph}) AND metadata->>'title' ILIKE '{PAT}'
                       AND coalesce(metadata->>'library_group','') = ''""", LAW_TYPES)
     titles = [r[0] for r in cur.fetchall() if r[0]]
     print("  عناوين تحتاج تجميعاً:", len(titles), flush=True)
@@ -75,4 +70,4 @@ with eng.psycopg.connect(eng.database_url()) as conn:
         print("    -", name[:55], "|", c, "كائن", flush=True)
 PYEOF
 echo ""
-echo "===== اكتمل الإصلاح الفعلي هذه المرة ====="
+echo "===== اكتمل الإصلاح ====="
