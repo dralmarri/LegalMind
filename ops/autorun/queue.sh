@@ -1,80 +1,82 @@
 #!/bin/bash
-# أمر آلي 77: أين مراجع بقية مبادئ أسواق المال؟ تشخيص البيانات الوصفية وإدراج المرجع في النص إن وجد
+# أمر آلي 78: إلحاق مراجع مبادئ الكتاب السابع (36 مرجعاً منسوخة بصرياً) بمبادئها في القاعدة
 set -e
 set -a; source /opt/LegalMind/deploy/.env; set +a
 PY=/opt/LegalMind/.venv/bin/python
+curl -fsSL "https://raw.githubusercontent.com/dralmarri/LegalMind/main/ops/autorun/refs-book7.json?nc=$(date +%s)" -o /tmp/refs-book7.json
 
 $PY - <<'PYEOF'
 # -*- coding: utf-8 -*-
-import sys, json
+import sys, re, json
 sys.path.insert(0, "/opt/LegalMind/engine")
 import legalmind_engine as eng
 import embedding
 
+AR = re.compile(r'[؀-ۿ]{2,}')
+def norm(w):
+    return w.replace('أ','ا').replace('إ','ا').replace('آ','ا').replace('ى','ي').replace('ة','ه').replace('ـ','')
+def sig(w):
+    return ''.join(sorted(norm(w)))
+def sigset(t):
+    return {sig(x) for x in AR.findall(t) if len(x) >= 3}
+
+entries = json.load(open('/tmp/refs-book7.json', encoding='utf-8'))
+for e in entries:
+    e['sig'] = sigset(e['k'])
+print("مفاتيح المراجع:", len(entries), flush=True)
+
 with eng.psycopg.connect(eng.database_url()) as conn:
     conn.autocommit = True
     cur = conn.cursor()
+    cur.execute("""SELECT id, coalesce(title,''), coalesce(original_text,'') FROM knowledge_objects
+                   WHERE object_type='judicial_principle'
+                     AND metadata->>'title' LIKE '%%الكتاب ٧%%'""")
+    objs = cur.fetchall()
+    print("مبادئ الكتاب السابع في القاعدة:", len(objs), flush=True)
 
-    print("== عينة: الكائن المعروض في الشاشة ==", flush=True)
-    cur.execute("""SELECT id, metadata FROM knowledge_objects
-                   WHERE id LIKE 'JUR-تجاري-أنواع-من-الشركات-P1-p13-1-%%' LIMIT 1""")
-    row = cur.fetchone()
-    if row:
-        print("id:", row[0], flush=True)
-        print("metadata:", json.dumps(row[1], ensure_ascii=False)[:900], flush=True)
-
-    print("\n== إحصاء مبادئ أسواق المال بلا مرجع في نصها ==", flush=True)
-    cur.execute("""SELECT id, coalesce(original_text,''), metadata FROM knowledge_objects
-                   WHERE object_type='judicial_principle' AND topic='مبادئ هيئة أسواق المال'""")
-    rows = cur.fetchall()
-    missing = []
-    meta_keys = {}
-    for oid, txt, meta in rows:
-        if ('قرار مجلس التأديب' in txt) or ('المرجع' in txt):
-            continue
-        missing.append((oid, meta or {}))
-        for k in (meta or {}):
-            meta_keys[k] = meta_keys.get(k, 0) + 1
-    print("الإجمالي: %d | بلا مرجع في النص: %d" % (len(rows), len(missing)), flush=True)
-    print("مفاتيح البيانات الوصفية لدى الناقصة:", sorted(meta_keys.items(), key=lambda kv: -kv[1])[:15], flush=True)
-
-    REF_KEYS = ['reference', 'مرجع', 'المرجع', 'ref', 'source_reference', 'decision', 'citation']
-    fixed = 0
+    ok = skipped = amb = 0
     updated_ids = []
-    for oid, meta in missing:
-        val = None
-        for k, v in (meta or {}).items():
-            if any(rk in k.lower() or rk in k for rk in REF_KEYS) and isinstance(v, str) and len(v) > 15:
-                val = v.strip()
-                break
-        if val:
-            addition = val if val.startswith('المرجع') else ('المرجع: ' + val)
-            cur.execute("""UPDATE knowledge_objects
-                           SET original_text = original_text || '\n\n' || %s,
-                               normalized_text = coalesce(normalized_text, original_text, '') || '\n\n' || %s,
-                               updated_at=now()
-                           WHERE id=%s""", (addition, addition, oid))
-            fixed += 1
-            updated_ids.append(oid)
-    print("\nأُدرج المرجع من البيانات الوصفية في النص: %d ✓" % fixed, flush=True)
-    still = len(missing) - fixed
-    if still:
-        print("ما زال بلا مرجع إطلاقاً (لا في النص ولا في الوصفية): %d" % still, flush=True)
-        shown = 0
-        for oid, meta in missing:
-            if oid in updated_ids:
-                continue
-            print("  ×", oid[:60], flush=True)
-            shown += 1
-            if shown >= 8:
-                break
+    for oid, t, txt in objs:
+        if 'قرار مجلس التأديب' in txt or 'المرجع:' in txt:
+            skipped += 1
+            continue
+        osig = sigset(t + ' ' + txt)
+        scored = []
+        for e in entries:
+            cov = sum(1 for x in e['sig'] if x in osig) / max(1, len(e['sig']))
+            scored.append((cov, e))
+        scored.sort(key=lambda x: -x[0])
+        best, e1 = scored[0]
+        second, e2 = scored[1] if len(scored) > 1 else (0, None)
+        if best < 0.55:
+            amb += 1
+            print("  × بلا مطابقة كافية (%.0f%%): %s | %s" % (best*100, oid[:40], t[:40]), flush=True)
+            continue
+        if e2 is not None and e2['r'] != e1['r'] and (best - second) < 0.05:
+            amb += 1
+            print("  × التباس بين مرجعين (%.0f%% مقابل %.0f%%): %s" % (best*100, second*100, t[:40]), flush=True)
+            continue
+        addition = 'المرجع: ' + e1['r']
+        cur.execute("""UPDATE knowledge_objects
+                       SET original_text = original_text || '\n\n' || %s,
+                           normalized_text = coalesce(normalized_text, original_text, '') || '\n\n' || %s,
+                           metadata = coalesce(metadata,'{}'::jsonb)
+                             || jsonb_build_object('reference_added_by','visual-transcription-claude'::text)
+                             || jsonb_build_object('reference_match', round(%s::numeric,2)),
+                           updated_at=now()
+                       WHERE id=%s""", (addition, addition, best, oid))
+        ok += 1
+        updated_ids.append(oid)
+        print("  ✓ (%.0f%%) %s ← %s" % (best*100, t[:38], e1['r'][:52]), flush=True)
+
+    print("\nأُلحق المرجع: %d | كان موجوداً: %d | التباس/بلا مطابقة: %d" % (ok, skipped, amb), flush=True)
 
     if updated_ids:
         cur.execute("""SELECT id, title, original_text, object_type, branch, topic, subtopic, micro_issue, source_key
                        FROM knowledge_objects WHERE id = ANY(%s)""", (updated_ids,))
-        rows2 = cur.fetchall()
-        for s in range(0, len(rows2), 32):
-            win = rows2[s:s+32]
+        rows = cur.fetchall()
+        for s in range(0, len(rows), 32):
+            win = rows[s:s+32]
             vecs = embedding.embed_passages([r[2] or '' for r in win])
             pts = []
             for r, v in zip(win, vecs):
@@ -84,6 +86,6 @@ with eng.psycopg.connect(eng.database_url()) as conn:
                                         "subtopic": subtopic, "micro_issue": micro,
                                         "source_key": skey, "title": title}})
             eng.qdrant_request("PUT", "/collections/%s/points?wait=true" % eng.COLLECTION, {"points": pts})
-        print("أُعيد تضمين المحدثة: %d ✓" % len(rows2), flush=True)
+        print("أُعيد تضمين المحدثة: %d ✓" % len(rows), flush=True)
 PYEOF
-echo "===== اكتمل الأمر 77 ====="
+echo "===== اكتمل الأمر 78 ====="
