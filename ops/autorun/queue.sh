@@ -1,5 +1,5 @@
 #!/bin/bash
-# أمر آلي 80: إلحاق 5 مراجع محسومة يدوياً لمبادئ الكتاب الخامس + طباعة نصوص الأربعة المتبقية كاملة
+# أمر آلي 81: إلحاق مراجع المبادئ الأربعة الأخيرة للكتاب الخامس (مطابقة حرفية) — يكتمل به الكتاب ٥
 set -e
 set -a; source /opt/LegalMind/deploy/.env; set +a
 PY=/opt/LegalMind/.venv/bin/python
@@ -11,19 +11,11 @@ sys.path.insert(0, "/opt/LegalMind/engine")
 import legalmind_engine as eng
 import embedding
 
-# مطابقات محسومة يدوياً (مراجعة بصرية للملف مقابل عناوين القاعدة)
 ASSIGN = [
-    ("JUR-تجاري-أنواع-من-الشركات-P1-p12-2-d009", "قرار مجلس التأديب في المخالفة رقم 98/2018 مجلس تأديب - 155/2018 هيئة الصادر بتاريخ 3/1/2019."),
-    ("JUR-تجاري-أنواع-من-الشركات-P1-p4-3-f71db", "قرار مجلس التأديب في المخالفة رقم 94/2018 مجلس تأديب، 128/2018 هيئة الصادر بجلسة 20/12/2018."),
-    ("JUR-تجاري-أنواع-من-الشركات-P1-p11-1-7487", "قرار مجلس التأديب في المخالفة رقم 4/2019 مجلس تأديب - 179/2018 هيئة الصادر بتاريخ 27/2/2019."),
-    ("JUR-تجاري-أنواع-من-الشركات-P1-p6-1-4c2ea", "قرار مجلس التأديب في المخالفة رقم 56/2019 مجلس تأديب، 74/2019 هيئة الصادر بجلسة 5/12/2019."),
-    ("JUR-تجاري-أنواع-من-الشركات-P1-p7-2-4d981", "قرار مجلس التأديب في المخالفة رقم 87/2018 مجلس تأديب - 132/2018 هيئة الصادر بجلسة 7/4/2019."),
-]
-# تحتاج نص الملخص للتمييز
-PRINT_PREFIXES = [
-    "JUR-تجاري-أنواع-من-الشركات-P1-p8-3-cbedf",
-    "JUR-تجاري-أنواع-من-الشركات-P1-p9-1-bfc24",
-    "JUR-تجاري-أنواع-من-الشركات-P1-p13-2-2ada",
+    ("JUR-تجاري-أنواع-من-الشركات-P1-p8-3-cbedf", "قرار مجلس التأديب في المخالفة رقم 10/2019 مجلس التأديب، 2/2019 هيئة الصادر بجلسة 3/4/2019."),
+    ("JUR-تجاري-أنواع-من-الشركات-P1-p9-1-bfc24", "قرار مجلس التأديب في المخالفة رقم 56/2018 مجلس تأديب، 108/2018 هيئة الصادر بجلسة 13/9/2018."),
+    ("JUR-تجاري-أنواع-من-الشركات-P1-p13-2-2ada", "قرار مجلس التأديب في المخالفة رقم 4/2019 مجلس تأديب - 179/2018 هيئة الصادر بتاريخ 27/2/2019."),
+    ("JUR-تجاري-أنواع-من-الشركات-P1-p14-2-820b", "قرار مجلس التأديب في المخالفة رقم 22/2019 مجلس تأديب - 30/2019 هيئة الصادر بجلسة 2/6/2019."),
 ]
 
 with eng.psycopg.connect(eng.database_url()) as conn:
@@ -51,7 +43,7 @@ with eng.psycopg.connect(eng.database_url()) as conn:
         updated_ids.append(oid)
         print("  ✓ %s ← %s" % (oid[:44], ref[:60]), flush=True)
 
-    print("\nأُلحق يدوياً: %d" % len(updated_ids), flush=True)
+    print("\nأُلحق: %d" % len(updated_ids), flush=True)
 
     if updated_ids:
         cur.execute("""SELECT id, title, original_text, object_type, branch, topic, subtopic, micro_issue, source_key
@@ -68,17 +60,10 @@ with eng.psycopg.connect(eng.database_url()) as conn:
         eng.qdrant_request("PUT", "/collections/%s/points?wait=true" % eng.COLLECTION, {"points": pts})
         print("أُعيد تضمين المحدثة: %d ✓" % len(rows), flush=True)
 
-    print("\n===== النصوص الكاملة للمبادئ الأربعة المتبقية =====", flush=True)
-    targets = list(PRINT_PREFIXES)
-    for prefix in targets:
-        cur.execute("SELECT id, coalesce(title,''), coalesce(original_text,'') FROM knowledge_objects WHERE id LIKE %s", (prefix + '%',))
-        for oid, t, txt in cur.fetchall():
-            print("\n--- %s\nالعنوان: %s\nالنص:\n%s" % (oid, t, txt[:1400]), flush=True)
-    cur.execute("""SELECT id, coalesce(title,''), coalesce(original_text,'') FROM knowledge_objects
+    cur.execute("""SELECT count(*) FROM knowledge_objects
                    WHERE object_type='judicial_principle'
                      AND metadata->>'title' LIKE '%%الكتاب ٥%%'
-                     AND title LIKE 'وجوب أن يقوم الشخص المرخص له بحفظ الدفات%%'""")
-    for oid, t, txt in cur.fetchall():
-        print("\n--- %s\nالعنوان: %s\nالنص:\n%s" % (oid, t, txt[:1400]), flush=True)
+                     AND original_text NOT LIKE '%%قرار مجلس التأديب%%'""")
+    print("\nمبادئ الكتاب الخامس المتبقية بلا مرجع: %d" % cur.fetchone()[0], flush=True)
 PYEOF
-echo "===== اكتمل الأمر 80 ====="
+echo "===== اكتمل الأمر 81 ====="
