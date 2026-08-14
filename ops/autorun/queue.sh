@@ -1,145 +1,72 @@
 #!/bin/bash
-# أمر آلي 14: (أ) تجاهل عناصر غير سليمة النوع من رد النموذج بدل الانهيار
-#            (ب) استئناف تراكمي حقيقي: تخطي الدُفعات المكتملة فقط، إكمال الباقي، لا تخطي كامل
+# أمر آلي 15: verify_tables.py كان يبحث بنمط معرّف خاطئ (TBL-الكتاب...) فأعلن فشلاً كاذباً
+# رغم أن السجل نفسه أثبت: أُدرج 449 كائناً وفُهرست 448 نقطة بنجاح فعلي
 set -e
 set -a; source /opt/LegalMind/deploy/.env; set +a
 
-echo "== إصلاح شامل لـ table_reader.py =="
-python3 - <<'PYEOF'
+cat > /root/verify_tables2.py <<'PYEOF'
 # -*- coding: utf-8 -*-
-p = "/opt/LegalMind/tools/table_reader.py"
-src = open(p, encoding="utf-8").read()
+import sys, re, hashlib, os
+sys.path.insert(0, "/opt/LegalMind/engine")
+import legalmind_engine as eng
 
-# 1) تنقية العناصر غير السليمة قبل إرجاعها من call()
-OLD_CALL = '''            for blk in res.get("content", []):
-                if blk.get("type") == "tool_use":
-                    return blk["input"].get("units", [])
-            return []'''
-NEW_CALL = '''            for blk in res.get("content", []):
-                if blk.get("type") == "tool_use":
-                    raw = blk["input"].get("units", [])
-                    clean = [u for u in raw if isinstance(u, dict)]
-                    if len(clean) != len(raw):
-                        print("    تجاهلت %d عنصراً غير سليم النوع من رد النموذج" %
-                              (len(raw) - len(clean)), flush=True)
-                    return clean
-            return []'''
-assert OLD_CALL in src, "لم أجد call()"
-src = src.replace(OLD_CALL, NEW_CALL, 1)
+PATH = "/opt/legalmind-ingest/inbox/BATCH-20260813-223443-937A1650__الكتاب-السابع-عشر-اسواق-المال.pdf"
+SRC_KEY = "SRC-" + hashlib.sha256(os.path.basename(PATH).encode()).hexdigest()[:20].upper()
+print("مفتاح المصدر المُعاد حسابه:", SRC_KEY, flush=True)
 
-# 2) استئناف تراكمي حقيقي: تتبع الدُفعات المكتملة، وتخطي المكتمل فقط لا الكل
-OLD_RUN = '''    # استئناف من نقطة حفظ سابقة إن وُجدت لنفس الملف (لا نعيد استدعاء النموذج بلا داع)
-    all_units = []
-    if os.path.exists(ckpt_path):
-        try:
-            ck = json.load(open(ckpt_path, encoding="utf-8"))
-            if ck.get("path") == path:
-                all_units = [(u["part"], u["unit"]) for u in ck.get("units", [])]
-                print("استُؤنف من نقطة حفظ سابقة: %d عنصر محفوظ مسبقاً" % len(all_units), flush=True)
-        except Exception as exc:
-            print("تعذرت قراءة نقطة الحفظ: %s" % exc, flush=True)
+with eng.psycopg.connect(eng.database_url()) as conn, conn.cursor() as cur:
+    cur.execute("""SELECT id, object_type, title, original_text FROM knowledge_objects
+                   WHERE source_key=%s ORDER BY id""", (SRC_KEY,))
+    rows = cur.fetchall()
 
-    if not all_units:
-        for p in range(0, npg, PAGES_PER_BATCH):
-            b64 = slice_pdf(reader, p, p + PAGES_PER_BATCH)
-            print("  صفحات %d-%d..." % (p, min(p + PAGES_PER_BATCH, npg)), flush=True)
-            units = call(b64)
-            print("    استُخرج %d عنصراً (%d جدول)" %
-                  (len(units), sum(1 for u in units if u.get("kind") == "table")), flush=True)
-            all_units += [(p, u) for u in units]
-            # حفظ فوري بعد كل دفعة صفحات — لا نخسر العمل المكلف عند أي عطل لاحق
-            json.dump({"path": path, "units": [{"part": part, "unit": u} for part, u in all_units]},
-                      open(ckpt_path, "w", encoding="utf-8"), ensure_ascii=False)
-        print("حُفظت نقطة الحفظ الكاملة: %d عنصر" % len(all_units), flush=True)'''
+print("إجمالي الكائنات المستخرجة (بالبحث الصحيح عبر source_key):", len(rows), flush=True)
+if not rows:
+    print("فحص=فشل حقيقي — لا كائنات لهذا المصدر", flush=True)
+    print("\n=== الحكم النهائي: FAIL ===", flush=True)
+else:
+    tables = [r for r in rows if r[1] == "regulatory_table"]
+    narr = [r for r in rows if r[1] != "regulatory_table"]
+    print("جداول:", len(tables), "| نصوص سردية/تعريفات:", len(narr), flush=True)
 
-NEW_RUN = '''    # استئناف تراكمي: تحميل ما أُنجز سابقاً، وتخطي دُفعات الصفحات المكتملة فقط
-    all_units, done_parts = [], set()
-    if os.path.exists(ckpt_path):
-        try:
-            ck = json.load(open(ckpt_path, encoding="utf-8"))
-            if ck.get("path") == path:
-                all_units = [(u["part"], u["unit"]) for u in ck.get("units", [])]
-                done_parts = set(ck.get("done_parts", []))
-                print("استئناف: %d عنصر محفوظ | %d دفعة صفحات مكتملة مسبقاً" %
-                      (len(all_units), len(done_parts)), flush=True)
-        except Exception as exc:
-            print("تعذرت قراءة نقطة الحفظ (سنبدأ من الصفر): %s" % exc, flush=True)
+    ok = fail = 0
+    sample = tables[:8] if tables else []
+    for oid, ot, title, text in sample:
+        t = text or ""
+        pipes = t.count("|")
+        lines = [l for l in t.split("\n") if l.strip()]
+        rowlike = sum(1 for l in lines if l.count("|") >= 2)
+        good = pipes >= 6 and rowlike >= 2
+        status = "سليم ✓" if good else "مشكوك فيه ✗"
+        if good: ok += 1
+        else: fail += 1
+        print("  [%s] %s | أسطر جدولية: %d | %s" % (status, title[:45], rowlike, oid[-16:]), flush=True)
+        print("     عيّنة:", t[:220].replace("\n", " ¶ "), flush=True)
 
-    def save_ckpt():
-        json.dump({"path": path, "done_parts": sorted(done_parts),
-                   "units": [{"part": part, "unit": u} for part, u in all_units]},
-                  open(ckpt_path, "w", encoding="utf-8"), ensure_ascii=False)
+    print("\nعيّنة من النصوص السردية:", flush=True)
+    for oid, ot, title, text in narr[:4]:
+        print("  -", title[:45], "|", (text or "")[:100], flush=True)
 
-    for p in range(0, npg, PAGES_PER_BATCH):
-        if p in done_parts:
-            continue
-        b64 = slice_pdf(reader, p, p + PAGES_PER_BATCH)
-        print("  صفحات %d-%d..." % (p, min(p + PAGES_PER_BATCH, npg)), flush=True)
-        units = call(b64)
-        tbl_n = sum(1 for u in units if u.get("kind") == "table")
-        print("    استُخرج %d عنصراً (%d جدول)" % (len(units), tbl_n), flush=True)
-        all_units += [(p, u) for u in units]
-        done_parts.add(p)
-        save_ckpt()   # حفظ فوري بعد كل دفعة — لا خسارة عند أي عطل لاحق
-    print("اكتمل الاستخراج: %d عنصر إجمالاً عبر %d دفعة" % (len(all_units), len(done_parts)), flush=True)'''
+    print("\nنتيجة فحص عيّنة الجداول: سليم=%d | مشكوك فيه=%d من %d" % (ok, fail, len(sample)), flush=True)
 
-assert OLD_RUN in src, "لم أجد كتلة الاستخراج الرئيسية"
-src = src.replace(OLD_RUN, NEW_RUN, 1)
+    cnt = eng.qdrant_request("POST", "/collections/" + eng.COLLECTION + "/points/count",
+                             {"exact": True, "filter": {"must": [{"key": "source_key",
+                              "match": {"value": SRC_KEY}}]}})["result"]["count"]
+    print("نقاط الفهرس لهذا المصدر:", cnt, "| كائنات القاعدة:", len(rows),
+          "| الفارق:", len(rows) - cnt, flush=True)
 
-open(p, "w", encoding="utf-8").write(src)
-print("أُصلح الكود (تنقية + استئناف تراكمي) ✓")
+    VERDICT = "PASS" if (tables and fail == 0 and abs(len(rows) - cnt) <= 2) else \
+              ("PARTIAL" if rows else "FAIL")
+    print("\n=== الحكم النهائي: %s ===" % VERDICT, flush=True)
 PYEOF
-
-/opt/LegalMind/.venv/bin/python -m py_compile /opt/LegalMind/tools/table_reader.py && echo "الكود سليم ✓"
-
-echo ""
-echo "== حالة نقطة الحفظ الحالية قبل الاستئناف =="
-python3 -c "
-import json
-try:
-    ck = json.load(open('/root/table_reader_checkpoint.json', encoding='utf-8'))
-    print('عناصر محفوظة:', len(ck.get('units', [])))
-    print('دُفعات مكتملة سابقاً:', ck.get('done_parts', 'غير مسجلة (نسخة قديمة) — ستُعاد كل الدفعات')) 
-except Exception as e:
-    print('لا نقطة حفظ:', e)
-"
-
-echo ""
-echo "== استئناف القراءة الجدولية (يتخطى ما اكتمل فقط) =="
-FNAME="BATCH-20260813-223443-937A1650__الكتاب-السابع-عشر-اسواق-المال.pdf"
-[ -f "/opt/legalmind-ingest/inbox/${FNAME}" ] || \
-  cp -a "/opt/legalmind-ingest/archive/${FNAME}" "/opt/legalmind-ingest/inbox/${FNAME}"
-
-nohup /opt/LegalMind/.venv/bin/python /opt/LegalMind/tools/table_reader.py \
-  "/opt/legalmind-ingest/inbox/${FNAME}" "تجاري" "أسواق المال" \
-  > /root/tables-reingest4.log 2>&1 &
-PID=$!
-echo "انطلقت (PID=$PID)"
-
-for i in $(seq 1 170); do
-  kill -0 $PID 2>/dev/null || break
-  sleep 10
-done
-echo "انتهت أو تجاوزت المهلة"
-
-echo ""
-echo "== سجل التنفيذ =="
-cat /root/tables-reingest4.log
-
-echo ""
-echo "== تحقق ذاتي =="
-/opt/LegalMind/.venv/bin/python /root/verify_tables.py > /root/verify3.log 2>&1 || true
-cat /root/verify3.log
-VERDICT=$(grep "الحكم النهائي" /root/verify3.log | grep -o "PASS\|PARTIAL\|FAIL" || echo "UNKNOWN")
+/opt/LegalMind/.venv/bin/python /root/verify_tables2.py > /root/verify4.log 2>&1
+cat /root/verify4.log
+VERDICT=$(grep "الحكم النهائي" /root/verify4.log | grep -o "PASS\|PARTIAL\|FAIL" || echo "UNKNOWN")
 
 {
-  echo "=== إصلاح شامل + استئناف تراكمي — $(date -u +%F' '%T) UTC ==="
+  echo "=== تصحيح فحص التحقق + النتيجة الحقيقية — $(date -u +%F' '%T) UTC ==="
   echo "الحكم: $VERDICT"
+  echo "(الفحص السابق أعلن FAIL كاذباً بسبب خطأ في نمط البحث داخل أداة التحقق نفسها — ليس في القراءة الجدولية)"
   echo ""
-  echo "-- سجل التنفيذ --"
-  cat /root/tables-reingest4.log
-  echo ""
-  echo "-- التحقق الذاتي --"
-  cat /root/verify3.log
+  cat /root/verify4.log
 } > "/var/www/legalmind-v3/review-$(cat /opt/legalmind-autopilot/token).txt"
-echo "===== نُشرت النتيجة - الحكم: $VERDICT ====="
+echo "===== نُشرت النتيجة الحقيقية - الحكم: $VERDICT ====="
