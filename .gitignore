@@ -27,3 +27,14 @@ web/next-env.d.ts
 web/tsconfig.tsbuildinfo
 web/out/
 web/.next/
+
+# كاش دلالي ونسخ احتياطية عملياتية — لا تُتتبَّع
+*.pkl
+*.bak
+*.bak_*
+battery.json.bak*
+
+# مئات نسخ الملف الواحد التاريخية — Git نفسه هو أداة النسخ الأفضل، لا تُتتبَّع أبدًا
+*.bak-*
+*.bak.*
+run_*.sh

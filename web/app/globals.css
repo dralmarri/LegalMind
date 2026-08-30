@@ -3,15 +3,22 @@
 @tailwind utilities;
 
 :root { color-scheme: light; }
+.dark { color-scheme: dark; }
 * { box-sizing: border-box; }
-html, body { margin: 0; min-height: 100%; background: #f4f6fa; color: #0f172a; }
-body { font-family: Tahoma, Arial, sans-serif; }
+html, body { margin: 0; min-height: 100%; background: #f7f8fb; color: #0f1b2d; }
+html.dark, html.dark body { background: #0a1730; color: #e8ecf5; }
+body { font-family: var(--font-cairo), Tahoma, Arial, sans-serif; }
 button, input, select, textarea { font: inherit; }
 
 @layer components {
-  .input { @apply w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-gold focus:bg-white; }
+  .input {
+    @apply w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-ink outline-none transition
+           focus:border-brand-blue focus:bg-white focus:ring-2 focus:ring-brand-blue/15
+           dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-100 dark:focus:bg-slate-800;
+  }
 }
 
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+.dark ::-webkit-scrollbar-thumb { background: #334155; }
 ::-webkit-scrollbar-track { background: transparent; }

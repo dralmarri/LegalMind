@@ -196,6 +196,20 @@ def database_url() -> str:
 
 
 def ingest_file(path: Path, archive_root: Path, failed_root: Path) -> dict:
+    """بوابة: قارئ Claude إن كان مفعلاً — وأي عطل فيه يرجع تلقائياً للمسار الكلاسيكي."""
+    import os as _os
+    if _os.environ.get("LEGALMIND_CLAUDE_INGEST") == "1":
+        try:
+            import claude_reader
+            return claude_reader.ingest(path, archive_root, failed_root)
+        except Exception as exc:
+            print(f"[claude_reader] تراجع للمسار الكلاسيكي: {exc}", flush=True)
+            if not path.exists():
+                raise
+    return _ingest_file_classic(path, archive_root, failed_root)
+
+
+def _ingest_file_classic(path: Path, archive_root: Path, failed_root: Path) -> dict:
     started = now_iso()
     metadata = load_metadata(path)
 

@@ -77,7 +77,17 @@ def evaluate_drafting_gate(legislation: int, principles: int, templates: int) ->
 
 
 def _case_key() -> str:
-    return f"CASE-{datetime.now(timezone.utc).strftime('%Y%m%d')}-{secrets.token_hex(4).upper()}"
+    """رقم قضية آلي مقروء ومتسلسل سنويًا: ق-2026-0001 (والعشوائي احتياطًا عند أي تعذر)."""
+    year = datetime.now(timezone.utc).year
+    prefix = f"ق-{year}-"
+    try:
+        rows = db_fetch(
+            "SELECT case_key FROM legal_cases WHERE case_key LIKE %s ORDER BY case_key DESC LIMIT 1",
+            (prefix + "%",))
+        nxt = (int(rows[0]["case_key"].rsplit("-", 1)[1]) + 1) if rows else 1
+        return f"{prefix}{nxt:04d}"
+    except Exception:
+        return f"{prefix}{secrets.token_hex(3).upper()}"
 
 
 @router.get("")
@@ -151,13 +161,27 @@ def case_coverage(case_id: str):
         (case["branch"], topic, topic, subtopic, subtopic),
     )
     by_type = {r["object_type"]: r["count"] for r in counts}
-    legislation = by_type.get("legislation", 0)
-    principles = by_type.get("judicial_principle", 0)
+    # أنواع التشريع في القاعدة ثلاثة (مادة/مادة إصدار/ديباجة) ولا يوجد نوع باسم legislation؛
+    # جمعها هنا يمنع إعلان «ناقص: تشريع» الكاذب رغم وجود آلاف المواد.
+    legislation = (by_type.get("legislation_article", 0)
+                   + by_type.get("legislation_issuing_article", 0)
+                   + by_type.get("legislation_preamble", 0)
+                   + by_type.get("legislation", 0))
+    principles = by_type.get("judicial_principle", 0) + by_type.get("full_judgment", 0)
     templates = by_type.get("judicial_template", 0) + by_type.get("legal_memorandum", 0)
     status = evaluate_drafting_gate(legislation, principles, templates)
     ready = status == "ready_for_grounded_draft"
+    _COV_LABELS = {
+        "legislation_article": "مادة تشريعية",
+        "legislation_issuing_article": "مادة إصدار",
+        "legislation_preamble": "ديباجة",
+        "judicial_principle": "مبدأ قضائي",
+        "full_judgment": "حكم كامل",
+        "judicial_template": "صيغة قضائية",
+        "legal_memorandum": "مذكرة",
+    }
     return {
-        "counts": by_type,
+        "counts": {_COV_LABELS.get(k, k): v for k, v in by_type.items()},
         "drafting_ready": ready,
         "drafting_status": status,
         "missing": [name for name, ok in {

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الدعم والتواصل — صوت العدالة</title>
+<style>
+  :root{--bg:#0b1220;--card:#111a2e;--accent:#2e5aac;--text:#e8ecf5;--muted:#9aa7c2;--line:#22304f;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:"Segoe UI",Tahoma,Arial,sans-serif;line-height:1.8;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:40px 16px}
+  .wrap{max-width:560px;width:100%}
+  h1{font-size:1.6rem;margin:0 0 6px}
+  .sub{color:var(--muted);margin:0 0 28px;font-size:.95rem}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px}
+  p{color:var(--muted);font-size:.95rem}
+  button{background:var(--accent);color:#fff;border:0;border-radius:10px;padding:12px 22px;font-size:1rem;cursor:pointer}
+  button:hover{opacity:.92}
+  form{display:none;margin-top:20px;flex-direction:column;gap:12px}
+  form.open{display:flex}
+  label{font-size:.85rem;color:var(--muted)}
+  input,textarea{background:#0e1729;border:1px solid var(--line);border-radius:8px;padding:10px 12px;color:var(--text);font-family:inherit;font-size:.95rem}
+  textarea{min-height:110px;resize:vertical}
+  .msg{margin-top:14px;font-size:.9rem;display:none}
+  .msg.ok{color:#5fd39c;display:block}
+  .msg.err{color:#e8748a;display:block}
+  footer{margin-top:24px;color:var(--muted);font-size:.8rem;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>الدعم والتواصل</h1>
+  <p class="sub">صوت العدالة — نظام مرجعي وصياغة قانونية للاستخدام الخاص</p>
+  <div class="card">
+    <p>لأي استفسار تقني أو ملاحظة حول التطبيق، اضغط الزر أدناه واكتب رسالتك — سيصلك الرد على وسيلة التواصل التي تذكرها.</p>
+    <button id="toggleBtn" type="button">تواصل معنا</button>
+    <form id="supportForm">
+      <div>
+        <label for="name">الاسم (اختياري)</label>
+        <input id="name" type="text" maxlength="200">
+      </div>
+      <div>
+        <label for="contact">وسيلة التواصل (بريد إلكتروني أو رقم هاتف) *</label>
+        <input id="contact" type="text" maxlength="300" required>
+      </div>
+      <div>
+        <label for="message">رسالتك *</label>
+        <textarea id="message" maxlength="5000" required></textarea>
+      </div>
+      <button type="submit">إرسال</button>
+      <div id="statusMsg" class="msg"></div>
+    </form>
+  </div>
+  <footer>© 2026 Ayedh Almarri</footer>
+</div>
+<script>
+  var btn = document.getElementById('toggleBtn');
+  var form = document.getElementById('supportForm');
+  btn.addEventListener('click', function(){ form.classList.toggle('open'); });
+  form.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    var statusEl = document.getElementById('statusMsg');
+    statusEl.className = 'msg';
+    var payload = {
+      name: document.getElementById('name').value || null,
+      contact: document.getElementById('contact').value,
+      message: document.getElementById('message').value
+    };
+    var submitBtn = form.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    fetch('/api/support/message', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    }).then(function(r){
+      if(!r.ok) throw new Error('bad status');
+      return r.json();
+    }).then(function(){
+      statusEl.textContent = 'تم إرسال رسالتك بنجاح، سنتواصل معك قريبًا.';
+      statusEl.className = 'msg ok';
+      form.reset();
+    }).catch(function(){
+      statusEl.textContent = 'تعذر إرسال الرسالة، حاول مرة أخرى لاحقًا.';
+      statusEl.className = 'msg err';
+    }).finally(function(){
+      submitBtn.disabled = false;
+    });
+  });
+</script>
+</body>
+</html>
