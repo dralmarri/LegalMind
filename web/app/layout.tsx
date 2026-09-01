@@ -10,7 +10,7 @@ const cairo = Cairo({
 });
 
 export const metadata: Metadata = {
-  title: 'صوت العدالة الذكي',
+  title: 'صوت العدالة',
   icons: { icon: '/favicon.png', apple: '/brand-192.png' },
   description: 'منصة إدارة المعرفة القانونية الكويتية',
 };

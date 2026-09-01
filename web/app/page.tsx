@@ -212,7 +212,7 @@ function HomeInner() {
       <div className="mx-auto flex max-w-7xl items-center gap-3 px-5 py-3 md:px-8">
         <button onClick={()=>setView('dashboard')} className="flex shrink-0 items-center gap-2.5">
           <img src="/brand-192.png" alt="صوت العدالة" className="h-10 w-10 rounded-2xl bg-white object-contain" />
-          <div className="hidden text-right sm:block"><div className="text-base font-bold leading-tight">صوت العدالة الذكي</div><div className="text-[11px] text-slate-500 dark:text-slate-400">منظومة قانونية ذكية</div></div>
+          <div className="hidden text-right sm:block"><div className="text-base font-bold leading-tight">صوت العدالة</div><div className="text-[11px] text-slate-500 dark:text-slate-400">منظومة قانونية ذكية</div></div>
         </button>
         <nav className="mr-2 hidden flex-1 items-center gap-1 lg:flex">{nav.filter(([id])=>!(isNativeApp()&&id==='cases')).map(([id,label,Icon])=><button key={id} onClick={()=>setView(id)} className={`flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-semibold transition ${view===id?'bg-brand-blue text-white shadow-md shadow-brand-blue/25':'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800'}`}><Icon size={16}/>{label}</button>)}</nav>
         <div className="mr-auto flex items-center gap-2">
@@ -394,7 +394,7 @@ function OverviewView({stats,lawsCount,cases,setView}:{stats:Stats|null;lawsCoun
   const quick=[
     {t:'استوديو الصياغة',d:'استشارة أو مذكرة مسندة — بالوقائع أو بالأوراق',Icon:PenLine,go:()=>setView('drafting')},
     {t:'بحث قانوني متقدم',d:'البحث في التشريعات والمبادئ والأحكام',Icon:Search,go:()=>setView('laws')},
-    {t:'إضافة قضية',d:'تسجيل قضية جديدة في السجل',Icon:FolderPlus,go:()=>setView('cases')},
+    
     {t:'رفع مستند جديد',d:'إدخال مصادر جديدة لقاعدة المعرفة',Icon:FilePlus2,go:()=>setView('docx')},
   ];
   const statusTone=(s?:string)=>{
@@ -409,7 +409,7 @@ function OverviewView({stats,lawsCount,cases,setView}:{stats:Stats|null;lawsCoun
       <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
         <div className="space-y-2">
           <h2 className="text-2xl font-bold">مرحباً بك مجدداً</h2>
-          <p className="max-w-xl text-sm leading-relaxed text-slate-300">منصة «صوت العدالة الذكي» توفّر لك وصولاً سريعاً ودقيقاً لأحدث التشريعات والمبادئ القانونية، إضافةً إلى استوديو صياغة متقدّم لتسهيل أعمالك اليومية.</p>
+          <p className="max-w-xl text-sm leading-relaxed text-slate-300">منصة «صوت العدالة» توفّر لك وصولاً سريعاً ودقيقاً لأحدث التشريعات والمبادئ القانونية، إضافةً إلى استوديو صياغة متقدّم لتسهيل أعمالك اليومية.</p>
         </div>
         <button onClick={()=>setView('drafting')} className="flex shrink-0 items-center gap-2 rounded-xl bg-brand-blue px-6 py-3 font-semibold text-white shadow-md shadow-brand-blue/30 transition hover:bg-brand-dark">
           <PenLine size={18}/><span>بدء صياغة جديدة</span>
@@ -832,7 +832,7 @@ function DraftingView({cases}:{cases:LegalCase[];onOpen:(c:LegalCase)=>void}) {
   const downloadMd=()=>dlBlob(answer,'text/markdown;charset=utf-8','md');
   const downloadJson=()=>dlBlob(JSON.stringify({request_type:rtype,branch:domain,madhab:isPersonal&&madhab!=='غير محدد'?madhab:null,model:meta.model,sources_used:meta.sources_used,answer},null,2),'application/json;charset=utf-8','json');
   const printDoc=()=>{ const w=window.open('','_blank'); if(!w)return; w.document.write(buildHtml()); w.document.close(); w.focus(); setTimeout(()=>w.print(),300); };
-  const emailDoc=()=>{ const s=encodeURIComponent(rtype+' — صوت العدالة الذكي'); const b=encodeURIComponent(answer.replace(/\*\*/g,'').slice(0,1800)+(answer.length>1800?'\n\n… (النص كامل في ملف Word المرفق)':'')); window.location.href='mailto:?subject='+s+'&body='+b; };
+  const emailDoc=()=>{ const s=encodeURIComponent(rtype+' — صوت العدالة'); const b=encodeURIComponent(answer.replace(/\*\*/g,'').slice(0,1800)+(answer.length>1800?'\n\n… (النص كامل في ملف Word المرفق)':'')); window.location.href='mailto:?subject='+s+'&body='+b; };
   const waDoc=()=>{ const t=encodeURIComponent(answer.replace(/\*\*/g,'').slice(0,1800)+(answer.length>1800?'\n\n… (النص كامل في ملف Word)':'')); window.open('https://wa.me/?text='+t,'_blank'); };
   const mkBody=(prov:string|null,rid?:string)=>JSON.stringify({request_type:rtype,facts,branch:domain,madhab:isPersonal&&madhab!=='غير محدد'?madhab:null,attachment:attach||null,attachments:attachMore,prior_facts:followOn?priorFacts:null,prior_answer:followOn?priorAnswer:null,case_id:caseId||null,draft_provider:prov,client_rid:rid||null});
   const _mkRid=()=>{try{return (crypto as any).randomUUID();}catch{return String(Date.now())+'-'+Math.floor(Math.random()*1e9);}};
@@ -1278,8 +1278,13 @@ const isNativeApp = () => typeof window !== 'undefined' && !!(window as any).Cap
 
 export default function Home() {
   const [auth,setAuth]=useState<'checking'|'in'|'out'>('checking');
+  const [isOffline,setIsOffline]=useState(false);
   useEffect(()=>{ fetch('/api/whoami').then(r=>setAuth(r.ok?'in':'out')).catch(()=>setAuth('out')); },[]);
-  if(auth==='in') return <HomeInner/>;
-  if(auth==='checking') return <div className="flex min-h-screen items-center justify-center bg-[#0f2137] text-[#c9a227]">جارٍ التحقق…</div>;
-  return <LoginScreen onDone={()=>setAuth('in')}/>;
+  // شريط تنبيه انقطاع الاتصال أثناء الاستعمال (2026-08-31) — لا يعالج فشل التحميل الأول
+  // (WebView لا يشغّل React أصلًا في تلك الحالة) بل حالة انقطاع الشبكة بعد تحميل التطبيق فعليًا.
+  useEffect(()=>{const upd=()=>setIsOffline(!navigator.onLine);upd();window.addEventListener('online',upd);window.addEventListener('offline',upd);return()=>{window.removeEventListener('online',upd);window.removeEventListener('offline',upd);};},[]);
+  const offlineBar = isOffline ? <div className="fixed inset-x-0 top-0 z-[100] bg-amber-500 py-2 text-center text-sm font-bold text-white" dir="rtl">لا يوجد اتصال بالإنترنت حاليًا — تحقّق من اتصالك، بعض الميزات قد لا تعمل.</div> : null;
+  if(auth==='in') return <>{offlineBar}<HomeInner/></>;
+  if(auth==='checking') return <>{offlineBar}<div className="flex min-h-screen items-center justify-center bg-[#0f2137] text-[#c9a227]">جارٍ التحقق…</div></>;
+  return <>{offlineBar}<LoginScreen onDone={()=>setAuth('in')}/></>;
 }
