@@ -4321,7 +4321,7 @@ def _draft_chap_index():
             cur.execute(
                 "SELECT id, topic, subtopic, COALESCE(micro_issue,'') FROM knowledge_objects "
                 "WHERE object_type='legislation_article' AND id ~ '^legis-.+-m[0-9]+$' "
-                "AND id NOT LIKE '%-memo-%'")
+                "AND id NOT LIKE '%-memo-%' ORDER BY id")
             groups = {}
             for oid, tp, st, mi in cur.fetchall():
                 law = oid.rsplit("-m", 1)[0]
