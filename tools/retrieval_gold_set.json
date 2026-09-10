@@ -32,7 +32,26 @@
       ],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "الحالة 1 التاريخية في battery.json — أثبتت تاريخيًا 27/28 استشهادًا مؤكدًا حرفيًا في جولة اعتماد مبكرة (§6)."
+      "notes": "الحالة 1 التاريخية في battery.json — أثبتت تاريخيًا 27/28 استشهادًا مؤكدًا حرفيًا في جولة اعتماد مبكرة (§6).",
+      "case_type": "positive",
+      "difficulty": "hard",
+      "expected_mechanisms": [],
+      "must_find_provenance": {
+        "legis-38-1980-m297": {
+          "verified": true,
+          "verification_method": "historical_battery_json",
+          "verification_note": "موروثة من battery.json — تحقُّق بشري سابق موثَّق في CLAUDE.md، لم يُعَد فحصه عبر MCP في هذه الجولة تحديدًا.",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        },
+        "legis-38-1980-m298": {
+          "verified": true,
+          "verification_method": "historical_battery_json",
+          "verification_note": "موروثة من battery.json — تحقُّق بشري سابق موثَّق في CLAUDE.md، لم يُعَد فحصه عبر MCP في هذه الجولة تحديدًا.",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        }
+      }
     },
     {
       "id": "gs-0002",
@@ -64,7 +83,11 @@
       ],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "الحالة 2 التاريخية في battery.json."
+      "notes": "الحالة 2 التاريخية في battery.json.",
+      "case_type": "positive",
+      "difficulty": "medium",
+      "expected_mechanisms": [],
+      "must_find_provenance": {}
     },
     {
       "id": "gs-0003",
@@ -96,7 +119,11 @@
       ],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "الحالة 3 التاريخية في battery.json."
+      "notes": "الحالة 3 التاريخية في battery.json.",
+      "case_type": "positive",
+      "difficulty": "medium",
+      "expected_mechanisms": [],
+      "must_find_provenance": {}
     },
     {
       "id": "gs-0004",
@@ -121,7 +148,11 @@
       ],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "الحالة 4 التاريخية في battery.json — تختبر عدم تسرّب فصل الحضانة السني إلى سؤال جعفري صراحة."
+      "notes": "الحالة 4 التاريخية في battery.json — تختبر عدم تسرّب فصل الحضانة السني إلى سؤال جعفري صراحة.",
+      "case_type": "positive",
+      "difficulty": "hard",
+      "expected_mechanisms": [],
+      "must_find_provenance": {}
     },
     {
       "id": "gs-0005",
@@ -146,7 +177,11 @@
       ],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "الحالة 5 التاريخية في battery.json."
+      "notes": "الحالة 5 التاريخية في battery.json.",
+      "case_type": "positive",
+      "difficulty": "medium",
+      "expected_mechanisms": [],
+      "must_find_provenance": {}
     },
     {
       "id": "gs-0006",
@@ -171,7 +206,11 @@
       ],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "الحالة 6 التاريخية في battery.json."
+      "notes": "الحالة 6 التاريخية في battery.json.",
+      "case_type": "positive",
+      "difficulty": "medium",
+      "expected_mechanisms": [],
+      "must_find_provenance": {}
     },
     {
       "id": "gs-0007",
@@ -197,7 +236,11 @@
       ],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "الحالة 7 التاريخية — القضية غير المقيدة بـmust/any في البطارية التي فازت فيها Claude ثلاث مرات متتالية على gpt-6-astra (§18، المواجهة الرابعة)."
+      "notes": "الحالة 7 التاريخية — القضية غير المقيدة بـmust/any في البطارية التي فازت فيها Claude ثلاث مرات متتالية على gpt-6-astra (§18، المواجهة الرابعة).",
+      "case_type": "positive",
+      "difficulty": "medium",
+      "expected_mechanisms": [],
+      "must_find_provenance": {}
     },
     {
       "id": "gs-0008",
@@ -225,7 +268,11 @@
       ],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "الحالة 8 التاريخية — ضمانة مادة النفاذ الديناميكية (`.bak_hybfix2`) وُلدت من هذه الحالة تحديدًا."
+      "notes": "الحالة 8 التاريخية — ضمانة مادة النفاذ الديناميكية (`.bak_hybfix2`) وُلدت من هذه الحالة تحديدًا.",
+      "case_type": "positive",
+      "difficulty": "hard",
+      "expected_mechanisms": [],
+      "must_find_provenance": {}
     },
     {
       "id": "gs-0009",
@@ -251,7 +298,11 @@
       ],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "الحالة 9 التاريخية — القضية التي فازت فيها Claude بأكبر فارق على gpt-6-astra (§18، المواجهة الخامسة) بآلية م65 لائحة 287/2016 وم30 قانون الشركات."
+      "notes": "الحالة 9 التاريخية — القضية التي فازت فيها Claude بأكبر فارق على gpt-6-astra (§18، المواجهة الخامسة) بآلية م65 لائحة 287/2016 وم30 قانون الشركات.",
+      "case_type": "positive",
+      "difficulty": "hard",
+      "expected_mechanisms": [],
+      "must_find_provenance": {}
     },
     {
       "id": "gs-0010",
@@ -275,7 +326,11 @@
       ],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "الحالة 10 التاريخية في battery.json."
+      "notes": "الحالة 10 التاريخية في battery.json.",
+      "case_type": "positive",
+      "difficulty": "medium",
+      "expected_mechanisms": [],
+      "must_find_provenance": {}
     },
     {
       "id": "gs-0011",
@@ -308,7 +363,26 @@
         "legis-51-1984-m92",
         "legis-53-2026-m8"
       ],
-      "notes": "الحالة 11 التاريخية — بوابتا الاستلزام gate92 وlجنة النسب (`.bak_gate92`، §بوابات الإجراءات السابقة الوجوبية) رُمّزتا صراحة بسبب هذه الحالة تحديدًا؛ must_not_miss مكرَّرة عن must_find عمدًا لأن كليهما إخلال إجرائي لا نقص جودة عادي."
+      "notes": "الحالة 11 التاريخية — بوابتا الاستلزام gate92 وlجنة النسب (`.bak_gate92`، §بوابات الإجراءات السابقة الوجوبية) رُمّزتا صراحة بسبب هذه الحالة تحديدًا؛ must_not_miss مكرَّرة عن must_find عمدًا لأن كليهما إخلال إجرائي لا نقص جودة عادي.",
+      "case_type": "positive",
+      "difficulty": "hard",
+      "expected_mechanisms": [],
+      "must_find_provenance": {
+        "legis-51-1984-m92": {
+          "verified": true,
+          "verification_method": "historical_battery_json",
+          "verification_note": "موروثة من battery.json — تحقُّق بشري سابق موثَّق في CLAUDE.md، لم يُعَد فحصه عبر MCP في هذه الجولة تحديدًا.",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        },
+        "legis-53-2026-m8": {
+          "verified": true,
+          "verification_method": "historical_battery_json",
+          "verification_note": "موروثة من battery.json — تحقُّق بشري سابق موثَّق في CLAUDE.md، لم يُعَد فحصه عبر MCP في هذه الجولة تحديدًا.",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        }
+      }
     },
     {
       "id": "gs-0012",
@@ -329,7 +403,19 @@
       "must_find_any_of": [],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "الحالة 12 — جولة prinxref كاملة (§) وُلدت من رصد المالك أن هذا السؤال بالذات كان يُرجع القوانين أقل من الأحكام؛ ترادف محل↔متجر في _CHAP_SYN حل الفجوة. حارس انتكاس دائم موثق (خط الأساس صار 13/13 بعده)."
+      "notes": "الحالة 12 — جولة prinxref كاملة (§) وُلدت من رصد المالك أن هذا السؤال بالذات كان يُرجع القوانين أقل من الأحكام؛ ترادف محل↔متجر في _CHAP_SYN حل الفجوة. حارس انتكاس دائم موثق (خط الأساس صار 13/13 بعده).",
+      "case_type": "positive",
+      "difficulty": "medium",
+      "expected_mechanisms": [],
+      "must_find_provenance": {
+        "legis-68-1980-m36": {
+          "verified": true,
+          "verification_method": "historical_battery_json",
+          "verification_note": "موروثة من battery.json — تحقُّق بشري سابق موثَّق في CLAUDE.md، لم يُعَد فحصه عبر MCP في هذه الجولة تحديدًا.",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        }
+      }
     },
     {
       "id": "gs-0013",
@@ -360,7 +446,47 @@
         "legis-38-1980-m166",
         "legis-68-1980-m550"
       ],
-      "notes": "الحالة 13 — السؤال المعياري لكل مقارنات المزوّدين (§18/§17) وحارس انتكاس \"بوابة امر اداء\"/\"بوابة شيك+تقادم\" (`.bak_gateshik`). حزمة الأدلة على هذا السؤال (13 جولة) أثبتت م166 «في المرشحات لا السياق» في 13/13 جولة — مثال مرجعي لفشل نوع cap لا candidate-generation."
+      "notes": "الحالة 13 — السؤال المعياري لكل مقارنات المزوّدين (§18/§17) وحارس انتكاس \"بوابة امر اداء\"/\"بوابة شيك+تقادم\" (`.bak_gateshik`). حزمة الأدلة على هذا السؤال (13 جولة) أثبتت م166 «في المرشحات لا السياق» في 13/13 جولة — مثال مرجعي لفشل نوع cap لا candidate-generation.",
+      "case_type": "positive",
+      "difficulty": "adversarial",
+      "expected_mechanisms": [],
+      "must_find_provenance": {
+        "legis-38-1980-m166": {
+          "verified": true,
+          "verification_method": "historical_battery_json",
+          "verification_note": "موروثة من battery.json — تحقُّق بشري سابق موثَّق في CLAUDE.md، لم يُعَد فحصه عبر MCP في هذه الجولة تحديدًا.",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        },
+        "legis-38-1980-m167": {
+          "verified": true,
+          "verification_method": "historical_battery_json",
+          "verification_note": "موروثة من battery.json — تحقُّق بشري سابق موثَّق في CLAUDE.md، لم يُعَد فحصه عبر MCP في هذه الجولة تحديدًا.",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        },
+        "legis-68-1980-m550": {
+          "verified": true,
+          "verification_method": "historical_battery_json",
+          "verification_note": "موروثة من battery.json — تحقُّق بشري سابق موثَّق في CLAUDE.md، لم يُعَد فحصه عبر MCP في هذه الجولة تحديدًا.",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        },
+        "legis-68-1980-m553": {
+          "verified": true,
+          "verification_method": "historical_battery_json",
+          "verification_note": "موروثة من battery.json — تحقُّق بشري سابق موثَّق في CLAUDE.md، لم يُعَد فحصه عبر MCP في هذه الجولة تحديدًا.",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        },
+        "legis-68-1980-m532": {
+          "verified": true,
+          "verification_method": "historical_battery_json",
+          "verification_note": "موروثة من battery.json — تحقُّق بشري سابق موثَّق في CLAUDE.md، لم يُعَد فحصه عبر MCP في هذه الجولة تحديدًا.",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        }
+      }
     },
     {
       "id": "gs-0014",
@@ -380,7 +506,19 @@
       "must_find_any_of": [],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "الحالة 14 — أُضيفت في جولة P0 (2026-09-10) لتغطية فئة object_type='legislation' التي كانت غائبة تمامًا عن كل قنوات الاسترجاع الآلية قبل kb_types.py."
+      "notes": "الحالة 14 — أُضيفت في جولة P0 (2026-09-10) لتغطية فئة object_type='legislation' التي كانت غائبة تمامًا عن كل قنوات الاسترجاع الآلية قبل kb_types.py.",
+      "case_type": "positive",
+      "difficulty": "medium",
+      "expected_mechanisms": [],
+      "must_find_provenance": {
+        "LEG-20-49-e62d299077f0e672": {
+          "verified": true,
+          "verification_method": "historical_battery_json",
+          "verification_note": "موروثة من battery.json — تحقُّق بشري سابق موثَّق في CLAUDE.md، لم يُعَد فحصه عبر MCP في هذه الجولة تحديدًا.",
+          "object_type": "legislation_archived",
+          "legal_role": "governing"
+        }
+      }
     },
     {
       "id": "gs-0015",
@@ -401,7 +539,19 @@
       "must_find_any_of": [],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "الحالة 15 — أُضيفت في جولة P0 (2026-09-10) لتغطية فئة object_type='legislation_archived' (بادئة LEG-UNKNOWN-*) التي كانت غائبة تمامًا قبل kb_types.py. | تحديث 2026-09-10: اختبار استقرار 5 تكرارات مستقلة أثبت RETRIEVAL_INSTABILITY_NONDETERMINISM (حضور 3/5، صفر تغطية في أي قناة حتمية — الاعتماد كليًا على الكثيف). لا تُدمَج نتيجتها في رقم Must-Find Recall واحد بلا توسيم (انظر docs/p1_retrieval_evaluation_framework.md القسمان J/K)."
+      "notes": "الحالة 15 — أُضيفت في جولة P0 (2026-09-10) لتغطية فئة object_type='legislation_archived' (بادئة LEG-UNKNOWN-*) التي كانت غائبة تمامًا قبل kb_types.py. | تحديث 2026-09-10: اختبار استقرار 5 تكرارات مستقلة أثبت RETRIEVAL_INSTABILITY_NONDETERMINISM (حضور 3/5، صفر تغطية في أي قناة حتمية — الاعتماد كليًا على الكثيف). لا تُدمَج نتيجتها في رقم Must-Find Recall واحد بلا توسيم (انظر docs/p1_retrieval_evaluation_framework.md القسمان J/K).",
+      "case_type": "positive",
+      "difficulty": "adversarial",
+      "expected_mechanisms": [],
+      "must_find_provenance": {
+        "LEG-UNKNOWN-P1-art2-3-6144aa963fc48469": {
+          "verified": true,
+          "verification_method": "historical_battery_json",
+          "verification_note": "موروثة من battery.json — تحقُّق بشري سابق موثَّق في CLAUDE.md، لم يُعَد فحصه عبر MCP في هذه الجولة تحديدًا.",
+          "object_type": "legislation_archived",
+          "legal_role": "governing"
+        }
+      }
     },
     {
       "id": "gs-0016",
@@ -420,7 +570,21 @@
       "must_find_any_of": [],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "حالة مخصَّصة لقناة الاستشهاد المباشر (_draft_direct_ids) — رقم المادة والقانون مذكوران صراحة بالنص. تحقُّق حي عبر get_article(67,1980,\"227\") في 2026-09-10: نص مطابق، معرف legis-67-1980-m227."
+      "notes": "حالة مخصَّصة لقناة الاستشهاد المباشر (_draft_direct_ids) — رقم المادة والقانون مذكوران صراحة بالنص. تحقُّق حي عبر get_article(67,1980,\"227\") في 2026-09-10: نص مطابق، معرف legis-67-1980-m227.",
+      "case_type": "positive",
+      "difficulty": "easy",
+      "expected_mechanisms": [
+        "direct_citation"
+      ],
+      "must_find_provenance": {
+        "legis-67-1980-m227": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "get_article(67,1980,'227') — نص مطابق حرفيًا، تحقُّق مباشر 2026-09-10",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        }
+      }
     },
     {
       "id": "gs-0017",
@@ -440,7 +604,23 @@
       "must_find_any_of": [],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "فجوة استرجاع مثبتة حيًّا (2026-09-10): بحث دلالي بصياغة 'رد القاضي لقرابة أو مصاهرة' عبر search_legal أعاد 6 نتائج كلها مبادئ لا صلة لها (تسبيب، إدانة جزائية…) ولم يُصب نص م102 مرافعات نفسه رغم وجوده الكامل والصحيح (تحقُّق مباشر عبر get_article(38,1980,\"102\")). حالة صممت خصيصًا لاختبار عدم تطابق الصياغة الفقهية الشائعة ('رد القاضي') مع عنوان النص الرسمي ('عدم الصلاحية')."
+      "notes": "فجوة استرجاع مثبتة حيًّا (2026-09-10): بحث دلالي بصياغة 'رد القاضي لقرابة أو مصاهرة' عبر search_legal أعاد 6 نتائج كلها مبادئ لا صلة لها (تسبيب، إدانة جزائية…) ولم يُصب نص م102 مرافعات نفسه رغم وجوده الكامل والصحيح (تحقُّق مباشر عبر get_article(38,1980,\"102\")). حالة صممت خصيصًا لاختبار عدم تطابق الصياغة الفقهية الشائعة ('رد القاضي') مع عنوان النص الرسمي ('عدم الصلاحية').",
+      "case_type": "positive",
+      "difficulty": "adversarial",
+      "expected_mechanisms": [
+        "dense",
+        "lexical"
+      ],
+      "known_preexisting_failure": true,
+      "must_find_provenance": {
+        "legis-38-1980-m102": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "get_article(38,1980,'102') نجح؛ search_legal('رد القاضي لقرابة أو مصاهرة') فشل في جلبها فعليًا (6 نتائج، صفر تطابق) — فجوة مكتشَفة قبل أي تشغيل benchmark",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        }
+      }
     },
     {
       "id": "gs-0018",
@@ -459,7 +639,21 @@
       "must_find_any_of": [],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "تحقُّق حي (2026-09-10): البحث الدلالي عن 'التقادم المسقط لدعوى المسؤولية التقصيرية' أعاد م253 مدني بتشابه 0.812 كنص صحيح المضمون فعلًا، لكن م162 تجارة سجّلت تشابهًا أعلى (0.818) رغم كونها أقل صلة موضوعية بالمسؤولية التقصيرية العامة — فارق ضئيل يستحق رصدًا كمثال حي لعدم تطابق درجة التشابه مع الصلة الموضوعية الدقيقة."
+      "notes": "تحقُّق حي (2026-09-10): البحث الدلالي عن 'التقادم المسقط لدعوى المسؤولية التقصيرية' أعاد م253 مدني بتشابه 0.812 كنص صحيح المضمون فعلًا، لكن م162 تجارة سجّلت تشابهًا أعلى (0.818) رغم كونها أقل صلة موضوعية بالمسؤولية التقصيرية العامة — فارق ضئيل يستحق رصدًا كمثال حي لعدم تطابق درجة التشابه مع الصلة الموضوعية الدقيقة.",
+      "case_type": "positive",
+      "difficulty": "medium",
+      "expected_mechanisms": [
+        "dense"
+      ],
+      "must_find_provenance": {
+        "legis-67-1980-m253": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "search_legal تشابه 0.812، مادة تجارية غير ذات صلة سجّلت 0.818 أعلى منها",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        }
+      }
     },
     {
       "id": "gs-0019",
@@ -480,7 +674,35 @@
       "must_find_any_of": [],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "حالة متعددة المواد لاختبار استرجاع مجموعة نصوص متقاربة موضوعيًا (لا مادة واحدة معزولة) — تحقُّق حي عبر search_legal('قسمة المال الشائع') أعاد الثلاثة بتشابه 0.85/0.837/0.831 على التوالي."
+      "notes": "حالة متعددة المواد لاختبار استرجاع مجموعة نصوص متقاربة موضوعيًا (لا مادة واحدة معزولة) — تحقُّق حي عبر search_legal('قسمة المال الشائع') أعاد الثلاثة بتشابه 0.85/0.837/0.831 على التوالي.",
+      "case_type": "positive",
+      "difficulty": "medium",
+      "expected_mechanisms": [
+        "dense"
+      ],
+      "must_find_provenance": {
+        "legis-67-1980-m845": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "get_article مباشر — نص القسمة المهايأة أثناء انتظار القسمة النهائية",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        },
+        "legis-67-1980-m843": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "search_legal تشابه 0.837 — لم يُتحقَّق نصه الكامل مباشرة، أُدرج بثقة أدنى",
+          "object_type": "legislation_article",
+          "legal_role": "supporting"
+        },
+        "legis-67-1980-m831": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "search_legal تشابه 0.831 — لم يُتحقَّق نصه الكامل مباشرة، أُدرج بثقة أدنى",
+          "object_type": "legislation_article",
+          "legal_role": "supporting"
+        }
+      }
     },
     {
       "id": "gs-0020",
@@ -502,7 +724,22 @@
         "legis-67-1980-m539"
       ],
       "must_not_miss": [],
-      "notes": "تحقُّق حي (2026-09-10): مبدأ الطعن 829/2007 نصًا يحيل صراحة للمواد 537/538/539-ب مدني (should_find لم يُتحقَّق فرديًا بنفس صرامة must_find — يحتاج تأكيدًا مستقلًا قبل الاعتماد الكامل)."
+      "notes": "تحقُّق حي (2026-09-10): مبدأ الطعن 829/2007 نصًا يحيل صراحة للمواد 537/538/539-ب مدني (should_find لم يُتحقَّق فرديًا بنفس صرامة must_find — يحتاج تأكيدًا مستقلًا قبل الاعتماد الكامل).",
+      "case_type": "positive",
+      "difficulty": "hard",
+      "expected_mechanisms": [
+        "dense",
+        "principle_xref"
+      ],
+      "must_find_provenance": {
+        "jprin-829-2007-e6090-e2ab86b94a": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "search_legal تشابه 0.866 — نص المبدأ يحيل صراحة للمواد 537/538/539-ب مدني",
+          "object_type": "judicial_principle",
+          "legal_role": "governing"
+        }
+      }
     },
     {
       "id": "gs-0021",
@@ -522,7 +759,22 @@
       "must_find_any_of": [],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "تحقُّق حي (2026-09-10): مبدأ الطعن 1900/2012 يحيل صراحة للمادتين 10 و20/1 من المرسوم بقانون 35/1978 — مثال آخر لإحالة مبدأ لنص تشريعي محدد."
+      "notes": "تحقُّق حي (2026-09-10): مبدأ الطعن 1900/2012 يحيل صراحة للمادتين 10 و20/1 من المرسوم بقانون 35/1978 — مثال آخر لإحالة مبدأ لنص تشريعي محدد.",
+      "case_type": "positive",
+      "difficulty": "hard",
+      "expected_mechanisms": [
+        "dense",
+        "principle_xref"
+      ],
+      "must_find_provenance": {
+        "jprin-1900-2012-s81-68a45b672d": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "search_legal تشابه 0.872 — نص المبدأ يحيل صراحة للمادتين 10/20-1 من 35/1978",
+          "object_type": "judicial_principle",
+          "legal_role": "governing"
+        }
+      }
     },
     {
       "id": "gs-0022",
@@ -542,7 +794,21 @@
       "must_find_any_of": [],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "تحقُّق حي (2026-09-10) عبر get_object مباشرة: نص م191 كامل ومطابق. معرّف من نوع LEG-UNKNOWN-* (تصنيف legislation_archived/غير موحَّد التصنيف الموثَّق في P0 §21) — حالة مخصَّصة لاختبار استمرار تغطية هذا النوع بعد إصلاح P0-1/kb_types.py."
+      "notes": "تحقُّق حي (2026-09-10) عبر get_object مباشرة: نص م191 كامل ومطابق. معرّف من نوع LEG-UNKNOWN-* (تصنيف legislation_archived/غير موحَّد التصنيف الموثَّق في P0 §21) — حالة مخصَّصة لاختبار استمرار تغطية هذا النوع بعد إصلاح P0-1/kb_types.py.",
+      "case_type": "positive",
+      "difficulty": "hard",
+      "expected_mechanisms": [
+        "dense"
+      ],
+      "must_find_provenance": {
+        "LEG-UNKNOWN-P13-c191-a66d5a94d9a5a20d": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "get_object مباشر — نص كامل ومطابق، معرف من نوع legislation_archived",
+          "object_type": "legislation_archived",
+          "legal_role": "governing"
+        }
+      }
     },
     {
       "id": "gs-0023",
@@ -566,7 +832,30 @@
       "must_not_miss": [
         "legis-12-2015-m9"
       ],
-      "notes": "حالة اعتمادية إلزامية مركَّبة (بنمط gs-0011 نفسه) — تحقُّق حي عبر get_article(51,1984,\"126\") وget_article(12,2015,\"9\") في 2026-09-10: نصان مطابقان. must_not_miss لأن غياب م9 محكمة الأسرة إخلال إجرائي (بوابة _GATES القائمة: 'طلاق/تفريق/تطليق/خلع' ← م9 ق12/2015) لا مجرد نقص جودة."
+      "notes": "حالة اعتمادية إلزامية مركَّبة (بنمط gs-0011 نفسه) — تحقُّق حي عبر get_article(51,1984,\"126\") وget_article(12,2015,\"9\") في 2026-09-10: نصان مطابقان. must_not_miss لأن غياب م9 محكمة الأسرة إخلال إجرائي (بوابة _GATES القائمة: 'طلاق/تفريق/تطليق/خلع' ← م9 ق12/2015) لا مجرد نقص جودة.",
+      "case_type": "positive",
+      "difficulty": "hard",
+      "expected_mechanisms": [
+        "dense",
+        "chapter",
+        "legal_dependency"
+      ],
+      "must_find_provenance": {
+        "legis-51-1984-m126": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "get_article(51,1984,'126') — نص التفريق للضرر مطابق",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        },
+        "legis-12-2015-m9": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "get_article(12,2015,'9') — نص مركز تسوية المنازعات الأسرية مطابق؛ بوابة _GATES قائمة فعليًا (طلاق/تفريق/تطليق/خلع ← م9)",
+          "object_type": "legislation_article",
+          "legal_role": "procedure"
+        }
+      }
     },
     {
       "id": "gs-0024",
@@ -583,7 +872,12 @@
       "must_find_any_of": [],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "ضابط سلبي موثَّق سياسة لا حدس: CLAUDE.md §9 يوثِّق صراحة استبعاد 'جداول المواد المخدرة (أسماء كيميائية لاتينية يستحيل ضمان أمانتها من مسح ضوئي)' عن الإدخال عمدًا، بخلاف مواد القانون الجوهرية (م1/م5/م37…) التي أُدخلت فعلًا (تحقُّق حي عبر search_legal يوم 2026-09-10 أعاد هذه المواد بتشابه 0.84-0.86). يُتوقَّع من نظام سليم الإفصاح الصادق بعدم توفر محتوى الجدول تحديدًا لا اختلاق اسم كيميائي. يقيس True No-Source لا False No-Source (عكس القسم G) — يحتاج توليدًا فعليًا للقياس، لا الاسترجاع وحده."
+      "notes": "ضابط سلبي موثَّق سياسة لا حدس: CLAUDE.md §9 يوثِّق صراحة استبعاد 'جداول المواد المخدرة (أسماء كيميائية لاتينية يستحيل ضمان أمانتها من مسح ضوئي)' عن الإدخال عمدًا، بخلاف مواد القانون الجوهرية (م1/م5/م37…) التي أُدخلت فعلًا (تحقُّق حي عبر search_legal يوم 2026-09-10 أعاد هذه المواد بتشابه 0.84-0.86). يُتوقَّع من نظام سليم الإفصاح الصادق بعدم توفر محتوى الجدول تحديدًا لا اختلاق اسم كيميائي. يقيس True No-Source لا False No-Source (عكس القسم G) — يحتاج توليدًا فعليًا للقياس، لا الاسترجاع وحده.",
+      "case_type": "negative",
+      "negative_reason": "policy_excluded",
+      "difficulty": "adversarial",
+      "expected_mechanisms": [],
+      "must_find_provenance": {}
     },
     {
       "id": "gs-0025",
@@ -600,7 +894,12 @@
       "must_find_any_of": [],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "ضابط سلبي بسيط غير خلافي: القاعدة كويتية حصرًا وفق الجرد الحي (legislation_inventory) — لا نص قانون مصري في القاعدة. يقيس True No-Source؛ يحتاج توليدًا فعليًا للقياس النهائي (هل يُفصح النموذج بصدق أم يخلط بمعرفته العامة بالقانون المصري؟) — خارج نطاق الاسترجاع وحده."
+      "notes": "ضابط سلبي بسيط غير خلافي: القاعدة كويتية حصرًا وفق الجرد الحي (legislation_inventory) — لا نص قانون مصري في القاعدة. يقيس True No-Source؛ يحتاج توليدًا فعليًا للقياس النهائي (هل يُفصح النموذج بصدق أم يخلط بمعرفته العامة بالقانون المصري؟) — خارج نطاق الاسترجاع وحده.",
+      "case_type": "negative",
+      "negative_reason": "out_of_scope",
+      "difficulty": "medium",
+      "expected_mechanisms": [],
+      "must_find_provenance": {}
     }
   ]
 }
