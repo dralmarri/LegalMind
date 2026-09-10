@@ -388,7 +388,8 @@
       "request_type": "استشارات قانونية",
       "category": "تجاري/مصرفي — كفاية رأس المال",
       "retrieval_class": [
-        "semantic_match"
+        "semantic_match",
+        "retrieval_instability"
       ],
       "relevant_issues": [
         "مكونات رأس المال الرقابي",
@@ -400,7 +401,7 @@
       "must_find_any_of": [],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "الحالة 15 — أُضيفت في جولة P0 (2026-09-10) لتغطية فئة object_type='legislation_archived' (بادئة LEG-UNKNOWN-*) التي كانت غائبة تمامًا قبل kb_types.py."
+      "notes": "الحالة 15 — أُضيفت في جولة P0 (2026-09-10) لتغطية فئة object_type='legislation_archived' (بادئة LEG-UNKNOWN-*) التي كانت غائبة تمامًا قبل kb_types.py. | تحديث 2026-09-10: اختبار استقرار 5 تكرارات مستقلة أثبت RETRIEVAL_INSTABILITY_NONDETERMINISM (حضور 3/5، صفر تغطية في أي قناة حتمية — الاعتماد كليًا على الكثيف). لا تُدمَج نتيجتها في رقم Must-Find Recall واحد بلا توسيم (انظر docs/p1_retrieval_evaluation_framework.md القسمان J/K)."
     }
   ]
 }
