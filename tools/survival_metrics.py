@@ -57,11 +57,17 @@ def trace_case(app, client, case):
     cap_dropped = set(attr.get("cap_dropped_ids") or [])
     precap_dup_dropped = set(attr.get("principle_precap_dup_dropped_ids") or [])
     stage2_dup_dropped = set(attr.get("stage2_dup_dropped_ids") or [])
-    budget_dropped_ids = {d["id"] for d in (attr.get("budget_dropped") or []) if d.get("id")}
+    # P1.5 (.bak_provenance): القائمة الكاملة بلا قصّ [:60] — الاسم القديم attr["budget_dropped"]
+    # (الآن attr["budget_dropped_sample"]) كان يُخفي إسقاطات حقيقية خارج أول 60 عن هذا المصنِّف
+    # تحديدًا (سبب سوء تصنيف legis-38-1980-m166 في gs-0013 كـ"unknown_pool_loss" بدل "budget").
+    budget_dropped_ids = {d["id"] for d in (ctx.get("budget_dropped_full") or []) if d.get("id")}
+    provenance_by_id = {p["object_id"]: p for p in (ctx.get("provenance") or [])}
 
     def trace_one(oid):
-        return classify(oid, hits_ids, cap_dropped, precap_dup_dropped,
-                         stage2_dup_dropped, budget_dropped_ids, seen_ids)
+        t = classify(oid, hits_ids, cap_dropped, precap_dup_dropped,
+                      stage2_dup_dropped, budget_dropped_ids, seen_ids)
+        t["provenance"] = provenance_by_id.get(oid)
+        return t
 
     must_traces = [trace_one(m) for m in case.get("must_find", [])]
     mnm_traces = [trace_one(m) for m in case.get("must_not_miss", [])]
@@ -127,6 +133,15 @@ def main():
         mnm_misses = [t for t in r["must_not_miss_traces"] if t["fail_class"]]
         if mnm_misses:
             print(f"  ⚠ must_not_miss فقد: {[(t['id'], t['fail_class']) for t in mnm_misses]}", flush=True)
+        # P1.5: نسب كل فقد (must_find وmust_not_miss) — قناته، رتبته، درجاته عبر المراحل
+        for t in misses + mnm_misses:
+            p = t.get("provenance")
+            if p:
+                print(f"    نسب {t['id']}: source={p['source']} rank={p['rank']} "
+                      f"pre_rerank={p['pre_rerank_score']} reranker_raw={p['reranker_raw']} "
+                      f"final_score={p['final_score']} admitted={p['admitted']}", flush=True)
+            else:
+                print(f"    نسب {t['id']}: غائب تمامًا عن ordered/provenance (لم يدخل hits إطلاقًا)", flush=True)
 
     all_must = [t for r in results for t in r["must_find_traces"]]
     all_mnm = [t for r in results for t in r["must_not_miss_traces"]]
