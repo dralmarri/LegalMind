@@ -161,12 +161,12 @@ def case_coverage(case_id: str):
         (case["branch"], topic, topic, subtopic, subtopic),
     )
     by_type = {r["object_type"]: r["count"] for r in counts}
-    # أنواع التشريع في القاعدة ثلاثة (مادة/مادة إصدار/ديباجة) ولا يوجد نوع باسم legislation؛
-    # جمعها هنا يمنع إعلان «ناقص: تشريع» الكاذب رغم وجود آلاف المواد.
-    legislation = (by_type.get("legislation_article", 0)
-                   + by_type.get("legislation_issuing_article", 0)
-                   + by_type.get("legislation_preamble", 0)
-                   + by_type.get("legislation", 0))
+    # P0-1 (2026-09-10): مصدر واحد مركزي (kb_types.LEGISLATION_TYPES) بدل جمع يدوي —
+    # يضيف legislation_archived الآن أيضًا (لم يكن يُحسَب سابقًا رغم وجوده فعليًا).
+    import sys as _kbsys2
+    _kbsys2.path.insert(0, "/opt/LegalMind")
+    import kb_types as _kb2
+    legislation = sum(by_type.get(t, 0) for t in _kb2.LEGISLATION_TYPES)
     principles = by_type.get("judicial_principle", 0) + by_type.get("full_judgment", 0)
     templates = by_type.get("judicial_template", 0) + by_type.get("legal_memorandum", 0)
     status = evaluate_drafting_gate(legislation, principles, templates)

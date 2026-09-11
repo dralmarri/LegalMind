@@ -6,6 +6,7 @@ import sys, json, collections
 sys.path.insert(0, "/opt/LegalMind")
 sys.path.insert(0, "/opt/LegalMind/admin")
 from admin import app
+import kb_types as _kb
 
 def retrieve(rt, facts):
     import anthropic
@@ -14,9 +15,9 @@ def retrieve(rt, facts):
     subqueries = app._draft_subqueries(client, rt, facts, None)
     query = rt + " - " + facts[:1500]
     vectors = app._draft_embed_multi([query] + subqueries)
-    plans = [(vectors[0], [(["legislation_article","legislation_issuing_article"],10),(["judicial_principle"],10),(["full_judgment"],2),(["judicial_template"],2)])]
+    plans = [(vectors[0], [(list(_kb.LEGISLATION_TYPES),10),(list(_kb.PRINCIPLE_TYPES),10),(list(_kb.JUDGMENT_TYPES),2),(list(_kb.TEMPLATE_TYPES),2)])]
     for v in vectors[1:]:
-        plans.append((v, [(["legislation_article","legislation_issuing_article"],8),(["judicial_principle"],8)]))
+        plans.append((v, [(list(_kb.LEGISLATION_TYPES),8),(list(_kb.PRINCIPLE_TYPES),8)]))
     picked = set()
     for vec, buckets in plans:
         for types, lim in buckets:
@@ -41,7 +42,7 @@ def retrieve(rt, facts):
             if tgt not in picked and _xn < 24:
                 picked.add(tgt)
                 _xn += 1
-    hits = [("تشريع" if oid.startswith(("legis", "regl")) else "مبدأ قضائي", 0.5,
+    hits = [("تشريع" if _kb.is_legislation_id(oid) else "مبدأ قضائي", 0.5,
              {"object_id": oid}) for oid in picked]
     texts = app._draft_fetch_texts(set(picked))
     extra = app._sib_expand(hits, texts, picked) + app._prin_xref(hits, texts, picked)
@@ -75,10 +76,24 @@ def main():
         for pref, n in c.get("law_min", []):
             k = sum(1 for p in picked if p.startswith(pref))
             if k < n: fails.append(f"law:{pref}({k}<{n})")
+        # تشخيص P0-3: تكرار المبادئ ضمن مرشحي هذه الحالة — قياس فقط، لا يغيّر النجاح/الفشل
+        _prin_ids = [pid for pid in picked if pid.startswith("jprin-")]
+        _dup_info = ""
+        if _prin_ids:
+            try:
+                _ptexts = app._draft_fetch_texts(_prin_ids)
+                _fps = set()
+                for pid in _prin_ids:
+                    _tt = _ptexts.get(pid)
+                    if _tt:
+                        _fps.add(app._draft_norm_ar(_tt.get("text") or "")[:120])
+                _dup_info = " | مبادئ: %d (فريد: %d)" % (len(_prin_ids), len(_fps))
+            except Exception:
+                pass
         total += 1
         status = "✓" if not fails else "✗"
         if not fails: ok += 1
-        print(f"{status} {c['name']} | مسترجَع: {len(picked)}" + ("" if not fails else " | فشل: " + "، ".join(fails)), flush=True)
+        print(f"{status} {c['name']} | مسترجَع: {len(picked)}" + _dup_info + ("" if not fails else " | فشل: " + "، ".join(fails)), flush=True)
     print(f"\nالبطاقة: {ok}/{total}", flush=True)
     print("BATTERY_PASS" if ok == total else "BATTERY_FAIL", flush=True)
 

@@ -69,6 +69,12 @@ def _fmt_row(row, score=None, cap=1600):
     return head + "\n" + tx
 
 
+# P0-1 (2026-09-10): مصدر مركزي واحد لتصنيف object_type — kb_types.py في جذر المشروع
+import sys as _kbsys
+_kbsys.path.insert(0, "/opt/LegalMind")
+import kb_types as _kb
+
+
 def search_legal(query: str, kind: str = "الكل", limit: int = 8) -> str:
     """بحث دلالي في قاعدة المعرفة القانونية الكويتية (58 ألف كائن: تشريعات نافذة بنصوصها
     الرسمية، ومبادئ محكمة التمييز بأسانيدها). kind: «الكل» أو «تشريع» أو «مبدأ»."""
@@ -78,8 +84,8 @@ def search_legal(query: str, kind: str = "الكل", limit: int = 8) -> str:
     limit = max(1, min(int(limit or 8), 20))
     flt = None
     if kind == "تشريع":
-        flt = {"must": [{"key": "object_type", "match": {"any": [
-            "legislation_article", "legislation_issuing_article", "legislation_preamble"]}}]}
+        flt = {"must": [{"key": "object_type", "match": {
+            "any": list(_kb.MCP_LEGISLATION_TYPES)}}]}
     elif kind == "مبدأ":
         flt = {"must": [{"key": "object_type", "match": {"value": "judicial_principle"}}]}
     body = {"vector": _embed(query), "limit": limit, "with_payload": True}

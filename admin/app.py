@@ -859,8 +859,8 @@ def _draft_lexical(subqueries, facts="", per_q=3):
             groups.append("(" + " OR ".join(["normalized_text LIKE %s"] * len(vs)) + ")")
             params += ["%" + v + "%" for v in vs]
         cur.execute(
-            "SELECT id FROM knowledge_objects WHERE object_type IN "
-            "('legislation_article','legislation_issuing_article') AND "
+            "SELECT id FROM knowledge_objects WHERE object_type IN ("
+            + ",".join("'" + t + "'" for t in _kb.LEXICAL_TYPES) + ") AND "
             + " AND ".join(groups)
             + " ORDER BY length(original_text) ASC LIMIT %s",
             tuple(params) + (per_q,))
@@ -3943,6 +3943,11 @@ _INGESTED_LAWS = frozenset({
     "7/2010", "71/2020", "8/2010", "47/2026", "53/2026", "20/2019", "91/2013", "88/1995", "19/2012",
     "13/2026", "35/1985", "51/2026", "67/1976", "42/2014", "33/2016", "8/2016", "3/2006", "61/2007",
     "20/2014", "21/2019", "78/2026", "10/2026", "14/1973"})
+# P0-1 (2026-09-10): مصدر مركزي واحد لتصنيف object_type — انظر kb_types.py
+import sys as _kbsys
+_kbsys.path.insert(0, "/opt/LegalMind")
+import kb_types as _kb
+
 _LAWREF_RE = re.compile(
     r"(?:قانون|مرسوم(?:\s+بقانون)?)\s+(?:رقم\s*)?\(?\s*([0-9٠-٩]{1,4})\s*\)?\s*لسنه\s*([0-9٠-٩]{4})"
     r"|(?<![0-9٠-٩])([0-9٠-٩]{1,4})\s*/\s*([0-9٠-٩]{4})(?![0-9٠-٩])"
@@ -4216,7 +4221,7 @@ def _draft_direct_ids(request_type, facts, subqueries):
             for pref in prefixes:
                 cur.execute(
                     "SELECT id, title FROM knowledge_objects WHERE id LIKE %s AND object_type"
-                    " IN ('legislation_article','legislation_issuing_article')"
+                    " IN (" + ",".join("'" + t + "'" for t in _kb.DIRECT_CITATION_TYPES) + ")"
                     " AND id NOT LIKE %s", (pref + "m%", "%-memo-%"))
                 scored = []
                 for oid, title in cur.fetchall():
@@ -4822,15 +4827,45 @@ _DRAFT_SYSTEM = """أنت المساعد القانوني لنظام LegalMind �
    - عبارة عامة لختام الرد على حكم مستأنف (عند مذكرات الاستئناف والتمييز تحديدًا): «لابد من الإشارة إلى أن الحكم المستأنف قد ناقش ورد على جميع ما جاء به المستأنف بصورة ممتازة ولغة قانونية رصينة، وللأمانة العلمية نرى أن ما جاء...».
    استعمل هذه العبارات ونظائرها بتناسب مع موضوع كل جملة لا كقائمة تُستنفد بالكامل في كل مستند، واحكم على مناسبة كل عبارة من طبيعة الفرع القانوني الظاهرة من الوقائع نفسها. أما في الاستشارات القانونية العامة (غير صحف الدعاوى والمذكرات) فاستعمل هذا الأسلوب باعتدال أكبر محافظًا على الوضوح المباشر، ولا داعي لعبارات افتتاح الصحيفة فيها.
 
-بنية الإجابة (التزم بها بعناوين ماركداون):
+11. ميّز دومًا بين ثلاث طبقات في تحليلك ولا تخلطها: «المصدر يقول» — نقل حرفي أو شبه حرفي لنص مادة أو مبدأ من السياق بلا إضافة رأي؛ «التحليل يستنتج» — تطبيقك لهذا النص على وقائع هذا الطلب تحديدًا، وهو استنتاجك أنت لا نصًا منقولًا فاعرضه بصيغة تُظهر أنه استنتاج («يستنتج من ذلك أن...»، «وبإسقاط هذا على الوقائع المعروضة...»)؛ «الرأي يوصي» — حكمك المهني العملي النهائي، وهو رأي قابل للنقاش لا حقيقة قانونية قاطعة. لا تُقدّم استنتاجًا أو رأيًا في صيغة نقلٍ حرفي عن مصدر، ولا نقلًا حرفيًا في صيغة استنتاجٍ يوهم بأوسع مما يحمله النص فعلًا.
+
+بنية الإجابة — تتكيّف مع نوع الطلب وتعقيده، ولا تُفرض كقالبٍ واحدٍ جامد على كل حالة:
+
+أ) إذا كان الطلب صياغة مستند قضائي (صحيفة دعوى، مذكرة دفاع أو تعقيب أو استئناف أو تمييز، أمر أداء، تظلم من أمر على عريضة، أي طلب قضائي آخر) التزم ببنية الأقسام الأربعة:
 # أولًا: الفحص الإجرائي المسبق
 (الإجراءات الوجوبية قبل الرفع/التقديم، الاختصاص، المواعيد — بالاستناد للمواد)
 # ثانيًا: سيناريو النجاح والفشل
 (سيناريو النجاح، سيناريوهات الفشل/التعثر، ثم مواطن القوة ومواطن الضعف)
 # ثالثًا: التنفيذ
-(الصياغة الكاملة بالشكل الكويتي مع عناصر نائبة [ … ] للبيانات الشخصية، أو الاستشارة الكاملة — مع الاستشهاد بالمواد والمبادئ من السياق)
+(الصياغة الكاملة بالشكل الكويتي مع عناصر نائبة [ … ] للبيانات الشخصية — مع الاستشهاد بالمواد والمبادئ من السياق)
 # رابعًا: حدود المصادر
 (اذكر بصراحةٍ كلَّ ما بُني على قواعدَ عامةٍ أو لم يرد نصُّه في السياق المسترجَع — منسوبًا إلى حدود الاسترجاع في هذا الطلب، لا إلى خلوِّ قاعدة النظام منه)
+
+ب) إذا كان الطلب استشارة قانونية ابنِ إجابتك من أقسام أساسية تحضر دومًا، وأضف الأقسام التكميلية فقط حين يستدعيها تعقيد المسألة فعلًا — سؤال بسيط محدد الجواب لا يحتاج كل قسم، ونزاع مركب متعدد المسائل يحتاجها:
+
+أقسام أساسية (في كل استشارة):
+# الخلاصة التنفيذية
+(بضعة أسطر: أهم ما يريد المحامي معرفته أولًا، بلا تفصيل)
+# الوقائع الجوهرية
+(ميّز بوضوح ما هو موثَّق بمستند مرفق عمّا هو مجرد أقوال غير موثقة من الموكل أو الطالب، واذكر صراحةً أي مستند حاسم غائب يمنع رأيًا قاطعًا)
+# التحليل والتطبيق
+(لكل مسألة قانونية أثارتها الوقائع: النص أو المبدأ الحاكم من السياق، ولماذا ينطبق على هذه الوقائع تحديدًا أو لا ينطبق — التزم بالتمييز الثلاثي في القاعدة 11؛ وإن تعارضت مصادر السياق فاذكر التعارض صراحةً واشرح كيف حُسم)
+# الرأي القانوني النهائي
+(بدرجة يقين صريحة لكل نقطة رئيسة: راجح / قابل للدفاع / محل خلاف فعلي بين الآراء / يتوقف على مستند أو معلومة غير متوفرة)
+# التوصية والإجراءات التالية
+(خطوات عملية قابلة للتنفيذ؛ اذكر الميعاد بتاريخه أو مدته إن ورد في السياق)
+
+أقسام تُضاف عند الحاجة الفعلية فقط:
+# الرأي المقابل والدفوع المحتملة
+(إلزامي كلما أبديتَ رأيًا قانونيًا جوهريًا قابلًا للنزاع: اعرض أقوى ما يمكن أن يحتج به الطرف المقابل استنادًا لمصادر السياق نفسها — لا تكتفِ بعرض ما يؤيد طلب المحامي وحده)
+# الخيارات القانونية المتاحة
+(عند تعدد مسارات قانونية ممكنة فعليًا، لا عند وجود مسار واحد واضح)
+# نقاط القوة والضعف والمخاطر
+(عند وجود مخاطرة حقيقية تستحق تنبيهًا مستقلًا يتجاوز ما ورد في التحليل)
+
+وفي الحالتين معًا اختم بقسم:
+# حدود المصادر
+(كل ما بُني على قواعد عامة أو لم يرد نصه في السياق المسترجَع — منسوبًا لحدود الاسترجاع في هذا الطلب لا لخلو قاعدة النظام منه؛ وأي معلومة أو مستند ناقص يمنع رأيًا حاسمًا)
 
 اكتب بعربية قانونية فصيحة. البيانات الشخصية في الصياغة تكون عناصر نائبة بين معقوفات."""
 
@@ -5236,6 +5271,28 @@ def _audit_answer(answer, seen):
 _GAP_RE = re.compile(r"لم\s+يرد[^.\n؟]{0,40}?في\s+(?:السياق|المصادر)")
 
 
+def _compute_review_status(answer, flags, inctx, crosscheck_findings):
+    """يُشتق من إشارات تحقق فعلية لا من إعلان ذاتي للنموذج (قرار المالك 2026-09-10):
+    needs_review عند شبهة استشهاد غير موجود أو إعلان غياب كاذب باقيين على النص
+    النهائي بعد التنقيح، أو تصنيف تدقيق متقاطع «suspicious»، أو علامة [للتحقق]
+    الصريحة (تعليمات جولة التنقيح تأمر بوضعها متى بقي شكّ)؛ partial عند بقاء إفصاح
+    صريح بفجوة استرجاع (_GAP_RE) بلا أي شبهة؛ وإلا verified. فشل الحساب نفسه يُرَد
+    needs_review احتياطًا — لا verified — فحقل سلامة لا يصح أن يفشل صامتًا لصالح
+    الطمأنة الكاذبة."""
+    try:
+        cc_suspicious = any((f or {}).get("verdict") == "suspicious"
+                             for f in (crosscheck_findings or []))
+        needs_review = bool(flags) or bool(inctx) or cc_suspicious or ("[للتحقق]" in (answer or ""))
+        if needs_review:
+            return "needs_review"
+        if _GAP_RE.search(answer or ""):
+            return "partial"
+        return "verified"
+    except Exception as _rs_e:
+        print("[draft] review-status-error:", repr(_rs_e), flush=True)
+        return "needs_review"
+
+
 def _gap_confirmed_art(window_text):
     """يستخرج رقم مادة صريح مقترنًا بأقرب اسم قانون من نافذة فجوة معلَنة (نفس منطق
     الاقتران في _audit_answer._art_ids، بنسخة قائمة بذاتها لأن الأصلية متداخلة محليًا).
@@ -5318,8 +5375,8 @@ def _gap_search(answer, seen):
             if len(topic) < 8:
                 continue
             vec = _draft_embed(topic[:300])
-            flt = {"must": [{"key": "object_type", "match": {"any": [
-                "legislation_article", "judicial_principle", "legislation_issuing_article"]}}]}
+            flt = {"must": [{"key": "object_type", "match": {
+                "any": list(_kb.GAP_SEARCH_TYPES)}}]}
             hits = _qdrant_search(vec, 4, flt)
             picked_here = 0
             for h in hits:
@@ -5333,6 +5390,288 @@ def _gap_search(answer, seen):
         print("[draft] gap-search-error:", repr(_ge), flush=True)
         return confirmed[:4], []
     return confirmed[:4], tentative[:4]
+
+
+def _draft_build_context(client, inp: _DraftIn, facts_ret: str) -> dict:
+    """يبني السياق المسترجَع الكامل بلا أي نداء توليد/صياغة — استخراج حرفي بالفهرس
+    من _draft_run (P1-6 في docs/p1_retrieval_evaluation_framework.md، بأمر المالك
+    2026-09-10) ليتيح قياس الاسترجاع (Gold Set) بلا كلفة توليد حقيقية. صفر تغيير
+    سلوكي عن الكتلة الأصلية — فقط عزل في دالة مستقلة قابلة للنداء بمفردها."""
+    query = inp.request_type + " - " + facts_ret[:1500]
+    if inp.madhab:
+        query += " (مذهب " + inp.madhab + ")"
+    _early_media = []
+    for _a in ([inp.attachment] if inp.attachment else []) + list(inp.attachments or []):
+        _k = getattr(_a, "kind", None) or (isinstance(_a, dict) and _a.get("kind"))
+        _d = getattr(_a, "data", None) or (isinstance(_a, dict) and _a.get("data"))
+        _mt = getattr(_a, "media_type", None) or (isinstance(_a, dict) and _a.get("media_type"))
+        if _k in ("image", "pdf") and _d:
+            _early_media.append((_k, _mt, _d))
+    subqueries = _draft_subqueries(client, inp.request_type, facts_ret, inp.madhab, _early_media)
+    if _early_media:
+        print("[draft] doc-axes: محاور من", len(_early_media), "مستندًا:", subqueries, flush=True)
+    vectors = _draft_embed_multi([query] + subqueries)
+
+    # الاستعلام الكامل: كل الأنواع؛ كل محور فرعي: تشريعات ومبادئ
+    plans = [(vectors[0], [
+        (list(_kb.LEGISLATION_TYPES), 10, "تشريع"),
+        (list(_kb.PRINCIPLE_TYPES), 10, "مبدأ قضائي"),
+        (list(_kb.JUDGMENT_TYPES), 2, "حكم كامل"),
+        (list(_kb.TEMPLATE_TYPES), 2, "نموذج صياغة"),
+    ])]
+    for v in vectors[1:]:
+        plans.append((v, [
+            (list(_kb.LEGISLATION_TYPES), 8, "تشريع"),
+            (list(_kb.PRINCIPLE_TYPES), 8, "مبدأ قضائي"),
+        ]))
+    best = {}
+    _attr_axes = []  # P0-3: عدد المسترجَع الخام لكل محور/دلو قبل أي دمج أو قصّ
+    for vec, buckets in plans:
+        for types, lim, label in buckets:
+            try:
+                _raw_h = _draft_search(vec, types, lim)
+                _attr_axes.append({"label": label, "types": list(types),
+                                    "limit": lim, "returned": len(_raw_h)})
+                for h in _raw_h:
+                    p = h.get("payload") or {}
+                    oid = p.get("object_id")
+                    if not oid:
+                        continue
+                    sc = h.get("score", 0)
+                    if oid not in best or sc > best[oid][1]:
+                        best[oid] = (label, sc, p)
+            except Exception:
+                continue
+    _attr_dense_union = len(best)
+    # P0-4 (2026-09-10): إزالة تكرار المبادئ قبل قصّ الـ32 لا بعده — نسخ منشورة
+    # عبر مجلدات مختلفة لنفس المبدأ كانت تستهلك حصة الـ32 قبل إزالتها فتُقصى
+    # مبادئ فريدة أصلية. فحص سلامة حي على أكبر 5 عناقيد + عينة عشوائية 10 عناقيد
+    # صغيرة أثبت صفر دمج خاطئ لمبادئ مختلفة فعلًا (كل تباين رُصد كان زيادة ذيل
+    # استشهاد لاحق على المتن نفسه لا مبدأً آخر) — فاعتُمد المِبصَم القائم (أول 120
+    # حرفًا عربيًا مطبَّعًا من normalized_text) كما هو دون استبدال.
+    _prin_oids_precap = [oid for oid, (lb, _sc, _p) in best.items() if lb == "مبدأ قضائي"]
+    _dup_dropped_ids = []
+    _precap_texts_cache = {}
+    if _prin_oids_precap:
+        try:
+            _precap_texts_cache = _draft_fetch_texts(_prin_oids_precap)
+        except Exception:
+            _precap_texts_cache = {}
+        _seen_fp_precap = {}
+        for oid in sorted(_prin_oids_precap, key=lambda o: -best[o][1]):
+            _t = _precap_texts_cache.get(oid)
+            _fp = _draft_norm_ar((_t or {}).get("text") or "")[:120] if _t else None
+            if _fp and _fp in _seen_fp_precap:
+                _dup_dropped_ids.append(oid)
+                del best[oid]
+                continue
+            if _fp:
+                _seen_fp_precap[_fp] = oid
+    # قصّ لكل نوع بعد الدمج وإزالة التكرار
+    caps_n = {"تشريع": 20, "مبدأ قضائي": 32, "حكم كامل": 3, "نموذج صياغة": 3}
+    grouped = {}
+    for oid, (label, sc, p) in best.items():
+        grouped.setdefault(label, []).append((sc, label, p))
+    _attr_pre_cap_by_label = {lb: len(v) for lb, v in grouped.items()}
+    hits = []
+    _cap_dropped_ids = []
+    for label, items in grouped.items():
+        items.sort(reverse=True, key=lambda x: x[0])
+        for sc, lb, p in items[:caps_n[label]]:
+            hits.append((lb, sc, dict(p, _source="dense")))
+        for _sc2, _lb2, _p2 in items[caps_n[label]:]:
+            _cap_dropped_ids.append(_p2.get("object_id"))
+    # ضمانة تشريعية: (1) حزم الفصول الحاكمة حسب نوع المطالبة، (2) بحث معجمي عام
+    picked = {p.get("object_id") for _l, _s, p in hits}
+    bundle_added, lex_added = [], []
+    for _bi, oid in enumerate(_draft_bundles(inp.request_type, facts_ret, subqueries, inp.madhab, inp.branch)):
+        if oid in picked:
+            continue
+        picked.add(oid)
+        # المواد الحاكمة الأولى في الحزمة (المرتّبة أولًا) تُعطى درجة عالية لتنجو من قصّ الميزانية:
+        # المادة الأساس للجريمة قد تكون بعيدة دلاليًّا فلا يجلبها المتجه (كم35 رشوة «يعاقب… كل موظف عام…»)،
+        # فلو بقيت بدرجة صفر لَقُصّت خلف نتائج المتجه وتوسعة الإحالات. الذيل (كالنواة الإجرائية) يبقى منخفضًا.
+        _bscore = 0.85 if _bi < 18 else 0.0
+        hits.append(("تشريع", _bscore, {"object_id": oid, "_source": "bundle"}))
+        bundle_added.append(oid)
+    direct_added = []
+    _docrefs = _draft_doc_refs(client, _early_media)
+    if _docrefs:
+        print("[draft] doc-refs:", len(_docrefs), _docrefs[:14], flush=True)
+    for oid in (_draft_direct_ids(inp.request_type, facts_ret, subqueries) + _docrefs):
+        if oid in picked:
+            continue
+        picked.add(oid)
+        hits.append(("تشريع", 0.99, {"object_id": oid, "_source": "direct"}))
+        direct_added.append(oid)
+    print("[draft] direct_extra:", len(direct_added), direct_added[:12], flush=True)
+    chap_added = []
+    for oid in _draft_chap_ids(inp.request_type, facts_ret, subqueries):
+        if oid in picked:
+            continue
+        picked.add(oid)
+        hits.append(("تشريع", 0.99, {"object_id": oid, "_source": "chapter"}))
+        chap_added.append(oid)
+    print("[draft] chap_extra:", len(chap_added), chap_added[:12], flush=True)
+    for oid in _draft_lexical(subqueries, facts_ret):
+        if oid in picked or len(lex_added) >= 16:
+            continue
+        picked.add(oid)
+        hits.append(("تشريع", 0.0, {"object_id": oid, "_source": "lexical"}))
+        lex_added.append(oid)
+    # توسعة الإحالات بين القوانين: كل مادة مُستحضَرة تجرّ المواد المُحال إليها صراحةً في قانون آخر
+    # (مستوى واحد فقط، بسقف 24 هدفًا، لمنع الإجابات السلبية الكاذبة عن مصادر مرفوعة أصلًا).
+    xref_added = []
+    for oid in list(picked):
+        for tgt in _XREF.get(oid, ()):
+            if tgt in picked or len(xref_added) >= 24:
+                continue
+            picked.add(tgt)
+            # درجة موجبة صغيرة: ترفع المادة المُحال إليها فوق حشو الحزم الجامعة (درجة 0) لتنجو من قصّ الميزانية
+            hits.append(("تشريع", 0.05, {"object_id": tgt, "_source": "xref"}))
+            xref_added.append(tgt)
+    ids = {p.get("object_id") for _l, _s, p in hits if p.get("object_id")}
+    texts = _draft_fetch_texts(ids)
+    _sib = _sib_expand(hits, texts, picked)
+    if _sib:
+        texts.update(_draft_fetch_texts(_sib))
+        hits += [("تشريع", 0.55, {"object_id": s, "_source": "sibling_xref"}) for s in _sib if s in texts]
+        print("[draft] siblings:", len(_sib), _sib[:8], flush=True)
+    _pxr = _prin_xref(hits, texts, picked)
+    if _pxr:
+        texts.update(_draft_fetch_texts(_pxr))
+        hits += [("تشريع", 0.55, {"object_id": s, "_source": "principle_xref"}) for s in _pxr if s in texts]
+        print("[draft] prin-xref:", len(_pxr), _pxr[:8], flush=True)
+    _rr = _draft_rerank(query, [(o, texts[o]["text"]) for o in
+                                {p.get("object_id") for lb, sc, p in hits
+                                 if lb in ("تشريع", "مبدأ قضائي") and sc < 0.99}
+                                if o in texts])
+    hits = [(lb, (0.5 * sc + 0.5 * _rr[p.get("object_id")])
+             if (_rr and sc < 0.99 and p.get("object_id") in _rr) else sc,
+             dict(p, _pre_rerank_score=sc,
+                  _reranker_raw=(_rr.get(p.get("object_id")) if _rr else None)))
+            for lb, sc, p in hits]
+    if _rr:
+        print("[draft] rerank:", len(_rr), flush=True)
+    caps = {"تشريع": 2200, "مبدأ قضائي": 1400, "حكم كامل": 3500, "نموذج صياغة": 3500}
+    prio = {"تشريع": 0, "مبدأ قضائي": 1, "حكم كامل": 2, "نموذج صياغة": 3}
+    # الأولوية: التشريع الحاكم أولًا ثم المبادئ ثم الأحكام ثم النماذج؛ ميزانية سياق قصوى
+    ordered = sorted(hits, key=lambda h: (prio.get(h[0], 9), -(h[1] or 0.0)))
+    # ميزانياتٌ محجوزةٌ لكل نوع — كي لا يلتهم التشريعُ (حِزمًا وإحالات) حصةَ المبادئ فتغيب عن السياق
+    LBL_BUDGET = {"تشريع": 48000, "مبدأ قضائي": 24000, "حكم كامل": 8000, "نموذج صياغة": 5000}
+    parts, seen, lbl_used, _prin_seen = [], set(), {}, set()
+    _stage2_dup_dropped_ids = []  # P0-3: تكرار لم يُلتقط قبل القصّ (وصل عبر حزم/إحالات/معجمي)
+    _budget_dropped = []          # P0-5: أُسقط بسبب امتلاء ميزانية نوعه — لا رفع للسقف الآن، قياس فقط
+    for label, _score, p in ordered:
+        oid = p.get("object_id")
+        if not oid or oid in seen or oid not in texts:
+            continue
+        t = texts[oid]
+        _txt = t["text"] or ""
+        if label == "مبدأ قضائي":
+            # جمع النسخ المتطابقة المطلع (تكرار النشر عبر المجلدات) — يبقى الأعلى درجة
+            _fp = _draft_norm_ar(_txt)[:120]
+            if _fp in _prin_seen:
+                _stage2_dup_dropped_ids.append(oid)
+                continue
+            _prin_seen.add(_fp)
+        _cap = caps.get(label, 2000)
+        if len(_txt) > _cap:
+            # القصُّ يحفظ سطرَ السند الختامي كي لا يضيع موضعُ النشر من ذيل المبدأ
+            _tail = _txt.rstrip().rsplit("\n", 1)[-1]
+            _keep = ("\n[…]\n" + _tail) if (("الطعن" in _tail or "جلسة" in _tail)
+                                              and len(_tail) < 400) else ""
+            _cut = _txt[:_cap]
+            _dot = max(_cut.rfind("."), _cut.rfind("؟"), _cut.rfind("!"))
+            if _dot > int(_cap * 0.6):
+                _cut = _cut[:_dot + 1]      # ارتدَّ لآخر جملة مكتملة بدل البتر وسط الكلام
+            _txt = _cut + ("" if _keep else "\n[…]") + _keep
+        _pub = (t.get("publication") or "").replace('"', "'").strip()
+        if not _pub and label in ("مبدأ قضائي", "حكم كامل"):
+            _snd = (t["text"] or "").rstrip().rsplit("\n", 1)[-1].strip()
+            if ("الطعن" in _snd or "جلسة" in _snd) and len(_snd) < 400:
+                _pub = _snd.replace('"', "'")
+        block = (
+            '<مصدر نوع="' + label + '" معرف="' + oid + '" فرع="' + (t["branch"] or "")
+            + '" موضوع="' + (t.get("topic") or "") + '" عنوان="' + (t.get("title") or "")
+            + ('" النشر="' + _pub if _pub else "") + '">\n'
+            + _txt + "\n</مصدر>")
+        if lbl_used.get(label, 0) + len(block) > LBL_BUDGET.get(label, 4000):
+            _budget_dropped.append({"id": oid, "type": label, "score": round(float(_score or 0), 4),
+                                    "chars_requested": len(block),
+                                    "remaining_budget": LBL_BUDGET.get(label, 4000) - lbl_used.get(label, 0)})
+            continue                     # نفدت ميزانيةُ هذا النوع — لا يزاحم غيرَه
+        seen.add(oid)
+        lbl_used[label] = lbl_used.get(label, 0) + len(block)
+        parts.append(block)
+    context = "\n\n".join(parts)
+    # P1.5 (2026-09-10): سلسلة نسب كل مرشح (أي قناة أتى منها + درجاته عبر مراحل
+    # الترتيب) — قياس بحت بلا أي تحويل لقاعدة قبول صلبة (بأمر المالك الصريح).
+    _provenance = []
+    try:
+        for _prank, (_plabel, _pscore, _pp) in enumerate(ordered):
+            _poid = _pp.get("object_id")
+            if not _poid:
+                continue
+            _provenance.append({
+                "object_id": _poid,
+                "object_type": _plabel,
+                "source": _pp.get("_source", "dense"),
+                "pre_rerank_score": _pp.get("_pre_rerank_score"),
+                "reranker_raw": _pp.get("_reranker_raw"),
+                "final_score": round(float(_pscore or 0), 4),
+                "rank": _prank,
+                "admitted": _poid in seen,
+            })
+    except Exception as _prov_e:
+        print("[draft] provenance-error:", repr(_prov_e), flush=True)
+        _provenance = []
+    # P1.5: إسقاط الميزانية الكامل — العدّ والتجميع بالنوع دومًا كاملان؛ العيّنة
+    # المخزَّنة محدودة (60) للعرض/اليوميات فقط؛ القائمة الكاملة تُعاد في ctx وحده
+    # (بلا تخزين قاعدة بيانات) لأدوات التحليل التي تحتاج دقة تامة.
+    _budget_dropped_by_type = {}
+    for _bd in _budget_dropped:
+        _budget_dropped_by_type[_bd["type"]] = _budget_dropped_by_type.get(_bd["type"], 0) + 1
+    # P0-3: تجميع مقاييس فقد المرشحين لهذه الجولة — لا نصوص كاملة، معرفات وأسباب فقط
+    try:
+        _true_union = (set(_precap_texts_cache.keys()) | {oid for oid in best}
+                       | set(bundle_added) | set(direct_added) | set(chap_added)
+                       | set(lex_added) | set(xref_added)
+                       | set(_sib or []) | set(_pxr or []))
+        _attr = {
+            "per_axis": _attr_axes,
+            "dense_union_count": _attr_dense_union,
+            "true_union_count": len(_true_union),
+            "principle_precap_dup_dropped": len(_dup_dropped_ids),
+            "principle_precap_dup_dropped_ids": _dup_dropped_ids[:60],
+            "dense_precap_by_label": _attr_pre_cap_by_label,  # دلالته: دلوّ التشريعات/المبادئ الكثيف بعد إزالة تكرار P0-4 وقبل سقف Stage-1 caps_n — دلالة "الكثيف فقط" لا كل القنوات
+            "cap_dropped_count": len(_cap_dropped_ids),
+            "cap_dropped_ids": [i for i in _cap_dropped_ids if i][:60],
+            "bundle_added": len(bundle_added), "direct_added": len(direct_added),
+            "chap_added": len(chap_added), "lexical_added": len(lex_added),
+            "xref_added": len(xref_added),
+            "sibling_added": len(_sib) if _sib else 0,
+            "prin_xref_added": len(_pxr) if _pxr else 0,
+            "rerank_output_count": len(_rr) if _rr else 0,  # اسمه القديم rerank_input_count كان مضللًا: هذا حجم مخرَج المرتِّب لا مدخله الحقيقي (المدخل الحقيقي يُقصّ داخليًا لأول 300 زوج في _draft_rerank)
+            "stage2_dup_dropped_count": len(_stage2_dup_dropped_ids),
+            "stage2_dup_dropped_ids": _stage2_dup_dropped_ids[:60],
+            "budget_admitted_count": len(seen),  # مرادف تام لـfinal_context_count أدناه — كلاهما عدّ الكائنات المتمايزة المقبولة، لا تجزيء نصي
+            "budget_dropped_count": len(_budget_dropped),
+            "budget_dropped_by_type": _budget_dropped_by_type,
+            "budget_dropped_sample": _budget_dropped[:60],  # اسمه القديم budget_dropped: عيّنة محدودة فقط — القائمة الكاملة في ctx['budget_dropped_full']
+            "final_context_count": len(parts),
+        }
+        print("[draft] attrition:", _djson.dumps(_attr, ensure_ascii=False)[:6000], flush=True)
+    except Exception as _attr_e:
+        print("[draft] attrition-error:", repr(_attr_e), flush=True)
+        _attr = {}
+    return {
+        "context": context, "attr": _attr, "seen": seen, "hits": hits,
+        "subqueries": subqueries, "bundle_added": bundle_added,
+        "direct_added": direct_added, "chap_added": chap_added,
+        "lex_added": lex_added, "sources_used": len(parts),
+        "provenance": _provenance, "budget_dropped_full": _budget_dropped,
+    }
 
 
 def _draft_run(inp: _DraftIn) -> dict:
@@ -5364,173 +5703,17 @@ def _draft_run(inp: _DraftIn) -> dict:
     import anthropic
     client = anthropic.Anthropic(api_key=key)
 
-    query = inp.request_type + " - " + facts_ret[:1500]
-    if inp.madhab:
-        query += " (مذهب " + inp.madhab + ")"
-    _early_media = []
-    for _a in ([inp.attachment] if inp.attachment else []) + list(inp.attachments or []):
-        _k = getattr(_a, "kind", None) or (isinstance(_a, dict) and _a.get("kind"))
-        _d = getattr(_a, "data", None) or (isinstance(_a, dict) and _a.get("data"))
-        _mt = getattr(_a, "media_type", None) or (isinstance(_a, dict) and _a.get("media_type"))
-        if _k in ("image", "pdf") and _d:
-            _early_media.append((_k, _mt, _d))
-    subqueries = _draft_subqueries(client, inp.request_type, facts_ret, inp.madhab, _early_media)
-    if _early_media:
-        print("[draft] doc-axes: محاور من", len(_early_media), "مستندًا:", subqueries, flush=True)
-    vectors = _draft_embed_multi([query] + subqueries)
-
-    # الاستعلام الكامل: كل الأنواع؛ كل محور فرعي: تشريعات ومبادئ
-    plans = [(vectors[0], [
-        (["legislation_article", "legislation", "legislation_issuing_article"], 10, "تشريع"),
-        (["judicial_principle", "judicial_principles_collection"], 10, "مبدأ قضائي"),
-        (["full_judgment"], 2, "حكم كامل"),
-        (["judicial_template"], 2, "نموذج صياغة"),
-    ])]
-    for v in vectors[1:]:
-        plans.append((v, [
-            (["legislation_article", "legislation", "legislation_issuing_article"], 8, "تشريع"),
-            (["judicial_principle", "judicial_principles_collection"], 8, "مبدأ قضائي"),
-        ]))
-    best = {}
-    for vec, buckets in plans:
-        for types, lim, label in buckets:
-            try:
-                for h in _draft_search(vec, types, lim):
-                    p = h.get("payload") or {}
-                    oid = p.get("object_id")
-                    if not oid:
-                        continue
-                    sc = h.get("score", 0)
-                    if oid not in best or sc > best[oid][1]:
-                        best[oid] = (label, sc, p)
-            except Exception:
-                continue
-    # قصّ لكل نوع بعد الدمج
-    caps_n = {"تشريع": 20, "مبدأ قضائي": 32, "حكم كامل": 3, "نموذج صياغة": 3}
-    grouped = {}
-    for oid, (label, sc, p) in best.items():
-        grouped.setdefault(label, []).append((sc, label, p))
-    hits = []
-    for label, items in grouped.items():
-        items.sort(reverse=True, key=lambda x: x[0])
-        for sc, lb, p in items[:caps_n[label]]:
-            hits.append((lb, sc, p))
-    # ضمانة تشريعية: (1) حزم الفصول الحاكمة حسب نوع المطالبة، (2) بحث معجمي عام
-    picked = {p.get("object_id") for _l, _s, p in hits}
-    bundle_added, lex_added = [], []
-    for _bi, oid in enumerate(_draft_bundles(inp.request_type, facts_ret, subqueries, inp.madhab, inp.branch)):
-        if oid in picked:
-            continue
-        picked.add(oid)
-        # المواد الحاكمة الأولى في الحزمة (المرتّبة أولًا) تُعطى درجة عالية لتنجو من قصّ الميزانية:
-        # المادة الأساس للجريمة قد تكون بعيدة دلاليًّا فلا يجلبها المتجه (كم35 رشوة «يعاقب… كل موظف عام…»)،
-        # فلو بقيت بدرجة صفر لَقُصّت خلف نتائج المتجه وتوسعة الإحالات. الذيل (كالنواة الإجرائية) يبقى منخفضًا.
-        _bscore = 0.85 if _bi < 18 else 0.0
-        hits.append(("تشريع", _bscore, {"object_id": oid}))
-        bundle_added.append(oid)
-    direct_added = []
-    _docrefs = _draft_doc_refs(client, _early_media)
-    if _docrefs:
-        print("[draft] doc-refs:", len(_docrefs), _docrefs[:14], flush=True)
-    for oid in (_draft_direct_ids(inp.request_type, facts_ret, subqueries) + _docrefs):
-        if oid in picked:
-            continue
-        picked.add(oid)
-        hits.append(("تشريع", 0.99, {"object_id": oid}))
-        direct_added.append(oid)
-    print("[draft] direct_extra:", len(direct_added), direct_added[:12], flush=True)
-    chap_added = []
-    for oid in _draft_chap_ids(inp.request_type, facts_ret, subqueries):
-        if oid in picked:
-            continue
-        picked.add(oid)
-        hits.append(("تشريع", 0.99, {"object_id": oid}))
-        chap_added.append(oid)
-    print("[draft] chap_extra:", len(chap_added), chap_added[:12], flush=True)
-    for oid in _draft_lexical(subqueries, facts_ret):
-        if oid in picked or len(lex_added) >= 16:
-            continue
-        picked.add(oid)
-        hits.append(("تشريع", 0.0, {"object_id": oid}))
-        lex_added.append(oid)
-    # توسعة الإحالات بين القوانين: كل مادة مُستحضَرة تجرّ المواد المُحال إليها صراحةً في قانون آخر
-    # (مستوى واحد فقط، بسقف 24 هدفًا، لمنع الإجابات السلبية الكاذبة عن مصادر مرفوعة أصلًا).
-    xref_added = []
-    for oid in list(picked):
-        for tgt in _XREF.get(oid, ()):
-            if tgt in picked or len(xref_added) >= 24:
-                continue
-            picked.add(tgt)
-            # درجة موجبة صغيرة: ترفع المادة المُحال إليها فوق حشو الحزم الجامعة (درجة 0) لتنجو من قصّ الميزانية
-            hits.append(("تشريع", 0.05, {"object_id": tgt}))
-            xref_added.append(tgt)
-    ids = {p.get("object_id") for _l, _s, p in hits if p.get("object_id")}
-    texts = _draft_fetch_texts(ids)
-    _sib = _sib_expand(hits, texts, picked)
-    if _sib:
-        texts.update(_draft_fetch_texts(_sib))
-        hits += [("تشريع", 0.55, {"object_id": s}) for s in _sib if s in texts]
-        print("[draft] siblings:", len(_sib), _sib[:8], flush=True)
-    _pxr = _prin_xref(hits, texts, picked)
-    if _pxr:
-        texts.update(_draft_fetch_texts(_pxr))
-        hits += [("تشريع", 0.55, {"object_id": s}) for s in _pxr if s in texts]
-        print("[draft] prin-xref:", len(_pxr), _pxr[:8], flush=True)
-    _rr = _draft_rerank(query, [(o, texts[o]["text"]) for o in
-                                {p.get("object_id") for lb, sc, p in hits
-                                 if lb in ("تشريع", "مبدأ قضائي") and sc < 0.99}
-                                if o in texts])
-    if _rr:
-        hits = [(lb, (0.5 * sc + 0.5 * _rr[p.get("object_id")])
-                 if (sc < 0.99 and p.get("object_id") in _rr) else sc, p)
-                for lb, sc, p in hits]
-        print("[draft] rerank:", len(_rr), flush=True)
-    caps = {"تشريع": 2200, "مبدأ قضائي": 1400, "حكم كامل": 3500, "نموذج صياغة": 3500}
-    prio = {"تشريع": 0, "مبدأ قضائي": 1, "حكم كامل": 2, "نموذج صياغة": 3}
-    # الأولوية: التشريع الحاكم أولًا ثم المبادئ ثم الأحكام ثم النماذج؛ ميزانية سياق قصوى
-    ordered = sorted(hits, key=lambda h: (prio.get(h[0], 9), -(h[1] or 0.0)))
-    # ميزانياتٌ محجوزةٌ لكل نوع — كي لا يلتهم التشريعُ (حِزمًا وإحالات) حصةَ المبادئ فتغيب عن السياق
-    LBL_BUDGET = {"تشريع": 48000, "مبدأ قضائي": 24000, "حكم كامل": 8000, "نموذج صياغة": 5000}
-    parts, seen, lbl_used, _prin_seen = [], set(), {}, set()
-    for label, _score, p in ordered:
-        oid = p.get("object_id")
-        if not oid or oid in seen or oid not in texts:
-            continue
-        t = texts[oid]
-        _txt = t["text"] or ""
-        if label == "مبدأ قضائي":
-            # جمع النسخ المتطابقة المطلع (تكرار النشر عبر المجلدات) — يبقى الأعلى درجة
-            _fp = _draft_norm_ar(_txt)[:120]
-            if _fp in _prin_seen:
-                continue
-            _prin_seen.add(_fp)
-        _cap = caps.get(label, 2000)
-        if len(_txt) > _cap:
-            # القصُّ يحفظ سطرَ السند الختامي كي لا يضيع موضعُ النشر من ذيل المبدأ
-            _tail = _txt.rstrip().rsplit("\n", 1)[-1]
-            _keep = ("\n[…]\n" + _tail) if (("الطعن" in _tail or "جلسة" in _tail)
-                                              and len(_tail) < 400) else ""
-            _cut = _txt[:_cap]
-            _dot = max(_cut.rfind("."), _cut.rfind("؟"), _cut.rfind("!"))
-            if _dot > int(_cap * 0.6):
-                _cut = _cut[:_dot + 1]      # ارتدَّ لآخر جملة مكتملة بدل البتر وسط الكلام
-            _txt = _cut + ("" if _keep else "\n[…]") + _keep
-        _pub = (t.get("publication") or "").replace('"', "'").strip()
-        if not _pub and label in ("مبدأ قضائي", "حكم كامل"):
-            _snd = (t["text"] or "").rstrip().rsplit("\n", 1)[-1].strip()
-            if ("الطعن" in _snd or "جلسة" in _snd) and len(_snd) < 400:
-                _pub = _snd.replace('"', "'")
-        block = (
-            '<مصدر نوع="' + label + '" معرف="' + oid + '" فرع="' + (t["branch"] or "")
-            + '" موضوع="' + (t.get("topic") or "") + '" عنوان="' + (t.get("title") or "")
-            + ('" النشر="' + _pub if _pub else "") + '">\n'
-            + _txt + "\n</مصدر>")
-        if lbl_used.get(label, 0) + len(block) > LBL_BUDGET.get(label, 4000):
-            continue                     # نفدت ميزانيةُ هذا النوع — لا يزاحم غيرَه
-        seen.add(oid)
-        lbl_used[label] = lbl_used.get(label, 0) + len(block)
-        parts.append(block)
-    context = "\n\n".join(parts)
+    _ctx = _draft_build_context(client, inp, facts_ret)
+    context = _ctx["context"]
+    _attr = _ctx["attr"]
+    seen = _ctx["seen"]
+    hits = _ctx["hits"]
+    subqueries = _ctx["subqueries"]
+    bundle_added = _ctx["bundle_added"]
+    direct_added = _ctx["direct_added"]
+    chap_added = _ctx["chap_added"]
+    lex_added = _ctx["lex_added"]
+    _sources_used = _ctx["sources_used"]
 
     atts = []
     if inp.attachment:
@@ -5681,6 +5864,19 @@ def _draft_run(inp: _DraftIn) -> dict:
                     answer = _a2
         except Exception:
             pass                              # أي فشل: تبقى المسودة الأولى كما هي
+    # تصنيف مراجعة محسوب برمجيًا من التدقيق الفعلي (2026-09-10) — لا جملة ذاتية
+    # يكتبها النموذج عن نفسه. يُعاد تشغيل المدقق الحرفي على النص النهائي (بعد أي
+    # تنقيح) مع توسعة seen بما جُلب فعليًا (selffix/gap-confirmed) حتى لا يُتَّهم
+    # استشهادٌ صحيح صار في السياق بعد الجلب بأنه خارج السياق.
+    try:
+        _rs_seen = (seen | set(selffix_ids or []) | set(gap_confirmed or [])) if seen else set()
+        _, _final_flags, _final_inctx = _audit_answer(answer, _rs_seen)
+    except Exception as _rs_e:
+        print("[draft] review-status-error:", repr(_rs_e), flush=True)
+        _final_flags, _final_inctx = list(audit_flags), list(audit_inctx)
+    review_status = _compute_review_status(answer, _final_flags, _final_inctx, crosscheck_findings)
+    print("[draft] review-status:", review_status, "| flags:", len(_final_flags),
+          "| inctx:", len(_final_inctx), flush=True)
     # حزمة الأدلة: سجل دائم للجولة — أساس مقارنة النماذج العادلة والتشخيص.
     # تسجيل خالص: أي فشل يُطبع ولا يمس الجولة (لا ابتلاع صامتًا — درس معياري).
     try:
@@ -5697,24 +5893,25 @@ def _draft_run(inp: _DraftIn) -> dict:
         with _evpg.connect(_draft_env("DATABASE_URL")) as _evc, _evc.cursor() as _evcu:
             _evcu.execute(
                 "INSERT INTO draft_evidence(qid, rt, question, madhab, case_id, axes, hits, "
-                "context_ids, model, answer_chars, audit_flags) "
-                "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                "context_ids, model, answer_chars, audit_flags, attrition) "
+                "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                 (str(_uuid.uuid4()), getattr(inp, "request_type", None),
                  (getattr(inp, "facts", "") or "")[:8000], getattr(inp, "madhab", None),
                  getattr(inp, "case_id", None),
                  _EvJb(list(subqueries)[:12]), _EvJb(_ev_hits), _EvJb(_ev_seen[:400]),
                  getattr(resp, "model", None), len(answer or ""),
-                 _EvJb(list(audit_flags or [])[:40])))
+                 _EvJb(list(audit_flags or [])[:40]), _EvJb(_attr)))
             _evc.commit()
         print("[draft] evidence: سُجلت الجولة (%d مصدرًا في السياق)" % len(_ev_seen), flush=True)
     except Exception as _ev_e:
         print("[draft] evidence-error:", _ev_e, flush=True)
-    return {"answer": answer, "sources_used": len(parts), "model": resp.model,
+    return {"answer": answer, "sources_used": _sources_used, "model": resp.model,
             "subqueries": subqueries, "bundle_extra": bundle_added, "lexical_extra": lex_added,
             "direct_extra": direct_added,
             "chap_extra": chap_added,
             "selffix_extra": selffix_ids,
             "audit_flags": audit_flags, "audit_incontext": audit_inctx,
+            "review_status": review_status,
             "usage": {"input": resp.usage.input_tokens, "output": resp.usage.output_tokens}}
 def _store_draft_result(rid, res):
     """التسليم المضمون: النتيجة تُحفظ خادميًا فور اكتمالها فيستردها العميل إن مات البث —
@@ -5822,7 +6019,7 @@ def get_object_full(object_id: str, _: str = Depends(require_auth)) -> dict:
 
 # ==================== تصفّح قاعدة المعرفة الهرمي — /api/browse ====================
 _BROWSE_TYPES = {
-    "laws": ("legislation_article", "legislation", "legislation_issuing_article", "legislation_preamble"),
+    "laws": _kb.LEGISLATION_TYPES,
     "principles": ("judicial_principle", "judicial_principles_collection", "full_judgment"),
     "judgments": ("full_judgment",),
     "templates": ("judicial_template",),

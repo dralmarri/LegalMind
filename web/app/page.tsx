@@ -740,6 +740,13 @@ function MdLite({text}:{text:string}) {
     return <div key={i} className="whitespace-pre-wrap">{bold(ln)}</div>;
   })}</div>;
 }
+// شارة review_status (2026-09-10) — تصنيف مُحتسَب برمجيًا من التدقيق الفعلي (_audit_answer + التدقيق المتقاطع)، لا جملة يكتبها النموذج عن نفسه.
+const _reviewLabel:Record<string,string>={verified:'موثوقة ✓',partial:'جزئية — إفصاح بفجوة',needs_review:'تحتاج مراجعتك'};
+const _reviewTone:Record<string,string>={verified:'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300',partial:'bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',needs_review:'bg-rose-50 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300'};
+function ReviewBadge({status}:{status?:string}) {
+  if(!status||!_reviewLabel[status])return null;
+  return <span className={`rounded-full px-2 py-0.5 text-xs font-bold ${_reviewTone[status]}`}>{_reviewLabel[status]}</span>;
+}
 const _snap:{q:string;atts:string[];follow:boolean;caseId:string}={q:'',atts:[],follow:false,caseId:''};
 const _openThread:{rec:any;follow:boolean;caseId:string|null}={rec:null,follow:false,caseId:null};
 function DraftingView({cases}:{cases:LegalCase[];onOpen:(c:LegalCase)=>void}) {
@@ -786,7 +793,7 @@ function DraftingView({cases}:{cases:LegalCase[];onOpen:(c:LegalCase)=>void}) {
   const [busy,setBusy]=useState(false);
   const [err,setErr]=useState('');
   const [answer,setAnswer]=useState('');
-  const [meta,setMeta]=useState<{sources_used?:number;model?:string}>({});
+  const [meta,setMeta]=useState<{sources_used?:number;model?:string;review_status?:string}>({});
   const [copied,setCopied]=useState(false);
   const [provider,setProvider]=useState('');
   const [cmp,setCmp]=useState<any>(null);
@@ -889,7 +896,7 @@ function DraftingView({cases}:{cases:LegalCase[];onOpen:(c:LegalCase)=>void}) {
         setErr('');
         if(!d)throw new Error('انقطع البث ولم تُسترد النتيجة خلال المهلة — أعد المحاولة');
       }
-      setAnswer(d.answer||'');setMeta({sources_used:d.sources_used,model:d.model});
+      setAnswer(d.answer||'');setMeta({sources_used:d.sources_used,model:d.model,review_status:d.review_status});
     }catch(e){setErr(e instanceof Error?e.message:'خطأ غير متوقع');}
     setBusy(false);
   };
@@ -906,11 +913,11 @@ function DraftingView({cases}:{cases:LegalCase[];onOpen:(c:LegalCase)=>void}) {
         <div className="grid min-h-0 flex-1 grid-cols-1 md:grid-cols-2">
           {cmp.pair.map((c:any,i:number)=><div key={i} className={'flex min-h-0 flex-col '+(i?'border-t border-slate-200 dark:border-slate-800 md:border-t-0 md:border-r':'')}>
             <div className="flex items-center justify-between gap-2 border-b border-slate-100 bg-slate-50 px-4 py-2 dark:border-slate-800 dark:bg-slate-800/50">
-              <span className="font-bold text-ink dark:text-white">الإجابة {i?'ب':'أ'}{cmp.reveal?' — '+c.name+(c.model?' ('+c.model+')':''):''}</span>
+              <span className="flex items-center gap-2 font-bold text-ink dark:text-white">الإجابة {i?'ب':'أ'}{cmp.reveal?' — '+c.name+(c.model?' ('+c.model+')':''):''}<ReviewBadge status={c.review_status}/></span>
               {!c.error&&<span className="flex shrink-0 items-center gap-1.5">
                 <button onClick={()=>{try{navigator.clipboard.writeText(c.answer||'');}catch{}}} className="rounded-lg border border-slate-300 bg-white px-2.5 py-1 text-xs text-slate-600 transition hover:border-brand-blue hover:text-brand-blue dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300">نسخ</button>
                 <button onClick={()=>dlBlob(''+buildHtml(c.answer||''),'application/msword','doc')} className="rounded-lg border border-slate-300 bg-white px-2.5 py-1 text-xs text-slate-600 transition hover:border-brand-blue hover:text-brand-blue dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300">Word</button>
-                <button onClick={()=>{setAnswer(c.answer||'');setMeta({sources_used:c.sources_used,model:c.model});setCmp(null);}} className="rounded-lg bg-emerald-600 px-3 py-1 text-sm font-bold text-white transition hover:bg-emerald-700">اعتماد هذه الإجابة</button>
+                <button onClick={()=>{setAnswer(c.answer||'');setMeta({sources_used:c.sources_used,model:c.model,review_status:c.review_status});setCmp(null);}} className="rounded-lg bg-emerald-600 px-3 py-1 text-sm font-bold text-white transition hover:bg-emerald-700">اعتماد هذه الإجابة</button>
               </span>}
             </div>
             <div className="min-h-0 flex-1 overflow-y-auto p-4">{c.error?<div className="rounded-lg bg-red-50 p-3 text-sm leading-7 text-red-800 dark:bg-red-950/40 dark:text-red-300">تعذر توليد هذه الإجابة — السبب: <bdi className="font-mono text-xs">{String(c.error||'غير معروف')}</bdi>. أعد المحاولة، وإن تكرر فراجع يوميات الخادم.</div>:<MdLite text={c.answer||''}/>}</div>
@@ -1015,7 +1022,7 @@ function DraftingView({cases}:{cases:LegalCase[];onOpen:(c:LegalCase)=>void}) {
         </div>}
       <div className="flex-1 overflow-y-auto p-6 lg:p-8">
         {answer?<div className="mx-auto max-w-4xl">
-          <div className="mb-4 flex items-center justify-end gap-2 text-xs text-slate-500 dark:text-slate-400"><span>استند إلى {meta.sources_used??'—'} مصدرًا</span>{meta.model&&<span className="rounded-full bg-brand-soft px-2 py-0.5 text-brand-dark dark:bg-brand-blue/15 dark:text-brand-blue">{meta.model}</span>}</div>
+          <div className="mb-4 flex items-center justify-end gap-2 text-xs text-slate-500 dark:text-slate-400"><ReviewBadge status={meta.review_status}/><span>استند إلى {meta.sources_used??'—'} مصدرًا</span>{meta.model&&<span className="rounded-full bg-brand-soft px-2 py-0.5 text-brand-dark dark:bg-brand-blue/15 dark:text-brand-blue">{meta.model}</span>}</div>
           <MdLite text={answer}/>
         </div>:<div className="flex h-full flex-col items-center justify-center p-8 text-center">
           <div className="mb-4 grid h-20 w-20 place-items-center rounded-full bg-slate-50 text-brand-blue/40 dark:bg-slate-800"><PenLine size={30}/></div>
