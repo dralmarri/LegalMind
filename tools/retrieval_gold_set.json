@@ -1404,7 +1404,7 @@
         "وجوب الشكل الرسمي لتعديل عقد الشركة وأثر تخلفه"
       ],
       "must_find": [
-        "jprin-101-1995-f1574-a90c7a3e5f"
+        "jprin-101-1995-f1574-ce8b49f13f"
       ],
       "must_find_any_of": [],
       "should_find": [],
@@ -1413,10 +1413,10 @@
         "dense"
       ],
       "must_find_provenance": {
-        "jprin-101-1995-f1574-a90c7a3e5f": {
+        "jprin-101-1995-f1574-ce8b49f13f": {
           "verified": true,
-          "verification_method": "MCP_via_subagent_transcription",
-          "verification_note": "search_legal('إعلان الشركات بطلان تعديل عقد الشركة بلا رسمية') — نص: 'عقد الشركة... أو أي اتفاق لاحق معدل آثاره. إستلزام إفراغه في محرر رسمي. تخلف ذلك. بطلانه بطلاناً مطلقاً'. ملاحظة أمانة: هذا معرّف مُعاد بناؤه تقريبيًا من نص الوكيل المنقول وليس بصيغة get_object المؤكَّدة حرفيًا — يحتاج تحقق get_object مباشر قبل الاعتماد النهائي كمقياس حاسم.",
+          "verification_method": "MCP",
+          "verification_note": "تصحيح 2026-09-13: المعرف السابق (...a90c7a3e5f) كان خطأً في النسخ من نص وكيل منقول ولم يكن يشير لكائن حقيقي (get_object أعاد \"لا كائن بهذا المعرف\") — سبَّب فشلًا كاذبًا في Candidate Recall (0/1) نُسب خطأً للنظام. المعرف الصحيح تحقَّق مباشرة عبر search_legal ثم get_object (تطابق حرفي تام).",
           "object_type": "judicial_principle",
           "legal_role": "governing"
         }
