@@ -8,7 +8,14 @@ docs/p2_1_shadow_mode_design.md §1/§5 (v2). يقرأ `current hits` من تش�
 تاريخية معاد تشغيلها من `facts_ret` محفوظ.
 
 **تأكيد عدم مساس الإنتاج:** هذا سكربت مستقل يُشغَّل يدويًا offline، لا نقطة استدعاء واحدة من
-admin/app.py الحي إليه أو منه — عزل فيزيائي تام (Section 8، P2.1 v2)."""
+admin/app.py الحي إليه أو منه — عزل فيزيائي تام (Section 8، P2.1 v2).
+
+**تصحيح عزل تجريبي (2026-09-14):** التشغيلة الأولى أظهرت `legis-1-2016-m30` (Discovery
+Failure تاريخيًا موثَّق — غائبة عن hits الحقيقية) ضمن must_find_rescued خطأً، بسبب حقن كان
+موجودًا وقتها في `p2_evidence_classification.classify_candidates` (أُزيل الآن كليًا). النتيجة
+السابقة سُجِّلت لا مُحيت (`experimental isolation bug detected before Shadow B`) — الحقن كان
+يصنع مرشحًا لم يكتشفه أي استرجاع فعلي، فيُبطل تعريف Shadow A. بعد التصحيح: `main()` يتحقق
+آليًا أن لا تقاطع بين `must_find_rescued` و`a3_absent_from_hits` في أي حالة."""
 import json
 import sys
 
@@ -41,11 +48,19 @@ def run_one(app, client, case, backbone_mod, ec_mod, ap_mod, cc_mod):
         texts[oid]["object_type_label"] = "مبدأ قضائي" if oid.startswith("jprin-") else "تشريع"
 
     xref_map = getattr(app, "_XREF", {})
-    tiers = ec_mod.classify_candidates(hits, scope, xref_map=xref_map)
+    tiers = ec_mod.classify_candidates(hits, scope, xref_map=xref_map, texts=texts)
     dim_by_obj = {}
     for a in scope.get("anchors_a1", []) + scope.get("anchors_a3", []):
         if "dimension_id" in a:
             dim_by_obj[a["authority_id"]] = a["dimension_id"]
+
+    # تعقّب صريح (بعد إزالة الحقن 2026-09-14): أي anchor A3 حدَّده Backbone لكن لم يظهر إطلاقًا
+    # في hits الحقيقية — هذه بالضبط مادة Shadow B (تحتاج جلبًا/استرجاعًا فعليًا جديدًا)، ويجب
+    # ألا تظهر أبدًا في must_find_rescued هنا. تسجيلها صراحةً يجعل التحقق من سلامة العزل مباشرًا
+    # بلا اشتقاق يدوي من shadow_a_evidence_tiers.
+    a3_ids_all = {a["authority_id"] for a in scope.get("anchors_a3", [])}
+    a3_absent_from_hits = sorted(a3_ids_all - set(tiers.keys()))
+    s_tier_ids = sorted(oid for oid, t in tiers.items() if t["tier"] == "S")
 
     admission = ap_mod.admit(tiers, texts, dim_by_obj)
 
@@ -72,6 +87,8 @@ def run_one(app, client, case, backbone_mod, ec_mod, ap_mod, cc_mod):
         "must_find_rescued": sorted(set(case.get("must_find", [])) & (shadow_final - current_final)),
         "must_find_lost": sorted(set(case.get("must_find", [])) & (current_final - shadow_final)),
         "all_authorities_lost": sorted(current_final - shadow_final),
+        "a3_absent_from_hits": a3_absent_from_hits,
+        "s_tier_ids": s_tier_ids,
     }
 
 
@@ -109,6 +126,20 @@ def main():
 
     total_rescued = sum(len(r["must_find_rescued"]) for r in results)
     total_lost = sum(len(r["must_find_lost"]) for r in results)
+
+    # بوابة عزل صريحة: لا يجوز أبدًا أن يظهر معرِّف واحد في كلٍّ من must_find_rescued
+    # و a3_absent_from_hits لنفس الحالة — هذا بالضبط توقيع علة الحقن المُصلَحة. فشل هذا الفحص
+    # يعني عودة الانتهاك ولا يجوز تجاهله.
+    isolation_violations = []
+    for r in results:
+        bad = set(r["must_find_rescued"]) & set(r["a3_absent_from_hits"])
+        if bad:
+            isolation_violations.append((r["case_id"], sorted(bad)))
+    if isolation_violations:
+        print(f"\n!! SHADOW_A_ISOLATION_VIOLATION: {isolation_violations}")
+    else:
+        print("\nSHADOW_A_ISOLATION_OK: صفر تقاطع بين must_find_rescued وa3_absent_from_hits")
+
     print(f"\nSHADOW_A_DONE | cases={len(results)} | must_find_rescued_total={total_rescued} "
           f"| must_find_lost_total={total_lost}")
 

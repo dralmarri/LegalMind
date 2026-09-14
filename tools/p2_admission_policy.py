@@ -5,6 +5,9 @@ docs/p2_architecture_design.md §5-§6. يأخذ تصنيف p2_evidence_classifi
 يدخل الحجز المحدود (A1/A2/A3)، ومن يتنافس على الميزانية العادية (B/C/D)."""
 from __future__ import annotations
 
+# تنويه (2026-09-14): طبقة S (Structural/Enactment Context، من p2_evidence_classification)
+# لا تدخل هذا الحجز أبدًا — `anchors` أدناه يقتصر صراحة على ("A1","A2","A3")، فتسقط S تلقائيًا
+# إلى حلقة "COMPETE_ON_BUDGET" في آخر الدالة تمامًا كـB/C/D، بلا حاجة لاستثناء صريح إضافي.
 ANCHOR_RESERVATION = {
     "تشريع": {"max_chars": 6000, "max_count": 6},
     "مبدأ قضائي": {"max_chars": 4000, "max_count": 4},
