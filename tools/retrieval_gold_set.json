@@ -32,7 +32,26 @@
       ],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "الحالة 1 التاريخية في battery.json — أثبتت تاريخيًا 27/28 استشهادًا مؤكدًا حرفيًا في جولة اعتماد مبكرة (§6)."
+      "notes": "الحالة 1 التاريخية في battery.json — أثبتت تاريخيًا 27/28 استشهادًا مؤكدًا حرفيًا في جولة اعتماد مبكرة (§6).",
+      "case_type": "positive",
+      "difficulty": "hard",
+      "expected_mechanisms": [],
+      "must_find_provenance": {
+        "legis-38-1980-m297": {
+          "verified": true,
+          "verification_method": "historical_battery_json",
+          "verification_note": "موروثة من battery.json — تحقُّق بشري سابق موثَّق في CLAUDE.md، لم يُعَد فحصه عبر MCP في هذه الجولة تحديدًا.",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        },
+        "legis-38-1980-m298": {
+          "verified": true,
+          "verification_method": "historical_battery_json",
+          "verification_note": "موروثة من battery.json — تحقُّق بشري سابق موثَّق في CLAUDE.md، لم يُعَد فحصه عبر MCP في هذه الجولة تحديدًا.",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        }
+      }
     },
     {
       "id": "gs-0002",
@@ -64,7 +83,11 @@
       ],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "الحالة 2 التاريخية في battery.json."
+      "notes": "الحالة 2 التاريخية في battery.json.",
+      "case_type": "positive",
+      "difficulty": "medium",
+      "expected_mechanisms": [],
+      "must_find_provenance": {}
     },
     {
       "id": "gs-0003",
@@ -96,7 +119,11 @@
       ],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "الحالة 3 التاريخية في battery.json."
+      "notes": "الحالة 3 التاريخية في battery.json.",
+      "case_type": "positive",
+      "difficulty": "medium",
+      "expected_mechanisms": [],
+      "must_find_provenance": {}
     },
     {
       "id": "gs-0004",
@@ -121,7 +148,11 @@
       ],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "الحالة 4 التاريخية في battery.json — تختبر عدم تسرّب فصل الحضانة السني إلى سؤال جعفري صراحة."
+      "notes": "الحالة 4 التاريخية في battery.json — تختبر عدم تسرّب فصل الحضانة السني إلى سؤال جعفري صراحة.",
+      "case_type": "positive",
+      "difficulty": "hard",
+      "expected_mechanisms": [],
+      "must_find_provenance": {}
     },
     {
       "id": "gs-0005",
@@ -146,7 +177,11 @@
       ],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "الحالة 5 التاريخية في battery.json."
+      "notes": "الحالة 5 التاريخية في battery.json.",
+      "case_type": "positive",
+      "difficulty": "medium",
+      "expected_mechanisms": [],
+      "must_find_provenance": {}
     },
     {
       "id": "gs-0006",
@@ -171,7 +206,11 @@
       ],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "الحالة 6 التاريخية في battery.json."
+      "notes": "الحالة 6 التاريخية في battery.json.",
+      "case_type": "positive",
+      "difficulty": "medium",
+      "expected_mechanisms": [],
+      "must_find_provenance": {}
     },
     {
       "id": "gs-0007",
@@ -197,7 +236,11 @@
       ],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "الحالة 7 التاريخية — القضية غير المقيدة بـmust/any في البطارية التي فازت فيها Claude ثلاث مرات متتالية على gpt-6-astra (§18، المواجهة الرابعة)."
+      "notes": "الحالة 7 التاريخية — القضية غير المقيدة بـmust/any في البطارية التي فازت فيها Claude ثلاث مرات متتالية على gpt-6-astra (§18، المواجهة الرابعة).",
+      "case_type": "positive",
+      "difficulty": "medium",
+      "expected_mechanisms": [],
+      "must_find_provenance": {}
     },
     {
       "id": "gs-0008",
@@ -225,7 +268,11 @@
       ],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "الحالة 8 التاريخية — ضمانة مادة النفاذ الديناميكية (`.bak_hybfix2`) وُلدت من هذه الحالة تحديدًا."
+      "notes": "الحالة 8 التاريخية — ضمانة مادة النفاذ الديناميكية (`.bak_hybfix2`) وُلدت من هذه الحالة تحديدًا.",
+      "case_type": "positive",
+      "difficulty": "hard",
+      "expected_mechanisms": [],
+      "must_find_provenance": {}
     },
     {
       "id": "gs-0009",
@@ -251,7 +298,11 @@
       ],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "الحالة 9 التاريخية — القضية التي فازت فيها Claude بأكبر فارق على gpt-6-astra (§18، المواجهة الخامسة) بآلية م65 لائحة 287/2016 وم30 قانون الشركات."
+      "notes": "الحالة 9 التاريخية — القضية التي فازت فيها Claude بأكبر فارق على gpt-6-astra (§18، المواجهة الخامسة) بآلية م65 لائحة 287/2016 وم30 قانون الشركات.",
+      "case_type": "positive",
+      "difficulty": "hard",
+      "expected_mechanisms": [],
+      "must_find_provenance": {}
     },
     {
       "id": "gs-0010",
@@ -275,7 +326,11 @@
       ],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "الحالة 10 التاريخية في battery.json."
+      "notes": "الحالة 10 التاريخية في battery.json.",
+      "case_type": "positive",
+      "difficulty": "medium",
+      "expected_mechanisms": [],
+      "must_find_provenance": {}
     },
     {
       "id": "gs-0011",
@@ -308,7 +363,26 @@
         "legis-51-1984-m92",
         "legis-53-2026-m8"
       ],
-      "notes": "الحالة 11 التاريخية — بوابتا الاستلزام gate92 وlجنة النسب (`.bak_gate92`، §بوابات الإجراءات السابقة الوجوبية) رُمّزتا صراحة بسبب هذه الحالة تحديدًا؛ must_not_miss مكرَّرة عن must_find عمدًا لأن كليهما إخلال إجرائي لا نقص جودة عادي."
+      "notes": "الحالة 11 التاريخية — بوابتا الاستلزام gate92 وlجنة النسب (`.bak_gate92`، §بوابات الإجراءات السابقة الوجوبية) رُمّزتا صراحة بسبب هذه الحالة تحديدًا؛ must_not_miss مكرَّرة عن must_find عمدًا لأن كليهما إخلال إجرائي لا نقص جودة عادي.",
+      "case_type": "positive",
+      "difficulty": "hard",
+      "expected_mechanisms": [],
+      "must_find_provenance": {
+        "legis-51-1984-m92": {
+          "verified": true,
+          "verification_method": "historical_battery_json",
+          "verification_note": "موروثة من battery.json — تحقُّق بشري سابق موثَّق في CLAUDE.md، لم يُعَد فحصه عبر MCP في هذه الجولة تحديدًا.",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        },
+        "legis-53-2026-m8": {
+          "verified": true,
+          "verification_method": "historical_battery_json",
+          "verification_note": "موروثة من battery.json — تحقُّق بشري سابق موثَّق في CLAUDE.md، لم يُعَد فحصه عبر MCP في هذه الجولة تحديدًا.",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        }
+      }
     },
     {
       "id": "gs-0012",
@@ -329,7 +403,19 @@
       "must_find_any_of": [],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "الحالة 12 — جولة prinxref كاملة (§) وُلدت من رصد المالك أن هذا السؤال بالذات كان يُرجع القوانين أقل من الأحكام؛ ترادف محل↔متجر في _CHAP_SYN حل الفجوة. حارس انتكاس دائم موثق (خط الأساس صار 13/13 بعده)."
+      "notes": "الحالة 12 — جولة prinxref كاملة (§) وُلدت من رصد المالك أن هذا السؤال بالذات كان يُرجع القوانين أقل من الأحكام؛ ترادف محل↔متجر في _CHAP_SYN حل الفجوة. حارس انتكاس دائم موثق (خط الأساس صار 13/13 بعده).",
+      "case_type": "positive",
+      "difficulty": "medium",
+      "expected_mechanisms": [],
+      "must_find_provenance": {
+        "legis-68-1980-m36": {
+          "verified": true,
+          "verification_method": "historical_battery_json",
+          "verification_note": "موروثة من battery.json — تحقُّق بشري سابق موثَّق في CLAUDE.md، لم يُعَد فحصه عبر MCP في هذه الجولة تحديدًا.",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        }
+      }
     },
     {
       "id": "gs-0013",
@@ -360,7 +446,47 @@
         "legis-38-1980-m166",
         "legis-68-1980-m550"
       ],
-      "notes": "الحالة 13 — السؤال المعياري لكل مقارنات المزوّدين (§18/§17) وحارس انتكاس \"بوابة امر اداء\"/\"بوابة شيك+تقادم\" (`.bak_gateshik`). حزمة الأدلة على هذا السؤال (13 جولة) أثبتت م166 «في المرشحات لا السياق» في 13/13 جولة — مثال مرجعي لفشل نوع cap لا candidate-generation."
+      "notes": "الحالة 13 — السؤال المعياري لكل مقارنات المزوّدين (§18/§17) وحارس انتكاس \"بوابة امر اداء\"/\"بوابة شيك+تقادم\" (`.bak_gateshik`). حزمة الأدلة على هذا السؤال (13 جولة) أثبتت م166 «في المرشحات لا السياق» في 13/13 جولة — مثال مرجعي لفشل نوع cap لا candidate-generation.",
+      "case_type": "positive",
+      "difficulty": "adversarial",
+      "expected_mechanisms": [],
+      "must_find_provenance": {
+        "legis-38-1980-m166": {
+          "verified": true,
+          "verification_method": "historical_battery_json",
+          "verification_note": "موروثة من battery.json — تحقُّق بشري سابق موثَّق في CLAUDE.md، لم يُعَد فحصه عبر MCP في هذه الجولة تحديدًا.",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        },
+        "legis-38-1980-m167": {
+          "verified": true,
+          "verification_method": "historical_battery_json",
+          "verification_note": "موروثة من battery.json — تحقُّق بشري سابق موثَّق في CLAUDE.md، لم يُعَد فحصه عبر MCP في هذه الجولة تحديدًا.",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        },
+        "legis-68-1980-m550": {
+          "verified": true,
+          "verification_method": "historical_battery_json",
+          "verification_note": "موروثة من battery.json — تحقُّق بشري سابق موثَّق في CLAUDE.md، لم يُعَد فحصه عبر MCP في هذه الجولة تحديدًا.",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        },
+        "legis-68-1980-m553": {
+          "verified": true,
+          "verification_method": "historical_battery_json",
+          "verification_note": "موروثة من battery.json — تحقُّق بشري سابق موثَّق في CLAUDE.md، لم يُعَد فحصه عبر MCP في هذه الجولة تحديدًا.",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        },
+        "legis-68-1980-m532": {
+          "verified": true,
+          "verification_method": "historical_battery_json",
+          "verification_note": "موروثة من battery.json — تحقُّق بشري سابق موثَّق في CLAUDE.md، لم يُعَد فحصه عبر MCP في هذه الجولة تحديدًا.",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        }
+      }
     },
     {
       "id": "gs-0014",
@@ -380,7 +506,19 @@
       "must_find_any_of": [],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "الحالة 14 — أُضيفت في جولة P0 (2026-09-10) لتغطية فئة object_type='legislation' التي كانت غائبة تمامًا عن كل قنوات الاسترجاع الآلية قبل kb_types.py."
+      "notes": "الحالة 14 — أُضيفت في جولة P0 (2026-09-10) لتغطية فئة object_type='legislation' التي كانت غائبة تمامًا عن كل قنوات الاسترجاع الآلية قبل kb_types.py.",
+      "case_type": "positive",
+      "difficulty": "medium",
+      "expected_mechanisms": [],
+      "must_find_provenance": {
+        "LEG-20-49-e62d299077f0e672": {
+          "verified": true,
+          "verification_method": "historical_battery_json",
+          "verification_note": "موروثة من battery.json — تحقُّق بشري سابق موثَّق في CLAUDE.md، لم يُعَد فحصه عبر MCP في هذه الجولة تحديدًا.",
+          "object_type": "legislation_archived",
+          "legal_role": "governing"
+        }
+      }
     },
     {
       "id": "gs-0015",
@@ -388,7 +526,8 @@
       "request_type": "استشارات قانونية",
       "category": "تجاري/مصرفي — كفاية رأس المال",
       "retrieval_class": [
-        "semantic_match"
+        "semantic_match",
+        "retrieval_instability"
       ],
       "relevant_issues": [
         "مكونات رأس المال الرقابي",
@@ -400,7 +539,933 @@
       "must_find_any_of": [],
       "should_find": [],
       "must_not_miss": [],
-      "notes": "الحالة 15 — أُضيفت في جولة P0 (2026-09-10) لتغطية فئة object_type='legislation_archived' (بادئة LEG-UNKNOWN-*) التي كانت غائبة تمامًا قبل kb_types.py."
+      "notes": "الحالة 15 — أُضيفت في جولة P0 (2026-09-10) لتغطية فئة object_type='legislation_archived' (بادئة LEG-UNKNOWN-*) التي كانت غائبة تمامًا قبل kb_types.py. | تحديث 2026-09-10: اختبار استقرار 5 تكرارات مستقلة أثبت RETRIEVAL_INSTABILITY_NONDETERMINISM (حضور 3/5، صفر تغطية في أي قناة حتمية — الاعتماد كليًا على الكثيف). لا تُدمَج نتيجتها في رقم Must-Find Recall واحد بلا توسيم (انظر docs/p1_retrieval_evaluation_framework.md القسمان J/K).",
+      "case_type": "positive",
+      "difficulty": "adversarial",
+      "expected_mechanisms": [],
+      "must_find_provenance": {
+        "LEG-UNKNOWN-P1-art2-3-6144aa963fc48469": {
+          "verified": true,
+          "verification_method": "historical_battery_json",
+          "verification_note": "موروثة من battery.json — تحقُّق بشري سابق موثَّق في CLAUDE.md، لم يُعَد فحصه عبر MCP في هذه الجولة تحديدًا.",
+          "object_type": "legislation_archived",
+          "legal_role": "governing"
+        }
+      }
+    },
+    {
+      "id": "gs-0016",
+      "question": "ما حكم المادة 227 من القانون المدني الكويتي رقم 67 لسنة 1980، وما نطاق المسؤولية عن الفعل الضار؟",
+      "request_type": "استشارة",
+      "category": "مدني — مسؤولية تقصيرية (استشهاد صريح)",
+      "retrieval_class": [
+        "explicit_citation"
+      ],
+      "relevant_issues": [
+        "نطاق المسؤولية عن الفعل الضار المباشر والمتسبب"
+      ],
+      "must_find": [
+        "legis-67-1980-m227"
+      ],
+      "must_find_any_of": [],
+      "should_find": [],
+      "must_not_miss": [],
+      "notes": "حالة مخصَّصة لقناة الاستشهاد المباشر (_draft_direct_ids) — رقم المادة والقانون مذكوران صراحة بالنص. تحقُّق حي عبر get_article(67,1980,\"227\") في 2026-09-10: نص مطابق، معرف legis-67-1980-m227.",
+      "case_type": "positive",
+      "difficulty": "easy",
+      "expected_mechanisms": [
+        "direct_citation"
+      ],
+      "must_find_provenance": {
+        "legis-67-1980-m227": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "get_article(67,1980,'227') — نص مطابق حرفيًا، تحقُّق مباشر 2026-09-10",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        }
+      }
+    },
+    {
+      "id": "gs-0017",
+      "question": "هل يجوز للقاضي نظر دعوى يكون أحد أطرافها قريبًا له أو صهرًا؟ ومتى يكون القاضي غير صالح لنظر الدعوى وممنوعًا من سماعها لهذا السبب؟",
+      "request_type": "استشارة",
+      "category": "مرافعات — عدم صلاحية القاضي",
+      "retrieval_class": [
+        "semantic_match",
+        "natural_language_mismatch"
+      ],
+      "relevant_issues": [
+        "حالات عدم صلاحية القاضي لقرابة أو مصاهرة"
+      ],
+      "must_find": [
+        "legis-38-1980-m102"
+      ],
+      "must_find_any_of": [],
+      "should_find": [],
+      "must_not_miss": [],
+      "notes": "فجوة استرجاع مثبتة حيًّا (2026-09-10): بحث دلالي بصياغة 'رد القاضي لقرابة أو مصاهرة' عبر search_legal أعاد 6 نتائج كلها مبادئ لا صلة لها (تسبيب، إدانة جزائية…) ولم يُصب نص م102 مرافعات نفسه رغم وجوده الكامل والصحيح (تحقُّق مباشر عبر get_article(38,1980,\"102\")). حالة صممت خصيصًا لاختبار عدم تطابق الصياغة الفقهية الشائعة ('رد القاضي') مع عنوان النص الرسمي ('عدم الصلاحية').",
+      "case_type": "positive",
+      "difficulty": "adversarial",
+      "expected_mechanisms": [
+        "dense",
+        "lexical"
+      ],
+      "known_preexisting_failure": true,
+      "must_find_provenance": {
+        "legis-38-1980-m102": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "get_article(38,1980,'102') نجح؛ search_legal('رد القاضي لقرابة أو مصاهرة') فشل في جلبها فعليًا (6 نتائج، صفر تطابق) — فجوة مكتشَفة قبل أي تشغيل benchmark",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        }
+      }
+    },
+    {
+      "id": "gs-0018",
+      "question": "ما هي مدة تقادم دعوى المسؤولية عن العمل غير المشروع (المسؤولية التقصيرية) في القانون المدني الكويتي، ومتى تبدأ؟",
+      "request_type": "استشارة",
+      "category": "مدني — تقادم المسؤولية التقصيرية",
+      "retrieval_class": [
+        "semantic_match"
+      ],
+      "relevant_issues": [
+        "مدة تقادم دعوى المسؤولية التقصيرية ومبدأ سريانها"
+      ],
+      "must_find": [
+        "legis-67-1980-m253"
+      ],
+      "must_find_any_of": [],
+      "should_find": [],
+      "must_not_miss": [],
+      "notes": "تحقُّق حي (2026-09-10): البحث الدلالي عن 'التقادم المسقط لدعوى المسؤولية التقصيرية' أعاد م253 مدني بتشابه 0.812 كنص صحيح المضمون فعلًا، لكن م162 تجارة سجّلت تشابهًا أعلى (0.818) رغم كونها أقل صلة موضوعية بالمسؤولية التقصيرية العامة — فارق ضئيل يستحق رصدًا كمثال حي لعدم تطابق درجة التشابه مع الصلة الموضوعية الدقيقة.",
+      "case_type": "positive",
+      "difficulty": "medium",
+      "expected_mechanisms": [
+        "dense"
+      ],
+      "must_find_provenance": {
+        "legis-67-1980-m253": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "search_legal تشابه 0.812، مادة تجارية غير ذات صلة سجّلت 0.818 أعلى منها",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        }
+      }
+    },
+    {
+      "id": "gs-0019",
+      "question": "كيف تتم قسمة المال الشائع بين الشركاء إذا لم يتفقوا وديًّا في القانون المدني الكويتي؟",
+      "request_type": "استشارة",
+      "category": "مدني — الشيوع وقسمة المال الشائع",
+      "retrieval_class": [
+        "semantic_match"
+      ],
+      "relevant_issues": [
+        "القسمة النهائية والمهايأة في المال الشائع"
+      ],
+      "must_find": [
+        "legis-67-1980-m845",
+        "legis-67-1980-m843",
+        "legis-67-1980-m831"
+      ],
+      "must_find_any_of": [],
+      "should_find": [],
+      "must_not_miss": [],
+      "notes": "حالة متعددة المواد لاختبار استرجاع مجموعة نصوص متقاربة موضوعيًا (لا مادة واحدة معزولة) — تحقُّق حي عبر search_legal('قسمة المال الشائع') أعاد الثلاثة بتشابه 0.85/0.837/0.831 على التوالي.",
+      "case_type": "positive",
+      "difficulty": "medium",
+      "expected_mechanisms": [
+        "dense"
+      ],
+      "must_find_provenance": {
+        "legis-67-1980-m845": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "get_article مباشر — نص القسمة المهايأة أثناء انتظار القسمة النهائية",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        },
+        "legis-67-1980-m843": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "search_legal تشابه 0.837 — لم يُتحقَّق نصه الكامل مباشرة، أُدرج بثقة أدنى",
+          "object_type": "legislation_article",
+          "legal_role": "supporting"
+        },
+        "legis-67-1980-m831": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "search_legal تشابه 0.831 — لم يُتحقَّق نصه الكامل مباشرة، أُدرج بثقة أدنى",
+          "object_type": "legislation_article",
+          "legal_role": "supporting"
+        }
+      }
+    },
+    {
+      "id": "gs-0020",
+      "question": "متى يجوز للواهب الرجوع في هبته بعد تمامها في القانون الكويتي؟ وما هو الأصل والاستثناء في ذلك؟",
+      "request_type": "استشارة",
+      "category": "مدني — الرجوع في الهبة",
+      "retrieval_class": [
+        "judicial_principle",
+        "cross_reference",
+        "exception"
+      ],
+      "relevant_issues": [
+        "الأصل عدم جواز الرجوع في الهبة والاستثناءات الواردة عليه"
+      ],
+      "must_find": [
+        "jprin-829-2007-e6090-e2ab86b94a"
+      ],
+      "must_find_any_of": [],
+      "should_find": [
+        "legis-67-1980-m539"
+      ],
+      "must_not_miss": [],
+      "notes": "تحقُّق حي (2026-09-10): مبدأ الطعن 829/2007 نصًا يحيل صراحة للمواد 537/538/539-ب مدني (should_find لم يُتحقَّق فرديًا بنفس صرامة must_find — يحتاج تأكيدًا مستقلًا قبل الاعتماد الكامل).",
+      "case_type": "positive",
+      "difficulty": "hard",
+      "expected_mechanisms": [
+        "dense",
+        "principle_xref"
+      ],
+      "must_find_provenance": {
+        "jprin-829-2007-e6090-e2ab86b94a": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "search_legal تشابه 0.866 — نص المبدأ يحيل صراحة للمواد 537/538/539-ب مدني",
+          "object_type": "judicial_principle",
+          "legal_role": "governing"
+        }
+      }
+    },
+    {
+      "id": "gs-0021",
+      "question": "ما التزام المستأجر بسداد الأجرة في المواعيد المتفق عليها، وما أثر تأخره على استمرار عقد الإيجار؟",
+      "request_type": "استشارة",
+      "category": "مدني — إيجارات (التزام المستأجر بالأجرة)",
+      "retrieval_class": [
+        "judicial_principle",
+        "cross_reference"
+      ],
+      "relevant_issues": [
+        "التزام المستأجر بالوفاء بالأجرة في مواعيدها"
+      ],
+      "must_find": [
+        "jprin-1900-2012-s81-68a45b672d"
+      ],
+      "must_find_any_of": [],
+      "should_find": [],
+      "must_not_miss": [],
+      "notes": "تحقُّق حي (2026-09-10): مبدأ الطعن 1900/2012 يحيل صراحة للمادتين 10 و20/1 من المرسوم بقانون 35/1978 — مثال آخر لإحالة مبدأ لنص تشريعي محدد.",
+      "case_type": "positive",
+      "difficulty": "hard",
+      "expected_mechanisms": [
+        "dense",
+        "principle_xref"
+      ],
+      "must_find_provenance": {
+        "jprin-1900-2012-s81-68a45b672d": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "search_legal تشابه 0.872 — نص المبدأ يحيل صراحة للمادتين 10/20-1 من 35/1978",
+          "object_type": "judicial_principle",
+          "legal_role": "governing"
+        }
+      }
+    },
+    {
+      "id": "gs-0022",
+      "question": "ما مدى مسؤولية الناقل البحري عن هلاك البضاعة أو تلفها إذا كان السبب عدم صلاحية السفينة للملاحة؟ ومن يقع عليه عبء إثبات بذل الهمة الكافية؟",
+      "request_type": "استشارة",
+      "category": "تجاري — النقل البحري ومسؤولية الناقل",
+      "retrieval_class": [
+        "semantic_match",
+        "multi_law"
+      ],
+      "relevant_issues": [
+        "مسؤولية الناقل البحري عن عدم صلاحية السفينة وعبء الإثبات"
+      ],
+      "must_find": [
+        "LEG-UNKNOWN-P13-c191-a66d5a94d9a5a20d"
+      ],
+      "must_find_any_of": [],
+      "should_find": [],
+      "must_not_miss": [],
+      "notes": "تحقُّق حي (2026-09-10) عبر get_object مباشرة: نص م191 كامل ومطابق. معرّف من نوع LEG-UNKNOWN-* (تصنيف legislation_archived/غير موحَّد التصنيف الموثَّق في P0 §21) — حالة مخصَّصة لاختبار استمرار تغطية هذا النوع بعد إصلاح P0-1/kb_types.py.",
+      "case_type": "positive",
+      "difficulty": "hard",
+      "expected_mechanisms": [
+        "dense"
+      ],
+      "must_find_provenance": {
+        "LEG-UNKNOWN-P13-c191-a66d5a94d9a5a20d": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "get_object مباشر — نص كامل ومطابق، معرف من نوع legislation_archived",
+          "object_type": "legislation_archived",
+          "legal_role": "governing"
+        }
+      }
+    },
+    {
+      "id": "gs-0023",
+      "question": "زوجة تريد رفع دعوى تفريق للضرر لإساءة زوجها لها قولًا وفعلًا بما لا تستطاع معه دوام العشرة، فما شروط دعوى التفريق للضرر، وما الإجراء الوجوبي الذي يجب عليها سلوكه قبل رفع الدعوى أمام محكمة الأسرة؟",
+      "request_type": "استشارة",
+      "category": "أحوال شخصية (سنّي) — تفريق للضرر + إجراء وجوبي سابق",
+      "retrieval_class": [
+        "legal_dependency",
+        "procedure"
+      ],
+      "relevant_issues": [
+        "شروط دعوى التفريق للضرر",
+        "الإجراء الوجوبي السابق أمام مركز تسوية المنازعات الأسرية"
+      ],
+      "must_find": [
+        "legis-51-1984-m126",
+        "legis-12-2015-m9"
+      ],
+      "must_find_any_of": [],
+      "should_find": [],
+      "must_not_miss": [
+        "legis-12-2015-m9"
+      ],
+      "notes": "حالة اعتمادية إلزامية مركَّبة (بنمط gs-0011 نفسه) — تحقُّق حي عبر get_article(51,1984,\"126\") وget_article(12,2015,\"9\") في 2026-09-10: نصان مطابقان. must_not_miss لأن غياب م9 محكمة الأسرة إخلال إجرائي (بوابة _GATES القائمة: 'طلاق/تفريق/تطليق/خلع' ← م9 ق12/2015) لا مجرد نقص جودة.",
+      "case_type": "positive",
+      "difficulty": "hard",
+      "expected_mechanisms": [
+        "dense",
+        "chapter",
+        "legal_dependency"
+      ],
+      "must_find_provenance": {
+        "legis-51-1984-m126": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "get_article(51,1984,'126') — نص التفريق للضرر مطابق",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        },
+        "legis-12-2015-m9": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "get_article(12,2015,'9') — نص مركز تسوية المنازعات الأسرية مطابق؛ بوابة _GATES قائمة فعليًا (طلاق/تفريق/تطليق/خلع ← م9)",
+          "object_type": "legislation_article",
+          "legal_role": "procedure"
+        }
+      }
+    },
+    {
+      "id": "gs-0024",
+      "question": "ما هو الاسم الكيميائي الدقيق للمادة المخدرة المدرجة في الجدول رقم (1) من المجموعة الأولى المرفقة بمرسوم قانون مكافحة المخدرات رقم 159 لسنة 2025، تحت الرقم التسلسلي (12) في الجدول؟",
+      "request_type": "استشارة",
+      "category": "ضابط سلبي — جداول المواد المخدرة (مستبعدة عمدًا)",
+      "retrieval_class": [
+        "negative_control_no_source"
+      ],
+      "relevant_issues": [
+        "محتوى جداول أسماء المواد المخدرة الكيميائية"
+      ],
+      "must_find": [],
+      "must_find_any_of": [],
+      "should_find": [],
+      "must_not_miss": [],
+      "notes": "ضابط سلبي موثَّق سياسة لا حدس: CLAUDE.md §9 يوثِّق صراحة استبعاد 'جداول المواد المخدرة (أسماء كيميائية لاتينية يستحيل ضمان أمانتها من مسح ضوئي)' عن الإدخال عمدًا، بخلاف مواد القانون الجوهرية (م1/م5/م37…) التي أُدخلت فعلًا (تحقُّق حي عبر search_legal يوم 2026-09-10 أعاد هذه المواد بتشابه 0.84-0.86). يُتوقَّع من نظام سليم الإفصاح الصادق بعدم توفر محتوى الجدول تحديدًا لا اختلاق اسم كيميائي. يقيس True No-Source لا False No-Source (عكس القسم G) — يحتاج توليدًا فعليًا للقياس، لا الاسترجاع وحده.",
+      "case_type": "negative",
+      "negative_reason": "policy_excluded",
+      "difficulty": "adversarial",
+      "expected_mechanisms": [],
+      "must_find_provenance": {}
+    },
+    {
+      "id": "gs-0025",
+      "question": "ما حكم القانون المصري فيما يتعلق بالتعويض عن الفصل التعسفي من العمل؟",
+      "request_type": "استشارة",
+      "category": "ضابط سلبي — قانون أجنبي خارج نطاق القاعدة",
+      "retrieval_class": [
+        "negative_control_no_source"
+      ],
+      "relevant_issues": [
+        "نطاق القاعدة القانوني الكويتي حصرًا"
+      ],
+      "must_find": [],
+      "must_find_any_of": [],
+      "should_find": [],
+      "must_not_miss": [],
+      "notes": "ضابط سلبي بسيط غير خلافي: القاعدة كويتية حصرًا وفق الجرد الحي (legislation_inventory) — لا نص قانون مصري في القاعدة. يقيس True No-Source؛ يحتاج توليدًا فعليًا للقياس النهائي (هل يُفصح النموذج بصدق أم يخلط بمعرفته العامة بالقانون المصري؟) — خارج نطاق الاسترجاع وحده.",
+      "case_type": "negative",
+      "negative_reason": "out_of_scope",
+      "difficulty": "medium",
+      "expected_mechanisms": [],
+      "must_find_provenance": {}
+    },
+    {
+      "id": "gs-0026",
+      "question": "ما هي المدة اللازمة كحد أدنى للبقاء في درجة وكيل نيابة قبل الترقية، وفق الجدول النافذ حاليًا؟",
+      "request_type": "استشارة",
+      "category": "إداري/قضائي — جدول مدد البقاء (تحديث تشريعي)",
+      "case_type": "positive",
+      "difficulty": "medium",
+      "retrieval_class": [
+        "temporal",
+        "semantic_match"
+      ],
+      "relevant_issues": [
+        "الجدول النافذ لمدد البقاء بعد استبدال جدول 126/2018 بمرسوم 136/2026"
+      ],
+      "must_find": [
+        "legis-136-2026-annex-1"
+      ],
+      "must_find_any_of": [],
+      "should_find": [
+        "legis-136-2026-issuing-m1"
+      ],
+      "must_not_miss": [],
+      "expected_mechanisms": [
+        "dense"
+      ],
+      "must_find_provenance": {
+        "legis-136-2026-annex-1": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "search_legal('مدد البقاء في درجات القضاة...الجدول') تشابه 0.864 — الجدول الثماني الصفوف مطابق لِما وثَّقه CLAUDE.md §12",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        }
+      },
+      "notes": "حالة زمنية موثَّقة تاريخيًا (§12) — الجدول الجديد يستبدل جدول مرسوم 126/2018 على نفس مبدأ 'قاعدة التحديث' القائم."
+    },
+    {
+      "id": "gs-0027",
+      "question": "من يتولى رئاسة دوائر محكمة الاستئناف، وكيف تشكَّل المحكمة الكلية وفق القانون النافذ حاليًا؟",
+      "request_type": "استشارة",
+      "category": "إداري/قضائي — تنظيم القضاء (نافذ مقابل ملغى)",
+      "case_type": "positive",
+      "difficulty": "hard",
+      "retrieval_class": [
+        "temporal",
+        "semantic_match"
+      ],
+      "relevant_issues": [
+        "تشكيل محكمة الاستئناف والمحكمة الكلية وفق قانون 80/2026 النافذ لا 23/1990 الملغى"
+      ],
+      "must_find": [
+        "legis-80-2026-m7",
+        "legis-80-2026-m8"
+      ],
+      "must_find_any_of": [],
+      "should_find": [],
+      "must_not_miss": [],
+      "expected_mechanisms": [
+        "dense",
+        "chapter"
+      ],
+      "must_find_provenance": {
+        "legis-80-2026-m7": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "get_article(80,2026,'7') مباشر؛ وsearch_legal أظهر legis-23-1990-m6 (الملغى) بدرجة قريبة جدًا (0.863 مقابل 0.866) — مخاطرة خلط حقيقية بين النافذ والملغى",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        },
+        "legis-80-2026-m8": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "get_article(80,2026,'8') مباشر؛ نفس المخاطرة مع legis-23-1990-m7 الملغى",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        }
+      },
+      "notes": "حالة زمنية مصمَّمة خصيصًا لاختبار عدم الخلط بين القانون الملغى (23/1990، وُسمت مواده verification_status=superseded حسب §10) والنافذ (80/2026) — كلاهما يتصدران البحث الحر بدرجات متقاربة جدًا (فارق 0.003-0.007 فقط)، تحقُّق حي 2026-09-10."
+    },
+    {
+      "id": "gs-0028",
+      "question": "ما هي المهلة المحددة لمقيّمي العقار الجدد لتوفيق أوضاعهم وفق النظام الحالي، وماذا يترتب على تجاوزها؟",
+      "request_type": "استشارة",
+      "category": "تجاري — تنظيم مهنة تقييم العقار (نافذ بعد تعديل)",
+      "case_type": "positive",
+      "difficulty": "medium",
+      "retrieval_class": [
+        "temporal",
+        "semantic_match"
+      ],
+      "relevant_issues": [
+        "مهلة توفيق الأوضاع الجديدة وأثر تجاوزها على التصنيف"
+      ],
+      "must_find": [
+        "legis-152-2023-m18"
+      ],
+      "must_find_any_of": [],
+      "should_find": [],
+      "must_not_miss": [],
+      "expected_mechanisms": [
+        "dense"
+      ],
+      "must_find_provenance": {
+        "legis-152-2023-m18": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "get_article(152,2023,'18') مباشر + search_legal تشابه 0.856 — تطابق تام بين القناتين، نص التوفيق حتى 31/12/2027 بعد تعديل 99/2025",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        }
+      },
+      "notes": "قاعدة التحديث القائمة (§9) تُبقي النص النافذ على معرّف م18 نفسه — تحقُّق حي 2026-09-10."
+    },
+    {
+      "id": "gs-0029",
+      "question": "هل يشترط قانون المعاملات الإلكترونية الحالي استثناءات معينة (كالأحوال الشخصية أو سندات ملكية العقار) لا يسري عليها، أم أُلغيت هذه الاستثناءات؟",
+      "request_type": "استشارة",
+      "category": "تجاري — المعاملات الإلكترونية (تعاقب نصوص)",
+      "case_type": "positive",
+      "difficulty": "hard",
+      "retrieval_class": [
+        "temporal",
+        "semantic_match"
+      ],
+      "relevant_issues": [
+        "نطاق سريان قانون المعاملات الإلكترونية بعد استبدال م2/م3 بمرسوم 148/2025"
+      ],
+      "must_find": [
+        "legis-20-2014-m2",
+        "legis-20-2014-m3"
+      ],
+      "must_find_any_of": [],
+      "should_find": [
+        "legis-148-2025-preamble"
+      ],
+      "must_not_miss": [],
+      "expected_mechanisms": [
+        "dense"
+      ],
+      "must_find_provenance": {
+        "legis-20-2014-m2": {
+          "verified": true,
+          "verification_method": "MCP_inferred_from_preamble",
+          "verification_note": "لم يُتحقَّق مباشرة بـget_article في هذه الجولة — الاستدلال من ديباجة legis-20-2014-preamble (تحقُّق حي) التي تذكر صراحة استبدال م2/م3 بمرسوم 148/2025 وإلغاء قائمة الاستثناءات القديمة، وفق قاعدة التحديث القائمة (§9: النص الجديد على المعرّف نفسه) — ثقة أدنى من التحقق المباشر بالمادة نفسها.",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        },
+        "legis-20-2014-m3": {
+          "verified": true,
+          "verification_method": "MCP_inferred_from_preamble",
+          "verification_note": "نفس الاستدلال أعلاه من الديباجة — لم يُتحقَّق نص المادة نفسها مباشرة.",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        }
+      },
+      "notes": "حالة زمنية بثقة جزئية: الديباجة (legis-20-2014-preamble) تؤكد الاستبدال حرفيًا، لكن لم يُنفَّذ get_article(20,2014,'2')/('3') مباشرة للتحقق من النص الحالي بعد الاستبدال — يُنصح بتحقق مباشر إضافي قبل اعتماد هذه الحالة نهائيًا في أي قياس حاسم."
+    },
+    {
+      "id": "gs-0030",
+      "question": "هل يجوز للدائن أن يوقع حجزًا على أموال الدولة العامة استيفاءً لدين له في ذمتها؟",
+      "request_type": "استشارة",
+      "category": "مدني/مرافعات — استثناء حظر الحجز على أموال الدولة",
+      "case_type": "positive",
+      "difficulty": "medium",
+      "retrieval_class": [
+        "exception",
+        "semantic_match"
+      ],
+      "relevant_issues": [
+        "الأصل جواز الحجز على أموال المدين، والاستثناء حظره على الأموال العامة للدولة"
+      ],
+      "must_find": [
+        "legis-38-1980-m216",
+        "legis-67-1980-m23"
+      ],
+      "must_find_any_of": [],
+      "should_find": [],
+      "must_not_miss": [],
+      "expected_mechanisms": [
+        "dense"
+      ],
+      "must_find_provenance": {
+        "legis-38-1980-m216": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "search_legal تشابه — البند (أ) 'لا يجوز الحجز على... الأموال العامة أو الخاصة المملوكة للدولة'",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        },
+        "legis-67-1980-m23": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "search_legal — 'لا يجوز الحجز أو وضع يد الغير' على أموال الدولة المخصصة للنفع العام",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        }
+      },
+      "notes": "حالة استثناء مزدوجة المصدر (مرافعات + مدني) — تحقُّق حي 2026-09-10."
+    },
+    {
+      "id": "gs-0031",
+      "question": "ما هي المدة القصوى التي يجوز فيها الحبس الاحتياطي في قضية جنحة تحديدًا، مقارنة بالحد الأقصى العام للحبس الاحتياطي؟",
+      "request_type": "استشارة",
+      "category": "جزائي — الحبس الاحتياطي (عام وخاص)",
+      "case_type": "positive",
+      "difficulty": "hard",
+      "retrieval_class": [
+        "exception",
+        "semantic_match"
+      ],
+      "relevant_issues": [
+        "السقف الخاص بالجنح (40 يومًا) في مواجهة النص العام للحبس الاحتياطي"
+      ],
+      "must_find": [
+        "legis-17-1960-m69"
+      ],
+      "must_find_any_of": [],
+      "should_find": [
+        "legis-16-1960-m62"
+      ],
+      "must_not_miss": [],
+      "expected_mechanisms": [
+        "dense"
+      ],
+      "must_find_provenance": {
+        "legis-17-1960-m69": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "search_legal تشابه 0.857 — نص صريح: سقف 40 يومًا في الجنح مقابل 80 يومًا في الجنايات، وتفاصيل التجديد",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        }
+      },
+      "notes": "أُعيد تصنيفها من 'تعارض' مقترَح إلى 'استثناء' (عام/خاص) بحكمي المستقل بعد المراجعة: legis-16-1960-m62 (نص عام في قانون الجزاء) وlegis-17-1960-m69 (نص خاص إجرائي في قانون آخر) ليسا تعارضًا حقيقيًا بل تخصيصًا كلاسيكيًا (الخاص يقيّد العام) — لا يُصنَّف conflicting_authorities بلا تعارض حقيقي مؤكَّد، تطبيقًا لقاعدة 'لا تصطنع تعارضًا غير موجود'."
+    },
+    {
+      "id": "gs-0032",
+      "question": "زوج رفع دعوى تفريق للضرر ولم تثبت المحكمة الضرر بشكل قاطع، فما هو الإجراء الذي يجب على المحكمة اتخاذه قبل الفصل في الدعوى؟",
+      "request_type": "استشارة",
+      "category": "أحوال شخصية (سنّي) — تحكيم الضرر (إجراء وجوبي)",
+      "case_type": "positive",
+      "difficulty": "medium",
+      "retrieval_class": [
+        "procedural_prerequisite",
+        "legal_dependency"
+      ],
+      "relevant_issues": [
+        "تعيين حكمين للتوفيق أو التفريق عند عدم ثبوت الضرر قطعًا"
+      ],
+      "must_find": [
+        "legis-51-1984-m127",
+        "legis-51-1984-m132"
+      ],
+      "must_find_any_of": [],
+      "should_find": [
+        "legis-51-1984-m128"
+      ],
+      "must_not_miss": [
+        "legis-51-1984-m127"
+      ],
+      "expected_mechanisms": [
+        "dense",
+        "chapter"
+      ],
+      "must_find_provenance": {
+        "legis-51-1984-m127": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "get_article(51,1984,'127') مباشر — نص تعيين الحكمين عند تعذر ثبوت الضرر",
+          "object_type": "legislation_article",
+          "legal_role": "procedure"
+        },
+        "legis-51-1984-m132": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "get_article(51,1984,'132') مباشر — نص رفع تقرير المحكمين للمحكمة",
+          "object_type": "legislation_article",
+          "legal_role": "procedure"
+        }
+      },
+      "notes": "إجراء تحكيم الضرر إجراء وجوبي موثَّق في §6 ('فحص الإجراءات السابقة الوجوبية') — تحقُّق حي 2026-09-10."
+    },
+    {
+      "id": "gs-0033",
+      "question": "ما هو الشرط الإجرائي الذي يجب توافره قبل قبول دعوى إثبات النسب المباشر أمام المحكمة؟",
+      "request_type": "استشارة",
+      "category": "أحوال شخصية — لجنة فحص النسب (إجراء وجوبي)",
+      "case_type": "positive",
+      "difficulty": "hard",
+      "retrieval_class": [
+        "procedural_prerequisite",
+        "legal_dependency"
+      ],
+      "relevant_issues": [
+        "شرط قبول دعوى النسب: سبق تحقيق لجنة النسب المختصة"
+      ],
+      "must_find": [
+        "legis-53-2026-m8"
+      ],
+      "must_find_any_of": [],
+      "should_find": [
+        "legis-53-2026-m7",
+        "legis-53-2026-m10"
+      ],
+      "must_not_miss": [
+        "legis-53-2026-m8"
+      ],
+      "expected_mechanisms": [
+        "dense",
+        "chapter"
+      ],
+      "must_find_provenance": {
+        "legis-53-2026-m8": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "get_article(53,2026,'8') مباشر — نص صريح: 'لا تقبل دعوى النسب إلا إذا سبقها تحقيق تجريه اللجنة'. تصحيح مهم: مسودة أولى ظنّت م7 هي شرط القبول خطأً؛ م7 صلاحيات إجرائية عامة للجنة فقط، م8 هي الوجوبية الفعلية.",
+          "object_type": "legislation_article",
+          "legal_role": "procedure"
+        }
+      },
+      "notes": "حالة صُحِّحت أثناء البناء نفسه (لا بعد تشغيل بنشمارك) — التحقق المباشر كشف أن الافتراض الأول (م7) خاطئ والصحيح م8، مثال حي لقيمة التحقق قبل الاعتماد."
+    },
+    {
+      "id": "gs-0034",
+      "question": "زوجي ضربني وشتمني وابي اطلق منه، شنو أسوي؟",
+      "request_type": "استشارة",
+      "category": "أحوال شخصية (سنّي) — صياغة عامية للتفريق للضرر",
+      "case_type": "positive",
+      "difficulty": "adversarial",
+      "known_preexisting_failure": true,
+      "retrieval_class": [
+        "natural_language_mismatch",
+        "exception"
+      ],
+      "relevant_issues": [
+        "دعوى التفريق للضرر بصياغة عامية بعيدة عن المصطلح القانوني الرسمي"
+      ],
+      "must_find": [
+        "legis-51-1984-m126"
+      ],
+      "must_find_any_of": [],
+      "should_find": [
+        "legis-51-1984-m127",
+        "legis-51-1984-m132"
+      ],
+      "must_not_miss": [],
+      "expected_mechanisms": [
+        "dense"
+      ],
+      "must_find_provenance": {
+        "legis-51-1984-m126": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "فجوة استرجاع مؤكَّدة حيًّا 2026-09-10 قبل أي تشغيل benchmark: search_legal('زوجي ضربني وشتمني ابغى اطلق') أعاد 6 نتائج (تعريف الشقاق الجعفري، نفقة، طلقات الزوج…) صفر منها م126-132 (التفريق للضرر) رغم تحقُّق وجودها وصحتها الكاملة في نداء مباشر منفصل (get_article(51,1984,'126')).",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        }
+      },
+      "notes": "الصياغة العامية الكاملة تُختبر بلا أي تصحيح لفظي — لا تُضاف مرادفات/gate جديدة لإصلاحها (بأمر صريح: 'دعها تفشل إذا كان النظام الحالي يفشل فيها'). known_preexisting_failure=true لأنها اكتُشفت أثناء بناء Gold Set قبل أي تشغيل قياس."
+    },
+    {
+      "id": "gs-0035",
+      "question": "صاحب الشغل طردني من الشغل بدون سبب وابي اعرف حقوقي؟",
+      "request_type": "استشارة",
+      "category": "عمالي — صياغة عامية للفصل التعسفي",
+      "case_type": "positive",
+      "difficulty": "adversarial",
+      "known_preexisting_failure": true,
+      "retrieval_class": [
+        "natural_language_mismatch",
+        "semantic_match"
+      ],
+      "relevant_issues": [
+        "حقوق العامل عند انتهاء العقد بصياغة عامية بعيدة عن مصطلح 'الفصل التعسفي' الرسمي"
+      ],
+      "must_find": [
+        "legis-6-2010-m50"
+      ],
+      "must_find_any_of": [],
+      "should_find": [],
+      "must_not_miss": [],
+      "expected_mechanisms": [
+        "dense"
+      ],
+      "must_find_provenance": {
+        "legis-6-2010-m50": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "إخفاق جزئي مؤكَّد حيًّا 2026-09-10: search_legal('صاحب الشغل طردني بدون سبب أبغى حقوقي') أعاد 6 مبادئ قضائية عمالية ذات صلة موضوعية معقولة، لكن صفرها نص تشريعي من قانون العمل 6/2010 نفسه؛ المادة الصحيحة (م50، حالات انتهاء العقد) تحقَّقت منفصلة عبر search_legal('انتهاء عقد العمل بالإرادة المنفردة') في الدفعة الأولى بتشابه 0.845.",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        }
+      },
+      "notes": "إخفاق جزئي (لا كلي كـgs-0034) — يصيب مبادئ ذات صلة لكن يُغفل النص التشريعي المباشر. known_preexisting_failure=true."
+    },
+    {
+      "id": "gs-0036",
+      "question": "شريك في شركة ذات مسؤولية محدودة يمتنع المدير عن دعوة الجمعية العامة لعزله رغم امتلاك الشريك ربع رأس المال، وباقي الشركاء (بينهم المدير) يعطّلون النصاب متعمَّدين — ما هي الطرق القانونية المتاحة له لعزل المدير وكسر تعطيل النصاب؟",
+      "request_type": "استشارة",
+      "category": "تجاري — شركات (مركّبة: عزل مدير + تعطيل نصاب + امتناع عن الدعوة)",
+      "case_type": "positive",
+      "difficulty": "adversarial",
+      "known_preexisting_failure": true,
+      "retrieval_class": [
+        "multi_issue",
+        "legal_dependency",
+        "semantic_match"
+      ],
+      "relevant_issues": [
+        "عزل مدير الشركة قضائيًا",
+        "تحييد الحصص لكسر تعطيل النصاب",
+        "تدخل الوزارة عند امتناع المدير عن الدعوة"
+      ],
+      "must_find": [
+        "legis-1-2016-m104",
+        "legis-1-2016-m30",
+        "regl-1-2016-m65"
+      ],
+      "must_find_any_of": [],
+      "should_find": [
+        "legis-1-2016-m50"
+      ],
+      "must_not_miss": [],
+      "expected_mechanisms": [
+        "dense"
+      ],
+      "must_find_provenance": {
+        "legis-1-2016-m104": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "search_legal('عزل مدير الشركة ذات المسؤولية المحدودة وتعطيل النصاب') تشابه 0.846 — نص عزل المدير بحكم قضائي بطلب ربع الحصص",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        },
+        "legis-1-2016-m30": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "فجوة استرجاع مؤكَّدة حيًّا: نفس البحث أعلاه (8 نتائج) لم يُرجع م30 (تحييد الحصص) إطلاقًا رغم get_article(1,2016,'30') المباشر مؤكِّدًا وجودها ومطابقتها التامة لموضوع 'أمر على عريضة بتحييد الحصص' الموثَّق في CLAUDE.md §18.",
+          "object_type": "legislation_article",
+          "legal_role": "governing"
+        },
+        "regl-1-2016-m65": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "search_legal('إنذار المدير الممتنع عن دعوة الجمعية والتدخل الوزاري') تشابه 0.859 — تطابق شبه حرفي مع وصف §18 (إنذار + 15 يومًا + تدخل الوزارة).",
+          "object_type": "legislation_archived",
+          "legal_role": "procedure"
+        }
+      },
+      "notes": "حالة مركَّبة كثيفة المرشحات بنمط gs-0013 — أحد مكوناتها (م30) فجوة استرجاع مكتشَفة قبل أي تشغيل (known_preexisting_failure=true) بينما مكوّنان آخران (م104، regl-m65) وصلا بنجاح في هذا البحث المحدد."
+    },
+    {
+      "id": "gs-0037",
+      "question": "هل يشترط أن يكون السند التجاري المستند إليه في طلب أمر الأداء من الأوراق التجارية تحديدًا (كالشيك أو الكمبيالة)، أم يكفي أي محرر يثبت دينًا نقديًا معين المقدار؟",
+      "request_type": "استشارة",
+      "category": "مرافعات/تجاري — استقلال أمر الأداء عن دعوى الصرف",
+      "case_type": "positive",
+      "difficulty": "easy",
+      "retrieval_class": [
+        "judicial_principle",
+        "cross_reference"
+      ],
+      "relevant_issues": [
+        "استقلال إجراءات أمر الأداء عن الصفة الصرفية للسند"
+      ],
+      "must_find": [
+        "jprin-110-2009-e1084-fe6c318b1a"
+      ],
+      "must_find_any_of": [],
+      "should_find": [
+        "legis-38-1980-m166"
+      ],
+      "must_not_miss": [],
+      "expected_mechanisms": [
+        "dense",
+        "principle_xref"
+      ],
+      "must_find_provenance": {
+        "jprin-110-2009-e1084-fe6c318b1a": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "search_legal('إصدار أمر الأداء يستقل عن دعوى الصرف') تشابه 0.873 — تطابق حرفي تام بما فيه عبارة 'يستقل عن دعوى الصرف' نصًا، ويحيل صراحة للمادة 166 مرافعات.",
+          "object_type": "judicial_principle",
+          "legal_role": "governing"
+        }
+      },
+      "notes": "مبدأ سبق ذكره في مواجهة gpt-5.6 التاريخية (§18) كاستشهاد فريد متحقَّق حرفيًا — أُعيد التحقق منه اليوم مباشرة لبناء Gold Set."
+    },
+    {
+      "id": "gs-0038",
+      "question": "هل يجوز تعديل عقد شركة ذات مسؤولية محدودة بمجرد اتفاق الشركاء دون إفراغه في محرر رسمي؟",
+      "request_type": "استشارة",
+      "category": "تجاري — شركات (رسمية تعديل عقد الشركة)",
+      "case_type": "positive",
+      "difficulty": "medium",
+      "retrieval_class": [
+        "judicial_principle"
+      ],
+      "relevant_issues": [
+        "وجوب الشكل الرسمي لتعديل عقد الشركة وأثر تخلفه"
+      ],
+      "must_find": [
+        "jprin-101-1995-f1574-ce8b49f13f"
+      ],
+      "must_find_any_of": [],
+      "should_find": [],
+      "must_not_miss": [],
+      "expected_mechanisms": [
+        "dense"
+      ],
+      "must_find_provenance": {
+        "jprin-101-1995-f1574-ce8b49f13f": {
+          "verified": true,
+          "verification_method": "MCP",
+          "verification_note": "تصحيح 2026-09-13: المعرف السابق (...a90c7a3e5f) كان خطأً في النسخ من نص وكيل منقول ولم يكن يشير لكائن حقيقي (get_object أعاد \"لا كائن بهذا المعرف\") — سبَّب فشلًا كاذبًا في Candidate Recall (0/1) نُسب خطأً للنظام. المعرف الصحيح تحقَّق مباشرة عبر search_legal ثم get_object (تطابق حرفي تام).",
+          "object_type": "judicial_principle",
+          "legal_role": "governing"
+        }
+      },
+      "notes": "الطعنان التاريخيان 296/1989 و569/2002 (المذكوران في §18) لم يظهرا في هذا البحث تحديدًا — لم يُستبعَدا من القاعدة بالضرورة (لم يُفحصا بـget_object مباشرة)، لكن أُفضِّل استعمال ما ظهر فعليًا اليوم (101/1995) بدل الاعتماد على معرفات تاريخية غير مُعاد التحقق منها هذه الجولة."
+    },
+    {
+      "id": "gs-0039",
+      "question": "ما هي العقوبة المقررة تحديدًا لجريمة غسل الأموال متى ارتُكبت باستخدام عملات رقمية مشفرة (كالبيتكوين)؟",
+      "request_type": "استشارة",
+      "category": "ضابط سلبي — تخصيص تقني غير مدرَج (عملات مشفرة تحديدًا)",
+      "case_type": "negative",
+      "negative_reason": "out_of_scope",
+      "difficulty": "medium",
+      "retrieval_class": [
+        "negative_control_no_source"
+      ],
+      "relevant_issues": [
+        "وجود نص خاص بالعملات المشفرة تحديدًا ضمن قانون غسل الأموال"
+      ],
+      "must_find": [],
+      "must_find_any_of": [],
+      "should_find": [],
+      "must_not_miss": [],
+      "expected_mechanisms": [],
+      "must_find_provenance": {},
+      "notes": "تحقُّق حي 2026-09-10: search_legal('عقوبة جريمة غسل الأموال بالعملات الرقمية المشفرة تحديدًا') أعاد نصوصًا عامة لقانون 106/2013 ومعاملات إلكترونية بلا أي ذكر لـ'العملات الرقمية المشفرة'/'cryptocurrency' في أي نص مُعاد — القاعدة العامة لغسل الأموال موجودة، والتخصيص التقني الدقيق غائب. N1 (غياب فعلي عن الموضوع، لا سياسة استبعاد)."
+    },
+    {
+      "id": "gs-0040",
+      "question": "ما هي أحكام الشريعة اليهودية المتبعة في مسائل الأحوال الشخصية للطوائف اليهودية في الكويت؟",
+      "request_type": "استشارة",
+      "category": "ضابط سلبي — نطاق مذهبي غير مغطى (سني/جعفري فقط)",
+      "case_type": "negative",
+      "negative_reason": "out_of_scope",
+      "difficulty": "easy",
+      "retrieval_class": [
+        "negative_control_no_source"
+      ],
+      "relevant_issues": [
+        "نطاق القاعدة المذهبي (سني وجعفري حصرًا)"
+      ],
+      "must_find": [],
+      "must_find_any_of": [],
+      "should_find": [],
+      "must_not_miss": [],
+      "expected_mechanisms": [],
+      "must_find_provenance": {},
+      "notes": "تحقُّق حي 2026-09-10: search_legal('أحكام الشريعة اليهودية في الأحوال الشخصية') أعاد فقط مبادئ عن مذهب الإمام مالك السني وتطبيقه على مختلطي السني/الجعفري — صفر ذكر لليهودية في أي نتيجة. يؤكد نطاق CLAUDE.md §2 (سنّي وجعفري فقط)."
     }
   ]
 }
