@@ -98,10 +98,17 @@ def compute_metrics(cases, final_context_by_case, label):
                            for cid, dims in by_case_critical.items()}
     critical_failures = sorted(cid for cid, ok in critical_case_pass.items() if not ok)
 
+    def _hashable(key):
+        # بعض حقول Gold Set (retrieval_class تحديدًا) قوائم لا قيمًا مفردة لبعض الحالات —
+        # تُحوَّل لـtuple مرتَّب لتصلح مفتاحًا، بلا تغيير في المعنى (نفس المجموعة = نفس الدلو)
+        if isinstance(key, list):
+            return tuple(sorted(key))
+        return key
+
     def recall_by(keyfn):
         buckets = defaultdict(lambda: [0, 0])
         for cid, d in positive:
-            key = keyfn(cid, d)
+            key = _hashable(keyfn(cid, d))
             buckets[key][0] += int(dimension_satisfied(d, fc(cid)))
             buckets[key][1] += 1
         return {str(k): {"hit": v[0], "total": v[1],
