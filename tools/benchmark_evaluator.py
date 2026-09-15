@@ -135,6 +135,17 @@ def compute_metrics(cases, final_context_by_case, label):
     }
 
 
+def diff_critical_failures(before, after):
+    """مقارنة زوجية صحيحة (نفس التشغيلة): أي حالة تحسَّنت/تدهورت/بقيت فاشلة في حالة الحرج
+    الحرجة (critical) بين قبل وبعد تطبيق آلية Shadow على نفس خط الأساس بالضبط."""
+    b, a = set(before["critical_case_failures"]), set(after["critical_case_failures"])
+    return {
+        "fixed_by_mechanism": sorted(b - a),
+        "newly_failed_by_mechanism": sorted(a - b),
+        "still_failing_both": sorted(b & a),
+    }
+
+
 def main():
     gold = load_gold_set()
     cases = gold["cases"]
@@ -148,14 +159,32 @@ def main():
 
     current_fc = {r["case_id"]: r["current_final_context"] for r in shadow_a}
     shadow_a_fc = {r["case_id"]: r["shadow_a_final_context"] for r in shadow_a}
+    # تنويه منهجي حاسم: Shadow A وShadow B نُفِّذا في تشغيلتين حيّتين مستقلّتين تمامًا
+    # (استدعاءا _draft_build_context منفصلان، لكل منهما تفكيك محاور Haiku الخاص به وتذبذب
+    # اكتشاف طبيعي مصاحب موثَّق سابقًا) — فمقارنة نتائج shadow_a مباشرة بـshadow_b تخلط أثر
+    # الآلية الحقيقي بتذبذب التشغيلة الطبيعي. current_final_context في shadow_b.log هو خط
+    # الأساس **الصحيح** لتقييم Shadow B (نفس تشغيلته هي بالضبط)، لا current_final_context
+    # المأخوذ من ملف Shadow A. نحسب الأساسين معًا صراحة لإتاحة المقارنة العادلة لكل طبقة.
+    current_fc_shadow_b_draw = {r["case_id"]: r["current_final_context"] for r in shadow_b}
     shadow_b_fc = {r["case_id"]: r["shadow_b_final_context"] for r in shadow_b}
 
     results = {
         "gold_set_frozen_at": gold.get("_required_dimensions_frozen_at"),
-        "baseline_current_production": compute_metrics(cases, current_fc, "current_production"),
+        "_methodological_note": (
+            "Shadow A وShadow B تشغيلتان حيّتان مستقلّتان بخطي أساس مختلفين طبيعيًا "
+            "(تذبذب Haiku/الاسترجاع المعروف) — المقارنة العادلة لكل طبقة هي أساسها الخاص بها "
+            "(baseline_current_production_shadow_a_draw مقابل shadow_a، وشبيهه لـshadow_b)، "
+            "لا مقارنة shadow_a برقم shadow_b مباشرة."
+        ),
+        "baseline_current_production_shadow_a_draw": compute_metrics(cases, current_fc, "baseline_shadow_a_draw"),
         "shadow_a": compute_metrics(cases, shadow_a_fc, "shadow_a"),
+        "baseline_current_production_shadow_b_draw": compute_metrics(cases, current_fc_shadow_b_draw, "baseline_shadow_b_draw"),
         "shadow_b": compute_metrics(cases, shadow_b_fc, "shadow_b"),
     }
+    results["shadow_a_mechanism_effect_same_draw"] = diff_critical_failures(
+        results["baseline_current_production_shadow_a_draw"], results["shadow_a"])
+    results["shadow_b_mechanism_effect_same_draw"] = diff_critical_failures(
+        results["baseline_current_production_shadow_b_draw"], results["shadow_b"])
     print(json.dumps(results, ensure_ascii=False, indent=2))
     print("\nBENCHMARK_EVALUATOR_DONE")
 
