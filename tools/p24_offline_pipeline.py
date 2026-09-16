@@ -202,8 +202,27 @@ def build_context_offline(app, client, inp, facts_ret, admission_policy=fixed_ca
         _txt = t["text"] or ""
         _cap = BUDGET_CAPS.get(label, 2000)
         if len(_txt) > _cap:
-            _txt = _txt[:_cap]
-        block = _txt
+            # مطابقة حرفية لمنطق القصّ الحقيقي (يحفظ سطر السند الختامي، يرتدّ لآخر جملة)
+            _tail = _txt.rstrip().rsplit("\n", 1)[-1]
+            _keep = ("\n[…]\n" + _tail) if (("الطعن" in _tail or "جلسة" in _tail)
+                                              and len(_tail) < 400) else ""
+            _cut = _txt[:_cap]
+            _dot = max(_cut.rfind("."), _cut.rfind("؟"), _cut.rfind("!"))
+            if _dot > int(_cap * 0.6):
+                _cut = _cut[:_dot + 1]
+            _txt = _cut + ("" if _keep else "\n[…]") + _keep
+        _pub = (t.get("publication") or "").replace('"', "'").strip()
+        if not _pub and label in ("مبدأ قضائي", "حكم كامل"):
+            _snd = (t["text"] or "").rstrip().rsplit("\n", 1)[-1].strip()
+            if ("الطعن" in _snd or "جلسة" in _snd) and len(_snd) < 400:
+                _pub = _snd.replace('"', "'")
+        # مطابقة حرفية لغلاف الكتلة الحقيقي (حجمه يدخل حساب LBL_BUDGET، فأي فارق هنا
+        # يُغيّر عدد المرشحين المقبولين فعليًا — هذا بالضبط ما كشفه فشل بوابة الصحة الأولى)
+        block = (
+            '<مصدر نوع="' + label + '" معرف="' + oid + '" فرع="' + (t.get("branch") or "")
+            + '" موضوع="' + (t.get("topic") or "") + '" عنوان="' + (t.get("title") or "")
+            + ('" النشر="' + _pub if _pub else "") + '">\n'
+            + _txt + "\n</مصدر>")
         if lbl_used.get(label, 0) + len(block) > LBL_BUDGET.get(label, 4000):
             budget_dropped.append({"id": oid, "type": label, "score": round(float(score or 0), 4)})
             continue
