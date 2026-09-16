@@ -35,7 +35,7 @@ import sys
 
 sys.path.insert(0, "/opt/LegalMind")
 
-PRIMARY_CASES = ["gs-0015", "gs-0036", "gs-0001", "gs-0035"]
+PRIMARY_CASES = ["gs-0015", "gs-0036", "gs-0001", "gs-0035", "gs-0038"]
 NEGATIVE_CONTROL_CASE = "gs-0013"
 FOCUS_TARGET = {
     "gs-0015": "LEG-UNKNOWN-P1-art2-3-6144aa963fc48469",
@@ -43,6 +43,13 @@ FOCUS_TARGET = {
     "gs-0001": "legis-38-1980-m298",
     "gs-0035": "legis-6-2010-m50",
     "gs-0013": "legis-38-1980-m167",
+    # P2.2 §9 — gs-0038: أظهر 0/5 اكتشاف تمامًا في Baseline20 (docs/p2_1_closure_measurement_
+    # report.md §1.3) رغم تحقُّق "Pass A" التاريخي (فحص وجود مزدوج search_legal←get_object،
+    # لا تشغيلة frozen-axes ناجحة محفوظة) — لا يوجد "Frozen-success-axis" قابل للاسترجاع لهذه
+    # الحالة أصلًا (Pass A لم يكن تجربة محاور مجمَّدة، فلا شيء يُستعاد)؛ يُشغَّل هنا Normal×5 +
+    # Frozen-current-axis×5 فقط، بنفس منهجية كل حالة أخرى في هذه الأداة، بلا أي تخمين لمحاور
+    # "ناجحة" غير موجودة أصلًا في أي سجل.
+    "gs-0038": "jprin-101-1995-f1574-ce8b49f13f",
 }
 
 
