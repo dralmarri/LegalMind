@@ -42,7 +42,7 @@ def classify_fact_grounding(triggering_fact, question_text):
     return "UNGROUNDED"
 
 
-def score_case(case, planner_obj, raw_json_text, manual_matches):
+def score_case(case, planner_obj, raw_json_text, manual_matches, unmatched_classifications=None):
     """
     case: من DEV_SET/GOLD_TIER_SET (الحقيقة الأرضية).
     planner_obj: مخرج Planner بعد json.loads.
@@ -51,8 +51,17 @@ def score_case(case, planner_obj, raw_json_text, manual_matches):
         [{"gt_issue_id":..., "gt_dimension_id":..., "matched": bool,
           "planner_status": "required|conditional|possible"|None}]
         كل بُعد حقيقة أرضية غير مذكور في القائمة يُعامَل matched=False تلقائيًا.
-        أي بُعد Planner لم يُربَط بأي بُعد حقيقة أرضية هو "غير مسنود" (unsupported) ويُحسَب
-        من `planner_obj` مباشرة (عدد أبعاد Planner الكلي - عدد المطابقات matched=True).
+
+    unmatched_classifications: **قرار مُدخَل أثناء التكرار على Dev Set** (سبب: مخرجات المرحلة
+    التجريبية الأولى أظهرت أبعادًا إضافية مشروعة تتجاوز حقيقة أرضية دنيا مؤلَّفة بحدّها الأدنى —
+    معاقبتها كـ"غير مسنودة" كان سيُعاقب العمق المشروع لا الخطأ الفعلي). لكل بُعد Planner لم
+    يُربَط بأي بُعد حقيقة أرضية، حكم يدوي منضبط بمعيارين اثنين لا أكثر:
+      - "unsupported_risky": غير مسنود فعليًا بوقائع السؤال أو ناتج عن سوء قراءة لفظية
+        (المخاطرة الحقيقية التي يقيسها Unsupported Dimension Rate).
+      - "reasonable_elaboration": عمق تفصيلي إضافي مشروع منطقيًا من نفس الوقائع (لم تسرد
+        الحقيقة الأرضية الدنيا كل تفصيل ممكن) — لا يُحتسَب ضد معدل الخطر، لكن لا يُحتسَب أيضًا
+        كتطابق (لا يوجد في الحقيقة الأرضية أصلًا).
+    أي بُعد لم يُصنَّف صراحة هنا يُعامَل تحفظيًا `unsupported_risky` (لا صمت آمن لصالح التساهل).
     """
     ok, struct_errors = validate_structure(planner_obj) if planner_obj is not None else (False, ["JSON غير قابل للتفكيك"])
     id_leaks = detect_id_leakage(raw_json_text)
@@ -81,7 +90,14 @@ def score_case(case, planner_obj, raw_json_text, manual_matches):
                     all_planner_facts.append(tf)
 
     n_matched = sum(1 for m in manual_matches if m.get("matched"))
-    n_unsupported = max(0, n_planner_dims - n_matched)
+    n_unmatched = max(0, n_planner_dims - n_matched)
+    unmatched_classifications = unmatched_classifications or []
+    n_reasonable = sum(1 for u in unmatched_classifications if u.get("class") == "reasonable_elaboration")
+    n_classified_risky = sum(1 for u in unmatched_classifications if u.get("class") == "unsupported_risky")
+    n_unclassified = max(0, n_unmatched - n_reasonable - n_classified_risky)
+    # أي بُعد غير مصنَّف صراحة (نسيان تصنيفه أثناء القراءة اليدوية) يُعامَل risky احتياطًا —
+    # فشل التصنيف لا يُترجَم صمتًا إلى تساهل.
+    n_unsupported_risky = n_classified_risky + n_unclassified
 
     fact_grounding = [{"fact": tf, "class": classify_fact_grounding(tf, case["question"])}
                        for tf in all_planner_facts]
@@ -92,7 +108,7 @@ def score_case(case, planner_obj, raw_json_text, manual_matches):
         "id_leakage": id_leaks,
         "gt_dim_count": len(gt_dims), "planner_dim_count": n_planner_dims,
         "dimension_results": dim_results,
-        "n_unsupported": n_unsupported,
+        "n_unsupported_risky": n_unsupported_risky, "n_reasonable_elaboration": n_reasonable,
         "fact_grounding": fact_grounding,
     }
 
@@ -102,11 +118,13 @@ def aggregate(case_scores):
     total_gt = sum(cs["gt_dim_count"] for cs in case_scores)
     total_matched = sum(sum(1 for d in cs["dimension_results"] if d["matched"]) for cs in case_scores)
     total_planner = sum(cs["planner_dim_count"] for cs in case_scores)
-    total_unsupported = sum(cs["n_unsupported"] for cs in case_scores)
+    total_unsupported_risky = sum(cs["n_unsupported_risky"] for cs in case_scores)
+    total_reasonable = sum(cs["n_reasonable_elaboration"] for cs in case_scores)
 
     dim_recall = total_matched / total_gt if total_gt else None
-    dim_precision = (total_planner - total_unsupported) / total_planner if total_planner else None
-    unsupported_rate = total_unsupported / total_planner if total_planner else None
+    # Precision: "جيد" = تطابق حقيقة أرضية أو عمق مشروع إضافي؛ "سيئ" = غير مسنود فعليًا فقط.
+    dim_precision = ((total_planner - total_unsupported_risky) / total_planner) if total_planner else None
+    unsupported_rate = total_unsupported_risky / total_planner if total_planner else None
 
     crit_gt = [d for cs in case_scores for d in cs["dimension_results"] if d.get("critical")]
     crit_matched = sum(1 for d in crit_gt if d["matched"])
@@ -163,7 +181,8 @@ def aggregate(case_scores):
         "structural_validity_violations": n_structural_invalid,
         "id_leakage_violations": n_id_leak,
         "total_gt_dimensions": total_gt, "total_planner_dimensions": total_planner,
-        "total_matched": total_matched, "total_unsupported": total_unsupported,
+        "total_matched": total_matched, "total_unsupported_risky": total_unsupported_risky,
+        "total_reasonable_elaboration": total_reasonable,
     }
 
 
