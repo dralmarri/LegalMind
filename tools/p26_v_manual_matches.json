@@ -1,0 +1,1405 @@
+{
+  "_note": "P2.6-V Step 5 manual semantic matching. Rule (frozen from p26_evaluator docstring): a GT dimension counts as matched iff some Planner dimension text describes the SAME core legal issue, regardless of wording. planner_status = the status the Planner assigned to the anchoring dimension. unmatched = per-case counts of Planner dimensions not anchored to any GT dimension, split into the two frozen evaluator classes; p26v_5way = the Step 10 five-way classification of those same unmatched dimensions.",
+  "cases": {
+    "gs-0001": {
+      "matches": [
+        {
+          "gt_dimension_id": "amr_alada_substantive_conditions",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "mandatory_payment_demand",
+          "matched": false,
+          "planner_status": null
+        },
+        {
+          "gt_dimension_id": "order_service_and_challenge_deadline",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "travel_ban_substantive_conditions",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "travel_ban_lifting_grounds",
+          "matched": false,
+          "planner_status": null
+        },
+        {
+          "gt_dimension_id": "signature_denial_procedure",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "forgery_challenge_procedure_alt_route",
+          "matched": true,
+          "planner_status": "required"
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 5,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 5,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      },
+      "miss_notes": {
+        "mandatory_payment_demand": "لا بُعد عن التكليف بالوفاء السابق على استصدار الأمر؛ أبعاد الإعلان كلها عن إعلان الأمر بعد صدوره لا عن التكليف السابق عليه",
+        "travel_ban_lifting_grounds": "لا بُعد عن حالات سقوط/رفع أمر المنع من السفر"
+      }
+    },
+    "gs-0002": {
+      "matches": [
+        {
+          "gt_dimension_id": "criminal_offense_bad_check",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "mandatory_criminal_complaint_deadline",
+          "matched": true,
+          "planner_status": "conditional"
+        },
+        {
+          "gt_dimension_id": "prosecution_exclusive_jurisdiction",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "civil_claim_route_amr_alada",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "check_civil_claim_prescription",
+          "matched": true,
+          "planner_status": "conditional"
+        },
+        {
+          "gt_dimension_id": "unjust_enrichment_after_prescription",
+          "matched": false,
+          "planner_status": null
+        },
+        {
+          "gt_dimension_id": "civil_criminal_independence",
+          "matched": false,
+          "planner_status": null
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 4,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 4,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      },
+      "miss_notes": {
+        "unjust_enrichment_after_prescription": "لا بُعد عن الإثراء بلا سبب كمخرج بعد سقوط الحق الصرفي",
+        "civil_criminal_independence": "المفهوم ظهر في cross_issue_dependencies لا كبُعد — لا يُحتسب لأن القياس على الأبعاد حصرًا"
+      },
+      "measurement_note": "بُعد واحد عام عن الميعاد الزمني ('أثر انقضاء مدة على قبول الدعوى الجزائية أو المدنية') غطّى مفهومي ميعاد الشكوى الجزائية وتقادم الدعوى المدنية معًا — عُدّ مطابقًا للاثنين لأن المعلومة حاضرة فعلًا، مع تسجيل أن Planner لم يفرّقهما"
+    },
+    "gs-0003": {
+      "matches": [
+        {
+          "gt_dimension_id": "mandatory_family_settlement_center",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "divorce_for_harm_substantive_condition",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "hakamayn_arbitration_when_harm_unproven",
+          "matched": false,
+          "planner_status": null
+        },
+        {
+          "gt_dimension_id": "spousal_maintenance_entitlement",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "child_maintenance_entitlement",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "retroactive_maintenance_time_limit",
+          "matched": false,
+          "planner_status": null
+        },
+        {
+          "gt_dimension_id": "family_court_jurisdiction",
+          "matched": false,
+          "planner_status": null
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 6,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 6,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      },
+      "miss_notes": {
+        "hakamayn_arbitration_when_harm_unproven": "لا بُعد عن بعث الحكمين الوجوبي عند تعذر إثبات الضرر",
+        "retroactive_maintenance_time_limit": "بُعد 'الأساس الزمني للنفقة' يعالج قيام الزوجية لا حدّ السماع للنفقة السابقة",
+        "family_court_jurisdiction": "لا بُعد اختصاص في هذه الحالة"
+      }
+    },
+    "gs-0004": {
+      "matches": [
+        {
+          "gt_dimension_id": "jafari_custody_priority_rule",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "custody_termination_age_exception",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "custodian_eligibility_conditions_jafari",
+          "matched": true,
+          "planner_status": "possible"
+        },
+        {
+          "gt_dimension_id": "family_court_jurisdiction",
+          "matched": true,
+          "planner_status": "required"
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 4,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 4,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      },
+      "gt_gap_candidates": [
+        "بُعد مركز التسوية الأسرية الوجوبي أخرجه Planner ولا وجود له في الحقيقة الأرضية لهذه الحالة رغم كونه نزاعًا أسريًا — يُسجَّل لمراجعة بشرية، ولا يُحتسب نجاحًا"
+      ]
+    },
+    "gs-0005": {
+      "matches": [
+        {
+          "gt_dimension_id": "notice_period_requirement",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "arbitrary_dismissal_definition_and_grounds",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "labor_dispute_challenge_route",
+          "matched": false,
+          "planner_status": null
+        },
+        {
+          "gt_dimension_id": "end_of_service_gratuity_calculation",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "full_gratuity_entitlement_on_employer_termination",
+          "matched": true,
+          "planner_status": "required"
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 8,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 8,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      },
+      "miss_notes": {
+        "labor_dispute_challenge_route": "Planner أخرج بُعد التسوية الودية السابقة (إجراء سابق) لا حق الطعن أمام الدائرة العمالية المختصة (اختصاص) — مفهومان متمايزان فلم يُحتسب مطابقًا"
+      }
+    },
+    "gs-0006": {
+      "matches": [
+        {
+          "gt_dimension_id": "eviction_nonpayment_grounds",
+          "matched": true,
+          "planner_status": "conditional"
+        },
+        {
+          "gt_dimension_id": "tenant_cure_defense",
+          "matched": false,
+          "planner_status": null
+        },
+        {
+          "gt_dimension_id": "rent_arrears_claim",
+          "matched": true,
+          "planner_status": "required"
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 5,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 5,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      },
+      "miss_notes": {
+        "tenant_cure_defense": "لا بُعد عن رخصة السداد حتى أول جلسة واعتبار الدعوى كأن لم تكن"
+      }
+    },
+    "gs-0007": {
+      "matches": [
+        {
+          "gt_dimension_id": "annulment_jurisdiction_scope",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "mandatory_prior_grievance",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "annulment_deadline",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "compensation_for_illegal_decision",
+          "matched": true,
+          "planner_status": "required"
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 7,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 7,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      }
+    },
+    "gs-0008": {
+      "matches": [
+        {
+          "gt_dimension_id": "tasattur_definition_and_prohibition",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "tasattur_penalty",
+          "matched": false,
+          "planner_status": null
+        },
+        {
+          "gt_dimension_id": "tasattur_effective_date",
+          "matched": true,
+          "planner_status": "required"
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 3,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 3,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      },
+      "miss_notes": {
+        "tasattur_penalty": "لا بُعد عن العقوبة المقررة — والموجّه يحظر كتابة النتيجة القانونية، لكن 'فحص العقوبة' بُعدٌ لا نتيجة"
+      }
+    },
+    "gs-0009": {
+      "matches": [
+        {
+          "gt_dimension_id": "manager_removal_by_partners_majority",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "judicial_removal_specific_grounds",
+          "matched": false,
+          "planner_status": null
+        },
+        {
+          "gt_dimension_id": "company_contract_amendment_majority",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "manager_refusal_to_convene_assembly",
+          "matched": false,
+          "planner_status": null
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 7,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 7,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      },
+      "miss_notes": {
+        "judicial_removal_specific_grounds": "بُعد 'سبب مشروع للعزل' يعالج مسؤولية الشركة تجاه المدير المعزول لا شروط العزل القضائي (نصاب الربع + الغش/الضرر الجسيم)",
+        "manager_refusal_to_convene_assembly": "وقائع السؤال لا تذكر امتناع المدير عن الدعوة إطلاقًا — يُرجَّح أنه قصور في نطاق الحقيقة الأرضية لا في Planner؛ يُسجَّل لمراجعة بشرية ويبقى محتسبًا تفويتًا في هذه الجولة"
+      }
+    },
+    "gs-0010": {
+      "matches": [
+        {
+          "gt_dimension_id": "wife_share_with_descendant",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "daughters_share_two_thirds",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "full_brother_residuary",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "no_son_no_father_precondition",
+          "matched": true,
+          "planner_status": "possible"
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 3,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 3,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      }
+    },
+    "gs-0011": {
+      "matches": [
+        {
+          "gt_dimension_id": "sima_dawa_alzawjiya_inkar",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "lijnat_alnasab_wujubiya",
+          "matched": false,
+          "planner_status": null
+        },
+        {
+          "gt_dimension_id": "athar_ikhtilaf_almadhab_ala_alqanoon_almutabbaq",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "tadakhkhul_alniyaba_alamma_wujubi",
+          "matched": false,
+          "planner_status": null
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 10,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 10,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      },
+      "miss_notes": {
+        "lijnat_alnasab_wujubiya": "Planner أخرج 'الإجراءات القضائية الخاصة بدعوى ثبوت النسب' عامةً ولم يفرد لجنة دعاوى النسب كإجراء سابق وجوبي",
+        "tadakhkhul_alniyaba_alamma_wujubi": "لا بُعد عن وجوب تدخل النيابة العامة في دعاوى النسب"
+      }
+    },
+    "gs-0012": {
+      "matches": [
+        {
+          "gt_dimension_id": "rasmiyat_bay_almatjar",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "tahdid_anasir_almatjar_wa_thamanuha",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "shahr_bay_almatjar",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "haqq_albaie_ind_adam_alwafa",
+          "matched": false,
+          "planner_status": null
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 2,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 2,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      },
+      "miss_notes": {
+        "haqq_albaie_ind_adam_alwafa": "لا بُعد عن حق البائع/الدائن المرتهن في طلب البيع بالمزاد عند عدم الوفاء بالثمن"
+      }
+    },
+    "gs-0013": {
+      "matches": [
+        {
+          "gt_dimension_id": "shurut_amr_alada",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "tazallum_amr_alada_wa_miadihi",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "man_almudir_min_alsafar",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "taqadum_sarfi_wa_baqaa_tariq_alithra",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "masuliyat_mudir_alsharika_alshakhsiya",
+          "matched": true,
+          "planner_status": "required"
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 14,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 14,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      }
+    },
+    "gs-0014": {
+      "matches": [
+        {
+          "gt_dimension_id": "sarayan_alqararat_alaskariya_ala_almujannadin",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "ijraat_altaqaddum_liltajil_liljiha_almukhtassa",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "shahadat_ada_alkhidma_shart_altayeen",
+          "matched": false,
+          "planner_status": null
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 7,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 7,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      },
+      "miss_notes": {
+        "shahadat_ada_alkhidma_shart_altayeen": "لا بُعد عن اشتراط شهادة أداء/تأجيل الخدمة للتعيين في الوظائف"
+      }
+    },
+    "gs-0015": {
+      "matches": [
+        {
+          "gt_dimension_id": "mukawwanat_ras_almal_alriqabi",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "manhajiyat_rabt_ras_almal_bilmakhatir",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "sultat_albank_almarkazi_alriqabiya",
+          "matched": false,
+          "planner_status": null
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 4,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 4,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      },
+      "miss_notes": {
+        "sultat_albank_almarkazi_alriqabiya": "لا بُعد عن أساس السلطة الرقابية لبنك الكويت المركزي على البنوك المحلية"
+      }
+    },
+    "gs-0016": {
+      "matches": [
+        {
+          "gt_dimension_id": "basis_of_tort_liability",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "direct_and_causative_scope",
+          "matched": true,
+          "planner_status": "possible"
+        },
+        {
+          "gt_dimension_id": "liability_despite_non_discernment",
+          "matched": false,
+          "planner_status": null
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 2,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 2,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      },
+      "miss_notes": {
+        "liability_despite_non_discernment": "لا بُعد عن بقاء الالتزام بالتعويض ولو كان محدث الضرر غير مميز"
+      },
+      "borderline_notes": [
+        "مطابقة direct_and_causative_scope حدّية: بُعد Planner صيغ 'الفاعل المباشر مقابل صور أخرى' وهو أقرب للتمييز المباشر/المتسبب دون النص عليه حرفيًا"
+      ]
+    },
+    "gs-0017": {
+      "matches": [
+        {
+          "gt_dimension_id": "disqualification_kinship_affinity",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "nullity_effect_of_disqualified_judge",
+          "matched": true,
+          "planner_status": "possible"
+        },
+        {
+          "gt_dimension_id": "distinction_disqualification_vs_recusal",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "panel_composition_relatives_rule",
+          "matched": false,
+          "planner_status": null
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 2,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 2,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      },
+      "miss_notes": {
+        "panel_composition_relatives_rule": "قاعدة اجتماع القضاة الأقارب في دائرة واحدة — بُعد غير واجب وغير حاكم في الحقيقة الأرضية، ولم يخرجه Planner"
+      }
+    },
+    "gs-0018": {
+      "matches": [
+        {
+          "gt_dimension_id": "limitation_period_short_and_long",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "exception_criminal_origin_continuation",
+          "matched": true,
+          "planner_status": "possible"
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 5,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 5,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      }
+    },
+    "gs-0019": {
+      "matches": [
+        {
+          "gt_dimension_id": "right_to_demand_partition",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "amicable_vs_judicial_partition",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "judicial_partition_procedure_court_competence",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "sale_by_auction_when_partition_in_kind_impossible",
+          "matched": true,
+          "planner_status": "conditional"
+        },
+        {
+          "gt_dimension_id": "temporary_muhayaa_partition",
+          "matched": false,
+          "planner_status": null
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 3,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 3,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      },
+      "miss_notes": {
+        "temporary_muhayaa_partition": "قسمة المهايأة — بُعد غير واجب وغير حاكم، لم يخرجه Planner"
+      }
+    },
+    "gs-0020": {
+      "matches": [
+        {
+          "gt_dimension_id": "principle_no_revocation_except_parents",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "exception_judicial_permission_valid_excuse",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "accepted_excuses_for_revocation",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "bars_to_revocation",
+          "matched": true,
+          "planner_status": "possible"
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 2,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 2,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      },
+      "measurement_note": "بُعد 'حصر أسباب وحالات الاستثناء' غطّى مفهومي الاستثناء القضائي بعذر مقبول والأعذار المقبولة معًا — عُدّا مطابقين لأن المعلومة حاضرة، مع تسجيل عدم تفريق Planner بينهما"
+    },
+    "gs-0021": {
+      "matches": [
+        {
+          "gt_dimension_id": "tenant_rent_payment_obligation",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "late_payment_deposit_mechanism",
+          "matched": false,
+          "planner_status": null
+        },
+        {
+          "gt_dimension_id": "eviction_ground_nonpayment",
+          "matched": true,
+          "planner_status": "required"
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 7,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 7,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      },
+      "miss_notes": {
+        "late_payment_deposit_mechanism": "لا بُعد عن إيداع الأجرة لدى إدارة التنفيذ كوسيلة وفاء معتبرة"
+      }
+    },
+    "gs-0022": {
+      "matches": [
+        {
+          "gt_dimension_id": "carrier_liability_unseaworthiness",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "burden_of_proof_due_diligence",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "other_exoneration_grounds_context",
+          "matched": true,
+          "planner_status": "required"
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 4,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 4,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      }
+    },
+    "gs-0023": {
+      "matches": [
+        {
+          "gt_dimension_id": "harm_divorce_substantive_condition",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "harm_proof_evidentiary_standard",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "court_reconciliation_arbitrators_procedure",
+          "matched": true,
+          "planner_status": "conditional"
+        },
+        {
+          "gt_dimension_id": "mandatory_family_settlement_center",
+          "matched": true,
+          "planner_status": "required"
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 4,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 4,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      }
+    },
+    "gs-0024": {
+      "matches": [
+        {
+          "gt_dimension_id": "scope_verification",
+          "matched": true,
+          "planner_status": "required"
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 3,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 3,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      },
+      "note": "حالة ضابطة (محتوى غير موجود عمدًا في القاعدة) — Planner أخرج بُعد التحقق من النص الرسمي وهو جوهر بُعد الحقيقة الأرضية"
+    },
+    "gs-0025": {
+      "matches": [
+        {
+          "gt_dimension_id": "scope_verification",
+          "matched": false,
+          "planner_status": null
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 7,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 7,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      },
+      "miss_notes": {
+        "scope_verification": "حالة ضابطة لقانون أجنبي: Planner عالج السؤال كمسألة قانون عمل مصري عادية ولم يخرج بُعدًا عن كون الموضوع خارج نطاق القانون الكويتي"
+      },
+      "scope_note": "الموجّه المجمَّد لا يُعلِم Planner أصلًا بأن القاعدة كويتية حصرًا — فهذا تفويت حقيقي بمعيار الحقيقة الأرضية لكن سببه بنيوي في تصميم الموجّه لا اختلاق ولا سوء قراءة؛ أبعاده السبعة كلها مسنودة بوقائع السؤال (الذي يسأل صراحة عن القانون المصري)"
+    },
+    "gs-0026": {
+      "matches": [
+        {
+          "gt_dimension_id": "currently_in_force_tenure_table",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "minimum_tenure_wakil_niyaba",
+          "matched": true,
+          "planner_status": "required"
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 1,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 1,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      }
+    },
+    "gs-0027": {
+      "matches": [
+        {
+          "gt_dimension_id": "law_currency_verification",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "court_of_appeal_composition_and_presidency",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "total_court_composition",
+          "matched": true,
+          "planner_status": "required"
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 4,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 4,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      }
+    },
+    "gs-0028": {
+      "matches": [
+        {
+          "gt_dimension_id": "distinguishing_new_vs_existing_appraisers",
+          "matched": true,
+          "planner_status": "conditional"
+        },
+        {
+          "gt_dimension_id": "reconciliation_deadline_and_consequence",
+          "matched": true,
+          "planner_status": "required"
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 5,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 5,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      }
+    },
+    "gs-0029": {
+      "matches": [
+        {
+          "gt_dimension_id": "current_scope_of_application_m2",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "legal_effect_equivalence_m3",
+          "matched": false,
+          "planner_status": null
+        },
+        {
+          "gt_dimension_id": "explicit_named_exceptions_status",
+          "matched": true,
+          "planner_status": "required"
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 4,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 4,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      },
+      "miss_notes": {
+        "legal_effect_equivalence_m3": "لا بُعد عن حجية السجل/التوقيع الإلكتروني ومساواته بالورقي"
+      }
+    },
+    "gs-0030": {
+      "matches": [
+        {
+          "gt_dimension_id": "general_rule_debtor_assets_guarantee",
+          "matched": false,
+          "planner_status": null
+        },
+        {
+          "gt_dimension_id": "exception_public_domain_immunity_from_seizure",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "scope_limited_to_dedicated_public_domain_not_private_state_property",
+          "matched": true,
+          "planner_status": "required"
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 2,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 2,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      },
+      "miss_notes": {
+        "general_rule_debtor_assets_guarantee": "لا بُعد يقرر الأصل العام (أموال المدين ضامنة للوفاء بديونه) — Planner بدأ مباشرة من الاستثناء (حصانة المال العام)"
+      }
+    },
+    "gs-0031": {
+      "matches": [
+        {
+          "gt_dimension_id": "misdemeanor_pretrial_detention_cap",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "felony_pretrial_detention_cap_comparison",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "detention_renewal_mechanism",
+          "matched": true,
+          "planner_status": "conditional"
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 1,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 1,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      }
+    },
+    "gs-0032": {
+      "matches": [
+        {
+          "gt_dimension_id": "arbitrators_when_harm_unproven",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "harm_ground_definition",
+          "matched": false,
+          "planner_status": null
+        },
+        {
+          "gt_dimension_id": "arbitrator_qualifications_and_role",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "harm_evidentiary_standard",
+          "matched": true,
+          "planner_status": "required"
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 1,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 1,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      },
+      "miss_notes": {
+        "harm_ground_definition": "لا بُعد يعرّف الضرر الموجب للتفريق ذاته — Planner انتقل مباشرة لدرجة الإثبات والإجراء"
+      },
+      "measurement_note": "بُعد 'بعث الحكمين للتحقيق في أسباب الخلاف' غطّى وجوب البعث ومهمة الحكمين معًا؛ شروط الحكمين لم تُذكر"
+    },
+    "gs-0033": {
+      "matches": [
+        {
+          "gt_dimension_id": "mandatory_paternity_committee_investigation",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "committee_decision_deadline_and_court_access",
+          "matched": false,
+          "planner_status": null
+        },
+        {
+          "gt_dimension_id": "committee_jurisdiction_scope",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "committee_investigation_procedure",
+          "matched": false,
+          "planner_status": null
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 2,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 2,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      },
+      "miss_notes": {
+        "committee_decision_deadline_and_court_access": "لا بُعد عن مهلة اللجنة الزمنية وأثر انقضائها على فتح باب القضاء",
+        "committee_investigation_procedure": "لا بُعد عن إجراءات تحقيق اللجنة (الشهود/البصمة الوراثية)"
+      }
+    },
+    "gs-0034": {
+      "matches": [
+        {
+          "gt_dimension_id": "harm_ground_threshold",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "harm_evidentiary_standard",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "arbitrators_when_harm_unproven",
+          "matched": false,
+          "planner_status": null
+        },
+        {
+          "gt_dimension_id": "mandatory_family_settlement_center",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "criminal_route_for_physical_assault",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "criminal_route_for_verbal_insult",
+          "matched": true,
+          "planner_status": "required"
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 6,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 6,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      },
+      "miss_notes": {
+        "arbitrators_when_harm_unproven": "لا بُعد عن تعيين حكمين عند عدم ثبوت الضرر — نفس فئة التفويت المتكررة في gs-0003 وgs-0023(جزئيًا)"
+      }
+    },
+    "gs-0035": {
+      "matches": [
+        {
+          "gt_dimension_id": "lawful_vs_arbitrary_dismissal",
+          "matched": true,
+          "planner_status": "conditional"
+        },
+        {
+          "gt_dimension_id": "right_to_challenge_and_compensation_if_arbitrary",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "notice_period_or_pay_in_lieu",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "end_of_service_reward_entitlement",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "labor_claims_limitation_period",
+          "matched": false,
+          "planner_status": null
+        },
+        {
+          "gt_dimension_id": "law_applicability_scope",
+          "matched": true,
+          "planner_status": "conditional"
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 4,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 4,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      },
+      "miss_notes": {
+        "labor_claims_limitation_period": "لا بُعد عن تقادم الدعاوى العمالية بسنة من انتهاء العقد"
+      }
+    },
+    "gs-0036": {
+      "matches": [
+        {
+          "gt_dimension_id": "judicial_removal_of_manager",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "ministry_convening_on_manager_refusal",
+          "matched": false,
+          "planner_status": null
+        },
+        {
+          "gt_dimension_id": "neutralizing_shares_to_break_quorum",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "criminal_liability_for_willful_refusal_to_convene",
+          "matched": false,
+          "planner_status": null
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 9,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 9,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      },
+      "miss_notes": {
+        "ministry_convening_on_manager_refusal": "Planner اقترح الإذن القضائي بالدعوة ولم يخرج مسار دعوة الوزارة (إنذار + 15 يومًا) — آلية مختلفة",
+        "criminal_liability_for_willful_refusal_to_convene": "لا بُعد عن المسؤولية الجزائية للمدير الممتنع عمدًا"
+      }
+    },
+    "gs-0037": {
+      "matches": [
+        {
+          "gt_dimension_id": "no_commercial_paper_requirement_for_order_of_payment",
+          "matched": true,
+          "planner_status": "required"
+        },
+        {
+          "gt_dimension_id": "general_substantive_conditions_order_of_payment",
+          "matched": true,
+          "planner_status": "required"
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 2,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 2,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      }
+    },
+    "gs-0038": {
+      "matches": [
+        {
+          "gt_dimension_id": "formal_deed_requirement_for_wll_contract_amendment",
+          "matched": true,
+          "planner_status": "required"
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 4,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 4,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      }
+    },
+    "gs-0039": {
+      "matches": [
+        {
+          "gt_dimension_id": "scope_verification",
+          "matched": true,
+          "planner_status": "conditional"
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 4,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 4,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      },
+      "note": "حالة ضابطة: Planner أفرد صراحة بُعد 'هل يوجد نص خاص بالعملات الرقمية' وهو جوهر بُعد التحقق من النطاق"
+    },
+    "gs-0040": {
+      "matches": [
+        {
+          "gt_dimension_id": "scope_verification",
+          "matched": true,
+          "planner_status": "required"
+        }
+      ],
+      "unmatched": {
+        "reasonable_elaboration": 5,
+        "unsupported_risky": 0
+      },
+      "p26v_5way": {
+        "SUPPORTED_BUT_NOT_IN_GT": 5,
+        "UNSUPPORTED_BY_FACTS": 0,
+        "DUPLICATE": 0,
+        "OVERINFERRED": 0,
+        "UNCERTAIN": 0
+      },
+      "note": "حالة ضابطة: Planner أفرد بُعد 'وجود إحالة تشريعية كويتية تخوّل غير المسلمين تطبيق شرائعهم' وهو جوهر التحقق من النطاق"
+    }
+  }
+}

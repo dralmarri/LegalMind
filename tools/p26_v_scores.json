@@ -1,0 +1,2246 @@
+{
+  "aggregate": {
+    "n_cases": 40,
+    "dimension_recall": 0.7816901408450704,
+    "dimension_precision": 1.0,
+    "critical_dimension_recall": 0.8598130841121495,
+    "strict_case_completeness": 0.725,
+    "unsupported_dimension_rate": 0.0,
+    "ungrounded_dimension_rate": 0.025157232704402517,
+    "status_classification_precision": {
+      "required": {
+        "classification_precision": 0.8532110091743119,
+        "total_gt": 138,
+        "matched_correct_status": 93,
+        "matched_wrong_status": 16
+      },
+      "conditional": {
+        "classification_precision": null,
+        "total_gt": 0,
+        "matched_correct_status": 0,
+        "matched_wrong_status": 0
+      },
+      "possible": {
+        "classification_precision": 0.0,
+        "total_gt": 4,
+        "matched_correct_status": 0,
+        "matched_wrong_status": 2
+      }
+    },
+    "complexity_stratified_recall": {
+      "hard": 0.7755102040816326,
+      "medium": 0.7758620689655172,
+      "adversarial": 0.7931034482758621,
+      "easy": 0.8333333333333334
+    },
+    "structural_validity_violations": 4,
+    "id_leakage_violations": 1,
+    "total_gt_dimensions": 142,
+    "total_planner_dimensions": 293,
+    "total_matched": 111,
+    "total_unsupported_risky": 0,
+    "total_reasonable_elaboration": 182
+  },
+  "case_scores": [
+    {
+      "case_id": "gs-0001",
+      "complexity": "hard",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 7,
+      "planner_dim_count": 10,
+      "dimension_results": [
+        {
+          "dimension_id": "amr_alada_substantive_conditions",
+          "status": "required",
+          "critical": true,
+          "label": "شروط اللجوء إلى أمر الأداء (دين ثابت بالكتابة، حال الأداء، معين المقدار)",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0001-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "mandatory_payment_demand",
+          "status": "required",
+          "critical": true,
+          "label": "التكليف بالوفاء قبل استصدار الأمر (إجراء سابق وجوبي)",
+          "legal_role": "mandatory_prior_procedure",
+          "issue_id": "gs-0001-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        },
+        {
+          "dimension_id": "order_service_and_challenge_deadline",
+          "status": "required",
+          "critical": true,
+          "label": "إعلان أمر الأداء شخصيا وميعاد التظلم منه (عشرة أيام من الإعلان الصحيح)",
+          "legal_role": "deadline",
+          "issue_id": "gs-0001-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "travel_ban_substantive_conditions",
+          "status": "required",
+          "critical": true,
+          "label": "شروط صدور أمر منع المدين من السفر (دين محقق حال الأداء + جدية الظن بالفرار)",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0001-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "travel_ban_lifting_grounds",
+          "status": "required",
+          "critical": true,
+          "label": "حالات سقوط أمر منع السفر (منها سقوط شرط من شروط الأمر)",
+          "legal_role": "exception",
+          "issue_id": "gs-0001-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        },
+        {
+          "dimension_id": "signature_denial_procedure",
+          "status": "required",
+          "critical": true,
+          "label": "إنكار التوقيع على الورقة العرفية (مسار قانوني متمايز عن الطعن بالتزوير)",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0001-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "forgery_challenge_procedure_alt_route",
+          "status": "required",
+          "critical": false,
+          "label": "الطعن بالتزوير كمسار بديل إن استُعمل مصطلح 'التزوير' فعليا",
+          "legal_role": "other",
+          "issue_id": "gs-0001-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 5
+    },
+    {
+      "case_id": "gs-0002",
+      "complexity": "medium",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 7,
+      "planner_dim_count": 9,
+      "dimension_results": [
+        {
+          "dimension_id": "criminal_offense_bad_check",
+          "status": "required",
+          "critical": true,
+          "label": "أركان جريمة إصدار شيك بدون رصيد",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0002-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "mandatory_criminal_complaint_deadline",
+          "status": "required",
+          "critical": true,
+          "label": "ميعاد تقديم الشكوى الجزائية (شرط لقبول الدعوى الجزائية)",
+          "legal_role": "deadline",
+          "issue_id": "gs-0002-i1",
+          "matched": true,
+          "planner_status": "conditional",
+          "status_correct": false
+        },
+        {
+          "dimension_id": "prosecution_exclusive_jurisdiction",
+          "status": "required",
+          "critical": false,
+          "label": "اختصاص النيابة العامة دون غيرها بالتحقيق في جريمة الشيك",
+          "legal_role": "jurisdiction",
+          "issue_id": "gs-0002-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "civil_claim_route_amr_alada",
+          "status": "required",
+          "critical": true,
+          "label": "الطريق الوجوبي للمطالبة المدنية بقيمة الشيك (أمر الأداء بصفته ورقة تجارية)",
+          "legal_role": "mandatory_prior_procedure",
+          "issue_id": "gs-0002-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "check_civil_claim_prescription",
+          "status": "required",
+          "critical": true,
+          "label": "تقادم دعوى المطالبة بقيمة الشيك (6 أشهر من انقضاء ميعاد التقديم)",
+          "legal_role": "deadline",
+          "issue_id": "gs-0002-i1",
+          "matched": true,
+          "planner_status": "conditional",
+          "status_correct": false
+        },
+        {
+          "dimension_id": "unjust_enrichment_after_prescription",
+          "status": "required",
+          "critical": true,
+          "label": "دعوى الإثراء بلا سبب كمخرج بعد تقادم الدعوى الصرفية",
+          "legal_role": "exception",
+          "issue_id": "gs-0002-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        },
+        {
+          "dimension_id": "civil_criminal_independence",
+          "status": "required",
+          "critical": false,
+          "label": "استقلال الدعوى المدنية عن نتيجة الدعوى الجزائية",
+          "legal_role": "other",
+          "issue_id": "gs-0002-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 4
+    },
+    {
+      "case_id": "gs-0003",
+      "complexity": "medium",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 7,
+      "planner_dim_count": 10,
+      "dimension_results": [
+        {
+          "dimension_id": "mandatory_family_settlement_center",
+          "status": "required",
+          "critical": true,
+          "label": "وجوب عرض النزاع على مركز تسوية المنازعات الأسرية قبل رفع دعوى التطليق",
+          "legal_role": "mandatory_prior_procedure",
+          "issue_id": "gs-0003-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "divorce_for_harm_substantive_condition",
+          "status": "required",
+          "critical": true,
+          "label": "الشرط الموضوعي للتطليق للضرر (إضرار يتعذر معه دوام العشرة)",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0003-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "hakamayn_arbitration_when_harm_unproven",
+          "status": "required",
+          "critical": true,
+          "label": "إجراء الحكمين الوجوبي عند تعذر إثبات الضرر مباشرة",
+          "legal_role": "mandatory_prior_procedure",
+          "issue_id": "gs-0003-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        },
+        {
+          "dimension_id": "spousal_maintenance_entitlement",
+          "status": "required",
+          "critical": true,
+          "label": "استحقاق الزوجة النفقة الزوجية",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0003-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "child_maintenance_entitlement",
+          "status": "required",
+          "critical": true,
+          "label": "استحقاق نفقة الأولاد على والدهم",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0003-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "retroactive_maintenance_time_limit",
+          "status": "required",
+          "critical": true,
+          "label": "حدّ السماع الزمني للمطالبة بنفقة سابقة (سنتان)",
+          "legal_role": "deadline",
+          "issue_id": "gs-0003-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        },
+        {
+          "dimension_id": "family_court_jurisdiction",
+          "status": "required",
+          "critical": false,
+          "label": "اختصاص محكمة الأسرة بجميع دعاوى الأسرة ذاتها لاحقا",
+          "legal_role": "jurisdiction",
+          "issue_id": "gs-0003-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 6
+    },
+    {
+      "case_id": "gs-0004",
+      "complexity": "hard",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 4,
+      "planner_dim_count": 8,
+      "dimension_results": [
+        {
+          "dimension_id": "jafari_custody_priority_rule",
+          "status": "required",
+          "critical": true,
+          "label": "أحقية الأم بالحضانة الجعفرية وعدم سقوطها بمجرد الطلاق",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0004-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "custody_termination_age_exception",
+          "status": "required",
+          "critical": true,
+          "label": "سن انتهاء الحضانة الجعفرية (استثناء عن التفريق السني بين الذكر والأنثى)",
+          "legal_role": "exception",
+          "issue_id": "gs-0004-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "custodian_eligibility_conditions_jafari",
+          "status": "required",
+          "critical": true,
+          "label": "شروط استحقاق الحضانة الجعفرية (الإسلام، العقل، الأمانة على سلامة الولد)",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0004-i1",
+          "matched": true,
+          "planner_status": "possible",
+          "status_correct": false
+        },
+        {
+          "dimension_id": "family_court_jurisdiction",
+          "status": "required",
+          "critical": false,
+          "label": "اختصاص محكمة الأسرة بنظر دعاوى الحضانة",
+          "legal_role": "jurisdiction",
+          "issue_id": "gs-0004-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 4
+    },
+    {
+      "case_id": "gs-0005",
+      "complexity": "medium",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 5,
+      "planner_dim_count": 12,
+      "dimension_results": [
+        {
+          "dimension_id": "notice_period_requirement",
+          "status": "required",
+          "critical": true,
+          "label": "وجوب الإخطار قبل إنهاء عقد العمل غير محدد المدة (أو بدل مهلة الإخطار)",
+          "legal_role": "mandatory_prior_procedure",
+          "issue_id": "gs-0005-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "arbitrary_dismissal_definition_and_grounds",
+          "status": "required",
+          "critical": true,
+          "label": "التمييز بين الفصل المشروع (لأسباب محددة حصرا) والفصل التعسفي",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0005-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "labor_dispute_challenge_route",
+          "status": "required",
+          "critical": true,
+          "label": "حق الطعن في قرار الفصل أمام الدائرة العمالية المختصة",
+          "legal_role": "jurisdiction",
+          "issue_id": "gs-0005-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        },
+        {
+          "dimension_id": "end_of_service_gratuity_calculation",
+          "status": "required",
+          "critical": true,
+          "label": "طريقة احتساب مكافأة نهاية الخدمة",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0005-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "full_gratuity_entitlement_on_employer_termination",
+          "status": "required",
+          "critical": true,
+          "label": "استحقاق المكافأة كاملة إذا كان إنهاء العقد من جانب صاحب العمل",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0005-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 8
+    },
+    {
+      "case_id": "gs-0006",
+      "complexity": "medium",
+      "structural_valid": false,
+      "structural_errors": [
+        "issues[0].dimensions[2].triggering_facts مفقودة أو فارغة"
+      ],
+      "id_leakage": [],
+      "gt_dim_count": 3,
+      "planner_dim_count": 7,
+      "dimension_results": [
+        {
+          "dimension_id": "eviction_nonpayment_grounds",
+          "status": "required",
+          "critical": true,
+          "label": "شرط وحصر أسباب إخلاء المأجور: عدم سداد الأجرة خلال 20 يومًا من الاستحقاق",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0006-i1",
+          "matched": true,
+          "planner_status": "conditional",
+          "status_correct": false
+        },
+        {
+          "dimension_id": "tenant_cure_defense",
+          "status": "required",
+          "critical": true,
+          "label": "رخصة اعتبار الدعوى كأن لم تكن إذا سدد المستأجر كامل المتأخر حتى أول جلسة بعذر مقبول",
+          "legal_role": "exception",
+          "issue_id": "gs-0006-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        },
+        {
+          "dimension_id": "rent_arrears_claim",
+          "status": "required",
+          "critical": true,
+          "label": "أساس الالتزام بسداد الأجرة والمطالبة بالمتأخر منها",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0006-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 5
+    },
+    {
+      "case_id": "gs-0007",
+      "complexity": "medium",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 4,
+      "planner_dim_count": 11,
+      "dimension_results": [
+        {
+          "dimension_id": "annulment_jurisdiction_scope",
+          "status": "required",
+          "critical": true,
+          "label": "اختصاص الدائرة الإدارية بإلغاء قرار إنهاء خدمة الموظف المدني والتعويض عنه",
+          "legal_role": "jurisdiction",
+          "issue_id": "gs-0007-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "mandatory_prior_grievance",
+          "status": "required",
+          "critical": true,
+          "label": "وجوب التظلم الإداري قبل قبول دعوى إلغاء قرار إنهاء الخدمة",
+          "legal_role": "mandatory_prior_procedure",
+          "issue_id": "gs-0007-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "annulment_deadline",
+          "status": "required",
+          "critical": true,
+          "label": "ميعاد رفع دعوى الإلغاء وأثر التظلم على قطع الميعاد",
+          "legal_role": "deadline",
+          "issue_id": "gs-0007-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "compensation_for_illegal_decision",
+          "status": "required",
+          "critical": false,
+          "label": "طلب التعويض عن أضرار قرار إنهاء الخدمة غير المشروع",
+          "legal_role": "remedy_route",
+          "issue_id": "gs-0007-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 7
+    },
+    {
+      "case_id": "gs-0008",
+      "complexity": "hard",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 3,
+      "planner_dim_count": 5,
+      "dimension_results": [
+        {
+          "dimension_id": "tasattur_definition_and_prohibition",
+          "status": "required",
+          "critical": true,
+          "label": "الركن المادي لجريمة التستر التجاري: تمكين الأجنبي من ممارسة نشاط اقتصادي محظور عليه",
+          "legal_role": "definitional",
+          "issue_id": "gs-0008-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "tasattur_penalty",
+          "status": "required",
+          "critical": false,
+          "label": "العقوبة المقررة لجريمة التستر التجاري",
+          "legal_role": "other",
+          "issue_id": "gs-0008-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        },
+        {
+          "dimension_id": "tasattur_effective_date",
+          "status": "required",
+          "critical": true,
+          "label": "تاريخ سريان مرسوم بقانون مكافحة التستر (78/2026) — بعد ستة أشهر من النشر لا من تاريخ الإصدار",
+          "legal_role": "deadline",
+          "issue_id": "gs-0008-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 3
+    },
+    {
+      "case_id": "gs-0009",
+      "complexity": "hard",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 4,
+      "planner_dim_count": 9,
+      "dimension_results": [
+        {
+          "dimension_id": "manager_removal_by_partners_majority",
+          "status": "required",
+          "critical": true,
+          "label": "عزل مدير الشركة ذات المسئولية المحدودة بالأغلبية اللازمة لتعديل عقد الشركة، أو قضائيًا عند تعذر ذلك",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0009-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "judicial_removal_specific_grounds",
+          "status": "required",
+          "critical": true,
+          "label": "شروط طلب العزل القضائي للمدير: نصاب ربع رأس المال وأسباب الغش أو الضرر الجسيم",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0009-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        },
+        {
+          "dimension_id": "company_contract_amendment_majority",
+          "status": "required",
+          "critical": true,
+          "label": "نصاب تعديل عقد الشركة: أغلبية عددية للشركاء يملكون ثلاثة أرباع رأس المال",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0009-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "manager_refusal_to_convene_assembly",
+          "status": "required",
+          "critical": true,
+          "label": "إجراء تدخل الوزارة عند امتناع المدير عن دعوة جمعية الشركاء للانعقاد",
+          "legal_role": "mandatory_prior_procedure",
+          "issue_id": "gs-0009-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 7
+    },
+    {
+      "case_id": "gs-0010",
+      "complexity": "medium",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 4,
+      "planner_dim_count": 7,
+      "dimension_results": [
+        {
+          "dimension_id": "wife_share_with_descendant",
+          "status": "required",
+          "critical": true,
+          "label": "نصيب الزوجة فرضًا: الثمن لوجود فرع وارث (بنتين)",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0010-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "daughters_share_two_thirds",
+          "status": "required",
+          "critical": true,
+          "label": "نصيب البنتين فأكثر فرضًا: الثلثان عند عدم وجود ابن",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0010-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "full_brother_residuary",
+          "status": "required",
+          "critical": true,
+          "label": "استحقاق الأخ الشقيق للباقي عصبة بالنفس بعد أصحاب الفروض",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0010-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "no_son_no_father_precondition",
+          "status": "required",
+          "critical": true,
+          "label": "افتراض عدم وجود ابن أو أب للمورث كشرط لتفعيل تعصيب الأخ الشقيق وبقاء البنات على فرضهن",
+          "legal_role": "other",
+          "issue_id": "gs-0010-i1",
+          "matched": true,
+          "planner_status": "possible",
+          "status_correct": false
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 3
+    },
+    {
+      "case_id": "gs-0011",
+      "complexity": "hard",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 4,
+      "planner_dim_count": 12,
+      "dimension_results": [
+        {
+          "dimension_id": "sima_dawa_alzawjiya_inkar",
+          "status": "required",
+          "critical": true,
+          "label": "عدم سماع دعوى الزوجية عند الإنكار إلا بوثيقة رسمية أو إقرار في ورقة رسمية (الزواج العرفي)",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0011-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "lijnat_alnasab_wujubiya",
+          "status": "required",
+          "critical": true,
+          "label": "وجوب عرض دعوى إثبات النسب على لجنة دعاوى النسب قبل رفعها للقضاء",
+          "legal_role": "mandatory_prior_procedure",
+          "issue_id": "gs-0011-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        },
+        {
+          "dimension_id": "athar_ikhtilaf_almadhab_ala_alqanoon_almutabbaq",
+          "status": "required",
+          "critical": true,
+          "label": "أثر اختلاف مذهب الزوجين (وورثتهما) على القانون واجب التطبيق في مسائل الزوجية والميراث",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0011-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "tadakhkhul_alniyaba_alamma_wujubi",
+          "status": "required",
+          "critical": true,
+          "label": "وجوب تدخل النيابة العامة في دعاوى النسب باعتبارها من النظام العام",
+          "legal_role": "mandatory_prior_procedure",
+          "issue_id": "gs-0011-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 10
+    },
+    {
+      "case_id": "gs-0012",
+      "complexity": "medium",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 4,
+      "planner_dim_count": 5,
+      "dimension_results": [
+        {
+          "dimension_id": "rasmiyat_bay_almatjar",
+          "status": "required",
+          "critical": true,
+          "label": "الرسمية ركن انعقاد لبيع المتجر (المحل التجاري) — البطلان المطلق عند تخلفها",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0012-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "tahdid_anasir_almatjar_wa_thamanuha",
+          "status": "required",
+          "critical": true,
+          "label": "تعريف عناصر المتجر (مادية وغير مادية) ووجوب تحديد ثمن كل عنصر منها على حدة في العقد",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0012-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "shahr_bay_almatjar",
+          "status": "required",
+          "critical": true,
+          "label": "شهر عقد بيع المتجر بالقيد في السجل التجاري وأثره في حفظ امتياز البائع",
+          "legal_role": "mandatory_prior_procedure",
+          "issue_id": "gs-0012-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "haqq_albaie_ind_adam_alwafa",
+          "status": "required",
+          "critical": false,
+          "label": "حق البائع أو الدائن المرتهن في طلب البيع بالمزاد عند عدم وفاء المشتري بالثمن",
+          "legal_role": "remedy_route",
+          "issue_id": "gs-0012-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 2
+    },
+    {
+      "case_id": "gs-0013",
+      "complexity": "adversarial",
+      "structural_valid": false,
+      "structural_errors": [
+        "issues[3].dimensions[2].triggering_facts مفقودة أو فارغة"
+      ],
+      "id_leakage": [],
+      "gt_dim_count": 5,
+      "planner_dim_count": 19,
+      "dimension_results": [
+        {
+          "dimension_id": "shurut_amr_alada",
+          "status": "required",
+          "critical": true,
+          "label": "شروط استصدار أمر الأداء ووجوب سلوكه حصرًا عند الرجوع بورقة تجارية على الساحب/الضامن",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0013-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "tazallum_amr_alada_wa_miadihi",
+          "status": "required",
+          "critical": true,
+          "label": "ميعاد وإجراءات التظلم من أمر الأداء (عشرة أيام) وعدم جواز استئنافه مباشرة",
+          "legal_role": "deadline",
+          "issue_id": "gs-0013-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "man_almudir_min_alsafar",
+          "status": "required",
+          "critical": true,
+          "label": "شروط وضمانات منع المدين (المدير المفوض) من السفر لتحصيل الدين",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0013-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "taqadum_sarfi_wa_baqaa_tariq_alithra",
+          "status": "required",
+          "critical": true,
+          "label": "التقادم الصرفي لدعوى الشيك (ستة أشهر) وبقاء طريق دعوى الإثراء بلا سبب للمطالبة بأصل الدين",
+          "legal_role": "exception",
+          "issue_id": "gs-0013-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "masuliyat_mudir_alsharika_alshakhsiya",
+          "status": "required",
+          "critical": true,
+          "label": "متى تمتد المسؤولية الشخصية لمدير الشركة ذات المسؤولية المحدودة عن ديون الشركة",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0013-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 14
+    },
+    {
+      "case_id": "gs-0014",
+      "complexity": "medium",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 3,
+      "planner_dim_count": 9,
+      "dimension_results": [
+        {
+          "dimension_id": "sarayan_alqararat_alaskariya_ala_almujannadin",
+          "status": "required",
+          "critical": true,
+          "label": "سريان القرارات والأوامر العسكرية على المجندين والاحتياطيين فيما لا يرد بشأنه نص في القانون",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0014-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "ijraat_altaqaddum_liltajil_liljiha_almukhtassa",
+          "status": "required",
+          "critical": true,
+          "label": "شروط وفئات التقدم بطلب تأجيل الخدمة العاملة إلى الجهة العسكرية المختصة",
+          "legal_role": "mandatory_prior_procedure",
+          "issue_id": "gs-0014-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "shahadat_ada_alkhidma_shart_altayeen",
+          "status": "required",
+          "critical": false,
+          "label": "اشتراط شهادة أداء/تأجيل/إعفاء الخدمة الوطنية للتعيين في الوظائف",
+          "legal_role": "other",
+          "issue_id": "gs-0014-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 7
+    },
+    {
+      "case_id": "gs-0015",
+      "complexity": "adversarial",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 3,
+      "planner_dim_count": 6,
+      "dimension_results": [
+        {
+          "dimension_id": "mukawwanat_ras_almal_alriqabi",
+          "status": "required",
+          "critical": true,
+          "label": "مكونات رأس المال الرقابي المؤهل (CET1 / AT1 / T2) وفق تعليمات كفاية رأس المال",
+          "legal_role": "definitional",
+          "issue_id": "gs-0015-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "manhajiyat_rabt_ras_almal_bilmakhatir",
+          "status": "required",
+          "critical": true,
+          "label": "منهجية ربط متطلبات رأس المال الرقابي بالمخاطر التي يتعرض لها البنك (مخاطر السوق/الائتمان/التشغيل)",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0015-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "sultat_albank_almarkazi_alriqabiya",
+          "status": "required",
+          "critical": false,
+          "label": "أساس اختصاص بنك الكويت المركزي الرقابي على البنوك المحلية في تنظيم متطلبات رأس المال",
+          "legal_role": "jurisdiction",
+          "issue_id": "gs-0015-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 4
+    },
+    {
+      "case_id": "gs-0016",
+      "complexity": "easy",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [
+        {
+          "label": "explicit_article_number_citation",
+          "match": "المادة 227"
+        },
+        {
+          "label": "explicit_article_number_citation",
+          "match": "المادة 227"
+        },
+        {
+          "label": "explicit_article_number_citation",
+          "match": "المادة 227"
+        },
+        {
+          "label": "explicit_article_number_citation",
+          "match": "المادة 227"
+        },
+        {
+          "label": "explicit_article_number_citation",
+          "match": "المادة 227"
+        }
+      ],
+      "gt_dim_count": 3,
+      "planner_dim_count": 4,
+      "dimension_results": [
+        {
+          "dimension_id": "basis_of_tort_liability",
+          "status": "required",
+          "critical": true,
+          "label": "أساس المسؤولية التقصيرية: الالتزام بالتعويض عن كل فعل خاطئ يُحدث ضررًا بالغير",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0016-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "direct_and_causative_scope",
+          "status": "required",
+          "critical": true,
+          "label": "نطاق المسؤولية: تساوي الضرر المباشر والمتسبب في إيجاب التعويض",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0016-i1",
+          "matched": true,
+          "planner_status": "possible",
+          "status_correct": false
+        },
+        {
+          "dimension_id": "liability_despite_non_discernment",
+          "status": "required",
+          "critical": false,
+          "label": "بقاء الالتزام بالتعويض ولو كان محدث الضرر غير مميز",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0016-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 2
+    },
+    {
+      "case_id": "gs-0017",
+      "complexity": "adversarial",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 4,
+      "planner_dim_count": 5,
+      "dimension_results": [
+        {
+          "dimension_id": "disqualification_kinship_affinity",
+          "status": "required",
+          "critical": true,
+          "label": "حالات عدم صلاحية القاضي لنظر الدعوى بسبب القرابة أو المصاهرة (منعًا من سماعها ولو لم يُرَد)",
+          "legal_role": "jurisdiction",
+          "issue_id": "gs-0017-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "nullity_effect_of_disqualified_judge",
+          "status": "required",
+          "critical": true,
+          "label": "الأثر القانوني لعمل/قضاء القاضي غير الصالح: البطلان ولو باتفاق الخصوم",
+          "legal_role": "remedy_route",
+          "issue_id": "gs-0017-i1",
+          "matched": true,
+          "planner_status": "possible",
+          "status_correct": false
+        },
+        {
+          "dimension_id": "distinction_disqualification_vs_recusal",
+          "status": "required",
+          "critical": false,
+          "label": "تمييز عدم الصلاحية الحتمية (م102) عن الرد الجوازي لأسباب أخرى (م104)",
+          "legal_role": "definitional",
+          "issue_id": "gs-0017-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "panel_composition_relatives_rule",
+          "status": "possible",
+          "critical": false,
+          "label": "قاعدة منفصلة: عدم جواز اجتماع قضاة بينهم قرابة أو مصاهرة حتى الدرجة الرابعة في دائرة واحدة",
+          "legal_role": "other",
+          "issue_id": "gs-0017-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 2
+    },
+    {
+      "case_id": "gs-0018",
+      "complexity": "medium",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 2,
+      "planner_dim_count": 7,
+      "dimension_results": [
+        {
+          "dimension_id": "limitation_period_short_and_long",
+          "status": "required",
+          "critical": true,
+          "label": "مدتا تقادم دعوى المسؤولية التقصيرية: ثلاث سنوات من العلم بالضرر وبالمسؤول، أو خمس عشرة سنة من وقوع الفعل، أيهما أقرب",
+          "legal_role": "deadline",
+          "issue_id": "gs-0018-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "exception_criminal_origin_continuation",
+          "status": "required",
+          "critical": true,
+          "label": "استثناء: عدم سقوط الدعوى المدنية التقصيرية الناشئة عن جريمة ما دامت الدعوى الجنائية قائمة",
+          "legal_role": "exception",
+          "issue_id": "gs-0018-i1",
+          "matched": true,
+          "planner_status": "possible",
+          "status_correct": false
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 5
+    },
+    {
+      "case_id": "gs-0019",
+      "complexity": "medium",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 5,
+      "planner_dim_count": 7,
+      "dimension_results": [
+        {
+          "dimension_id": "right_to_demand_partition",
+          "status": "required",
+          "critical": true,
+          "label": "حق كل شريك في طلب القسمة وحدود الإجبار على البقاء في الشيوع",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0019-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "amicable_vs_judicial_partition",
+          "status": "required",
+          "critical": true,
+          "label": "طريقتا القسمة: بالتراضي بين جميع الشركاء أو قضاءً عند عدم الاتفاق",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0019-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "judicial_partition_procedure_court_competence",
+          "status": "required",
+          "critical": true,
+          "label": "إجراءات القسمة القضائية: رفع الدعوى أمام المحكمة الكلية وندب خبير لإفراز الأنصبة",
+          "legal_role": "jurisdiction",
+          "issue_id": "gs-0019-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "sale_by_auction_when_partition_in_kind_impossible",
+          "status": "required",
+          "critical": true,
+          "label": "بيع المال الشائع بالمزاد عند تعذر القسمة عينًا أو إحداثها نقصًا كبيرًا في القيمة",
+          "legal_role": "exception",
+          "issue_id": "gs-0019-i1",
+          "matched": true,
+          "planner_status": "conditional",
+          "status_correct": false
+        },
+        {
+          "dimension_id": "temporary_muhayaa_partition",
+          "status": "possible",
+          "critical": false,
+          "label": "القسمة المؤقتة (المهايأة) كترتيب انتفاع ريثما تتم القسمة النهائية",
+          "legal_role": "other",
+          "issue_id": "gs-0019-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 3
+    },
+    {
+      "case_id": "gs-0020",
+      "complexity": "hard",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 4,
+      "planner_dim_count": 6,
+      "dimension_results": [
+        {
+          "dimension_id": "principle_no_revocation_except_parents",
+          "status": "required",
+          "critical": true,
+          "label": "الأصل: عدم جواز الرجوع في الهبة بعد تمامها إلا للأبوين فيما وهباه لولدهما",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0020-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "exception_judicial_permission_valid_excuse",
+          "status": "required",
+          "critical": true,
+          "label": "الاستثناء: جواز الرجوع في غير حالة الأبوين بترخيص من القضاء بناءً على عذر مقبول",
+          "legal_role": "exception",
+          "issue_id": "gs-0020-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "accepted_excuses_for_revocation",
+          "status": "required",
+          "critical": true,
+          "label": "الأعذار المقبولة قانونًا للرجوع في الهبة",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0020-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "bars_to_revocation",
+          "status": "required",
+          "critical": true,
+          "label": "موانع الرجوع في الهبة رغم قيام عذر مقبول",
+          "legal_role": "exception",
+          "issue_id": "gs-0020-i1",
+          "matched": true,
+          "planner_status": "possible",
+          "status_correct": false
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 2
+    },
+    {
+      "case_id": "gs-0021",
+      "complexity": "hard",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 3,
+      "planner_dim_count": 9,
+      "dimension_results": [
+        {
+          "dimension_id": "tenant_rent_payment_obligation",
+          "status": "required",
+          "critical": false,
+          "label": "التزام المستأجر بالوفاء بالأجرة في المواعيد المتفق عليها (أو مواعيد العرف/القانون عند غياب الاتفاق)",
+          "legal_role": "definitional",
+          "issue_id": "gs-0021-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "late_payment_deposit_mechanism",
+          "status": "required",
+          "critical": false,
+          "label": "حق المستأجر في إيداع الأجرة لدى إدارة التنفيذ بعد عرضها قانونًا خلال 20 يومًا كوسيلة وفاء معتبرة",
+          "legal_role": "other",
+          "issue_id": "gs-0021-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        },
+        {
+          "dimension_id": "eviction_ground_nonpayment",
+          "status": "required",
+          "critical": true,
+          "label": "أثر تأخر المستأجر على استمرار العقد: عدم دفع الأجرة خلال 20 يومًا من الاستحقاق سبب لطلب الإخلاء، مع استثناء العذر المقبول والوفاء حتى أول جلسة",
+          "legal_role": "exception",
+          "issue_id": "gs-0021-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 7
+    },
+    {
+      "case_id": "gs-0022",
+      "complexity": "hard",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 3,
+      "planner_dim_count": 7,
+      "dimension_results": [
+        {
+          "dimension_id": "carrier_liability_unseaworthiness",
+          "status": "required",
+          "critical": true,
+          "label": "شرط مسؤولية الناقل البحري عن الهلاك/التلف الناتج عن عدم صلاحية السفينة للملاحة: اشتراط الإهمال في بذل الهمة الكافية",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0022-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "burden_of_proof_due_diligence",
+          "status": "required",
+          "critical": true,
+          "label": "عبء إثبات بذل الهمة الكافية يقع على عاتق الناقل لا على الشاحن/المرسل إليه",
+          "legal_role": "other",
+          "issue_id": "gs-0022-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "other_exoneration_grounds_context",
+          "status": "possible",
+          "critical": false,
+          "label": "أسباب الإعفاء الأخرى من مسؤولية الناقل (أخطاء الملاحة، القوة القاهرة، الحريق...) كسياق تمييزي عن حالة عدم الصلاحية للملاحة",
+          "legal_role": "other",
+          "issue_id": "gs-0022-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": false
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 4
+    },
+    {
+      "case_id": "gs-0023",
+      "complexity": "hard",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 4,
+      "planner_dim_count": 8,
+      "dimension_results": [
+        {
+          "dimension_id": "harm_divorce_substantive_condition",
+          "status": "required",
+          "critical": true,
+          "label": "الشرط الموضوعي لدعوى التفريق للضرر: إضرار أحد الزوجين بالآخر قولًا أو فعلًا بما لا يستطاع معه دوام العشرة",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0023-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "harm_proof_evidentiary_standard",
+          "status": "required",
+          "critical": true,
+          "label": "معيار إثبات الضرر: شهادة رجلين، أو رجل وامرأتين",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0023-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "court_reconciliation_arbitrators_procedure",
+          "status": "required",
+          "critical": true,
+          "label": "وجوب سعي المحكمة للإصلاح، فإن لم يثبت الضرر تعيّن حكمان للتوفيق أو التفريق",
+          "legal_role": "mandatory_prior_procedure",
+          "issue_id": "gs-0023-i1",
+          "matched": true,
+          "planner_status": "conditional",
+          "status_correct": false
+        },
+        {
+          "dimension_id": "mandatory_family_settlement_center",
+          "status": "required",
+          "critical": true,
+          "label": "الإجراء الوجوبي السابق على رفع دعوى التفريق أمام محكمة الأسرة: التقدم بطلب لمركز تسوية المنازعات الأسرية",
+          "legal_role": "mandatory_prior_procedure",
+          "issue_id": "gs-0023-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 4
+    },
+    {
+      "case_id": "gs-0024",
+      "complexity": "adversarial",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 1,
+      "planner_dim_count": 4,
+      "dimension_results": [
+        {
+          "dimension_id": "scope_verification",
+          "status": "required",
+          "critical": false,
+          "label": "التحقق من وجود محتوى جدول المواد المخدرة الكيميائي التفصيلي (الجدول 1، المجموعة الأولى، الرقم التسلسلي 12) في القاعدة",
+          "legal_role": "other",
+          "issue_id": "gs-0024-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 3
+    },
+    {
+      "case_id": "gs-0025",
+      "complexity": "medium",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 1,
+      "planner_dim_count": 7,
+      "dimension_results": [
+        {
+          "dimension_id": "scope_verification",
+          "status": "required",
+          "critical": false,
+          "label": "التحقق من أن القاعدة تغطي القانون الكويتي حصرًا ولا تحوي نصوص القانون المصري",
+          "legal_role": "other",
+          "issue_id": "gs-0025-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 7
+    },
+    {
+      "case_id": "gs-0026",
+      "complexity": "medium",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 2,
+      "planner_dim_count": 3,
+      "dimension_results": [
+        {
+          "dimension_id": "currently_in_force_tenure_table",
+          "status": "required",
+          "critical": true,
+          "label": "تحديد الجدول النافذ حاليًا لمدد البقاء بعد استبدال جدول مرسوم 126/2018 بمرسوم 136/2026",
+          "legal_role": "definitional",
+          "issue_id": "gs-0026-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "minimum_tenure_wakil_niyaba",
+          "status": "required",
+          "critical": true,
+          "label": "المدة الفعلية اللازمة كحد أدنى للبقاء في درجة وكيل نيابة قبل الترقية",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0026-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 1
+    },
+    {
+      "case_id": "gs-0027",
+      "complexity": "hard",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 3,
+      "planner_dim_count": 7,
+      "dimension_results": [
+        {
+          "dimension_id": "law_currency_verification",
+          "status": "required",
+          "critical": true,
+          "label": "التحقق من أن قانون تنظيم القضاء 80/2026 هو النافذ حاليًا وأن قانون 23/1990 ملغى/مستبدل",
+          "legal_role": "other",
+          "issue_id": "gs-0027-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "court_of_appeal_composition_and_presidency",
+          "status": "required",
+          "critical": true,
+          "label": "تشكيل محكمة الاستئناف وقاعدة رئاسة دوائرها",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0027-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "total_court_composition",
+          "status": "required",
+          "critical": true,
+          "label": "تشكيل المحكمة الكلية ودوائرها",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0027-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 4
+    },
+    {
+      "case_id": "gs-0028",
+      "complexity": "medium",
+      "structural_valid": false,
+      "structural_errors": [
+        "issues[1].dimensions[2].triggering_facts مفقودة أو فارغة"
+      ],
+      "id_leakage": [],
+      "gt_dim_count": 2,
+      "planner_dim_count": 7,
+      "dimension_results": [
+        {
+          "dimension_id": "distinguishing_new_vs_existing_appraisers",
+          "status": "required",
+          "critical": true,
+          "label": "التمييز بين «المقيّمين الجدد» (يلتزمون فورًا بلا مهلة) والمقيّمين المسجَّلين وقت صدور القرار (يُمنحون مهلة توفيق أوضاع)",
+          "legal_role": "definitional",
+          "issue_id": "gs-0028-i1",
+          "matched": true,
+          "planner_status": "conditional",
+          "status_correct": false
+        },
+        {
+          "dimension_id": "reconciliation_deadline_and_consequence",
+          "status": "required",
+          "critical": true,
+          "label": "تاريخ انتهاء مهلة توفيق الأوضاع (31/12/2027) وأثر تجاوزها (إعادة التصنيف تلقائيًا لفئة ج)",
+          "legal_role": "deadline",
+          "issue_id": "gs-0028-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 5
+    },
+    {
+      "case_id": "gs-0029",
+      "complexity": "hard",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 3,
+      "planner_dim_count": 6,
+      "dimension_results": [
+        {
+          "dimension_id": "current_scope_of_application_m2",
+          "status": "required",
+          "critical": true,
+          "label": "نطاق سريان قانون المعاملات الإلكترونية بصيغته الحالية (بعد استبدال م2 بمرسوم 148/2025)",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0029-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "legal_effect_equivalence_m3",
+          "status": "required",
+          "critical": false,
+          "label": "حجية السجل/المستند/التوقيع الإلكتروني ومساواتها بالورقي، بما في ذلك التسجيل والإشهار",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0029-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        },
+        {
+          "dimension_id": "explicit_named_exceptions_status",
+          "status": "required",
+          "critical": true,
+          "label": "هل ما زال يوجد استثناء صريح مسمّى (أحوال شخصية/سندات ملكية عقار) في نص القانون الحالي أم أُلغي بالتعديل؟",
+          "legal_role": "exception",
+          "issue_id": "gs-0029-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 4
+    },
+    {
+      "case_id": "gs-0030",
+      "complexity": "medium",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 3,
+      "planner_dim_count": 4,
+      "dimension_results": [
+        {
+          "dimension_id": "general_rule_debtor_assets_guarantee",
+          "status": "required",
+          "critical": false,
+          "label": "الأصل العام: أموال المدين كافة ضامنة للوفاء بديونه ويجوز الحجز عليها",
+          "legal_role": "other",
+          "issue_id": "gs-0030-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        },
+        {
+          "dimension_id": "exception_public_domain_immunity_from_seizure",
+          "status": "required",
+          "critical": true,
+          "label": "الاستثناء: حظر الحجز على أموال الدولة/الأشخاص الاعتبارية العامة المخصصة فعلاً أو بمقتضى القانون للنفع العام",
+          "legal_role": "exception",
+          "issue_id": "gs-0030-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "scope_limited_to_dedicated_public_domain_not_private_state_property",
+          "status": "required",
+          "critical": true,
+          "label": "حدود الاستثناء: يقتصر الحظر على الأموال العامة المخصصة فعليًا للنفع العام (الدومين العام)، لا كل ما تملكه الدولة إطلاقًا (كأملاكها الخاصة)",
+          "legal_role": "definitional",
+          "issue_id": "gs-0030-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 2
+    },
+    {
+      "case_id": "gs-0031",
+      "complexity": "hard",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 3,
+      "planner_dim_count": 4,
+      "dimension_results": [
+        {
+          "dimension_id": "misdemeanor_pretrial_detention_cap",
+          "status": "required",
+          "critical": true,
+          "label": "السقف الأقصى المطلق للحبس الاحتياطي في قضايا الجنح (40 يومًا)",
+          "legal_role": "deadline",
+          "issue_id": "gs-0031-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "felony_pretrial_detention_cap_comparison",
+          "status": "required",
+          "critical": false,
+          "label": "الحد الأقصى العام للحبس الاحتياطي في الجنايات (80 يومًا) كمرجع للمقارنة",
+          "legal_role": "definitional",
+          "issue_id": "gs-0031-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "detention_renewal_mechanism",
+          "status": "required",
+          "critical": false,
+          "label": "آلية تجديد الحبس الاحتياطي والتظلم منه أثناء بلوغ السقف",
+          "legal_role": "other",
+          "issue_id": "gs-0031-i1",
+          "matched": true,
+          "planner_status": "conditional",
+          "status_correct": false
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 1
+    },
+    {
+      "case_id": "gs-0032",
+      "complexity": "medium",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 4,
+      "planner_dim_count": 4,
+      "dimension_results": [
+        {
+          "dimension_id": "arbitrators_when_harm_unproven",
+          "status": "required",
+          "critical": true,
+          "label": "وجوب تعيين حكمين للتوفيق أو التفريق عند عدم ثبوت الضرر قطعًا",
+          "legal_role": "mandatory_prior_procedure",
+          "issue_id": "gs-0032-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "harm_ground_definition",
+          "status": "required",
+          "critical": false,
+          "label": "تعريف الضرر الموجب للتفريق (مناط دعوى التطليق للضرر أصلًا)",
+          "legal_role": "definitional",
+          "issue_id": "gs-0032-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        },
+        {
+          "dimension_id": "arbitrator_qualifications_and_role",
+          "status": "required",
+          "critical": false,
+          "label": "شروط الحكمين ومهمتهما في تقصي أسباب الشقاق والإصلاح",
+          "legal_role": "other",
+          "issue_id": "gs-0032-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "harm_evidentiary_standard",
+          "status": "required",
+          "critical": false,
+          "label": "المعيار الخاص لإثبات الضرر (شهادة رجلين أو رجل وامرأتين)",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0032-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 1
+    },
+    {
+      "case_id": "gs-0033",
+      "complexity": "hard",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 4,
+      "planner_dim_count": 4,
+      "dimension_results": [
+        {
+          "dimension_id": "mandatory_paternity_committee_investigation",
+          "status": "required",
+          "critical": true,
+          "label": "شرط سبق تحقيق لجنة دعاوى النسب قبل قبول دعوى إثبات النسب المباشر",
+          "legal_role": "mandatory_prior_procedure",
+          "issue_id": "gs-0033-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "committee_decision_deadline_and_court_access",
+          "status": "required",
+          "critical": true,
+          "label": "المهلة الزمنية للجنة (6 أشهر عادة/3 أشهر عند اللعان) وأثر انقضائها على اللجوء للقضاء",
+          "legal_role": "deadline",
+          "issue_id": "gs-0033-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        },
+        {
+          "dimension_id": "committee_jurisdiction_scope",
+          "status": "required",
+          "critical": false,
+          "label": "اختصاص اللجنة بنظر طلبات إثبات النسب المباشر تحديدًا",
+          "legal_role": "jurisdiction",
+          "issue_id": "gs-0033-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "committee_investigation_procedure",
+          "status": "required",
+          "critical": false,
+          "label": "إجراءات تحقيق اللجنة (سماع الشهود، فحص البصمة الوراثية)",
+          "legal_role": "other",
+          "issue_id": "gs-0033-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 2
+    },
+    {
+      "case_id": "gs-0034",
+      "complexity": "adversarial",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 6,
+      "planner_dim_count": 11,
+      "dimension_results": [
+        {
+          "dimension_id": "harm_ground_threshold",
+          "status": "required",
+          "critical": true,
+          "label": "توافر معيار الضرر الموجب للتفريق (الضرب والشتم بما لا تستطاع معه دوام العشرة)",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0034-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "harm_evidentiary_standard",
+          "status": "required",
+          "critical": true,
+          "label": "شرط إثبات الضرر بشهادة رجلين أو رجل وامرأتين",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0034-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "arbitrators_when_harm_unproven",
+          "status": "required",
+          "critical": true,
+          "label": "تعيين حكمين للتوفيق أو التفريق إذا لم يثبت الضرر بالمعيار المطلوب",
+          "legal_role": "mandatory_prior_procedure",
+          "issue_id": "gs-0034-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        },
+        {
+          "dimension_id": "mandatory_family_settlement_center",
+          "status": "required",
+          "critical": true,
+          "label": "وجوب التقدم أولًا لمركز تسوية المنازعات الأسرية قبل قبول دعوى التطليق أمام محكمة الأسرة",
+          "legal_role": "mandatory_prior_procedure",
+          "issue_id": "gs-0034-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "criminal_route_for_physical_assault",
+          "status": "required",
+          "critical": false,
+          "label": "إمكانية الملاحقة الجزائية المستقلة عن الضرب (إيذاء بدني)",
+          "legal_role": "remedy_route",
+          "issue_id": "gs-0034-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "criminal_route_for_verbal_insult",
+          "status": "possible",
+          "critical": false,
+          "label": "إمكانية الملاحقة الجزائية عن الشتم (جريمة السب)",
+          "legal_role": "remedy_route",
+          "issue_id": "gs-0034-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": false
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 6
+    },
+    {
+      "case_id": "gs-0035",
+      "complexity": "adversarial",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 6,
+      "planner_dim_count": 9,
+      "dimension_results": [
+        {
+          "dimension_id": "lawful_vs_arbitrary_dismissal",
+          "status": "required",
+          "critical": true,
+          "label": "هل يندرج الفصل تحت الحالات المبررة قانونًا أم يُعد فصلًا تعسفيًا",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0035-i1",
+          "matched": true,
+          "planner_status": "conditional",
+          "status_correct": false
+        },
+        {
+          "dimension_id": "right_to_challenge_and_compensation_if_arbitrary",
+          "status": "required",
+          "critical": true,
+          "label": "حق الطعن في قرار الفصل أمام الدائرة العمالية واستحقاق المكافأة والتعويض عند ثبوت التعسف",
+          "legal_role": "remedy_route",
+          "issue_id": "gs-0035-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "notice_period_or_pay_in_lieu",
+          "status": "required",
+          "critical": true,
+          "label": "استحقاق مهلة الإخطار أو بدلها إذا أُنهي العقد دون إخطار مسبق",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0035-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "end_of_service_reward_entitlement",
+          "status": "required",
+          "critical": false,
+          "label": "استحقاق مكافأة نهاية الخدمة وطريقة احتسابها",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0035-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "labor_claims_limitation_period",
+          "status": "required",
+          "critical": true,
+          "label": "تقادم الدعاوى العمالية بمضي سنة من تاريخ انتهاء العقد",
+          "legal_role": "deadline",
+          "issue_id": "gs-0035-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        },
+        {
+          "dimension_id": "law_applicability_scope",
+          "status": "required",
+          "critical": false,
+          "label": "انطباق قانون العمل بالقطاع الأهلي (لا الخدمة المدنية أو قطاعات خاصة أخرى) على العلاقة",
+          "legal_role": "definitional",
+          "issue_id": "gs-0035-i1",
+          "matched": true,
+          "planner_status": "conditional",
+          "status_correct": false
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 4
+    },
+    {
+      "case_id": "gs-0036",
+      "complexity": "adversarial",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 4,
+      "planner_dim_count": 11,
+      "dimension_results": [
+        {
+          "dimension_id": "judicial_removal_of_manager",
+          "status": "required",
+          "critical": true,
+          "label": "عزل مدير الشركة ذات المسؤولية المحدودة قضائيًا بطلب شريك يملك ربع رأس المال على الأقل",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0036-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "ministry_convening_on_manager_refusal",
+          "status": "required",
+          "critical": true,
+          "label": "دعوة الوزارة لاجتماع الجمعية العامة عند امتناع المدير عن الدعوة (إنذار + 15 يومًا)",
+          "legal_role": "remedy_route",
+          "issue_id": "gs-0036-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        },
+        {
+          "dimension_id": "neutralizing_shares_to_break_quorum",
+          "status": "required",
+          "critical": true,
+          "label": "تحييد الحصص المعطِّلة للنصاب بأمر على عريضة (قاضي الأمور الوقتية)",
+          "legal_role": "remedy_route",
+          "issue_id": "gs-0036-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "criminal_liability_for_willful_refusal_to_convene",
+          "status": "required",
+          "critical": false,
+          "label": "المسؤولية الجزائية للمدير الذي يمتنع عمدًا عن عقد اجتماع الجمعية بعد إنذاره رسميًا شهرًا",
+          "legal_role": "other",
+          "issue_id": "gs-0036-i1",
+          "matched": false,
+          "planner_status": null,
+          "status_correct": false
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 9
+    },
+    {
+      "case_id": "gs-0037",
+      "complexity": "easy",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 2,
+      "planner_dim_count": 4,
+      "dimension_results": [
+        {
+          "dimension_id": "no_commercial_paper_requirement_for_order_of_payment",
+          "status": "required",
+          "critical": true,
+          "label": "استقلال شروط أمر الأداء عن اشتراط أن يكون السند ورقة تجارية",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0037-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        },
+        {
+          "dimension_id": "general_substantive_conditions_order_of_payment",
+          "status": "required",
+          "critical": true,
+          "label": "الشروط العامة الثلاثة لسلوك طريق أمر الأداء (كتابة + معين المقدار + حال الأداء)",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0037-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 2
+    },
+    {
+      "case_id": "gs-0038",
+      "complexity": "medium",
+      "structural_valid": false,
+      "structural_errors": [
+        "issues[0].dimensions[3].triggering_facts مفقودة أو فارغة",
+        "issues[0].dimensions[4].triggering_facts مفقودة أو فارغة"
+      ],
+      "id_leakage": [],
+      "gt_dim_count": 1,
+      "planner_dim_count": 5,
+      "dimension_results": [
+        {
+          "dimension_id": "formal_deed_requirement_for_wll_contract_amendment",
+          "status": "required",
+          "critical": true,
+          "label": "وجوب إفراغ تعديل عقد الشركة ذات المسؤولية المحدودة في محرر رسمي وبطلان الاتفاق غير الرسمي",
+          "legal_role": "substantive_condition",
+          "issue_id": "gs-0038-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 4
+    },
+    {
+      "case_id": "gs-0039",
+      "complexity": "medium",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 1,
+      "planner_dim_count": 5,
+      "dimension_results": [
+        {
+          "dimension_id": "scope_verification",
+          "status": "required",
+          "critical": false,
+          "label": "التحقق من وجود نص خاص بالعملات الرقمية المشفرة ضمن قانون مكافحة غسل الأموال",
+          "legal_role": "other",
+          "issue_id": "gs-0039-i1",
+          "matched": true,
+          "planner_status": "conditional",
+          "status_correct": false
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 4
+    },
+    {
+      "case_id": "gs-0040",
+      "complexity": "easy",
+      "structural_valid": true,
+      "structural_errors": [],
+      "id_leakage": [],
+      "gt_dim_count": 1,
+      "planner_dim_count": 6,
+      "dimension_results": [
+        {
+          "dimension_id": "scope_verification",
+          "status": "required",
+          "critical": false,
+          "label": "التحقق من نطاق قاعدة الأحوال الشخصية (سنّي/جعفري حصرًا) وعدم شمولها الشريعة اليهودية",
+          "legal_role": "other",
+          "issue_id": "gs-0040-i1",
+          "matched": true,
+          "planner_status": "required",
+          "status_correct": true
+        }
+      ],
+      "n_unsupported_risky": 0,
+      "n_reasonable_elaboration": 5
+    }
+  ],
+  "confusion_matrix_3x3": {
+    "required->required": 93,
+    "required->conditional": 10,
+    "required->possible": 6,
+    "conditional->required": 0,
+    "conditional->conditional": 0,
+    "conditional->possible": 0,
+    "possible->required": 2,
+    "possible->conditional": 0,
+    "possible->possible": 0
+  },
+  "retrieval_class_recall": {
+    "legal_dependency": {
+      "gt": 36,
+      "matched": 25,
+      "cases": 8
+    },
+    "procedure": {
+      "gt": 22,
+      "matched": 17,
+      "cases": 5
+    },
+    "semantic_match": {
+      "gt": 80,
+      "matched": 64,
+      "cases": 21
+    },
+    "lexical_match": {
+      "gt": 11,
+      "matched": 8,
+      "cases": 2
+    },
+    "exception": {
+      "gt": 20,
+      "matched": 18,
+      "cases": 5
+    },
+    "temporal": {
+      "gt": 13,
+      "matched": 11,
+      "cases": 5
+    },
+    "explicit_citation": {
+      "gt": 6,
+      "matched": 4,
+      "cases": 2
+    },
+    "multi_law": {
+      "gt": 12,
+      "matched": 10,
+      "cases": 3
+    },
+    "cross_reference": {
+      "gt": 22,
+      "matched": 18,
+      "cases": 6
+    },
+    "retrieval_instability": {
+      "gt": 3,
+      "matched": 2,
+      "cases": 1
+    },
+    "natural_language_mismatch": {
+      "gt": 16,
+      "matched": 13,
+      "cases": 3
+    },
+    "judicial_principle": {
+      "gt": 10,
+      "matched": 9,
+      "cases": 4
+    },
+    "negative_control_no_source": {
+      "gt": 4,
+      "matched": 3,
+      "cases": 4
+    },
+    "procedural_prerequisite": {
+      "gt": 8,
+      "matched": 5,
+      "cases": 2
+    },
+    "multi_issue": {
+      "gt": 4,
+      "matched": 2,
+      "cases": 1
+    }
+  }
+}
