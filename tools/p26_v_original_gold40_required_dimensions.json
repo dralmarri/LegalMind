@@ -1,0 +1,2228 @@
+[
+  {
+    "case_id": "gs-0001",
+    "required_dimensions": [
+      {
+        "dimension_id": "amr_alada_substantive_conditions",
+        "label": "شروط اللجوء إلى أمر الأداء (دين ثابت بالكتابة، حال الأداء، معين المقدار)",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-38-1980-m166"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م166 مرافعات تشترط لاتباع طريق أمر الأداء أن يكون حق الدائن ثابتا بالكتابة وحال الأداء ومعين المقدار، ويُلزم بهذا الطريق وجوبا إذا كان الدين بورقة تجارية واقتصر الرجوع على الساحب."
+      },
+      {
+        "dimension_id": "mandatory_payment_demand",
+        "label": "التكليف بالوفاء قبل استصدار الأمر (إجراء سابق وجوبي)",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "mandatory_prior_procedure",
+        "ground_truth_authority_ids": [
+          "legis-38-1980-m167"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م167 توجب على الدائن تكليف المدين بالوفاء بميعاد عشرة أيام على الأقل قبل استصدار أمر الأداء؛ ومبدأ الطعن 240/2002 يؤكد أن مخالفة أو بطلان هذا التكليف يترتب عليه إلغاء الأمر واعتباره كأن لم يكن.",
+        "note_extra": "jprin-240-2002-w3440-9cab9086a9"
+      },
+      {
+        "dimension_id": "order_service_and_challenge_deadline",
+        "label": "إعلان أمر الأداء شخصيا وميعاد التظلم منه (عشرة أيام من الإعلان الصحيح)",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "deadline",
+        "ground_truth_authority_ids": [
+          "legis-38-1980-m170",
+          "jprin-305-2005-a761-336747178b"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "م170 تمنح المدين حق التظلم خلال عشرة أيام من تاريخ إعلانه بالأمر. ومبدأ الطعن 305/2005 يقرر أن أوامر الأداء تُنزَّل منزلة الأحكام الغيابية فيجب إعلانها لشخص المدين أو موطنه الأصلي دون جواز الاكتفاء بالإعلان الإداري — وهذا مباشر لواقعة 'لم يعلن بشيء' في السؤال."
+      },
+      {
+        "dimension_id": "travel_ban_substantive_conditions",
+        "label": "شروط صدور أمر منع المدين من السفر (دين محقق حال الأداء + جدية الظن بالفرار)",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-38-1980-m297",
+          "jprin-369-2007-i874-36861980fc"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م297 مرافعات تشترط لصدور أمر المنع من السفر قيام أسباب جدية تدعو للظن بفرار المدين من الوفاء رغم ثبوت قدرته؛ ومبدأ الطعن 369/2007 يقرر أن عبء إثبات توافر هذين الشرطين يقع على الدائن."
+      },
+      {
+        "dimension_id": "travel_ban_lifting_grounds",
+        "label": "حالات سقوط أمر منع السفر (منها سقوط شرط من شروط الأمر)",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "exception",
+        "ground_truth_authority_ids": [
+          "legis-38-1980-m298"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م298 تنص صراحة على أن أمر المنع من السفر يسقط 'إذا سقط أي شرط من الشروط اللازم توفرها للأمر بالمنع من السفر' — وهو المدخل القانوني المباشر إذا ثبت بطلان أمر الأداء أصلا بسبب عدم الإعلان أو التكليف."
+      },
+      {
+        "dimension_id": "signature_denial_procedure",
+        "label": "إنكار التوقيع على الورقة العرفية (مسار قانوني متمايز عن الطعن بالتزوير)",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-39-1980-m13",
+          "legis-39-1980-m27",
+          "legis-39-1980-m37"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م13 و27 إثبات: الورقة العرفية تُعتبر صادرة ممن وقّعها ما لم ينكر صراحة توقيعه، وعندئذ يقع عبء إثبات صدورها منه على خصمه (لا على المنكِر)؛ وم27 توضح أن 'إنكار الخط أو التوقيع' مسار مستقل عن 'الطعن بالتزوير' وكلاهما يرد على الأوراق العرفية بإجراءات مختلفة. م37 تبيّن إجراء دعوى صحة التوقيع/التحقيق عند الإنكار."
+      },
+      {
+        "dimension_id": "forgery_challenge_procedure_alt_route",
+        "label": "الطعن بالتزوير كمسار بديل إن استُعمل مصطلح 'التزوير' فعليا",
+        "required": true,
+        "critical": false,
+        "requires_governing": true,
+        "legal_role": "other",
+        "ground_truth_authority_ids": [
+          "legis-39-1980-m32",
+          "legis-39-1980-m33",
+          "legis-39-1980-m36"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م32-36 إثبات تنظم إجراءات الطعن بالتزوير (إيداع الورقة، التحقيق بالمضاهاة، وغرامة لا تقل عن 300 د.ك عند رفض الطعن). لكن الوقائع (إنكار كامل لصدور التوقيع منه) تُكيَّف قانونا الأقرب باعتبارها 'إنكارا' لا 'طعنا بالتزوير' بحسب م27 — وهذا فارق تقني يستحق تنبيه الموكل لتفادي مخاطر الغرامة إن سُلك المسار الخاطئ."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0002",
+    "required_dimensions": [
+      {
+        "dimension_id": "criminal_offense_bad_check",
+        "label": "أركان جريمة إصدار شيك بدون رصيد",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-16-1960-m237"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م237 جزاء تجرّم إصدار شيك ليس له مقابل وفاء قائم وقابل للتصرف فيه بسوء نية، بعقوبة الحبس حتى 3 سنوات و/أو غرامة حتى 500 دينار، مع جواز الإعفاء من العقوبة إذا أوفى الجاني بقيمة الشيك قبل الحكم النهائي."
+      },
+      {
+        "dimension_id": "mandatory_criminal_complaint_deadline",
+        "label": "ميعاد تقديم الشكوى الجزائية (شرط لقبول الدعوى الجزائية)",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "deadline",
+        "ground_truth_authority_ids": [
+          "legis-16-1960-m237-mukarrar-a"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م237 مكرر أ: لا تُقام الدعوى الجزائية إذا لم يتقدم المجني عليه بشكواه للنيابة العامة خلال 4 أشهر من تاريخ الشيك (إذا سُحب في الكويت) أو 6 أشهر (إذا سُحب خارجها) — تفويت هذا الميعاد يسقط الملاحقة الجزائية نهائيا."
+      },
+      {
+        "dimension_id": "prosecution_exclusive_jurisdiction",
+        "label": "اختصاص النيابة العامة دون غيرها بالتحقيق في جريمة الشيك",
+        "required": true,
+        "critical": false,
+        "requires_governing": true,
+        "legal_role": "jurisdiction",
+        "ground_truth_authority_ids": [
+          "legis-16-1960-m237-mukarrar-b"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م237 مكرر ب تنص صراحة على اختصاص النيابة العامة دون غيرها بالتحقيق والتصرف والادعاء في هذه الجرائم — معلومة إجرائية توجيهية لا تغيّر جوهر الحق."
+      },
+      {
+        "dimension_id": "civil_claim_route_amr_alada",
+        "label": "الطريق الوجوبي للمطالبة المدنية بقيمة الشيك (أمر الأداء بصفته ورقة تجارية)",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "mandatory_prior_procedure",
+        "ground_truth_authority_ids": [
+          "legis-38-1980-m166",
+          "legis-38-1980-m167"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م166 مرافعات توجب اتباع طريق أمر الأداء إذا كان الدائن صاحب ورقة تجارية (كالشيك) واقتصر رجوعه على الساحب، وم167 تشترط تكليفه بالوفاء أولا."
+      },
+      {
+        "dimension_id": "check_civil_claim_prescription",
+        "label": "تقادم دعوى المطالبة بقيمة الشيك (6 أشهر من انقضاء ميعاد التقديم)",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "deadline",
+        "ground_truth_authority_ids": [
+          "legis-68-1980-m550"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م550 تجارة: تتقادم دعاوى رجوع حامل الشيك على الساحب بمضي ستة أشهر من تاريخ انقضاء ميعاد تقديم الشيك."
+      },
+      {
+        "dimension_id": "unjust_enrichment_after_prescription",
+        "label": "دعوى الإثراء بلا سبب كمخرج بعد تقادم الدعوى الصرفية",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "exception",
+        "ground_truth_authority_ids": [
+          "legis-68-1980-m553"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م553 تجارة: لا يحول تقادم الدعوى الصرفية دون مطالبة الحامل للساحب الذي لم يقدم مقابل الوفاء برد ما أثري به دون حق — مسار بديل يحفظ الحق بعد فوات ميعاد م550."
+      },
+      {
+        "dimension_id": "civil_criminal_independence",
+        "label": "استقلال الدعوى المدنية عن نتيجة الدعوى الجزائية",
+        "required": true,
+        "critical": false,
+        "requires_governing": false,
+        "legal_role": "other",
+        "ground_truth_authority_ids": [
+          "jprin-1068-2004-f808-18c18f6704"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "مبدأ الطعن 1068/2004: الحكم الجزائي بالإدانة في جريمة شيك بدون رصيد لا حجية له في مدى أحقية المستفيد بقيمة الشيك أو سببه، ويجوز للمحكمة المدنية بحث ذلك استقلالا."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0003",
+    "required_dimensions": [
+      {
+        "dimension_id": "mandatory_family_settlement_center",
+        "label": "وجوب عرض النزاع على مركز تسوية المنازعات الأسرية قبل رفع دعوى التطليق",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "mandatory_prior_procedure",
+        "ground_truth_authority_ids": [
+          "legis-12-2015-m9"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م9 قانون محكمة الأسرة: دعاوى الطلاق والتطليق التي يجوز فيها الصلح 'لا تُقبل رفعها ابتداء أمام محكمة الأسرة' قبل البتّ في طلب يقدَّم لمركز تسوية المنازعات الأسرية المختص — شرط قبول شكلي وجوبي."
+      },
+      {
+        "dimension_id": "divorce_for_harm_substantive_condition",
+        "label": "الشرط الموضوعي للتطليق للضرر (إضرار يتعذر معه دوام العشرة)",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-51-1984-m126"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م126 أحوال شخصية: لكل من الزوجين طلب التفريق بسبب إضرار الآخر به قولا أو فعلا بما لا يستطاع معه دوام العشرة بين أمثالهما."
+      },
+      {
+        "dimension_id": "hakamayn_arbitration_when_harm_unproven",
+        "label": "إجراء الحكمين الوجوبي عند تعذر إثبات الضرر مباشرة",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "mandatory_prior_procedure",
+        "ground_truth_authority_ids": [
+          "legis-51-1984-m127",
+          "legis-51-1984-m129"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م127: على المحكمة أن تبذل وسعها للإصلاح، فإن تعذر وثبت الضرر حكمت بالتفريق، وإن لم يثبت عيّنت حكمين للتوفيق أو التفريق (م129 تفصّل مهمتهما) — وهذا إجراء تحقق منه أيضا م10 ق12/2015 بأن التسوية الودية لا تغني عن اتباع هذه القواعد."
+      },
+      {
+        "dimension_id": "spousal_maintenance_entitlement",
+        "label": "استحقاق الزوجة النفقة الزوجية",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-51-1984-m74"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م74: تجب النفقة للزوجة على زوجها بالعقد الصحيح ولو كانت موسرة، إذا سلّمت نفسها إليه ولو حكما."
+      },
+      {
+        "dimension_id": "child_maintenance_entitlement",
+        "label": "استحقاق نفقة الأولاد على والدهم",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-51-1984-m202"
+        ],
+        "ground_truth_status": "partially_verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م202: يجب على الأب الموسر نفقة ولده الفقير العاجز عن الكسب حتى يستغني. النص لا يذكر صراحة سنا محددة لنهاية الاستحقاق (يرتبط بالعجز عن الكسب/الاستغناء لا بسن ثابتة)، لذا الحالة موسومة partially_verified فيما يخص تفاصيل الحدود العمرية الدقيقة."
+      },
+      {
+        "dimension_id": "retroactive_maintenance_time_limit",
+        "label": "حدّ السماع الزمني للمطالبة بنفقة سابقة (سنتان)",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "deadline",
+        "ground_truth_authority_ids": [
+          "legis-51-1984-m78"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م78(ب): لا تُسمع دعوى النفقة عن مدة سابقة تزيد على سنتين نهايتهما تاريخ رفع الدعوى، إلا إذا كانت مفروضة بالتراضي — يحدّ مباشرة من مقدار ما يمكن للزوجة استرداده من نفقة متأخرة."
+      },
+      {
+        "dimension_id": "family_court_jurisdiction",
+        "label": "اختصاص محكمة الأسرة بجميع دعاوى الأسرة ذاتها لاحقا",
+        "required": true,
+        "critical": false,
+        "requires_governing": true,
+        "legal_role": "jurisdiction",
+        "ground_truth_authority_ids": [
+          "legis-12-2015-m6"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م6: محكمة الأسرة التي رفعت إليها أول دعوى من أحد الزوجين تختص دون غيرها بكل دعاوى الأحوال الشخصية اللاحقة بينهما بما فيها النفقات — معلومة اختصاص إجرائية لا تغيّر جوهر الحق المطالب به."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0004",
+    "required_dimensions": [
+      {
+        "dimension_id": "jafari_custody_priority_rule",
+        "label": "أحقية الأم بالحضانة الجعفرية وعدم سقوطها بمجرد الطلاق",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-124-2019-m243",
+          "legis-124-2019-m247"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م243: الأم أحق بحضانة ولدها (ذكرا أو أنثى) حتى بلوغه سبع سنين ثم تكون للأب حتى البلوغ الشرعي. وم247: لا يسقط حق الأم في الحضانة بمجرد فراق الأب لها بطلاق أو فسخ، ولا يسقط إلا إذا تزوجت الأم بغير الأب أثناء مدة الحضانة."
+      },
+      {
+        "dimension_id": "custody_termination_age_exception",
+        "label": "سن انتهاء الحضانة الجعفرية (استثناء عن التفريق السني بين الذكر والأنثى)",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "exception",
+        "ground_truth_authority_ids": [
+          "legis-124-2019-m243",
+          "legis-124-2019-m248"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م243 (جعفري) توحّد سن انتقال الحضانة من الأم للأب عند سبع سنين لكلا الجنسين (بخلاف تفريق السني بين الغلام والجارية في بعض السياقات)، وتستمر حضانة الأب 'حتى البلوغ الشرعي'؛ وم248 تزيد بأن أي حضانة (من أي طرف) تنتهي كليا ببلوغ الولد 'رشيدا' حيث يصبح مالكا لأمر نفسه وله الخيار في الانضمام لمن شاء."
+      },
+      {
+        "dimension_id": "custodian_eligibility_conditions_jafari",
+        "label": "شروط استحقاق الحضانة الجعفرية (الإسلام، العقل، الأمانة على سلامة الولد)",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-124-2019-m252"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م252 (جعفري): يشترط فيمن يثبت له حق الحضانة من الأبوين أو غيرهما أن يكون مسلما عاقلا مأمونا على سلامة الولد صحيا وخلقيا — شرط جوهري يمكن أن يُنازَع فيه أحد الطرفين لإسقاط أهلية الآخر للحضانة."
+      },
+      {
+        "dimension_id": "family_court_jurisdiction",
+        "label": "اختصاص محكمة الأسرة بنظر دعاوى الحضانة",
+        "required": true,
+        "critical": false,
+        "requires_governing": true,
+        "legal_role": "jurisdiction",
+        "ground_truth_authority_ids": [
+          "legis-12-2015-m6"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م6 قانون محكمة الأسرة تدرج صراحة 'دعاوي حضانة الصغير ورؤيته وضمه ومسكن حضانته' ضمن اختصاص محكمة الأسرة التي سبق أن رفعت أمامها دعوى بين الزوجين."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0005",
+    "required_dimensions": [
+      {
+        "dimension_id": "notice_period_requirement",
+        "label": "وجوب الإخطار قبل إنهاء عقد العمل غير محدد المدة (أو بدل مهلة الإخطار)",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "mandatory_prior_procedure",
+        "ground_truth_authority_ids": [
+          "legis-6-2010-m44"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م44 قانون العمل الأهلي (6/2010): إنهاء العقد غير محدد المدة يستلزم إخطارا مسبقا (3 أشهر للعامل الشهري أو شهر لغيره)، فإن لم يُراعَ ذلك التزم من أنهى العقد بدفع بدل مهلة الإخطار مساويا لأجر تلك المدة — وهذا مباشر لواقعة 'فصل دون إنذار'."
+      },
+      {
+        "dimension_id": "arbitrary_dismissal_definition_and_grounds",
+        "label": "التمييز بين الفصل المشروع (لأسباب محددة حصرا) والفصل التعسفي",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-6-2010-m41"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م41 تحصر حالات فصل العامل دون تعويض أو مكافأة (خطأ جسيم، غش، إفشاء أسرار) وحالات الفصل بحالات أخرى محددة (جريمة مخلة بالشرف، إخلال متكرر...)، وتنص صراحة في الفقرة (ج) على أنه 'إذا ثبت بموجب حكم نهائي أن صاحب العمل قد تعسف في فصله استحق الأخير مكافأة نهاية الخدمة وتعويضا عما لحقه من أضرار مادية وأدبية'."
+      },
+      {
+        "dimension_id": "labor_dispute_challenge_route",
+        "label": "حق الطعن في قرار الفصل أمام الدائرة العمالية المختصة",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "jurisdiction",
+        "ground_truth_authority_ids": [
+          "legis-6-2010-m41"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "الفقرة (ج) من م41 نفسها تمنح العامل المفصول حق الطعن في قرار الفصل أمام الدائرة العمالية المختصة وفقا للإجراءات المنصوص عليها في القانون — طريق الطعن اللازم لإثبات التعسف والحصول على التعويض."
+      },
+      {
+        "dimension_id": "end_of_service_gratuity_calculation",
+        "label": "طريقة احتساب مكافأة نهاية الخدمة",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-6-2010-m51"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م51: للعامل الشهري أجر 15 يوما عن كل سنة من السنوات الخمس الأولى وأجر شهر عن كل سنة تالية، بحد أقصى أجر سنة ونصف، مع مكافأة عن كسور السنة بنسبة ما قضاه فيها."
+      },
+      {
+        "dimension_id": "full_gratuity_entitlement_on_employer_termination",
+        "label": "استحقاق المكافأة كاملة إذا كان إنهاء العقد من جانب صاحب العمل",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-6-2010-m52"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م52(أ): يستحق العامل مكافأة نهاية الخدمة كاملة (بلا تخفيض نسبي بحسب مدة الخدمة كما في حالة استقالته هو) 'إذا انتهى العقد من جانب صاحب العمل' — وهي حالة الفصل المطروحة في السؤال."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0006",
+    "required_dimensions": [
+      {
+        "dimension_id": "eviction_nonpayment_grounds",
+        "label": "شرط وحصر أسباب إخلاء المأجور: عدم سداد الأجرة خلال 20 يومًا من الاستحقاق",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-35-1978-m20"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 20(1) من قانون إيجار العقارات (35/1978) تحصر حالات الإخلاء ومنها «إذا لم يدفع المستأجر الأجرة المستحقة عليه ... خلال عشرين يومًا من تاريخ استحقاقها» — هذا النص هو الشرط الموضوعي الحاكم لدعوى الإخلاء لعدم السداد، وبدونه لا يقوم سبب الإخلاء."
+      },
+      {
+        "dimension_id": "tenant_cure_defense",
+        "label": "رخصة اعتبار الدعوى كأن لم تكن إذا سدد المستأجر كامل المتأخر حتى أول جلسة بعذر مقبول",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "exception",
+        "ground_truth_authority_ids": [
+          "legis-35-1978-m20"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "نفس المادة 20(1) تنص على أن للقاضي أن يحكم باعتبار دعوى الإخلاء كأن لم تكن إذا أثبت المستأجر أن تأخره يرجع لعذر قوي وأوفى بكامل الأجرة المستحقة حتى نهاية أول جلسة أُعلن بها إعلانًا صحيحًا — دفع جوهري قد يُسقط طلب الإخلاء كليًا فهو حرج للنتيجة."
+      },
+      {
+        "dimension_id": "rent_arrears_claim",
+        "label": "أساس الالتزام بسداد الأجرة والمطالبة بالمتأخر منها",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-67-1980-m586"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "المادة 586 من القانون المدني: «يجب على المستأجر الوفاء بالأجرة في المواعيد المتفق عليها» — هي السند الموضوعي لطلب إلزام المستأجر بالأجرة المتأخرة."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0007",
+    "required_dimensions": [
+      {
+        "dimension_id": "annulment_jurisdiction_scope",
+        "label": "اختصاص الدائرة الإدارية بإلغاء قرار إنهاء خدمة الموظف المدني والتعويض عنه",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "jurisdiction",
+        "ground_truth_authority_ids": [
+          "legis-20-1981-m1",
+          "legis-20-1981-m5"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 1 (رابعًا) تدخل «الطلبات التي يقدمها الموظفون المدنيون بإلغاء القرارات الصادرة بإنهاء خدمتهم» ضمن اختصاص الدائرة الإدارية بولايتي الإلغاء والتعويض معًا؛ والمادة 5 تؤكد اختصاصها وحدها بطلبات التعويض عن هذه القرارات سواء بطريقة أصلية أو تبعية."
+      },
+      {
+        "dimension_id": "mandatory_prior_grievance",
+        "label": "وجوب التظلم الإداري قبل قبول دعوى إلغاء قرار إنهاء الخدمة",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "mandatory_prior_procedure",
+        "ground_truth_authority_ids": [
+          "legis-20-1981-m8"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 8: «لا تقبل طلبات الإلغاء المنصوص عليها في البنود ثانيًا وثالثًا ورابعًا من المادة الأولى ... قبل التظلم منها إلى الجهة التي أصدرتها أو الجهات الرئاسية وانتظار المواعيد المقررة للبت في التظلم» — وقرار إنهاء الخدمة من البند رابعًا، فعدم التظلم يجعل الدعوى غير مقبولة."
+      },
+      {
+        "dimension_id": "annulment_deadline",
+        "label": "ميعاد رفع دعوى الإلغاء وأثر التظلم على قطع الميعاد",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "deadline",
+        "ground_truth_authority_ids": [
+          "legis-20-1981-m7"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "المادة 7: ميعاد دعوى الإلغاء ستون يومًا من تاريخ نشر القرار أو إعلان صاحب الشأن به أو علمه اليقيني، وينقطع بالتظلم، ويجب البت فيه خلال 60 يومًا وإلا اعتُبر رفضًا ضمنيًا يبدأ منه ميعاد جديد."
+      },
+      {
+        "dimension_id": "compensation_for_illegal_decision",
+        "label": "طلب التعويض عن أضرار قرار إنهاء الخدمة غير المشروع",
+        "required": true,
+        "critical": false,
+        "requires_governing": true,
+        "legal_role": "remedy_route",
+        "ground_truth_authority_ids": [
+          "legis-20-1981-m1",
+          "legis-20-1981-m5"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 1 تمنح الدائرة الإدارية «ولاية قضاء الإلغاء والتعويض» معًا، والمادة 5 تنص صراحة على اختصاصها وحدها بطلبات التعويض عن القرارات المشار إليها سواء رُفعت بطريقة أصلية أو تبعية لدعوى الإلغاء."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0008",
+    "required_dimensions": [
+      {
+        "dimension_id": "tasattur_definition_and_prohibition",
+        "label": "الركن المادي لجريمة التستر التجاري: تمكين الأجنبي من ممارسة نشاط اقتصادي محظور عليه",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "definitional",
+        "ground_truth_authority_ids": [
+          "legis-78-2026-m1",
+          "legis-78-2026-m2"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 1(4) تُعرّف التستر التجاري بأنه «تمكين أي شخص ... من ممارسة أي نشاط اقتصادي يحظر عليه ممارسته وفقًا لأحكام القوانين النافذة ... أو الالتفاف على نسب الملكية المقررة قانونًا للأجانب»؛ والمادة 2 تحظر صراحة تمكين الغير من مزاولة النشاط بالتستر (استخدام الاسم التجاري/الترخيص/السجل التجاري)."
+      },
+      {
+        "dimension_id": "tasattur_penalty",
+        "label": "العقوبة المقررة لجريمة التستر التجاري",
+        "required": true,
+        "critical": false,
+        "requires_governing": true,
+        "legal_role": "other",
+        "ground_truth_authority_ids": [
+          "legis-78-2026-m3"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 3 تعاقب على مخالفة حظر المادة الثانية بالحبس من سنة إلى ثلاث سنوات وغرامة من 10,000 إلى 100,000 دينار أو ما يعادل الأرباح المتحصلة أيهما أكبر."
+      },
+      {
+        "dimension_id": "tasattur_effective_date",
+        "label": "تاريخ سريان مرسوم بقانون مكافحة التستر (78/2026) — بعد ستة أشهر من النشر لا من تاريخ الإصدار",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "deadline",
+        "ground_truth_authority_ids": [
+          "legis-78-2026-m14"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 14 (التنفيذ والنفاذ): «يعمل به بعد ستة أشهر من تاريخ نشره في الجريدة الرسمية» — فالسؤال عن متى يبدأ السريان يُحسم حرفيًا بهذا النص، لا بتاريخ صدور المرسوم نفسه."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0009",
+    "required_dimensions": [
+      {
+        "dimension_id": "manager_removal_by_partners_majority",
+        "label": "عزل مدير الشركة ذات المسئولية المحدودة بالأغلبية اللازمة لتعديل عقد الشركة، أو قضائيًا عند تعذر ذلك",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-1-2016-m50"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 50 من قانون الشركات: «لا يجوز عزل مدير الشركة إلا بالأغلبية اللازمة لتعديل عقد الشركة، ومع ذلك يجوز عزل أي مدير بحكم قضائي بناءً على طلب أحد الشركاء إذا كانت هناك أسباب تبرر العزل»، مع استثناء خاص إذا بلغت حصص المدير نصف رأس المال فأكثر فلا يُعزل إلا قضائيًا."
+      },
+      {
+        "dimension_id": "judicial_removal_specific_grounds",
+        "label": "شروط طلب العزل القضائي للمدير: نصاب ربع رأس المال وأسباب الغش أو الضرر الجسيم",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-1-2016-m104"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 104: يجوز عزل المدير بحكم قضائي بناءً على طلب شريك أو أكثر يملكون ربع حصص رأس المال على الأقل، للغش أو الخطأ الجسيم أو مخالفة المادة 106 — وهذا يحدد نصاب وأسباب الطعن القضائي إن تعذر العزل بالأغلبية العادية."
+      },
+      {
+        "dimension_id": "company_contract_amendment_majority",
+        "label": "نصاب تعديل عقد الشركة: أغلبية عددية للشركاء يملكون ثلاثة أرباع رأس المال",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-1-2016-m52"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 52: «لا يجوز تعديل عقد الشركة إلا بقرار يصدر عن اجتماع الشركاء بالأغلبية العددية للشركاء الذين يملكون ثلاثة أرباع رأس المال، وينفذ التعديل بالقيد» — نصاب أعلى من نصاب عزل المدير العادي، حاسم لصحة قرار التعديل."
+      },
+      {
+        "dimension_id": "manager_refusal_to_convene_assembly",
+        "label": "إجراء تدخل الوزارة عند امتناع المدير عن دعوة جمعية الشركاء للانعقاد",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "mandatory_prior_procedure",
+        "ground_truth_authority_ids": [
+          "regl-1-2016-m65"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "المادة 65 من اللائحة التنفيذية (287/2016): عند امتناع المدير عن الدعوة، يُنذر رسميًا، ومع مضي 15 يومًا بلا استجابة دون مبرر تتولى الوزارة الدعوة خلال 15 يومًا من تسلّم الطلب — إجراء إلزامي بديل حال امتناع المدير يمكّن الشركاء عمليًا من فرض العزل/التعديل."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0010",
+    "required_dimensions": [
+      {
+        "dimension_id": "wife_share_with_descendant",
+        "label": "نصيب الزوجة فرضًا: الثمن لوجود فرع وارث (بنتين)",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-51-1984-m299"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 299(ب): «للزوجة ... فرض الربع عند عدم الولد ... والثمن مع الولد» — ووجود البنتين (ولد) يُنزل نصيب الزوجة من الربع إلى الثمن."
+      },
+      {
+        "dimension_id": "daughters_share_two_thirds",
+        "label": "نصيب البنتين فأكثر فرضًا: الثلثان عند عدم وجود ابن",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-51-1984-m300"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 300(أ): «للواحدة من البنات فرض النصف، وللاثنتين فأكثر الثلثان» — والبنتان في الواقعة تستحقان الثلثين معًا فرضًا (بشرط عدم وجود ابن يجعلهما عصبة بالغير، وهو ما لم يرد في الوقائع)."
+      },
+      {
+        "dimension_id": "full_brother_residuary",
+        "label": "استحقاق الأخ الشقيق للباقي عصبة بالنفس بعد أصحاب الفروض",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-51-1984-m305"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 305 تُدرج «الإخوة» (وتشمل الإخوة للأبوين) كجهة ثالثة من جهات العصبة بالنفس بعد البنوة والأبوة؛ ومع عدم وجود ابن أو أب للمتوفى في وقائع الحالة، يستحق الأخ الشقيق الباقي بعد فروض الزوجة والبنتين تعصيبًا."
+      },
+      {
+        "dimension_id": "no_son_no_father_precondition",
+        "label": "افتراض عدم وجود ابن أو أب للمورث كشرط لتفعيل تعصيب الأخ الشقيق وبقاء البنات على فرضهن",
+        "required": true,
+        "critical": true,
+        "requires_governing": false,
+        "legal_role": "other",
+        "ground_truth_authority_ids": [],
+        "ground_truth_status": "unresolved",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "وقائع السؤال (زوجة وبنتان وأخ شقيق) لا تذكر صراحة غياب الابن أو الأب أو الجد، وهذا افتراض ضمني حاسم للنتيجة (وجود أب كان سيحجب الأخ الشقيق بالكامل بحكم المادة 305، ووجود ابن كان يجعل البنات عصبة بالغير لا صاحبات فرض) — لم أجد نصًا يغني عن التحقق الوقائعي المباشر من عدم وجود هؤلاء الورثة قبل تطبيق الفريضة."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0011",
+    "required_dimensions": [
+      {
+        "dimension_id": "sima_dawa_alzawjiya_inkar",
+        "label": "عدم سماع دعوى الزوجية عند الإنكار إلا بوثيقة رسمية أو إقرار في ورقة رسمية (الزواج العرفي)",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-51-1984-m92",
+          "legis-51-1984-m93"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م92 ق51/1984 تنص صراحة: لا تسمع دعوى الزوجية عند الإنكار إلا إذا كانت ثابتة بوثيقة زواج رسمية أو سبق الإنكار إقرار بالزوجية في أوراق رسمية، مع استثناء أن تكون الدعوى سببًا لدعوى نسب مستقل. م93 تحدد أهلية دعوى الزوجية. هذا يحكم مباشرة مركز الزوجة الجعفرية التي عقدت زواجًا عرفيًا غير موثق."
+      },
+      {
+        "dimension_id": "lijnat_alnasab_wujubiya",
+        "label": "وجوب عرض دعوى إثبات النسب على لجنة دعاوى النسب قبل رفعها للقضاء",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "mandatory_prior_procedure",
+        "ground_truth_authority_ids": [
+          "legis-53-2026-m8",
+          "legis-53-2026-m7",
+          "legis-53-2026-m10"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_object",
+        "verification_note": "م8 من مرسوم بقانون 53/2026: لا تقبل دعوى النسب إلا إذا سبقها تحقيق تجريه لجنة دعاوى النسب، وعلى اللجنة إحالته للمحكمة بتقرير خلال ستة أشهر (ثلاثة أشهر لنفي النسب باللعان)، وإلا جاز للجنة اللجوء للقضاء مباشرة. م7 و10 يفصلان إجراءات اللجنة وسلطتها في الأمر بفحص البصمة الوراثية. إجراء وجوبي جوهري لإثبات نسب الطفلين المتنازع عليه."
+      },
+      {
+        "dimension_id": "athar_ikhtilaf_almadhab_ala_alqanoon_almutabbaq",
+        "label": "أثر اختلاف مذهب الزوجين (وورثتهما) على القانون واجب التطبيق في مسائل الزوجية والميراث",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-51-1984-m346",
+          "jprin-1141-2012-s523-16e6304577",
+          "jprin-1289-2014-s2176-bca33d1822"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "م346/ب ق51/1984: إذا كان أطراف النزاع مختلفين دينًا أو مذهبًا سرت عليهم أحكام هذا القانون (لا المذهب الجعفري). مبدآ الطعنين 1141/2012 و1289/2014 يؤكدان حرفيًا: 'اختلافهما في المذهب يطبق قانون رقم 51 لسنة 1984'. حاسم لأن الزوجة جعفرية والزوج سني وورثته (أبناء الزوجة الأولى) قد يكونون سنة أيضًا، فيحكم هذا النص أي نظام ميراث يُطبَّق على النزاع لا مذهب الزوجة وحده."
+      },
+      {
+        "dimension_id": "tadakhkhul_alniyaba_alamma_wujubi",
+        "label": "وجوب تدخل النيابة العامة في دعاوى النسب باعتبارها من النظام العام",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "mandatory_prior_procedure",
+        "ground_truth_authority_ids": [
+          "legis-51-1984-m337",
+          "legis-51-1984-m338"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م337: على النيابة العامة رفع الدعاوى أو التدخل فيها في كل أمر يمس النظام العام. م338 تُدرج صراحة 'دعاوى النسب' ضمن مسائل النظام العام الموجبة لتدخل النيابة. إغفال هذا الإجراء في دعوى نسب الطفلين قد يشوب الحكم."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0012",
+    "required_dimensions": [
+      {
+        "dimension_id": "rasmiyat_bay_almatjar",
+        "label": "الرسمية ركن انعقاد لبيع المتجر (المحل التجاري) — البطلان المطلق عند تخلفها",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-68-1980-m36",
+          "jprin-137-1994-f320-e1a16a5695",
+          "jprin-1000-2008-i1144-aa068f3f04"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م36/1 قانون التجارة 68/1980: لا يتم بيع المتجر إلا بورقة رسمية. مبدأ الطعن 137/1994 والطعن 1000/2008 يؤكدان: الرسمية ركن في الانعقاد، وتخلفها يوجب البطلان المطلق المتعلق بالنظام العام تقضي به المحكمة من تلقاء نفسها. هذا الشرط جوهري لصحة أي نموذج عقد بيع محل تجاري."
+      },
+      {
+        "dimension_id": "tahdid_anasir_almatjar_wa_thamanuha",
+        "label": "تعريف عناصر المتجر (مادية وغير مادية) ووجوب تحديد ثمن كل عنصر منها على حدة في العقد",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-68-1980-m34",
+          "legis-68-1980-m36",
+          "jprin-96-1997-e5827-50aef86a9f"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م34: المتجر يشمل عناصر مادية (بضائع، أثاث، آلات) وغير مادية (عملاء، عنوان تجاري، حق الإيجار، علامات...). م36/2 توجب تحديد ثمن البضائع والمهمات المادية والعناصر غير المادية كل على حدة مع ترتيب خصمها من الثمن المدفوع. مبدأ الطعن 96/1997: عنصر الاتصال بالعملاء لا غنى عنه، وبيعه وحده يُعد بيعًا للمتجر. بند جوهري في صياغة أي عقد بيع متجر."
+      },
+      {
+        "dimension_id": "shahr_bay_almatjar",
+        "label": "شهر عقد بيع المتجر بالقيد في السجل التجاري وأثره في حفظ امتياز البائع",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "mandatory_prior_procedure",
+        "ground_truth_authority_ids": [
+          "legis-68-1980-m37"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م37: يُشهر عقد بيع المتجر بقيده في السجل التجاري، ويكفل القيد حفظ امتياز البائع لمدة خمس سنوات قابلة للتجديد، ويُشطب بتراضي الأطراف أو بحكم نهائي. إغفال الشهر يفوّت على البائع ضمانة امتيازه تجاه الغير."
+      },
+      {
+        "dimension_id": "haqq_albaie_ind_adam_alwafa",
+        "label": "حق البائع أو الدائن المرتهن في طلب البيع بالمزاد عند عدم وفاء المشتري بالثمن",
+        "required": true,
+        "critical": false,
+        "requires_governing": true,
+        "legal_role": "remedy_route",
+        "ground_truth_authority_ids": [
+          "legis-68-1980-m44"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م44: عند عدم الوفاء بالثمن أو الدين، يجوز للبائع أو الدائن المرتهن بعد تنبيه رسمي بثمانية أيام أن يستصدر إذنًا من قاضي الأمور المستعجلة ببيع مقومات المتجر بالمزاد العلني. بند تكميلي مفيد لصياغة شرط جزائي/ضماني في العقد، وليس شرط صحة."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0013",
+    "required_dimensions": [
+      {
+        "dimension_id": "shurut_amr_alada",
+        "label": "شروط استصدار أمر الأداء ووجوب سلوكه حصرًا عند الرجوع بورقة تجارية على الساحب/الضامن",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-38-1980-m166",
+          "legis-38-1980-m167"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م166 مرافعات: يجب اتباع إجراءات أمر الأداء إذا كان صاحب الحق دائنًا بورقة تجارية واقتصر رجوعه على الساحب أو المحرر أو القابل أو الضامن الاحتياطي — وهذا ينطبق مباشرة على المورّد حامل الشيكين ضد الشركة الساحبة. م167 تفصّل التكليف بالوفاء (10 أيام على الأقل) ثم استصدار الأمر خلال 3 أيام من العريضة."
+      },
+      {
+        "dimension_id": "tazallum_amr_alada_wa_miadihi",
+        "label": "ميعاد وإجراءات التظلم من أمر الأداء (عشرة أيام) وعدم جواز استئنافه مباشرة",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "deadline",
+        "ground_truth_authority_ids": [
+          "legis-38-1980-m170",
+          "legis-38-1980-m171"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م170: يجوز للمدين التظلم من الأمر خلال عشرة أيام من إعلانه، ويكون مسببًا وإلا كان باطلاً، ولا يجوز استئناف أمر الأداء ذاته (إنما يُستأنف الحكم الصادر في التظلم). م171: يسري على أمر الأداء والحكم في التظلم أحكام النفاذ المعجل."
+      },
+      {
+        "dimension_id": "man_almudir_min_alsafar",
+        "label": "شروط وضمانات منع المدين (المدير المفوض) من السفر لتحصيل الدين",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-38-1980-m297",
+          "legis-38-1980-m298",
+          "jprin-1396-2005-i904-fae32f326b"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م297 مرافعات: يشترط أن يكون الدين محقق الوجود حال الأداء وقيام أسباب جدية للظن بفرار المدين رغم قدرته على الوفاء. م298 تحدد حالات سقوط أمر المنع (كفالة مصرفية، إيداع مبلغ الدين، عدم رفع الدعوى خلال 7 أيام...). مبدأ الطعن 1396/2005 يؤكد الشرطين معًا صراحة بالإحالة لذات المادتين. يحكم مباشرة سؤال منع المدير من السفر وضماناته."
+      },
+      {
+        "dimension_id": "taqadum_sarfi_wa_baqaa_tariq_alithra",
+        "label": "التقادم الصرفي لدعوى الشيك (ستة أشهر) وبقاء طريق دعوى الإثراء بلا سبب للمطالبة بأصل الدين",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "exception",
+        "ground_truth_authority_ids": [
+          "legis-68-1980-m550",
+          "jprin-260-1995-e10761-c35d7f3ef2"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م550 قانون التجارة: تتقادم دعوى رجوع حامل الشيك على الساحب بمضي ستة أشهر من انقضاء ميعاد التقديم — ينطبق على الشيك الأول (سنتان ونصف). مبدأ الطعن 260/1995 يقرر صراحة: تقادم دعوى المطالبة بالشيك لا يحول دون رجوع الحامل على الساحب بالتعويض على أساس الإثراء بلا سبب — فلا يسقط أصل الدين، بل يتغير طريق المطالبة به."
+      },
+      {
+        "dimension_id": "masuliyat_mudir_alsharika_alshakhsiya",
+        "label": "متى تمتد المسؤولية الشخصية لمدير الشركة ذات المسؤولية المحدودة عن ديون الشركة",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "jprin-208-1986-e8318-d415775c4a",
+          "jprin-1161-2007-i898-022c3aa334",
+          "jprin-119-1996-e8895-33499832c8"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "الطعن 208/1986: الذمة المالية للمدير مستقلة عن ذمة الشركة كأصل. الطعن 1161/2007: مسؤولية المدير مسؤولية تقصيرية تستلزم إثبات خطئه وضرر وسببية (عبء الإثبات على المضرور) — لا مسؤولية تلقائية عن مجرد ديون الشركة. الطعن 119/1996: من يُسأل شخصيًا هو من كان يحمل صفة المدير وقت إبرام العقد المرتب للمديونية. يحسم أن مساءلة المدير المفوض بالتوقيع شخصيًا مشروطة بخطأ شخصي مُثبَت لا آلية."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0014",
+    "required_dimensions": [
+      {
+        "dimension_id": "sarayan_alqararat_alaskariya_ala_almujannadin",
+        "label": "سريان القرارات والأوامر العسكرية على المجندين والاحتياطيين فيما لا يرد بشأنه نص في القانون",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-20-2015-m49"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_object",
+        "verification_note": "م49 من قانون الخدمة الوطنية العسكرية 20/2015 (النص النافذ) تنص حرفيًا: 'تسري على المجندين والاحتياطيين -الموجودين في الخدمة- القرارات والأوامر العسكرية، فيما لم يرد بشأنه نص في هذا القانون'، وتُخضعهم أيضًا لأحكام القرار الوزاري الخاص بالبدلات عند تماثل طبيعة العمل. يجيب مباشرة على السؤال المطروح."
+      },
+      {
+        "dimension_id": "ijraat_altaqaddum_liltajil_liljiha_almukhtassa",
+        "label": "شروط وفئات التقدم بطلب تأجيل الخدمة العاملة إلى الجهة العسكرية المختصة",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "mandatory_prior_procedure",
+        "ground_truth_authority_ids": [
+          "legis-20-2015-m13"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_object",
+        "verification_note": "م13 (بعد تعديل المرسوم 9/2026) تحدد حصرًا فئات تأجيل أداء الخدمة العاملة (المعيل الوحيد، أبناء الأسير/المفقود/الشهيد، من توفيت زوجته الوحيدة...) مع شرط تقديم ما يثبت الحالة سنويًا لبعض الفئات، وتنظم أيضًا حالة العلاج من الإدمان بقرار من اللجنة الطبية العسكرية. هذا هو النص الحاكم لإجراءات وشروط التقدم لطلب التأجيل."
+      },
+      {
+        "dimension_id": "shahadat_ada_alkhidma_shart_altayeen",
+        "label": "اشتراط شهادة أداء/تأجيل/إعفاء الخدمة الوطنية للتعيين في الوظائف",
+        "required": true,
+        "critical": false,
+        "requires_governing": true,
+        "legal_role": "other",
+        "ground_truth_authority_ids": [
+          "LEG-20-3-bcffde99b733e588"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "م3 (بعد تعديل المرسوم 9/2026) تشترط لتعيين المستدعى تقديم شهادة من هيئة الخدمة الوطنية العسكرية بعدم وجود مانع من التعيين، مع حظر رفض تعيينه لمجرد استدعائه. سياق داعم لأثر الاستدعاء على وضعه الوظيفي، وليس جوهر السؤال المباشر."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0015",
+    "required_dimensions": [
+      {
+        "dimension_id": "mukawwanat_ras_almal_alriqabi",
+        "label": "مكونات رأس المال الرقابي المؤهل (CET1 / AT1 / T2) وفق تعليمات كفاية رأس المال",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "definitional",
+        "ground_truth_authority_ids": [
+          "LEG-UNKNOWN-P1-art3-3-aca816b5521b051f"
+        ],
+        "ground_truth_status": "partially_verified",
+        "verification_method": "mcp_get_object",
+        "verification_note": "المادة 3-3 موجودة حرفيًا في القاعدة وتحدد مكونات رأس المال الرقابي المؤهل (حقوق المساهم CET1، رأس المال الإضافي AT1، رأس المال المساند T2، وحقوق الأقلية المؤهلة). لكن الكائن مصنَّف `legislation_archived` ويحمل علامة الأداة الصريحة «⚠ صيغة استرشادية غير قابلة للاستشهاد» — أي أن المحتوى موجود وصحيح موضوعيًا لكن قاعدة أمانة المشروع تمنع اعتباره نصًا رسميًا قابلاً للاستشهاد به مباشرة كسند حاكم قاطع؛ لذا يُصنَّف partially_verified لا verified."
+      },
+      {
+        "dimension_id": "manhajiyat_rabt_ras_almal_bilmakhatir",
+        "label": "منهجية ربط متطلبات رأس المال الرقابي بالمخاطر التي يتعرض لها البنك (مخاطر السوق/الائتمان/التشغيل)",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "LEG-UNKNOWN-P1-art2-1-d81ec2705b9a0b76"
+        ],
+        "ground_truth_status": "partially_verified",
+        "verification_method": "mcp_get_object",
+        "verification_note": "المادة 2-1 موجودة حرفيًا: 'تحدد التعليمات متطلبات رأس المال الرقابي بناءً على المخاطر التي يتعرض لها الشخص المرخص له، وينبغي عليه الاحتفاظ برأس مال يتناسب مع المخاطر التي يواجهها' — وجدول المحتويات يؤكد وجود فصل كامل (الفصل الرابع) لاحتساب متطلبات رأس المال حسب أنواع المخاطر (سوق/تشغيل/استثمار/ائتمان). نفس التحفظ السابق: كائن `legislation_archived` موسوم من أداة البحث نفسها بأنه غير قابل للاستشهاد به رسميًا، فالمحتوى مطابق موضوعيًا لكن مكانته كسند قانوني قاطع محل تحفظ توثقه القاعدة ذاتها — partially_verified."
+      },
+      {
+        "dimension_id": "sultat_albank_almarkazi_alriqabiya",
+        "label": "أساس اختصاص بنك الكويت المركزي الرقابي على البنوك المحلية في تنظيم متطلبات رأس المال",
+        "required": true,
+        "critical": false,
+        "requires_governing": true,
+        "legal_role": "jurisdiction",
+        "ground_truth_authority_ids": [],
+        "ground_truth_status": "unresolved",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "لم يُعثر في القاعدة على نص تأسيسي صريح لقانون النقد وبنك الكويت المركزي (القانون 32/1968 أو تعديلاته اللاحقة) يمنح البنك المركزي صلاحية إصدار تعليمات كفاية رأس المال؛ ما ظهر (الطعن 448/1999) يخص شراء التسهيلات النقدية بموجب قانون آخر (41/1993) لا سند إصدار تعليمات كفاية رأس المال ذاتها. جرد التشريعات الحي لا يضم قانون النقد وبنك الكويت المركزي كتشريع مستقل مفهرس. يُسجَّل كفجوة حقيقية غير محلولة بدل افتراض سند غير موثق."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0016",
+    "required_dimensions": [
+      {
+        "dimension_id": "basis_of_tort_liability",
+        "label": "أساس المسؤولية التقصيرية: الالتزام بالتعويض عن كل فعل خاطئ يُحدث ضررًا بالغير",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-67-1980-m227"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "نص المادة 227/1 مدني حرفيًا: «كل من أحدث بفعله الخاطئ ضررًا بغيره يلتزم بتعويضه» — هذا هو الأساس العام للمسؤولية عن الفعل الضار (الفعل الشخصي) في القانون المدني الكويتي."
+      },
+      {
+        "dimension_id": "direct_and_causative_scope",
+        "label": "نطاق المسؤولية: تساوي الضرر المباشر والمتسبب في إيجاب التعويض",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-67-1980-m227"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "الفقرة الأولى من المادة 227 تنص صراحة: «سواء أكان في إحداثه الضرر مباشرًا أو متسببًا» — أي أن المشرع الكويتي يسوّي بين المتسبب والمباشر في نطاق الالتزام بالتعويض، وهو بيت القصيد في سؤال «نطاق المسؤولية»."
+      },
+      {
+        "dimension_id": "liability_despite_non_discernment",
+        "label": "بقاء الالتزام بالتعويض ولو كان محدث الضرر غير مميز",
+        "required": true,
+        "critical": false,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-67-1980-m227"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "الفقرة الثانية من ذات المادة: «ويلتزم الشخص بتعويض الضرر الناشئ عن فعله الخاطئ ولو كان غير مميز» — جزء أصيل من «حكم المادة 227» الذي يسأل عنه السؤال، وإن لم يكن جوهر «النطاق» المباشر/المتسبب تحديدًا فهو غير حاسم لتغيير الإجابة عن هذين المفهومين."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0017",
+    "required_dimensions": [
+      {
+        "dimension_id": "disqualification_kinship_affinity",
+        "label": "حالات عدم صلاحية القاضي لنظر الدعوى بسبب القرابة أو المصاهرة (منعًا من سماعها ولو لم يُرَد)",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "jurisdiction",
+        "ground_truth_authority_ids": [
+          "legis-38-1980-m102"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 102 مرافعات تنص أن القاضي «غير صالح لنظر الدعوى ممنوعًا من سماعها ولو لم يرده أحد من الخصوم» في حالات منها (أ) كونه زوجًا لأحد الخصوم أو قريبًا أو صهرًا له إلى الدرجة الرابعة، و(هـ) قرابة/مصاهرة للدرجة الرابعة مع أحد قضاة الدائرة أو للدرجة الثانية مع ممثل النيابة العامة أو المدافع عن أحد الخصوم — تغطي بدقة سؤال «القريب أو الصهر» و«متى يكون غير صالح وممنوعًا من سماعها»."
+      },
+      {
+        "dimension_id": "nullity_effect_of_disqualified_judge",
+        "label": "الأثر القانوني لعمل/قضاء القاضي غير الصالح: البطلان ولو باتفاق الخصوم",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "remedy_route",
+        "ground_truth_authority_ids": [
+          "legis-38-1980-m103"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 103 مرافعات: «يقع باطلًا عمل القاضي أو قضاؤه في الأحوال المشار إليها في المادة السابقة ولو تم باتفاق الخصوم»، وتضيف أنه إذا وقع هذا البطلان في حكم تمييز جاز للخصم طلب إلغائه وإعادة نظر الطعن أمام دائرة لا يكون فيها المستشار المتسبب في البطلان — أثر جوهري يغيّر مصير الحكم ذاته لا مجرد وصف نظري."
+      },
+      {
+        "dimension_id": "distinction_disqualification_vs_recusal",
+        "label": "تمييز عدم الصلاحية الحتمية (م102) عن الرد الجوازي لأسباب أخرى (م104)",
+        "required": true,
+        "critical": false,
+        "requires_governing": true,
+        "legal_role": "definitional",
+        "ground_truth_authority_ids": [
+          "legis-38-1980-m104"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "المادة 104 مرافعات تنظم حالات «رد» القاضي الجوازية (كخصومة مماثلة، عداوة أو مودة ترجّح عدم الحكم بغير ميل) وهي منفصلة عن حالة القرابة/المصاهرة الحتمية في م102 — توضيح مفيد لحدود السؤال لكنه لا يغيّر الإجابة عن حالة القرابة تحديدًا."
+      },
+      {
+        "dimension_id": "panel_composition_relatives_rule",
+        "label": "قاعدة منفصلة: عدم جواز اجتماع قضاة بينهم قرابة أو مصاهرة حتى الدرجة الرابعة في دائرة واحدة",
+        "required": false,
+        "critical": false,
+        "requires_governing": false,
+        "legal_role": "other",
+        "ground_truth_authority_ids": [
+          "legis-80-2026-m30"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "مادة 30 من قانون تنظيم القضاء 80/2026 تمنع اجتماع قضاة أقارب أو أصهار حتى الدرجة الرابعة في دائرة واحدة، وكذلك تمنع صلة مماثلة بممثل النيابة أو الخصوم أو المدافعين — قاعدة تنظيمية لتشكيل الدائرة تختلف موضوعًا عن سؤال قرابة القاضي بأحد الخصوم، فهي سياقية لا جوهرية لهذا السؤال بالذات."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0018",
+    "required_dimensions": [
+      {
+        "dimension_id": "limitation_period_short_and_long",
+        "label": "مدتا تقادم دعوى المسؤولية التقصيرية: ثلاث سنوات من العلم بالضرر وبالمسؤول، أو خمس عشرة سنة من وقوع الفعل، أيهما أقرب",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "deadline",
+        "ground_truth_authority_ids": [
+          "legis-67-1980-m253"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 253/1 مدني: «تسقط دعوى المسئولية عن العمل غير المشروع بمضي ثلاث سنوات من يوم علم المضرور بالضرر وبمن يسأل عنه، أو خمس عشرة سنة من وقوع العمل غير المشروع، أي المدتين تنقضي أولًا» — يجيب مباشرة عن مدة التقادم ومبدأ سريانها."
+      },
+      {
+        "dimension_id": "exception_criminal_origin_continuation",
+        "label": "استثناء: عدم سقوط الدعوى المدنية التقصيرية الناشئة عن جريمة ما دامت الدعوى الجنائية قائمة",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "exception",
+        "ground_truth_authority_ids": [
+          "legis-67-1980-m253"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 253/2: «إذا كانت دعوى المسئولية عن العمل غير المشروع ناشئة عن جريمة فإنها لا تسقط ما بقيت الدعوى الجنائية قائمة، ولو كانت المواعيد المنصوص عليها في الفقرة الأولى قد انقضت» — استثناء جوهري يغيّر مدة التقادم كليًا إذا كان الفعل الضار جريمة."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0019",
+    "required_dimensions": [
+      {
+        "dimension_id": "right_to_demand_partition",
+        "label": "حق كل شريك في طلب القسمة وحدود الإجبار على البقاء في الشيوع",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-67-1980-m830"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "المادة 830/1 مدني: «لكل شريك أن يطلب قسمة المال الشائع ما لم يكن مجبرًا على البقاء في الشيوع بمقتضى القانون أو التصرف» مع تقييد الإجبار الاتفاقي بخمس سنين — الأساس الذي يبرر لجوء الشريك للقسمة عند عدم الاتفاق الودي."
+      },
+      {
+        "dimension_id": "amicable_vs_judicial_partition",
+        "label": "طريقتا القسمة: بالتراضي بين جميع الشركاء أو قضاءً عند عدم الاتفاق",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-67-1980-m831"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "المادة 831/1: «للشركاء جميعًا أن يتفقوا على قسمة المال الشائع بالطريقة التي يرونها ما لم يقض نص بغيره» مع قيد عدم جواز القسمة الاتفاقية إذا كان أحد الشركاء ناقص الأهلية بلا ولي أو غائبًا/مفقودًا — يوضح أن القسمة الودية هي الأصل والقضائية بديل عند تعذرها، وهو صلب سؤال «إذا لم يتفقوا وديًا»."
+      },
+      {
+        "dimension_id": "judicial_partition_procedure_court_competence",
+        "label": "إجراءات القسمة القضائية: رفع الدعوى أمام المحكمة الكلية وندب خبير لإفراز الأنصبة",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "jurisdiction",
+        "ground_truth_authority_ids": [
+          "legis-67-1980-m833"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "المادة 833 مدني: «ترفع دعوى القسمة أمام المحكمة الكلية وللمحكمة أن تندب خبيرًا أو أكثر لإفراز الأنصبة إن كان المال يقبل القسمة عينًا دون نقص كبير في قيمته» — تحدد جهة الاختصاص وآلية القسمة القضائية تحديدًا، وهي حاسمة لأي إجابة عن «كيف تتم القسمة قضاءً»."
+      },
+      {
+        "dimension_id": "sale_by_auction_when_partition_in_kind_impossible",
+        "label": "بيع المال الشائع بالمزاد عند تعذر القسمة عينًا أو إحداثها نقصًا كبيرًا في القيمة",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "exception",
+        "ground_truth_authority_ids": [
+          "legis-67-1980-m836"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "المادة 836/1 مدني: «إذا كانت قسمة المال عينًا غير ممكنة أو كان من شأنها إحداث نقص كبير في قيمته، حكمت المحكمة ببيعه بالمزاد بالطريقة المبينة في قانون المرافعات»، مع جواز قصر المزايدة على الشركاء بالإجماع — بديل جوهري يغيّر شكل نتيجة القسمة القضائية بالكامل."
+      },
+      {
+        "dimension_id": "temporary_muhayaa_partition",
+        "label": "القسمة المؤقتة (المهايأة) كترتيب انتفاع ريثما تتم القسمة النهائية",
+        "required": false,
+        "critical": false,
+        "requires_governing": true,
+        "legal_role": "other",
+        "ground_truth_authority_ids": [
+          "legis-67-1980-m843",
+          "legis-67-1980-m845"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "المادتان 843 و845 مدني تنظمان قسمة المهايأة (انتفاع كل شريك بجزء مفرز مدة معينة) بما فيها جواز أن تأمر بها المحكمة عند تعذر الاتفاق أثناء القسمة النهائية — مفهوم متصل لكنه مختلف عن «القسمة النهائية» التي يسأل عنها السؤال صراحة، فهو سياقي لا جوهري لإجابة السؤال."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0020",
+    "required_dimensions": [
+      {
+        "dimension_id": "principle_no_revocation_except_parents",
+        "label": "الأصل: عدم جواز الرجوع في الهبة بعد تمامها إلا للأبوين فيما وهباه لولدهما",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-67-1980-m537"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 537/1 مدني: «لا يجوز للواهب الرجوع في هبته، إلا الأبوين فيما وهباه لولدهما» — تقرر الأصل العام الذي يسأل عنه السؤال صراحة."
+      },
+      {
+        "dimension_id": "exception_judicial_permission_valid_excuse",
+        "label": "الاستثناء: جواز الرجوع في غير حالة الأبوين بترخيص من القضاء بناءً على عذر مقبول",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "exception",
+        "ground_truth_authority_ids": [
+          "legis-67-1980-m537"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 537/2 مدني: «ومع ذلك يجوز في غير هذه الحالة، الرجوع في الهبة بترخيص من القضاء، إذا استند الواهب في ذلك إلى عذر مقبول» — الاستثناء الذي يفسر «متى يجوز» في السؤال، ومشروط بحكم قضائي لا بإرادة الواهب المنفردة."
+      },
+      {
+        "dimension_id": "accepted_excuses_for_revocation",
+        "label": "الأعذار المقبولة قانونًا للرجوع في الهبة",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-67-1980-m538"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 538 مدني تحصر أمثلة العذر المقبول: إخلال الموهوب له بواجبه نحو الواهب إخلالًا يُعد جحودًا كبيرًا، عجز الواهب عن نفقة نفسه أو غيره بعد الهبة، ورزق الواهب بولد يظل حيًا وقت الرجوع — بدونها لا يقوم «العذر المقبول» المشترط في م537/2."
+      },
+      {
+        "dimension_id": "bars_to_revocation",
+        "label": "موانع الرجوع في الهبة رغم قيام عذر مقبول",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "exception",
+        "ground_truth_authority_ids": [
+          "legis-67-1980-m539"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 539 مدني تعدد حالات يمتنع فيها الرجوع رغم توافر العذر: هبة الأم ليتيمها، الهبة بين الزوجين أثناء قيام الزوجية، وفاة الواهب أو الموهوب له، تصرف الموهوب له فيما يخرجه عن ملكه، تغير الموهوب أو زيادته المتصلة، تعامل الغير مع الموهوب له اعتمادًا على الهبة، مرض يُخشى منه الموت (يزول المانع بزوال المرض)، اقتران الهبة بتكليف، أو كون الهبة لغرض خيري — حاسمة لأنها قد تُسقط حق الرجوع حتى مع وجود عذر مقبول."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0021",
+    "required_dimensions": [
+      {
+        "dimension_id": "tenant_rent_payment_obligation",
+        "label": "التزام المستأجر بالوفاء بالأجرة في المواعيد المتفق عليها (أو مواعيد العرف/القانون عند غياب الاتفاق)",
+        "required": true,
+        "critical": false,
+        "requires_governing": true,
+        "legal_role": "definitional",
+        "ground_truth_authority_ids": [
+          "legis-67-1980-m586",
+          "legis-35-1978-m10"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م586 مدني: «يجب على المستأجر الوفاء بالأجرة في المواعيد المتفق عليها، فإذا لم يكن هناك اتفاق وجب الوفاء بها في المواعيد التي يعينها العرف». م10 قانون إيجار العقارات 35/1978 يفصّل: كتابة إن وُجد اتفاق، وإلا أول كل شهر (مشاهرة) أو أول كل مدة، ولا يعتد بتاريخ سند القبض."
+      },
+      {
+        "dimension_id": "late_payment_deposit_mechanism",
+        "label": "حق المستأجر في إيداع الأجرة لدى إدارة التنفيذ بعد عرضها قانونًا خلال 20 يومًا كوسيلة وفاء معتبرة",
+        "required": true,
+        "critical": false,
+        "requires_governing": true,
+        "legal_role": "other",
+        "ground_truth_authority_ids": [
+          "legis-35-1978-m10"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_object",
+        "verification_note": "نص م10 صراحة: «فإذا حصل الإيداع خلال عشرين يومًا من تاريخ الاستحقاق اعتبر وفاءً بالأجرة في الموعد المقرر» — وينظم شروط العرض القانوني المسبق وإخطار إدارة التنفيذ."
+      },
+      {
+        "dimension_id": "eviction_ground_nonpayment",
+        "label": "أثر تأخر المستأجر على استمرار العقد: عدم دفع الأجرة خلال 20 يومًا من الاستحقاق سبب لطلب الإخلاء، مع استثناء العذر المقبول والوفاء حتى أول جلسة",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "exception",
+        "ground_truth_authority_ids": [
+          "legis-35-1978-m20"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_object",
+        "verification_note": "م20/1 من قانون إيجار العقارات: عدم دفع المستأجر الأجرة المستحقة خلال عشرين يومًا من تاريخ استحقاقها المقرر في م10 سبب من أسباب الإخلاء الحصرية، «على أنه يجوز للقاضي أن يحكم باعتبار الدعوى كأن لم تكن... إذا أثبت المستأجر أن تأخره يرجع إلى عذر قوي تقبله المحكمة وأوفى حتى نهاية أول جلسة». هذا هو الأثر الجوهري الذي يحدد مصير العقد عند التأخر، وغيابه يغيّر النتيجة القانونية جذريًا."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0022",
+    "required_dimensions": [
+      {
+        "dimension_id": "carrier_liability_unseaworthiness",
+        "label": "شرط مسؤولية الناقل البحري عن الهلاك/التلف الناتج عن عدم صلاحية السفينة للملاحة: اشتراط الإهمال في بذل الهمة الكافية",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "LEG-UNKNOWN-P13-c191-a66d5a94d9a5a20d"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_object",
+        "verification_note": "المادة 191 (تبويب: تجاري | النقل | التأمين البحري): «لا يسأل الناقل عن هلاك البضائع أو تلفها الناتج عن عدم صلاحية السفينة للملاحة إلا إذا كان عدم الصلاحية راجعًا إلى إهمال الناقل في بذل الهمة الكافية لجعل السفينة صالحة للملاحة قبل السفر وعند البدء فيه...». هذا هو الشرط الجوهري الذي يحدد قيام المسؤولية من عدمها — غيابه يقلب النتيجة (مسؤولية مطلقة أم مقيدة بالخطأ)."
+      },
+      {
+        "dimension_id": "burden_of_proof_due_diligence",
+        "label": "عبء إثبات بذل الهمة الكافية يقع على عاتق الناقل لا على الشاحن/المرسل إليه",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "other",
+        "ground_truth_authority_ids": [
+          "LEG-UNKNOWN-P13-c191-a66d5a94d9a5a20d"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_object",
+        "verification_note": "الفقرة الثانية من نفس المادة 191 صراحة: «وفي جميع الحالات التي ينشأ فيها هلاك البضائع أو تلفها عن عدم صلاحية السفينة يقع عبء الإثبات فيما يتعلق ببذل الهمة الكافية على عاتق الناقل أو أي شخص آخر يتمسك بالإعفاء المنصوص عليه في هذه المادة» — عكس القاعدة العامة في الإثبات (البينة على من يدعي)، فهذا حكم حاسم لنتيجة النزاع."
+      },
+      {
+        "dimension_id": "other_exoneration_grounds_context",
+        "label": "أسباب الإعفاء الأخرى من مسؤولية الناقل (أخطاء الملاحة، القوة القاهرة، الحريق...) كسياق تمييزي عن حالة عدم الصلاحية للملاحة",
+        "required": false,
+        "critical": false,
+        "requires_governing": false,
+        "legal_role": "other",
+        "ground_truth_authority_ids": [
+          "LEG-UNKNOWN-P13-c192-da1fb91f381caa2a"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "المادة 192 تسرد 18 سببًا آخر للإعفاء (خطأ الربان في الملاحة، حوادث البحر، القضاء والقدر...) لا تخضع لعبء إثبات معكوس كما في حالة عدم الصلاحية — خلفية توضيحية غير حاسمة لموضوع السؤال المحدد."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0023",
+    "required_dimensions": [
+      {
+        "dimension_id": "harm_divorce_substantive_condition",
+        "label": "الشرط الموضوعي لدعوى التفريق للضرر: إضرار أحد الزوجين بالآخر قولًا أو فعلًا بما لا يستطاع معه دوام العشرة",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-51-1984-m126"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "م126 (الفرقة بالقضاء) حرفيًا: «لكل من الزوجين قبل الدخول أو بعده أن يطلب التفريق بسبب إضرار الآخر به قولًا أو فعلًا بما لا يستطاع معه دوام العشرة بين أمثالهما» — يطابق صياغة السؤال حرفيًا."
+      },
+      {
+        "dimension_id": "harm_proof_evidentiary_standard",
+        "label": "معيار إثبات الضرر: شهادة رجلين، أو رجل وامرأتين",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-51-1984-m133"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "م133: «يثبت الضرر بشهادة رجلين، أو رجل وامرأتين» — شرط إثباتي حاسم لنجاح الدعوى، دونه لا يقضى بالتفريق."
+      },
+      {
+        "dimension_id": "court_reconciliation_arbitrators_procedure",
+        "label": "وجوب سعي المحكمة للإصلاح، فإن لم يثبت الضرر تعيّن حكمان للتوفيق أو التفريق",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "mandatory_prior_procedure",
+        "ground_truth_authority_ids": [
+          "legis-51-1984-m127"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "م127: «على المحكمة أن تبذل وسعها للإصلاح بين الزوجين، فإذا تعذر الإصلاح وثبت الضرر حكم بالتفريق بينهما بطلقة بائنة وإن لم يثبت الضرر عينت حكمين للتوفيق أو التفريق» — إجراء قضائي وجوبي يحدد مسار الدعوى، وقد أحالت إليه م10 من قانون محكمة الأسرة صراحة (المواد 127-132)."
+      },
+      {
+        "dimension_id": "mandatory_family_settlement_center",
+        "label": "الإجراء الوجوبي السابق على رفع دعوى التفريق أمام محكمة الأسرة: التقدم بطلب لمركز تسوية المنازعات الأسرية",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "mandatory_prior_procedure",
+        "ground_truth_authority_ids": [
+          "legis-12-2015-m9",
+          "legis-12-2015-m10"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م9 من قانون محكمة الأسرة 12/2015: «بالنسبة لدعاوي الطلاق والتطليق التي يجوز فيها الصلح لا يقبل رفعها ابتداءً أمام محكمة الأسرة قبل البت في الطلب الذي يجب على المدعي تقديمه إلى مركز تسوية المنازعات الأسرية المختص». وم10 تؤكد أن مساعي التسوية لا تغني عن التزام المحكمة عند نظر دعاوى التفريق للضرر باتباع قواعد المواد 127-132. غيابه يجعل الدعوى غير مقبولة شكلًا."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0024",
+    "required_dimensions": [
+      {
+        "dimension_id": "scope_verification",
+        "label": "التحقق من وجود محتوى جدول المواد المخدرة الكيميائي التفصيلي (الجدول 1، المجموعة الأولى، الرقم التسلسلي 12) في القاعدة",
+        "required": true,
+        "critical": false,
+        "requires_governing": false,
+        "legal_role": "other",
+        "ground_truth_authority_ids": [],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "قانون مكافحة المخدرات 159/2025 موجود فعليًا في القاعدة (86 كائنًا: ديباجة، م1 التعريفات التي تشير إلى وجود «الجداول أرقام 1،2،3،4،5»، م5، م37، م83 الإلغاء، إلخ)، لكن بحثًا متعددًا عن محتوى الجداول نفسها (أسماء المواد الكيميائية بأرقامها التسلسلية) لم يُعِد أي نتيجة سوى إشارات نصية عامة للجداول دون محتواها. هذا يطابق سياسة موثقة صراحة في توثيق المشروع بأن جداول أسماء المواد المخدرة الكيميائية استُبعدت عمدًا من الإدخال (خطر خطأ نسخ حرف واحد في قضية جنائية). النتيجة: المعلومة المطلوبة تحديدًا (الاسم الكيميائي للمادة رقم 12 في الجدول 1) غير موجودة في القاعدة."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0025",
+    "required_dimensions": [
+      {
+        "dimension_id": "scope_verification",
+        "label": "التحقق من أن القاعدة تغطي القانون الكويتي حصرًا ولا تحوي نصوص القانون المصري",
+        "required": true,
+        "critical": false,
+        "requires_governing": false,
+        "legal_role": "other",
+        "ground_truth_authority_ids": [],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "الجرد الحي الكامل (97 تشريعًا/لائحة) يقتصر كليًا على التشريعات الكويتية (مراسيم بقوانين، قوانين، لوائح تنفيذية كويتية). بحث عن «الفصل التعسفي من العمل» أعاد فقط نصوصًا كويتية (م41(ج) و47 من قانون العمل الأهلي 6/2010، م688 مدني) ولا وجود لأي إشارة لقانون العمل المصري أو أي تشريع مصري في القاعدة. السؤال خارج نطاق القاعدة القانونية الكويتية المتخصصة تمامًا كما هو متوقع من عنوانه (سؤال عن قانون أجنبي)."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0026",
+    "required_dimensions": [
+      {
+        "dimension_id": "currently_in_force_tenure_table",
+        "label": "تحديد الجدول النافذ حاليًا لمدد البقاء بعد استبدال جدول مرسوم 126/2018 بمرسوم 136/2026",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "definitional",
+        "ground_truth_authority_ids": [
+          "legis-136-2026-annex-1",
+          "legis-136-2026-preamble"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "ديباجة مرسوم 136/2026 تنص صراحة على أنه استبدال للجدول المرافق للمرسوم 126/2018، والجدول الملحق (legis-136-2026-annex-1) هو النص الحالي النافذ لمدد البقاء في درجات القضاة وأعضاء النيابة العامة الصادر استنادًا لقانون تنظيم القضاء 80/2026."
+      },
+      {
+        "dimension_id": "minimum_tenure_wakil_niyaba",
+        "label": "المدة الفعلية اللازمة كحد أدنى للبقاء في درجة وكيل نيابة قبل الترقية",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-136-2026-annex-1"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "الجدول ذاته يفصّل الدرجة: وكيل نيابة (أ) وحيل نيابة (ب) — ثلاث سنوات لكل منهما، بينما وكيل نيابة (ج) — أربع سنوات. أي إجابة صحيحة يجب أن تميّز بين الدرجات الفرعية (أ/ب/ج) ولا تعطي رقمًا واحدًا مطلقًا."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0027",
+    "required_dimensions": [
+      {
+        "dimension_id": "law_currency_verification",
+        "label": "التحقق من أن قانون تنظيم القضاء 80/2026 هو النافذ حاليًا وأن قانون 23/1990 ملغى/مستبدل",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "other",
+        "ground_truth_authority_ids": [
+          "legis-80-2026-m7",
+          "legis-23-1990-m7"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "استدعاء المادة 7 من قانون 23/1990 عاد موسومًا صراحة «⚠ صيغة استرشادية غير قابلة للاستشهاد» (حالة مستبدلة/ملغاة وفق القاعدة الموثقة: نصوص 23/1990 وُسمت verification_status='superseded' بعد إحلال 80/2026 محله)، بينما مادتا 80/2026 (7 و8) هما النافذتان فعليًا."
+      },
+      {
+        "dimension_id": "court_of_appeal_composition_and_presidency",
+        "label": "تشكيل محكمة الاستئناف وقاعدة رئاسة دوائرها",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-80-2026-m7"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "نص م7/80-2026 حرفيًا: «تؤلف محكمة الاستئناف من رئيس، ونائب للرئيس، وعدد كاف من المستشارين الأول والمستشارين، وتشكل فيها دوائر حسب الحاجة تكون رئاستها لأقدم المستشارين، وتصدر أحكامها من ثلاثة مستشارين» — أي أن رئاسة كل دائرة استئناف لأقدم المستشارين فيها لا لرئيس المحكمة شخصيًا."
+      },
+      {
+        "dimension_id": "total_court_composition",
+        "label": "تشكيل المحكمة الكلية ودوائرها",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-80-2026-m8"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "نص م8/80-2026 حرفيًا: «تؤلف المحكمة الكلية من رئيس، ونائب أو أكثر للرئيس ممن هم بدرجة مستشار أول، وعدد كاف من وكلاء المحكمة والقضاة، وتشكل فيها دوائر بحسب الحاجة، وتصدر أحكامها من ثلاثة قضاة» مع جواز ندب مستشارين أول من الاستئناف لرئاسة الدوائر الكلية لمدة سنتين قابلة للتجديد."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0028",
+    "required_dimensions": [
+      {
+        "dimension_id": "distinguishing_new_vs_existing_appraisers",
+        "label": "التمييز بين «المقيّمين الجدد» (يلتزمون فورًا بلا مهلة) والمقيّمين المسجَّلين وقت صدور القرار (يُمنحون مهلة توفيق أوضاع)",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "definitional",
+        "ground_truth_authority_ids": [
+          "legis-152-2023-m18"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "نص م18 (بصيغته المعدَّلة بالقرار 99/2025) حرفيًا: «يلتزم المقيمون الجدد بهذا القرار من تاريخ صدوره، أما كافة المقيمين المدرجين بسجل مقيمي العقار وقت صدور هذا القرار يسجلون بتصنيف مقيم عقاري (أ)، ويلتزمون بتوفيق أوضاعهم ... حتى تاريخ 31/12/2027» — أي أن المهلة ممنوحة للمقيَّدين سلفًا لا للمقيّمين الجدد فعليًا، وهذا يخالف صياغة السؤال التي تفترض أن المهلة للجدد؛ إجابة دقيقة يجب أن تصحح هذا الافتراض."
+      },
+      {
+        "dimension_id": "reconciliation_deadline_and_consequence",
+        "label": "تاريخ انتهاء مهلة توفيق الأوضاع (31/12/2027) وأثر تجاوزها (إعادة التصنيف تلقائيًا لفئة ج)",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "deadline",
+        "ground_truth_authority_ids": [
+          "legis-152-2023-m18"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "نفس نص م18: المهلة حتى 31/12/2027، «ومن يتخلف عن ذلك يعتبر مقيماً عقارياً بتصنيف (ج) في سجل المقيمين في وزارة التجارة والصناعة» — جزاء آلي بتخفيض التصنيف لا إسقاط للقيد."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0029",
+    "required_dimensions": [
+      {
+        "dimension_id": "current_scope_of_application_m2",
+        "label": "نطاق سريان قانون المعاملات الإلكترونية بصيغته الحالية (بعد استبدال م2 بمرسوم 148/2025)",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-20-2014-m2"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "get_object أظهر وسم «مستبدلة بالمرسوم بقانون 148/2025» على المادة، والنص الحالي: «تسري أحكام هذا القانون على السجلات، والرسائل، والمعاملات، والمستندات، والتوقيعات الإلكترونية ذات العلاقة بالمعاملات والتصرفات المدنية والتجارية والإدارية ... بمراعاة الأحكام الخاصة لأي منها المنصوص عليها في القوانين الأخرى» — نطاق عام بلا استثناء صريح مذكور بالاسم."
+      },
+      {
+        "dimension_id": "legal_effect_equivalence_m3",
+        "label": "حجية السجل/المستند/التوقيع الإلكتروني ومساواتها بالورقي، بما في ذلك التسجيل والإشهار",
+        "required": true,
+        "critical": false,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-20-2014-m3"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "نص م3 الحالي (موسوم أيضًا «مستبدلة بالمرسوم بقانون 148/2025») يمنح السجل/المستند/التوقيع الإلكتروني ذات آثار الورقي «بما في ذلك التسجيل أو الإشهار إذا أنشأت الجهة المناط بها ذلك سجلاً إلكترونياً ... وذلك دون الإخلال بما هو منصوص عليه في أي قانون آخر» — أي أن أثر التسجيل العقاري الإلكتروني يبقى مشروطًا بقانون التسجيل العقاري نفسه (5/1959)."
+      },
+      {
+        "dimension_id": "explicit_named_exceptions_status",
+        "label": "هل ما زال يوجد استثناء صريح مسمّى (أحوال شخصية/سندات ملكية عقار) في نص القانون الحالي أم أُلغي بالتعديل؟",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "exception",
+        "ground_truth_authority_ids": [
+          "legis-20-2014-m2",
+          "legis-20-2014-m3",
+          "legis-20-2014-m43"
+        ],
+        "ground_truth_status": "partially_verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "لم أعثر في القاعدة على أي مادة من القانون 20/2014 (الحالية أو غيرها ضمن المواد المتاحة: م2-م5، م43) تتضمن استثناءً صريحًا مسمّى لـ«الأحوال الشخصية» أو «سندات ملكية العقار». النص الحالي لم يعُد يذكر استثناءً باسمه، بل يحيل عمومًا لـ«الأحكام الخاصة ... في القوانين الأخرى» (م2) ولـ«عدم الإخلال بما هو منصوص عليه في أي قانون آخر» (م3) ولـ«عدم الإخلال بأحكام التشريعات الخاصة» (م43). لم أتمكن من استرجاع النص السابق لمادتي 2/3 قبل تعديل 148/2025 عبر الأدوات المتاحة لأقارن مباشرة هل كان يتضمن استثناءً صريحًا حُذف، فالحالة partially_verified: النص الحالي مؤكَّد الخلوّ من استثناء مسمّى، لكن مقارنته بالنص السابق غير مؤكَّدة."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0030",
+    "required_dimensions": [
+      {
+        "dimension_id": "general_rule_debtor_assets_guarantee",
+        "label": "الأصل العام: أموال المدين كافة ضامنة للوفاء بديونه ويجوز الحجز عليها",
+        "required": true,
+        "critical": false,
+        "requires_governing": false,
+        "legal_role": "other",
+        "ground_truth_authority_ids": [
+          "legis-67-1980-m307"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "م307 مدني: «1- أموال المدين جميعها ضامنة للوفاء بديونه. 2- وجميع الدائنين متساوون في هذا الضمان، إلا من كان له منهم حق التقدم طبقاً للقانون» — يؤسس الأصل الذي يُبنى عليه الاستثناء الخاص بأموال الدولة العامة، لكنه خلفية لا يتوقف عليها حسم السؤال مباشرة."
+      },
+      {
+        "dimension_id": "exception_public_domain_immunity_from_seizure",
+        "label": "الاستثناء: حظر الحجز على أموال الدولة/الأشخاص الاعتبارية العامة المخصصة فعلاً أو بمقتضى القانون للنفع العام",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "exception",
+        "ground_truth_authority_ids": [
+          "legis-67-1980-m23"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "نص م23 مدني حرفيًا: «كل شيء تملكه الدولة أو أي شخص اعتباري عام ويكون مخصصا للنفع العام بالفعل أو بمقتضى القانون، لا يجوز التعامل فيه بما يتعارض مع هذا التخصيص كما لا يجوز الحجز أو وضع يد الغير عليه» — هذا هو النص الحاكم المباشر الذي يحسم السؤال بالنفي: لا يجوز الحجز على هذه الأموال طالما بقي التخصيص للنفع العام قائمًا (وينتهي الحظر بانتهاء التخصيص وفق الفقرة 2)."
+      },
+      {
+        "dimension_id": "scope_limited_to_dedicated_public_domain_not_private_state_property",
+        "label": "حدود الاستثناء: يقتصر الحظر على الأموال العامة المخصصة فعليًا للنفع العام (الدومين العام)، لا كل ما تملكه الدولة إطلاقًا (كأملاكها الخاصة)",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "definitional",
+        "ground_truth_authority_ids": [
+          "legis-67-1980-m23",
+          "jprin-112-1981-e7340-cbb4fe8412"
+        ],
+        "ground_truth_status": "partially_verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "م23 نفسها تقيّد الحظر بما «يكون مخصصا للنفع العام بالفعل أو بمقتضى القانون». ومبدأ الطعن 112/1981 يؤكد أن أموال الدولة/الأشخاص الاعتبارية العامة تصير أموالاً عامة «بمجرد تخصيصها للمنفعة العامة بالفعل» وأن أموال الأفراد لا تكتسب هذه الصفة بمجرد التخصيص دون تملّك سابق — يدعم أن الحظر مقصور على ما خُصص فعلاً، لا كل ملكية للدولة. لم أعثر على نص أو مبدأ صريح يؤكد إيجابًا جواز الحجز على أملاك الدولة الخاصة غير المخصصة للنفع العام (وجدت فقط مبادئ عن حظر تملّكها بالتقادم — jprin-292-1987/jprin-39-1988 — وهي غير حاسمة لمسألة الحجز تحديدًا)، فالحالة partially_verified."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0031",
+    "required_dimensions": [
+      {
+        "dimension_id": "misdemeanor_pretrial_detention_cap",
+        "label": "السقف الأقصى المطلق للحبس الاحتياطي في قضايا الجنح (40 يومًا)",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "deadline",
+        "ground_truth_authority_ids": [
+          "legis-17-1960-m69"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 69 من قانون الإجراءات والمحاكمات الجزائية 17/1960 تنص صراحة: «على ألا تزيد مدة الحبس الاحتياطي - بأي حال من الأحوال - على ثمانين يومًا في قضايا الجنايات وأربعين يومًا في قضايا الجُنح من تاريخ القبض على المتهم»."
+      },
+      {
+        "dimension_id": "felony_pretrial_detention_cap_comparison",
+        "label": "الحد الأقصى العام للحبس الاحتياطي في الجنايات (80 يومًا) كمرجع للمقارنة",
+        "required": true,
+        "critical": false,
+        "requires_governing": true,
+        "legal_role": "definitional",
+        "ground_truth_authority_ids": [
+          "legis-17-1960-m69"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "نفس المادة 69 تحدد سقف الجنايات بثمانين يومًا في مقابل أربعين يومًا للجنح، وهو الأساس النصي للمقارنة التي يطلبها السؤال؛ لا يغيّر هذا السقف الحكم في واقعة الجنحة نفسها، لذا هو مرجع مقارنة لا شرط حاسم لهذه القضية بعينها."
+      },
+      {
+        "dimension_id": "detention_renewal_mechanism",
+        "label": "آلية تجديد الحبس الاحتياطي والتظلم منه أثناء بلوغ السقف",
+        "required": true,
+        "critical": false,
+        "requires_governing": false,
+        "legal_role": "other",
+        "ground_truth_authority_ids": [
+          "legis-17-1960-m69"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "نفس المادة تبيّن أن المحقق يحبس ابتداءً حتى 10 أيام في الجنح، ثم يجدد رئيس المحكمة الحبس بحد أقصى 10 أيام في كل مرة حتى بلوغ سقف الأربعين يومًا، مع حق التظلم أمام رئيس المحكمة والفصل فيه خلال 48 ساعة."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0032",
+    "required_dimensions": [
+      {
+        "dimension_id": "arbitrators_when_harm_unproven",
+        "label": "وجوب تعيين حكمين للتوفيق أو التفريق عند عدم ثبوت الضرر قطعًا",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "mandatory_prior_procedure",
+        "ground_truth_authority_ids": [
+          "legis-51-1984-m127"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 127 من قانون الأحوال الشخصية 51/1984: «على المحكمة أن تبذل وسعها للإصلاح بين الزوجين، فإذا تعذر الإصلاح، وثبت الضرر حكم بالتفريق بينهما بطلقة بائنة وإن لم يثبت الضرر عينت حكمين للتوفيق أو التفريق» — نص صريح يحسم أن المحكمة لا تملك رفض الدعوى لعدم ثبوت الضرر قطعًا، بل يتحتم عليها المسار البديل بتعيين حكمين."
+      },
+      {
+        "dimension_id": "harm_ground_definition",
+        "label": "تعريف الضرر الموجب للتفريق (مناط دعوى التطليق للضرر أصلًا)",
+        "required": true,
+        "critical": false,
+        "requires_governing": true,
+        "legal_role": "definitional",
+        "ground_truth_authority_ids": [
+          "legis-51-1984-m126"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 126: «لكل من الزوجين... أن يطلب التفريق، بسبب إضرار الآخر به قولًا أو فعلًا، بما لا يستطاع معه دوام العشرة بين أمثالهما» — تحدد المعيار الموضوعي للضرر الذي يُبنى عليه طلب التفريق."
+      },
+      {
+        "dimension_id": "arbitrator_qualifications_and_role",
+        "label": "شروط الحكمين ومهمتهما في تقصي أسباب الشقاق والإصلاح",
+        "required": true,
+        "critical": false,
+        "requires_governing": false,
+        "legal_role": "other",
+        "ground_truth_authority_ids": [
+          "legis-51-1984-m128",
+          "legis-51-1984-m129"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 128: يشترط في الحكمين أن يكونا عدلين من أهل الزوجين إن أمكن؛ المادة 129: «على الحكمين أن يتعرفا أسباب الشقاق، ويبذلا جهدهما في الإصلاح بين الزوجين بأي طريقة ممكنة»."
+      },
+      {
+        "dimension_id": "harm_evidentiary_standard",
+        "label": "المعيار الخاص لإثبات الضرر (شهادة رجلين أو رجل وامرأتين)",
+        "required": true,
+        "critical": false,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-51-1984-m133"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 133: «يثبت الضرر بشهادة رجلين، أو رجل وامرأتين» — وهو المعيار الذي إذا لم يتحقق تحديدًا يبقى الضرر غير ثابت قطعًا وتنتقل الدعوى لمسار الحكمين."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0033",
+    "required_dimensions": [
+      {
+        "dimension_id": "mandatory_paternity_committee_investigation",
+        "label": "شرط سبق تحقيق لجنة دعاوى النسب قبل قبول دعوى إثبات النسب المباشر",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "mandatory_prior_procedure",
+        "ground_truth_authority_ids": [
+          "legis-53-2026-m8"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 8 من قانون دعاوى النسب وتصحيح الأسماء 53/2026: «لا تقبل دعوى النسب إلا إذا سبقها تحقيق تجريه اللجنة في طلب إثبات النسب المباشر أو نفيه الذي يقدم إليها من ذوي الشأن، وعلى اللجنة إحالته إلى المحكمة المختصة بتقرير مفصل بما انتهت إليه» — شرط قبول صريح."
+      },
+      {
+        "dimension_id": "committee_decision_deadline_and_court_access",
+        "label": "المهلة الزمنية للجنة (6 أشهر عادة/3 أشهر عند اللعان) وأثر انقضائها على اللجوء للقضاء",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "deadline",
+        "ground_truth_authority_ids": [
+          "legis-53-2026-m8"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "نفس المادة 8 تكمل: على اللجنة إحالة تقريرها «خلال ستة أشهر من تاريخ تقديم الطلب إليها، وثلاثة أشهر إذا كان الطلب نفي النسب باللعان، فإذا انتهت هذه المدة دون البت في الطلب كان لصاحب الشأن اللجوء إلى القضاء» — مهلة تحدد متى يجوز تجاوز الشرط الإجرائي."
+      },
+      {
+        "dimension_id": "committee_jurisdiction_scope",
+        "label": "اختصاص اللجنة بنظر طلبات إثبات النسب المباشر تحديدًا",
+        "required": true,
+        "critical": false,
+        "requires_governing": true,
+        "legal_role": "jurisdiction",
+        "ground_truth_authority_ids": [
+          "legis-53-2026-m4"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 4: «تختص اللجنة - دون غيرها - بالنظر في... طلب إثبات النسب المباشر أو نفيه...» تحدد أن اللجنة هي الجهة المختصة حصرًا بهذا النوع من الطلبات قبل القضاء."
+      },
+      {
+        "dimension_id": "committee_investigation_procedure",
+        "label": "إجراءات تحقيق اللجنة (سماع الشهود، فحص البصمة الوراثية)",
+        "required": true,
+        "critical": false,
+        "requires_governing": false,
+        "legal_role": "other",
+        "ground_truth_authority_ids": [
+          "legis-53-2026-m7"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 7 تبيّن صلاحيات اللجنة في استدعاء الأطراف والشهود وإلزامهم بالبيانات، وللجنة أن تأمر بإجراء فحص البصمة الوراثية في تحقيق طلبات النسب."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0034",
+    "required_dimensions": [
+      {
+        "dimension_id": "harm_ground_threshold",
+        "label": "توافر معيار الضرر الموجب للتفريق (الضرب والشتم بما لا تستطاع معه دوام العشرة)",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-51-1984-m126"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 126: «لكل من الزوجين... أن يطلب التفريق، بسبب إضرار الآخر به قولًا أو فعلًا، بما لا يستطاع معه دوام العشرة بين أمثالهما» — الضرب (فعل) والشتم (قول) الموصوفان في السؤال يندرجان مباشرة تحت هذا النص."
+      },
+      {
+        "dimension_id": "harm_evidentiary_standard",
+        "label": "شرط إثبات الضرر بشهادة رجلين أو رجل وامرأتين",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-51-1984-m133"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 133: «يثبت الضرر بشهادة رجلين، أو رجل وامرأتين» — معيار إثبات خاص يحدد هل يحكم بالتفريق مباشرة أم تنتقل الدعوى لمسار الحكمين، وهو حاسم عمليًا في واقعة عنف أسري غالبًا بلا شهود مباشرين."
+      },
+      {
+        "dimension_id": "arbitrators_when_harm_unproven",
+        "label": "تعيين حكمين للتوفيق أو التفريق إذا لم يثبت الضرر بالمعيار المطلوب",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "mandatory_prior_procedure",
+        "ground_truth_authority_ids": [
+          "legis-51-1984-m127"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 127 تحسم أنه إن لم يثبت الضرر قطعًا فالمسار الإلزامي هو تعيين حكمين للتوفيق أو التفريق، لا رفض الدعوى."
+      },
+      {
+        "dimension_id": "mandatory_family_settlement_center",
+        "label": "وجوب التقدم أولًا لمركز تسوية المنازعات الأسرية قبل قبول دعوى التطليق أمام محكمة الأسرة",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "mandatory_prior_procedure",
+        "ground_truth_authority_ids": [
+          "legis-12-2015-m9"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 9 من قانون محكمة الأسرة 12/2015: «بالنسبة لدعاوي الطلاق والتطليق التي يجوز فيها الصلح لا يقبل رفعها ابتداءً أمام محكمة الأسرة قبل البت في الطلب الذي يجب على المدعي تقديمه إلى مركز تسوية المنازعات الأسرية المختص» — شرط قبول إجرائي وجوبي قبل أي دعوى تفريق."
+      },
+      {
+        "dimension_id": "criminal_route_for_physical_assault",
+        "label": "إمكانية الملاحقة الجزائية المستقلة عن الضرب (إيذاء بدني)",
+        "required": true,
+        "critical": false,
+        "requires_governing": true,
+        "legal_role": "remedy_route",
+        "ground_truth_authority_ids": [
+          "legis-16-1960-m160"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 160 من قانون الجزاء 16/1960: «كل من ضرب شخصًا أو جرحه أو ألحق بجسمه أذى... يعاقب بالحبس مدة لا تجاوز سنتين وبغرامة...» — طريق جزائي مستقل ومتاح إلى جانب دعوى التفريق المدنية، وليس شرطًا لقبولها."
+      },
+      {
+        "dimension_id": "criminal_route_for_verbal_insult",
+        "label": "إمكانية الملاحقة الجزائية عن الشتم (جريمة السب)",
+        "required": false,
+        "critical": false,
+        "requires_governing": true,
+        "legal_role": "remedy_route",
+        "ground_truth_authority_ids": [
+          "legis-16-1960-m210"
+        ],
+        "ground_truth_status": "partially_verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 210 تعاقب على السب الذي يخدش الشرف أو الاعتبار، لكن نصها يشترط وقوعه «في مكان عام أو على مسمع أو مرأى من شخص آخر غير المجني عليه» — وهو شرط قد لا يتحقق في شتم زوجي يقع دون شهود ثالث، فالتطابق مع واقعة السؤال غير مؤكد بالكامل."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0035",
+    "required_dimensions": [
+      {
+        "dimension_id": "lawful_vs_arbitrary_dismissal",
+        "label": "هل يندرج الفصل تحت الحالات المبررة قانونًا أم يُعد فصلًا تعسفيًا",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-6-2010-m41"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 41 من قانون العمل بالقطاع الأهلي 6/2010 تحصر حالات فصل العامل دون إخطار أو تعويض أو مكافأة (فقرة أ) وحالات الفصل مع بقاء الحق في المكافأة (فقرة ب)؛ وفصل «بدون سبب» كما ورد في السؤال لا يندرج تحت أي منها ظاهريًا، مما يفتح باب وصفه بالتعسفي."
+      },
+      {
+        "dimension_id": "right_to_challenge_and_compensation_if_arbitrary",
+        "label": "حق الطعن في قرار الفصل أمام الدائرة العمالية واستحقاق المكافأة والتعويض عند ثبوت التعسف",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "remedy_route",
+        "ground_truth_authority_ids": [
+          "legis-6-2010-m41"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "الفقرة (ج) من المادة 41: «للعامل المفصول... حق الطعن في قرار الفصل أمام الدائرة العمالية المختصة... وإذا ثبت بموجب حكم نهائي أن صاحب العمل قد تعسف في فصله استحق الأخير مكافأة نهاية الخدمة وتعويضًا عما لحقه من أضرار مادية وأدبية»."
+      },
+      {
+        "dimension_id": "notice_period_or_pay_in_lieu",
+        "label": "استحقاق مهلة الإخطار أو بدلها إذا أُنهي العقد دون إخطار مسبق",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-6-2010-m44"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 44: يجب إخطار الطرف الآخر قبل الإنهاء (شهر إلى ثلاثة أشهر بحسب طبيعة الأجر)، «فإذا لم يراع الطرف الذي أنهى العقد مدة الإخطار فإنه يلتزم بأن يدفع للطرف الآخر بدل مهلة الإخطار مساويًا لأجر العامل عن نفس المدة» — الطرد الفوري بلا سبب موصوف في السؤال يثير هذا الاستحقاق مباشرة."
+      },
+      {
+        "dimension_id": "end_of_service_reward_entitlement",
+        "label": "استحقاق مكافأة نهاية الخدمة وطريقة احتسابها",
+        "required": true,
+        "critical": false,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-6-2010-m51",
+          "legis-6-2010-m52"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 52: يستحق العامل مكافأة نهاية الخدمة كاملة «إذا انتهى العقد من جانب صاحب العمل»؛ المادة 51 تحدد طريقة الاحتساب (10-15 يومًا لكل سنة بحسب طبيعة الأجر)."
+      },
+      {
+        "dimension_id": "labor_claims_limitation_period",
+        "label": "تقادم الدعاوى العمالية بمضي سنة من تاريخ انتهاء العقد",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "deadline",
+        "ground_truth_authority_ids": [
+          "legis-6-2010-m144"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 144: «لا تسمع عند الإنكار بمضي سنة من تاريخ انتهاء عقد العمل الدعاوى التي يرفعها العمال استنادًا إلى أحكام هذا القانون» — مهلة حاسمة لقبول أي مطالبة بالحقوق المذكورة."
+      },
+      {
+        "dimension_id": "law_applicability_scope",
+        "label": "انطباق قانون العمل بالقطاع الأهلي (لا الخدمة المدنية أو قطاعات خاصة أخرى) على العلاقة",
+        "required": true,
+        "critical": false,
+        "requires_governing": true,
+        "legal_role": "definitional",
+        "ground_truth_authority_ids": [
+          "legis-6-2010-m2"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "المادة 2: «تسري أحكام هذا القانون على العاملين في القطاع الأهلي» — يفترض السؤال ضمنًا أن السائل عامل بالقطاع الأهلي؛ إن كان موظفًا حكوميًا أو عاملة منزلية أو في قطاع النفط تسري أحكام مختلفة (نظام الخدمة المدنية أو قانون 68/2015 أو قانون 28/1969)، وهو ما لم يُحسم من نص السؤال."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0036",
+    "required_dimensions": [
+      {
+        "dimension_id": "judicial_removal_of_manager",
+        "label": "عزل مدير الشركة ذات المسؤولية المحدودة قضائيًا بطلب شريك يملك ربع رأس المال على الأقل",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-1-2016-m104",
+          "legis-1-2016-m50"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "م104 قانون الشركات (1/2016) تنص حرفيًا: يجوز عزل مدير الشركة بحكم قضائي بناء على طلب شريك أو أكثر يملكون ربع حصص رأس المال على الأقل (للغش/الخطأ الجسيم/مخالفة م106) — يطابق واقعة السؤال تمامًا (شريك يملك ربع رأس المال). وم50 تضيف أن حصص المدير المطلوب عزله لا تدخل ضمن النصاب اللازم لقرار العزل، وإذا بلغت حصته نصف رأس المال أو أكثر فلا يُعزل إلا بحكم قضائي — وهذا يعالج جزئيًا مشكلة تعطيل النصاب بالذات في قرار العزل."
+      },
+      {
+        "dimension_id": "ministry_convening_on_manager_refusal",
+        "label": "دعوة الوزارة لاجتماع الجمعية العامة عند امتناع المدير عن الدعوة (إنذار + 15 يومًا)",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "remedy_route",
+        "ground_truth_authority_ids": [
+          "legis-1-2016-m111",
+          "regl-1-2016-m65"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "م111 قانون الشركات: يجوز للوزارة دعوة الجمعية العامة للشركة ذات المسؤولية المحدودة في الحالات التي يتعين فيها على المدير الدعوة دون أن يقوم بذلك. والمادة 65 من اللائحة التنفيذية (قرار 287/2016) تفصّل الإجراء حرفيًا: تقديم طلب للوزارة، إنذار رسمي للمدير على يد مندوب إعلان إدارة التنفيذ، ومرور 15 يومًا دون بدء إجراءات الدعوة دون مبرر، فتقوم الوزارة بالدعوة خلال 15 يومًا من تسلم الطلب ويحضر ممثلها الاجتماع."
+      },
+      {
+        "dimension_id": "neutralizing_shares_to_break_quorum",
+        "label": "تحييد الحصص المعطِّلة للنصاب بأمر على عريضة (قاضي الأمور الوقتية)",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "remedy_route",
+        "ground_truth_authority_ids": [
+          "legis-1-2016-m30"
+        ],
+        "ground_truth_status": "partially_verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م30 قانون الشركات تنص حرفيًا على جواز التقدم لقاضي الأمور الوقتية لاستصدار أمر على عريضة بتحييد الأسهم أو الحصص محل النزاع من التصويت لحين الفصل في موضوع النزاع. لكن نص المادة يقيّد هذه الآلية بحالة مخالفة 'اتفاق مساهمين/شركاء' منظِّم للعلاقة بينهم — ووقائع السؤال لا تُثبت وجود اتفاق شركاء مكتوب من هذا النوع أصلًا، فتطبيق هذه الآلية بعينها على واقعة السؤال يبقى مشروطًا بمعطى واقعي غير مؤكَّد في نص السؤال، وإن كانت الآلية القانونية نفسها حقيقية وموثقة."
+      },
+      {
+        "dimension_id": "criminal_liability_for_willful_refusal_to_convene",
+        "label": "المسؤولية الجزائية للمدير الذي يمتنع عمدًا عن عقد اجتماع الجمعية بعد إنذاره رسميًا شهرًا",
+        "required": true,
+        "critical": false,
+        "requires_governing": true,
+        "legal_role": "other",
+        "ground_truth_authority_ids": [
+          "legis-1-2016-m304"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "م304(2) قانون الشركات تعاقب بالحبس مدة لا تزيد على سنة وبغرامة (5000-10000 د.ك) أو بإحداهما 'كل عضو مجلس إدارة أو مدير امتنع عمدًا ودون عذر مقبول بعد مرور شهر من إنذاره رسميًا عن عقد اجتماع الجمعية العامة... في الأحوال التي يوجبها القانون'، ويجوز للمحكمة الحكم بعزل المدير في هذه الجريمة ذاتها — بُعد رادع تكميلي لا أساسي لطلب الشريك."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0037",
+    "required_dimensions": [
+      {
+        "dimension_id": "no_commercial_paper_requirement_for_order_of_payment",
+        "label": "استقلال شروط أمر الأداء عن اشتراط أن يكون السند ورقة تجارية",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-38-1980-m166",
+          "jprin-110-2009-e1084-fe6c318b1a"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م166 مرافعات تنص على الشرط العام (دين نقود ثابت بالكتابة، حال الأداء، معين المقدار) دون تخصيصه بالأوراق التجارية؛ فقرتها الثانية توجب فقط اتباع طريق أمر الأداء (لا تحصره فيه) حين يكون الدائن بورقة تجارية ورجوعه مقصور على أطراف بعينهم. ومبدأ الطعن 110/2009 يحسم المسألة حرفيًا: 'لا يلزم أن يكون هذا السند من الأوراق التجارية... علة ذلك أن إصدار الأمر يستقل عن دعوى الصرف' — فيكفي أي محرر يثبت دينًا نقديًا معين المقدار حال الأداء."
+      },
+      {
+        "dimension_id": "general_substantive_conditions_order_of_payment",
+        "label": "الشروط العامة الثلاثة لسلوك طريق أمر الأداء (كتابة + معين المقدار + حال الأداء)",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-38-1980-m166",
+          "jprin-885-2003-w4643-3449f58a86",
+          "jprin-1335-2008-e1082-d8398409ff"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "استقرت مبادئ محكمة التمييز (885/2003، 1335/2008، 85/2006، 101/2001) على أن سلوك طريق أمر الأداء يشترط أن يكون الدين مبلغًا من النقود ثابتًا بالكتابة ومعين المقدار وحال الأداء، وتخلف أحد هذه الشروط يوجب اتباع الطريق العادي لرفع الدعوى — وهذا هو الإطار الذي يحكم إجابة السؤال عن استقلاليته عن الصفة الصرفية."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0038",
+    "required_dimensions": [
+      {
+        "dimension_id": "formal_deed_requirement_for_wll_contract_amendment",
+        "label": "وجوب إفراغ تعديل عقد الشركة ذات المسؤولية المحدودة في محرر رسمي وبطلان الاتفاق غير الرسمي",
+        "required": true,
+        "critical": true,
+        "requires_governing": true,
+        "legal_role": "substantive_condition",
+        "ground_truth_authority_ids": [
+          "legis-1-2016-m7",
+          "jprin-211-2002-w44-e1cfa73629",
+          "jprin-569-2002-f2857-584ea7db50",
+          "jprin-113-1989-f2411-e83aa2db98",
+          "jprin-451-2006-e8908-d8c5fc6a59"
+        ],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_get_article",
+        "verification_note": "م7 قانون الشركات تنص صراحة: فيما عدا شركة المحاصة، يجب أن يكون عقد الشركة مكتوبًا في محرر رسمي موثق وإلا كان باطلاً. ومبدأ الطعن 211/2002 يقرر حرفيًا: 'انعقاد الشركة ذات المسئولية المحدودة أو أي تعديل يدخل عليها. استلزام إفراغه في محرر رسمي. علة ذلك: أنه من النظام العام. مخالفة ذلك. انعدام العقد.' ومبدأ 569/2002 يضيف أن تخلف الرسمية يوجب البطلان المطلق. فمجرد اتفاق الشركاء دون محرر رسمي لا يكفي لتعديل عقد الشركة، والاتفاق غير الرسمي باطل بطلانًا مطلقًا متعلقًا بالنظام العام."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0039",
+    "required_dimensions": [
+      {
+        "dimension_id": "scope_verification",
+        "label": "التحقق من وجود نص خاص بالعملات الرقمية المشفرة ضمن قانون مكافحة غسل الأموال",
+        "required": true,
+        "critical": false,
+        "requires_governing": false,
+        "legal_role": "other",
+        "ground_truth_authority_ids": [],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "بحث في قانون 106/2013 ولائحته التنفيذية (27 كائنًا) وفي كل القاعدة عن 'عملات مشفرة/رقمية/بيتكوين/أصول افتراضية' لم يُظهر أي نص عقابي خاص بالعملات المشفرة تحديدًا. تعريف 'الأموال' في م1 عام تقنيًا محايد ('أيًّا كان شكلها، بما في ذلك الشكل الإلكتروني أو الرقمي') فيستوعب العملات المشفرة ضمنًا تحت العقوبات العامة (م28/م29/م32)، لكن لا يوجد نص خاص يحدد عقوبة مستقلة أو مشددة لحالة استخدام عملة مشفرة تحديدًا — القاعدة تفتقر لهذا التفصيل الدقيق الذي يطلبه السؤال."
+      }
+    ]
+  },
+  {
+    "case_id": "gs-0040",
+    "required_dimensions": [
+      {
+        "dimension_id": "scope_verification",
+        "label": "التحقق من نطاق قاعدة الأحوال الشخصية (سنّي/جعفري حصرًا) وعدم شمولها الشريعة اليهودية",
+        "required": true,
+        "critical": false,
+        "requires_governing": false,
+        "legal_role": "other",
+        "ground_truth_authority_ids": [],
+        "ground_truth_status": "verified",
+        "verification_method": "mcp_search_legal",
+        "verification_note": "الجرد الحي للتشريعات (97 تشريعًا) لا يضم أي قانون أحوال شخصية يهودي — فقط legis-51-1984 (المذهب السنّي/المالكي) وlegis-124-2019 (الجعفري) وlegis-12-2015 (محكمة الأسرة) وlegis-53-2026 (دعاوى النسب). وبحث 'الطائفة اليهودية/الشريعة اليهودية' لم يُعِد إلا مبادئ قضائية عن تنازع المذهبين السني والجعفري (مثل جلوس القضاء على 'ظاهر الإقرار اللساني' وتطبيق مذهب الإمام مالك عند اختلاف المذهبين)، ما يؤكد أن نطاق القاعدة الشخصي مقصور على السنّة والجعفرية دون غيرهما، والمسألة خارج نطاق القاعدة تمامًا."
+      }
+    ]
+  }
+]
