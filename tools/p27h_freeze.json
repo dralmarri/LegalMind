@@ -1,0 +1,35 @@
+{
+ "_note": "P2.7-H القسم 1 — تجميد كامل قبل المراجعة البشرية. لا يُعدَّل أي من هذه الملفات أثناء المراجعة.",
+ "frozen_at_utc": "2026-09-17T19:44:21Z",
+ "git_head": "2f071d6e9ee85ff13ace179fd3754332a335b9f6",
+ "git_branch": "claude/kuwaiti-legal-docs-qq0cx3",
+ "git_status_clean": true,
+ "edge_set_hash": "93d7c585f44de082c81524014b1346e803019601d41185b1c8a67643b0946d91",
+ "edge_count": 23,
+ "scope_gate_hash": "88117008c564626671d35d84eb5d6b2a2a9ed43137aa24adc1c7576d174b0f69",
+ "applicability_gate_hash": "c3152e8be8b96b75bcac7e0c1288399a7e13f630e2e61d4a75ebd4c45c2f4f95",
+ "file_hashes": {
+  "gold_set40_ground_truth": "a433b7fda60e56668ed72fe0973a2c69725515b5e046bbad76b3f8a9d1c8d536",
+  "gold_set40_questions": "90a55571a0d3c8465faa2b4b02afbb18d4036728bb89471233cd57e7269781f4",
+  "graph_file": "61331d68377991c57e6757ff5cfebb2212494a8f227a335da3756adc12ed10ca",
+  "planner_prompt": "ae40b77925a3d9be9dd521a35319048685e7a5047bcfe73eeac0166340c39801",
+  "planner_schema": "daa2f842dd905489531a432c595e401a7316c92d881be89feebda971eaf51489",
+  "evaluator": "755894c6612a463d906de342dc179e8d4e4cbb14d64e6a6f623abfb3d79ef09d",
+  "scope_gate": "af110c870f10ee56f157c13f5a2840a6bd1d588a22c555f7158c26bf39a3fc1e",
+  "applicability_gate": "cf00a851d006e5e902690ccd1d365c35e07ccff3bea509d995d21b106eb206bf",
+  "gate_outputs": "d76b390bac18290a02eb17dee814a24884e8a38ec47f97a05c1ef068030ef000",
+  "addition_audit": "9b931037de34b30a724f1939c514c2c85d0cb196a5dae24d3a405c1b3e3227fa",
+  "shadow_results": "608d8db4dbb599802b457c270eb394618ca3573e5f8a6ea369425b270c2f16c0",
+  "p27v_metrics": "59fe205993b5af78158df4fac9b61ba12326b9d2fd7212c33f03b82c75846cef",
+  "p27v_classification": "23649952ac480c81baef9ed1413272272aecc7f0f948fb8f608d70435e6b2710",
+  "omission_candidates": "bef9feefe31667f4cdd79e4cbd53285339c467c5effcb78d8636568e362926c8",
+  "p27_freeze": "c47264daea0ff93f53dc89a34e597cb29602ca4182b44db1e9b9a0390edf8917"
+ },
+ "immutability_contract": [
+  "لا تعديل على Gold Set40 ولا حقيقتها الأرضية",
+  "لا تعديل على الـgraph ولا أي حافة",
+  "لا تعديل على Planner",
+  "لا تعديل على بوابة النطاق ولا بوابة الانطباق",
+  "لا إعادة قياس ولا احتساب أي مقياس قبل ورود القرارات البشرية"
+ ]
+}

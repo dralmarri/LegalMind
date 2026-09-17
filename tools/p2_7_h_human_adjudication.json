@@ -1,0 +1,92 @@
+{
+ "_note": "P2.7-H القسم 8 — قرارات المراجعة القانونية البشرية. **Gold Set40 لم تُمس ولن تُمس من هذا الملف.** لا يملأ Claude حقل human_decision إطلاقًا.",
+ "freeze_ref": "tools/p27h_freeze.json",
+ "cards_ref": "tools/p27h_review_cards.json",
+ "status": "AWAITING_HUMAN_DECISIONS",
+ "decisions": [
+  {
+   "card_no": 1,
+   "case_id": "gs-0005",
+   "dimension": "عدم سماع الدعاوى العمالية بمضي سنة من انتهاء العقد",
+   "dimension_node": "D_LABOR_LIMITATION",
+   "edge_id": "E22",
+   "human_decision": "PENDING",
+   "condition_if_any": null,
+   "duplicate_of": null,
+   "reviewer_note": null,
+   "reviewed_at": null
+  },
+  {
+   "card_no": 2,
+   "case_id": "gs-0006",
+   "dimension": "إيداع الأجرة خزانة إدارة التنفيذ بعد العرض القانوني خلال عشرين يومًا كوفاء معتبر",
+   "dimension_node": "D_RENT_DEPOSIT",
+   "edge_id": "E23",
+   "human_decision": "PENDING",
+   "condition_if_any": null,
+   "duplicate_of": null,
+   "reviewer_note": null,
+   "reviewed_at": null
+  },
+  {
+   "card_no": 3,
+   "case_id": "gs-0011",
+   "dimension": "مهلة اللجنة (ستة أشهر/ثلاثة عند اللعان) وأثر انقضائها على فتح باب القضاء",
+   "dimension_node": "D_COMMITTEE_DEADLINE",
+   "edge_id": "E09",
+   "human_decision": "PENDING",
+   "condition_if_any": null,
+   "duplicate_of": null,
+   "reviewer_note": null,
+   "reviewed_at": null
+  },
+  {
+   "card_no": 4,
+   "case_id": "gs-0011",
+   "dimension": "إجراءات تحقيق اللجنة (سماع الشهود وفحص البصمة الوراثية)",
+   "dimension_node": "D_COMMITTEE_PROCEDURE",
+   "edge_id": "E10",
+   "human_decision": "PENDING",
+   "condition_if_any": null,
+   "duplicate_of": null,
+   "reviewer_note": null,
+   "reviewed_at": null
+  },
+  {
+   "card_no": 5,
+   "case_id": "gs-0013",
+   "dimension": "التكليف بالوفاء قبل استصدار أمر الأداء",
+   "dimension_node": "D_PAYMENT_DEMAND",
+   "edge_id": "E01",
+   "human_decision": "PENDING",
+   "condition_if_any": null,
+   "duplicate_of": null,
+   "reviewer_note": null,
+   "reviewed_at": null
+  },
+  {
+   "card_no": 6,
+   "case_id": "gs-0021",
+   "dimension": "اعتبار دعوى الإخلاء كأن لم تكن عند الوفاء حتى أول جلسة بعذر مقبول",
+   "dimension_node": "D_TENANT_CURE",
+   "edge_id": "E06",
+   "human_decision": "PENDING",
+   "condition_if_any": null,
+   "duplicate_of": null,
+   "reviewer_note": null,
+   "reviewed_at": null
+  },
+  {
+   "card_no": 7,
+   "case_id": "gs-0033",
+   "dimension": "وجوب تدخل النيابة العامة في دعاوى النسب باعتبارها من النظام العام",
+   "dimension_node": "D_PROSECUTION_INTERVENTION",
+   "edge_id": "E11",
+   "human_decision": "PENDING",
+   "condition_if_any": null,
+   "duplicate_of": null,
+   "reviewer_note": null,
+   "reviewed_at": null
+  }
+ ]
+}
