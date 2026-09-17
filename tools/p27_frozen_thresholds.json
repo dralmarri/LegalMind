@@ -1,0 +1,45 @@
+{
+  "_note": "P2.7 القسم Q — عتبات النجاح مجمَّدة قبل أي قياس. كُتب هذا الملف بعد تدقيق الأخطاء (C) وتحديد نطاق LOCO لكنه **قبل** بناء أي حافة وقبل تشغيل أي قياس. لا تُخفَّض أي عتبة بأثر رجعي.",
+  "frozen_at": "2026-09-17، قبل بناء الـgraph وقبل أي تشغيل قياس",
+  "baseline_planner_alone_gold40": {
+    "dimension_recall": 0.7817,
+    "critical_dimension_recall": 0.8598,
+    "dimension_precision": 1.0,
+    "strict_case_completeness": 0.725,
+    "unsupported_dimension_rate": 0.0,
+    "mandatory_procedure_recall": 0.647
+  },
+  "success_thresholds_planner_plus_graph": {
+    "verified_dimension_recall": {"op": ">=", "value": 0.90},
+    "critical_dimension_recall": {"op": ">=", "value": 0.95},
+    "dimension_precision": {"op": ">=", "value": 0.90},
+    "graph_addition_precision": {"op": ">=", "value": 0.90},
+    "unsupported_dimension_rate": {"op": "<=", "value": 0.10},
+    "mandatory_procedure_recall": {"op": ">", "value": 0.647, "note": "يجب أن يتحسن بوضوح لا هامشيًا"},
+    "strict_case_completeness": {"op": ">", "value": 0.725},
+    "no_regression_substantive": {"op": "==", "value": 0, "note": "صفر فقد لأي بُعد موضوعي كان Planner يصيبه أصلًا"}
+  },
+  "failure_conditions": {
+    "lookup_table": "إن لزم edge مختلفة لكل صياغة أو لكل case",
+    "topic_explosion": "إن انخفضت Graph Addition Precision",
+    "leakage": "إن اعتمد معظم الإنقاذ على edges مشتقة من نفس الـcase",
+    "no_effect": "إن لم يتحسن hidden-dependency recall"
+  },
+  "loco_protocol": {
+    "key": "المصدر المُسنِد (supporting_object_id) لا اسم البُعد",
+    "rule": "الحافة مقبولة عند اختبار الحالة X إذا وإذا فقط كان مصدرها المُسنِد حاضرًا في الحقيقة الأرضية لحالة أخرى ≠ X — أي أن القاعدة كانت ستُستخرج من بقية المتن حتى لو حُجبت X كليًا",
+    "rationale": "معرفات الأبعاد نصية وتختلف تسميةً بين الحالات وإن اتحد حكمها (م127 تظهر بأربعة معرفات مختلفة عبر أربع حالات)، فالمفتاح النصي يُسقط تعميمًا حقيقيًا؛ والمصدر المُسنِد معطى موضوعي في البيانات لا حكم من المشغِّل",
+    "measured_scope_before_building_anything": {
+      "graph_target_dimensions": 24,
+      "loco_clean": 12,
+      "loco_clean_critical": 10,
+      "not_loco_testable": 12,
+      "note": "الإنقاذ في الـ12 غير القابلة لـLOCO يُبلَّغ منفصلًا ولا يُحتسب دليل تعميم إطلاقًا"
+    }
+  },
+  "hard_ceiling_declared_in_advance": {
+    "max_possible_loco_clean_rescues": 12,
+    "max_possible_loco_clean_critical_rescues": 10,
+    "implication": "حتى graph مثالية لا تستطيع إنقاذ أكثر من 12 بُعدًا من 31 تفويتًا بلا تسريب. أثر ذلك على العتبات: استدعاء الأبعاد الأقصى الممكن بلا تسريب = (111+12)/142 = 0.866، والحاكم الأقصى = (92+10)/107 = 0.953. أي أن عتبة الاستدعاء 0.90 **غير قابلة للبلوغ بنيويًا** على هذه المجموعة بلا تسريب، وعتبة الحاكم 0.95 تُبلغ فقط بإنقاذ كامل مثالي للعشرة. هذا السقف يُعلَن قبل القياس لا بعده، ويُقرأ الحكم النهائي في ضوئه."
+  }
+}

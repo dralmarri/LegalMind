@@ -1,0 +1,542 @@
+{
+ "_note": "P2.7 القسم D — اختبار قابلية التمثيل. السؤال المحدد لكل بُعد مفوَّت داخل هدف الـgraph: هل يمكن التعبير عنه كعلاقة بين مفهومين قانونيين (مفهوم مُثار في الوقائع ← بُعد لازم) مسنودة بمصدر حقيقي؟ أُجري **قبل** أي قرار ببناء الـgraph الكامل، ونتيجته هي التي أجازت الانتقال للقسم E.",
+ "n_targets": 24,
+ "n_representable": 24,
+ "n_with_documented_source": 24,
+ "distinct_dimension_nodes": 23,
+ "items": [
+  {
+   "n": 1,
+   "case_id": "gs-0001",
+   "dimension_id": "mandatory_payment_demand",
+   "critical": true,
+   "audit_class": "MANDATORY_PROCEDURE",
+   "trigger_concept": "أمر أداء",
+   "representable_as_concept_relation": true,
+   "dimension_node": "D_PAYMENT_DEMAND",
+   "relation": [
+    {
+     "source": "C_AMR_ADA",
+     "relation": "PRECEDES",
+     "necessity": "MANDATORY",
+     "edge": "E01",
+     "provenance": [
+      "legis-38-1980-m167"
+     ]
+    }
+   ],
+   "documented_source_exists": true
+  },
+  {
+   "n": 2,
+   "case_id": "gs-0001",
+   "dimension_id": "travel_ban_lifting_grounds",
+   "critical": true,
+   "audit_class": "EXCEPTION",
+   "trigger_concept": "أمر منع من السفر",
+   "representable_as_concept_relation": true,
+   "dimension_node": "D_TRAVEL_BAN_LAPSE",
+   "relation": [
+    {
+     "source": "C_TRAVEL_BAN",
+     "relation": "EXCEPTION_CHECK",
+     "necessity": "MANDATORY",
+     "edge": "E02",
+     "provenance": [
+      "legis-38-1980-m298"
+     ]
+    }
+   ],
+   "documented_source_exists": true
+  },
+  {
+   "n": 3,
+   "case_id": "gs-0002",
+   "dimension_id": "unjust_enrichment_after_prescription",
+   "critical": true,
+   "audit_class": "LEGAL_DEPENDENCY",
+   "trigger_concept": "تقادم صرفي للشيك",
+   "representable_as_concept_relation": true,
+   "dimension_node": "D_UNJUST_ENRICHMENT_ROUTE",
+   "relation": [
+    {
+     "source": "C_CHEQUE_PRESCRIPTION",
+     "relation": "DEPENDS_ON",
+     "necessity": "MANDATORY",
+     "edge": "E14",
+     "provenance": [
+      "legis-68-1980-m553"
+     ]
+    }
+   ],
+   "documented_source_exists": true
+  },
+  {
+   "n": 4,
+   "case_id": "gs-0002",
+   "dimension_id": "civil_criminal_independence",
+   "critical": false,
+   "audit_class": "LEGAL_DEPENDENCY",
+   "trigger_concept": "ملاحقة جزائية ومطالبة مدنية عن فعل واحد",
+   "representable_as_concept_relation": true,
+   "dimension_node": "D_CIVIL_CRIMINAL_INDEPENDENCE",
+   "relation": [
+    {
+     "source": "C_CRIMINAL_AND_CIVIL",
+     "relation": "CHECKS",
+     "necessity": "MANDATORY",
+     "edge": "E15",
+     "provenance": [
+      "jprin-1068-2004-f808-18c18f6704"
+     ]
+    }
+   ],
+   "documented_source_exists": true
+  },
+  {
+   "n": 5,
+   "case_id": "gs-0003",
+   "dimension_id": "hakamayn_arbitration_when_harm_unproven",
+   "critical": true,
+   "audit_class": "MANDATORY_PROCEDURE",
+   "trigger_concept": "دعوى تطليق/تفريق للضرر",
+   "representable_as_concept_relation": true,
+   "dimension_node": "D_ARBITRATORS",
+   "relation": [
+    {
+     "source": "C_TAFRIQ_DARAR",
+     "relation": "REQUIRES",
+     "necessity": "CONDITIONAL",
+     "edge": "E03",
+     "provenance": [
+      "legis-51-1984-m127",
+      "legis-51-1984-m129"
+     ]
+    }
+   ],
+   "documented_source_exists": true
+  },
+  {
+   "n": 6,
+   "case_id": "gs-0003",
+   "dimension_id": "retroactive_maintenance_time_limit",
+   "critical": true,
+   "audit_class": "TEMPORAL_RULE",
+   "trigger_concept": "المطالبة بنفقة",
+   "representable_as_concept_relation": true,
+   "dimension_node": "D_RETROACTIVE_MAINTENANCE_LIMIT",
+   "relation": [
+    {
+     "source": "C_MAINTENANCE_CLAIM",
+     "relation": "SUBJECT_TO",
+     "necessity": "MANDATORY",
+     "edge": "E21",
+     "provenance": [
+      "legis-51-1984-m78"
+     ]
+    }
+   ],
+   "documented_source_exists": true
+  },
+  {
+   "n": 7,
+   "case_id": "gs-0003",
+   "dimension_id": "family_court_jurisdiction",
+   "critical": false,
+   "audit_class": "JURISDICTION",
+   "trigger_concept": "دعوى أسرية",
+   "representable_as_concept_relation": true,
+   "dimension_node": "D_FAMILY_COURT_JURISDICTION",
+   "relation": [
+    {
+     "source": "C_FAMILY_CLAIM",
+     "relation": "JURISDICTION_CHECK",
+     "necessity": "MANDATORY",
+     "edge": "E04",
+     "provenance": [
+      "legis-12-2015-m6"
+     ]
+    }
+   ],
+   "documented_source_exists": true
+  },
+  {
+   "n": 8,
+   "case_id": "gs-0005",
+   "dimension_id": "labor_dispute_challenge_route",
+   "critical": true,
+   "audit_class": "JURISDICTION",
+   "trigger_concept": "إنهاء عقد عمل / فصل",
+   "representable_as_concept_relation": true,
+   "dimension_node": "D_LABOR_CHALLENGE_ROUTE",
+   "relation": [
+    {
+     "source": "C_DISMISSAL",
+     "relation": "JURISDICTION_CHECK",
+     "necessity": "MANDATORY",
+     "edge": "E05",
+     "provenance": [
+      "legis-6-2010-m41"
+     ]
+    }
+   ],
+   "documented_source_exists": true
+  },
+  {
+   "n": 9,
+   "case_id": "gs-0006",
+   "dimension_id": "tenant_cure_defense",
+   "critical": true,
+   "audit_class": "EXCEPTION",
+   "trigger_concept": "دعوى إخلاء لعدم سداد الأجرة",
+   "representable_as_concept_relation": true,
+   "dimension_node": "D_TENANT_CURE",
+   "relation": [
+    {
+     "source": "C_EVICTION_NONPAY",
+     "relation": "EXCEPTION_CHECK",
+     "necessity": "CONDITIONAL",
+     "edge": "E06",
+     "provenance": [
+      "legis-35-1978-m20"
+     ]
+    }
+   ],
+   "documented_source_exists": true
+  },
+  {
+   "n": 11,
+   "case_id": "gs-0009",
+   "dimension_id": "judicial_removal_specific_grounds",
+   "critical": true,
+   "audit_class": "LEGAL_DEPENDENCY",
+   "trigger_concept": "عزل مدير شركة ذات مسؤولية محدودة",
+   "representable_as_concept_relation": true,
+   "dimension_node": "D_JUDICIAL_REMOVAL_GROUNDS",
+   "relation": [
+    {
+     "source": "C_WLL_MANAGER_REMOVAL",
+     "relation": "DEPENDS_ON",
+     "necessity": "MANDATORY",
+     "edge": "E07",
+     "provenance": [
+      "legis-1-2016-m104"
+     ]
+    }
+   ],
+   "documented_source_exists": true
+  },
+  {
+   "n": 13,
+   "case_id": "gs-0011",
+   "dimension_id": "lijnat_alnasab_wujubiya",
+   "critical": true,
+   "audit_class": "MANDATORY_PROCEDURE",
+   "trigger_concept": "دعوى إثبات نسب",
+   "representable_as_concept_relation": true,
+   "dimension_node": "D_PATERNITY_COMMITTEE",
+   "relation": [
+    {
+     "source": "C_PATERNITY_CLAIM",
+     "relation": "PRECEDES",
+     "necessity": "MANDATORY",
+     "edge": "E08",
+     "provenance": [
+      "legis-53-2026-m8"
+     ]
+    }
+   ],
+   "documented_source_exists": true
+  },
+  {
+   "n": 14,
+   "case_id": "gs-0011",
+   "dimension_id": "tadakhkhul_alniyaba_alamma_wujubi",
+   "critical": true,
+   "audit_class": "MANDATORY_PROCEDURE",
+   "trigger_concept": "دعوى نسب (من النظام العام)",
+   "representable_as_concept_relation": true,
+   "dimension_node": "D_PROSECUTION_INTERVENTION",
+   "relation": [
+    {
+     "source": "C_PATERNITY_CLAIM",
+     "relation": "REQUIRES",
+     "necessity": "MANDATORY",
+     "edge": "E11",
+     "provenance": [
+      "legis-51-1984-m338",
+      "legis-51-1984-m337"
+     ]
+    }
+   ],
+   "documented_source_exists": true
+  },
+  {
+   "n": 15,
+   "case_id": "gs-0012",
+   "dimension_id": "haqq_albaie_ind_adam_alwafa",
+   "critical": false,
+   "audit_class": "LEGAL_DEPENDENCY",
+   "trigger_concept": "بيع المتجر (المحل التجاري)",
+   "representable_as_concept_relation": true,
+   "dimension_node": "D_SELLER_AUCTION_RIGHT",
+   "relation": [
+    {
+     "source": "C_BUSINESS_SALE",
+     "relation": "DEPENDS_ON",
+     "necessity": "CONDITIONAL",
+     "edge": "E18",
+     "provenance": [
+      "legis-68-1980-m44"
+     ]
+    }
+   ],
+   "documented_source_exists": true
+  },
+  {
+   "n": 16,
+   "case_id": "gs-0014",
+   "dimension_id": "shahadat_ada_alkhidma_shart_altayeen",
+   "critical": false,
+   "audit_class": "CROSS_LAW_DEPENDENCY",
+   "trigger_concept": "الخدمة الوطنية",
+   "representable_as_concept_relation": true,
+   "dimension_node": "D_SERVICE_CERTIFICATE_FOR_APPOINTMENT",
+   "relation": [
+    {
+     "source": "C_NATIONAL_SERVICE",
+     "relation": "CHECKS",
+     "necessity": "MANDATORY",
+     "edge": "E20",
+     "provenance": [
+      "LEG-20-3-bcffde99b733e588"
+     ]
+    }
+   ],
+   "documented_source_exists": true
+  },
+  {
+   "n": 18,
+   "case_id": "gs-0016",
+   "dimension_id": "liability_despite_non_discernment",
+   "critical": false,
+   "audit_class": "LEGAL_DEPENDENCY",
+   "trigger_concept": "المسؤولية عن الفعل الضار",
+   "representable_as_concept_relation": true,
+   "dimension_node": "D_NON_DISCERNMENT",
+   "relation": [
+    {
+     "source": "C_TORT_LIABILITY",
+     "relation": "CHECKS",
+     "necessity": "MANDATORY",
+     "edge": "E16",
+     "provenance": [
+      "legis-67-1980-m227"
+     ]
+    }
+   ],
+   "documented_source_exists": true
+  },
+  {
+   "n": 21,
+   "case_id": "gs-0021",
+   "dimension_id": "late_payment_deposit_mechanism",
+   "critical": false,
+   "audit_class": "LEGAL_DEPENDENCY",
+   "trigger_concept": "تأخر المستأجر عن سداد الأجرة",
+   "representable_as_concept_relation": true,
+   "dimension_node": "D_RENT_DEPOSIT",
+   "relation": [
+    {
+     "source": "C_EVICTION_NONPAY",
+     "relation": "CHECKS",
+     "necessity": "MANDATORY",
+     "edge": "E23",
+     "provenance": [
+      "legis-35-1978-m10"
+     ]
+    }
+   ],
+   "documented_source_exists": true
+  },
+  {
+   "n": 23,
+   "case_id": "gs-0029",
+   "dimension_id": "legal_effect_equivalence_m3",
+   "critical": false,
+   "audit_class": "LEGAL_DEPENDENCY",
+   "trigger_concept": "نطاق سريان قانون المعاملات الإلكترونية",
+   "representable_as_concept_relation": true,
+   "dimension_node": "D_ELECTRONIC_EQUIVALENCE",
+   "relation": [
+    {
+     "source": "C_ELECTRONIC_TRANSACTIONS",
+     "relation": "CHECKS",
+     "necessity": "MANDATORY",
+     "edge": "E19",
+     "provenance": [
+      "legis-20-2014-m3"
+     ]
+    }
+   ],
+   "documented_source_exists": true
+  },
+  {
+   "n": 24,
+   "case_id": "gs-0030",
+   "dimension_id": "general_rule_debtor_assets_guarantee",
+   "critical": false,
+   "audit_class": "LEGAL_DEPENDENCY",
+   "trigger_concept": "الحجز استيفاءً لدين",
+   "representable_as_concept_relation": true,
+   "dimension_node": "D_DEBTOR_ASSETS_GUARANTEE",
+   "relation": [
+    {
+     "source": "C_ATTACHMENT_FOR_DEBT",
+     "relation": "DEPENDS_ON",
+     "necessity": "MANDATORY",
+     "edge": "E17",
+     "provenance": [
+      "legis-67-1980-m307"
+     ]
+    }
+   ],
+   "documented_source_exists": true
+  },
+  {
+   "n": 26,
+   "case_id": "gs-0033",
+   "dimension_id": "committee_decision_deadline_and_court_access",
+   "critical": true,
+   "audit_class": "TEMPORAL_RULE",
+   "trigger_concept": "إحالة لجنة دعاوى النسب",
+   "representable_as_concept_relation": true,
+   "dimension_node": "D_COMMITTEE_DEADLINE",
+   "relation": [
+    {
+     "source": "C_PATERNITY_CLAIM",
+     "relation": "SUBJECT_TO",
+     "necessity": "MANDATORY",
+     "edge": "E09",
+     "provenance": [
+      "legis-53-2026-m8"
+     ]
+    }
+   ],
+   "documented_source_exists": true
+  },
+  {
+   "n": 27,
+   "case_id": "gs-0033",
+   "dimension_id": "committee_investigation_procedure",
+   "critical": false,
+   "audit_class": "MANDATORY_PROCEDURE",
+   "trigger_concept": "تحقيق لجنة دعاوى النسب",
+   "representable_as_concept_relation": true,
+   "dimension_node": "D_COMMITTEE_PROCEDURE",
+   "relation": [
+    {
+     "source": "C_PATERNITY_CLAIM",
+     "relation": "CHECKS",
+     "necessity": "MANDATORY",
+     "edge": "E10",
+     "provenance": [
+      "legis-53-2026-m7"
+     ]
+    }
+   ],
+   "documented_source_exists": true
+  },
+  {
+   "n": 28,
+   "case_id": "gs-0034",
+   "dimension_id": "arbitrators_when_harm_unproven",
+   "critical": true,
+   "audit_class": "MANDATORY_PROCEDURE",
+   "trigger_concept": "دعوى تطليق/تفريق للضرر",
+   "representable_as_concept_relation": true,
+   "dimension_node": "D_ARBITRATORS",
+   "relation": [
+    {
+     "source": "C_TAFRIQ_DARAR",
+     "relation": "REQUIRES",
+     "necessity": "CONDITIONAL",
+     "edge": "E03",
+     "provenance": [
+      "legis-51-1984-m127",
+      "legis-51-1984-m129"
+     ]
+    }
+   ],
+   "documented_source_exists": true
+  },
+  {
+   "n": 29,
+   "case_id": "gs-0035",
+   "dimension_id": "labor_claims_limitation_period",
+   "critical": true,
+   "audit_class": "TEMPORAL_RULE",
+   "trigger_concept": "المطالبة بحقوق عمالية بعد انتهاء العقد",
+   "representable_as_concept_relation": true,
+   "dimension_node": "D_LABOR_LIMITATION",
+   "relation": [
+    {
+     "source": "C_LABOR_CLAIM",
+     "relation": "SUBJECT_TO",
+     "necessity": "MANDATORY",
+     "edge": "E22",
+     "provenance": [
+      "legis-6-2010-m144"
+     ]
+    }
+   ],
+   "documented_source_exists": true
+  },
+  {
+   "n": 30,
+   "case_id": "gs-0036",
+   "dimension_id": "ministry_convening_on_manager_refusal",
+   "critical": true,
+   "audit_class": "LEGAL_DEPENDENCY",
+   "trigger_concept": "امتناع المدير عن دعوة الجمعية العامة",
+   "representable_as_concept_relation": true,
+   "dimension_node": "D_MINISTRY_CONVENING",
+   "relation": [
+    {
+     "source": "C_MANAGER_REFUSES_CONVENE",
+     "relation": "DEPENDS_ON",
+     "necessity": "MANDATORY",
+     "edge": "E12",
+     "provenance": [
+      "legis-1-2016-m111",
+      "regl-1-2016-m65"
+     ]
+    }
+   ],
+   "documented_source_exists": true
+  },
+  {
+   "n": 31,
+   "case_id": "gs-0036",
+   "dimension_id": "criminal_liability_for_willful_refusal_to_convene",
+   "critical": false,
+   "audit_class": "CROSS_LAW_DEPENDENCY",
+   "trigger_concept": "امتناع المدير عن دعوة الجمعية العامة",
+   "representable_as_concept_relation": true,
+   "dimension_node": "D_MANAGER_CRIMINAL_LIABILITY",
+   "relation": [
+    {
+     "source": "C_MANAGER_REFUSES_CONVENE",
+     "relation": "CHECKS",
+     "necessity": "CONDITIONAL",
+     "edge": "E13",
+     "provenance": [
+      "legis-1-2016-m304"
+     ]
+    }
+   ],
+   "documented_source_exists": true
+  }
+ ],
+ "finding": "كل الأبعاد الأربعة والعشرين قابلة للتمثيل كعلاقة مفهوم←بُعد بمصدر موثَّق، وتنطوي على 23 عقدة بُعد متمايزة (حالتان — gs-0003 وgs-0034 — تؤولان إلى العقدة نفسها D_ARBITRATORS بمصدر م127 نفسه، وهذا بذاته دليل تعميم لا تكرار). أي أن العائق ليس قابلية التمثيل بل الإطلاق والتسريب والدقة، وهي ما قِيس في الأقسام التالية."
+}

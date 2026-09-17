@@ -1,0 +1,2402 @@
+{
+ "_note": "P2.7 الأقسام H/I/K/L/M/N/O — قياس واحد بلا أي إعادة تشغيل لـPlanner.",
+ "frozen_thresholds_ref": "tools/p27_frozen_thresholds.json",
+ "baseline_A_planner_alone": {
+  "dimension_recall": 0.7816901408450704,
+  "critical_dimension_recall": 0.8598130841121495,
+  "dimension_precision": 1.0,
+  "strict_case_completeness": 0.725
+ },
+ "baseline_C_planner_plus_graph_LOCO_CLEAN": {
+  "loco_clean_only": true,
+  "gt_required_total": 142,
+  "gt_critical_total": 107,
+  "dimension_recall": 0.8662,
+  "critical_dimension_recall": 0.9533,
+  "strict_case_completeness": 0.875,
+  "no_regression_substantive": 0,
+  "_no_regression_note": "الـgraph تضيف ولا تحذف: الاتحاد مع مخرَج Planner لا يُسقط أي بُعد كان يصيبه، فالانحدار صفر بنيويًا لا قياسًا.",
+  "n_rescued": 12,
+  "n_rescued_critical": 10,
+  "rescued": [
+   [
+    "gs-0001",
+    "mandatory_payment_demand"
+   ],
+   [
+    "gs-0001",
+    "travel_ban_lifting_grounds"
+   ],
+   [
+    "gs-0003",
+    "hakamayn_arbitration_when_harm_unproven"
+   ],
+   [
+    "gs-0003",
+    "family_court_jurisdiction"
+   ],
+   [
+    "gs-0005",
+    "labor_dispute_challenge_route"
+   ],
+   [
+    "gs-0006",
+    "tenant_cure_defense"
+   ],
+   [
+    "gs-0009",
+    "judicial_removal_specific_grounds"
+   ],
+   [
+    "gs-0011",
+    "lijnat_alnasab_wujubiya"
+   ],
+   [
+    "gs-0033",
+    "committee_decision_deadline_and_court_access"
+   ],
+   [
+    "gs-0033",
+    "committee_investigation_procedure"
+   ],
+   [
+    "gs-0034",
+    "arbitrators_when_harm_unproven"
+   ],
+   [
+    "gs-0036",
+    "ministry_convening_on_manager_refusal"
+   ]
+  ],
+  "rescued_critical": [
+   [
+    "gs-0001",
+    "mandatory_payment_demand"
+   ],
+   [
+    "gs-0001",
+    "travel_ban_lifting_grounds"
+   ],
+   [
+    "gs-0003",
+    "hakamayn_arbitration_when_harm_unproven"
+   ],
+   [
+    "gs-0005",
+    "labor_dispute_challenge_route"
+   ],
+   [
+    "gs-0006",
+    "tenant_cure_defense"
+   ],
+   [
+    "gs-0009",
+    "judicial_removal_specific_grounds"
+   ],
+   [
+    "gs-0011",
+    "lijnat_alnasab_wujubiya"
+   ],
+   [
+    "gs-0033",
+    "committee_decision_deadline_and_court_access"
+   ],
+   [
+    "gs-0034",
+    "arbitrators_when_harm_unproven"
+   ],
+   [
+    "gs-0036",
+    "ministry_convening_on_manager_refusal"
+   ]
+  ],
+  "graph_additions_total": 26,
+  "graph_additions_matching_gt": 12,
+  "graph_addition_precision": 0.4615,
+  "false_additions": [
+   [
+    "gs-0005",
+    "E22",
+    "D_LABOR_LIMITATION"
+   ],
+   [
+    "gs-0006",
+    "E23",
+    "D_RENT_DEPOSIT"
+   ],
+   [
+    "gs-0011",
+    "E09",
+    "D_COMMITTEE_DEADLINE"
+   ],
+   [
+    "gs-0011",
+    "E10",
+    "D_COMMITTEE_PROCEDURE"
+   ],
+   [
+    "gs-0013",
+    "E01",
+    "D_PAYMENT_DEMAND"
+   ],
+   [
+    "gs-0013",
+    "E02",
+    "D_TRAVEL_BAN_LAPSE"
+   ],
+   [
+    "gs-0018",
+    "E16",
+    "D_NON_DISCERNMENT"
+   ],
+   [
+    "gs-0021",
+    "E06",
+    "D_TENANT_CURE"
+   ],
+   [
+    "gs-0023",
+    "E04",
+    "D_FAMILY_COURT_JURISDICTION"
+   ],
+   [
+    "gs-0025",
+    "E05",
+    "D_LABOR_CHALLENGE_ROUTE"
+   ],
+   [
+    "gs-0032",
+    "E04",
+    "D_FAMILY_COURT_JURISDICTION"
+   ],
+   [
+    "gs-0033",
+    "E11",
+    "D_PROSECUTION_INTERVENTION"
+   ],
+   [
+    "gs-0037",
+    "E01",
+    "D_PAYMENT_DEMAND"
+   ],
+   [
+    "gs-0040",
+    "E04",
+    "D_FAMILY_COURT_JURISDICTION"
+   ]
+  ],
+  "recall_by_legal_role": {
+   "deadline": {
+    "hit": 10,
+    "total": 12,
+    "recall": 0.8333
+   },
+   "definitional": {
+    "hit": 9,
+    "total": 10,
+    "recall": 0.9
+   },
+   "exception": {
+    "hit": 11,
+    "total": 12,
+    "recall": 0.9167
+   },
+   "jurisdiction": {
+    "hit": 8,
+    "total": 9,
+    "recall": 0.8889
+   },
+   "mandatory_prior_procedure": {
+    "hit": 15,
+    "total": 17,
+    "recall": 0.8824
+   },
+   "other": {
+    "hit": 11,
+    "total": 20,
+    "recall": 0.55
+   },
+   "remedy_route": {
+    "hit": 7,
+    "total": 8,
+    "recall": 0.875
+   },
+   "substantive_condition": {
+    "hit": 52,
+    "total": 54,
+    "recall": 0.963
+   }
+  },
+  "rescue_by_audit_class": {
+   "CROSS_LAW_DEPENDENCY": {
+    "rescued": 0,
+    "target": 2
+   },
+   "EXCEPTION": {
+    "rescued": 2,
+    "target": 2
+   },
+   "JURISDICTION": {
+    "rescued": 2,
+    "target": 2
+   },
+   "LEGAL_DEPENDENCY": {
+    "rescued": 2,
+    "target": 9
+   },
+   "MANDATORY_PROCEDURE": {
+    "rescued": 5,
+    "target": 6
+   },
+   "TEMPORAL_RULE": {
+    "rescued": 1,
+    "target": 3
+   }
+  }
+ },
+ "baseline_C_planner_plus_graph_WITH_LEAKAGE": {
+  "loco_clean_only": false,
+  "gt_required_total": 142,
+  "gt_critical_total": 107,
+  "dimension_recall": 0.9437,
+  "critical_dimension_recall": 0.9813,
+  "strict_case_completeness": 0.95,
+  "no_regression_substantive": 0,
+  "_no_regression_note": "الـgraph تضيف ولا تحذف: الاتحاد مع مخرَج Planner لا يُسقط أي بُعد كان يصيبه، فالانحدار صفر بنيويًا لا قياسًا.",
+  "n_rescued": 23,
+  "n_rescued_critical": 13,
+  "rescued": [
+   [
+    "gs-0001",
+    "mandatory_payment_demand"
+   ],
+   [
+    "gs-0001",
+    "travel_ban_lifting_grounds"
+   ],
+   [
+    "gs-0002",
+    "civil_criminal_independence"
+   ],
+   [
+    "gs-0003",
+    "hakamayn_arbitration_when_harm_unproven"
+   ],
+   [
+    "gs-0003",
+    "retroactive_maintenance_time_limit"
+   ],
+   [
+    "gs-0003",
+    "family_court_jurisdiction"
+   ],
+   [
+    "gs-0005",
+    "labor_dispute_challenge_route"
+   ],
+   [
+    "gs-0006",
+    "tenant_cure_defense"
+   ],
+   [
+    "gs-0009",
+    "judicial_removal_specific_grounds"
+   ],
+   [
+    "gs-0011",
+    "lijnat_alnasab_wujubiya"
+   ],
+   [
+    "gs-0011",
+    "tadakhkhul_alniyaba_alamma_wujubi"
+   ],
+   [
+    "gs-0012",
+    "haqq_albaie_ind_adam_alwafa"
+   ],
+   [
+    "gs-0014",
+    "shahadat_ada_alkhidma_shart_altayeen"
+   ],
+   [
+    "gs-0016",
+    "liability_despite_non_discernment"
+   ],
+   [
+    "gs-0021",
+    "late_payment_deposit_mechanism"
+   ],
+   [
+    "gs-0029",
+    "legal_effect_equivalence_m3"
+   ],
+   [
+    "gs-0030",
+    "general_rule_debtor_assets_guarantee"
+   ],
+   [
+    "gs-0033",
+    "committee_decision_deadline_and_court_access"
+   ],
+   [
+    "gs-0033",
+    "committee_investigation_procedure"
+   ],
+   [
+    "gs-0034",
+    "arbitrators_when_harm_unproven"
+   ],
+   [
+    "gs-0035",
+    "labor_claims_limitation_period"
+   ],
+   [
+    "gs-0036",
+    "ministry_convening_on_manager_refusal"
+   ],
+   [
+    "gs-0036",
+    "criminal_liability_for_willful_refusal_to_convene"
+   ]
+  ],
+  "rescued_critical": [
+   [
+    "gs-0001",
+    "mandatory_payment_demand"
+   ],
+   [
+    "gs-0001",
+    "travel_ban_lifting_grounds"
+   ],
+   [
+    "gs-0003",
+    "hakamayn_arbitration_when_harm_unproven"
+   ],
+   [
+    "gs-0003",
+    "retroactive_maintenance_time_limit"
+   ],
+   [
+    "gs-0005",
+    "labor_dispute_challenge_route"
+   ],
+   [
+    "gs-0006",
+    "tenant_cure_defense"
+   ],
+   [
+    "gs-0009",
+    "judicial_removal_specific_grounds"
+   ],
+   [
+    "gs-0011",
+    "lijnat_alnasab_wujubiya"
+   ],
+   [
+    "gs-0011",
+    "tadakhkhul_alniyaba_alamma_wujubi"
+   ],
+   [
+    "gs-0033",
+    "committee_decision_deadline_and_court_access"
+   ],
+   [
+    "gs-0034",
+    "arbitrators_when_harm_unproven"
+   ],
+   [
+    "gs-0035",
+    "labor_claims_limitation_period"
+   ],
+   [
+    "gs-0036",
+    "ministry_convening_on_manager_refusal"
+   ]
+  ],
+  "graph_additions_total": 37,
+  "graph_additions_matching_gt": 23,
+  "graph_addition_precision": 0.6216,
+  "false_additions": [
+   [
+    "gs-0005",
+    "E22",
+    "D_LABOR_LIMITATION"
+   ],
+   [
+    "gs-0006",
+    "E23",
+    "D_RENT_DEPOSIT"
+   ],
+   [
+    "gs-0011",
+    "E09",
+    "D_COMMITTEE_DEADLINE"
+   ],
+   [
+    "gs-0011",
+    "E10",
+    "D_COMMITTEE_PROCEDURE"
+   ],
+   [
+    "gs-0013",
+    "E01",
+    "D_PAYMENT_DEMAND"
+   ],
+   [
+    "gs-0013",
+    "E02",
+    "D_TRAVEL_BAN_LAPSE"
+   ],
+   [
+    "gs-0018",
+    "E16",
+    "D_NON_DISCERNMENT"
+   ],
+   [
+    "gs-0021",
+    "E06",
+    "D_TENANT_CURE"
+   ],
+   [
+    "gs-0023",
+    "E04",
+    "D_FAMILY_COURT_JURISDICTION"
+   ],
+   [
+    "gs-0025",
+    "E05",
+    "D_LABOR_CHALLENGE_ROUTE"
+   ],
+   [
+    "gs-0032",
+    "E04",
+    "D_FAMILY_COURT_JURISDICTION"
+   ],
+   [
+    "gs-0033",
+    "E11",
+    "D_PROSECUTION_INTERVENTION"
+   ],
+   [
+    "gs-0037",
+    "E01",
+    "D_PAYMENT_DEMAND"
+   ],
+   [
+    "gs-0040",
+    "E04",
+    "D_FAMILY_COURT_JURISDICTION"
+   ]
+  ],
+  "recall_by_legal_role": {
+   "deadline": {
+    "hit": 12,
+    "total": 12,
+    "recall": 1.0
+   },
+   "definitional": {
+    "hit": 9,
+    "total": 10,
+    "recall": 0.9
+   },
+   "exception": {
+    "hit": 11,
+    "total": 12,
+    "recall": 0.9167
+   },
+   "jurisdiction": {
+    "hit": 8,
+    "total": 9,
+    "recall": 0.8889
+   },
+   "mandatory_prior_procedure": {
+    "hit": 16,
+    "total": 17,
+    "recall": 0.9412
+   },
+   "other": {
+    "hit": 16,
+    "total": 20,
+    "recall": 0.8
+   },
+   "remedy_route": {
+    "hit": 8,
+    "total": 8,
+    "recall": 1.0
+   },
+   "substantive_condition": {
+    "hit": 54,
+    "total": 54,
+    "recall": 1.0
+   }
+  },
+  "rescue_by_audit_class": {
+   "CROSS_LAW_DEPENDENCY": {
+    "rescued": 2,
+    "target": 2
+   },
+   "EXCEPTION": {
+    "rescued": 2,
+    "target": 2
+   },
+   "JURISDICTION": {
+    "rescued": 2,
+    "target": 2
+   },
+   "LEGAL_DEPENDENCY": {
+    "rescued": 8,
+    "target": 9
+   },
+   "MANDATORY_PROCEDURE": {
+    "rescued": 6,
+    "target": 6
+   },
+   "TEMPORAL_RULE": {
+    "rescued": 3,
+    "target": 3
+   }
+  }
+ },
+ "per_case": [
+  {
+   "case_id": "gs-0001",
+   "seeds": [
+    {
+     "node": "C_AMR_ADA",
+     "matched_surface_form": "أمر أداء"
+    },
+    {
+     "node": "C_TRAVEL_BAN",
+     "matched_surface_form": "منع من السفر"
+    }
+   ],
+   "n_gt_dimensions": 7,
+   "expansions": [
+    {
+     "edge": "E01",
+     "source_concept": "C_AMR_ADA",
+     "dimension_node": "D_PAYMENT_DEMAND",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": "mandatory_payment_demand",
+     "gt_required": true,
+     "gt_critical": true,
+     "gt_role": "mandatory_prior_procedure",
+     "planner_already_found": false,
+     "verdict": "MISSING_REQUIRED",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0002",
+      "gs-0013"
+     ],
+     "provenance": [
+      "legis-38-1980-m167"
+     ]
+    },
+    {
+     "edge": "E02",
+     "source_concept": "C_TRAVEL_BAN",
+     "dimension_node": "D_TRAVEL_BAN_LAPSE",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": "travel_ban_lifting_grounds",
+     "gt_required": true,
+     "gt_critical": true,
+     "gt_role": "exception",
+     "planner_already_found": false,
+     "verdict": "MISSING_REQUIRED",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0013"
+     ],
+     "provenance": [
+      "legis-38-1980-m298"
+     ]
+    }
+   ]
+  },
+  {
+   "case_id": "gs-0002",
+   "seeds": [
+    {
+     "node": "C_CRIMINAL_AND_CIVIL",
+     "matched_surface_form": "ملاحقة الساحب جزائيا"
+    }
+   ],
+   "n_gt_dimensions": 7,
+   "expansions": [
+    {
+     "edge": "E15",
+     "source_concept": "C_CRIMINAL_AND_CIVIL",
+     "dimension_node": "D_CIVIL_CRIMINAL_INDEPENDENCE",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": "civil_criminal_independence",
+     "gt_required": true,
+     "gt_critical": false,
+     "gt_role": "other",
+     "planner_already_found": false,
+     "verdict": "MISSING_REQUIRED",
+     "loco_admissible": false,
+     "loco_witness_cases": [],
+     "provenance": [
+      "jprin-1068-2004-f808-18c18f6704"
+     ]
+    }
+   ]
+  },
+  {
+   "case_id": "gs-0003",
+   "seeds": [
+    {
+     "node": "C_TAFRIQ_DARAR",
+     "matched_surface_form": "التطليق للضرر"
+    },
+    {
+     "node": "C_FAMILY_CLAIM",
+     "matched_surface_form": "دعوى التطليق"
+    },
+    {
+     "node": "C_MAINTENANCE_CLAIM",
+     "matched_surface_form": "تطلب نفقة"
+    }
+   ],
+   "n_gt_dimensions": 7,
+   "expansions": [
+    {
+     "edge": "E03",
+     "source_concept": "C_TAFRIQ_DARAR",
+     "dimension_node": "D_ARBITRATORS",
+     "necessity": "CONDITIONAL",
+     "gt_dimension_id": "hakamayn_arbitration_when_harm_unproven",
+     "gt_required": true,
+     "gt_critical": true,
+     "gt_role": "mandatory_prior_procedure",
+     "planner_already_found": false,
+     "verdict": "MISSING_REQUIRED",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0023",
+      "gs-0032",
+      "gs-0034"
+     ],
+     "provenance": [
+      "legis-51-1984-m127",
+      "legis-51-1984-m129"
+     ]
+    },
+    {
+     "edge": "E04",
+     "source_concept": "C_FAMILY_CLAIM",
+     "dimension_node": "D_FAMILY_COURT_JURISDICTION",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": "family_court_jurisdiction",
+     "gt_required": true,
+     "gt_critical": false,
+     "gt_role": "jurisdiction",
+     "planner_already_found": false,
+     "verdict": "MISSING_REQUIRED",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0004"
+     ],
+     "provenance": [
+      "legis-12-2015-m6"
+     ]
+    },
+    {
+     "edge": "E21",
+     "source_concept": "C_MAINTENANCE_CLAIM",
+     "dimension_node": "D_RETROACTIVE_MAINTENANCE_LIMIT",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": "retroactive_maintenance_time_limit",
+     "gt_required": true,
+     "gt_critical": true,
+     "gt_role": "deadline",
+     "planner_already_found": false,
+     "verdict": "MISSING_REQUIRED",
+     "loco_admissible": false,
+     "loco_witness_cases": [],
+     "provenance": [
+      "legis-51-1984-m78"
+     ]
+    }
+   ]
+  },
+  {
+   "case_id": "gs-0004",
+   "seeds": [
+    {
+     "node": "C_FAMILY_CLAIM",
+     "matched_surface_form": "الحضانة"
+    }
+   ],
+   "n_gt_dimensions": 4,
+   "expansions": [
+    {
+     "edge": "E04",
+     "source_concept": "C_FAMILY_CLAIM",
+     "dimension_node": "D_FAMILY_COURT_JURISDICTION",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": "family_court_jurisdiction",
+     "gt_required": true,
+     "gt_critical": false,
+     "gt_role": "jurisdiction",
+     "planner_already_found": true,
+     "verdict": "COVERED",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0003"
+     ],
+     "provenance": [
+      "legis-12-2015-m6"
+     ]
+    }
+   ]
+  },
+  {
+   "case_id": "gs-0005",
+   "seeds": [
+    {
+     "node": "C_DISMISSAL",
+     "matched_surface_form": "فصل تعسفي"
+    },
+    {
+     "node": "C_LABOR_CLAIM",
+     "matched_surface_form": "مكافأة نهاية الخدمة"
+    }
+   ],
+   "n_gt_dimensions": 5,
+   "expansions": [
+    {
+     "edge": "E05",
+     "source_concept": "C_DISMISSAL",
+     "dimension_node": "D_LABOR_CHALLENGE_ROUTE",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": "labor_dispute_challenge_route",
+     "gt_required": true,
+     "gt_critical": true,
+     "gt_role": "jurisdiction",
+     "planner_already_found": false,
+     "verdict": "MISSING_REQUIRED",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0035"
+     ],
+     "provenance": [
+      "legis-6-2010-m41"
+     ]
+    },
+    {
+     "edge": "E22",
+     "source_concept": "C_LABOR_CLAIM",
+     "dimension_node": "D_LABOR_LIMITATION",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": null,
+     "gt_required": false,
+     "gt_critical": false,
+     "gt_role": null,
+     "planner_already_found": false,
+     "verdict": "NOT_IN_GROUND_TRUTH",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0035"
+     ],
+     "provenance": [
+      "legis-6-2010-m144"
+     ]
+    }
+   ]
+  },
+  {
+   "case_id": "gs-0006",
+   "seeds": [
+    {
+     "node": "C_EVICTION_NONPAY",
+     "matched_surface_form": "إخلاء المستأجر"
+    }
+   ],
+   "n_gt_dimensions": 3,
+   "expansions": [
+    {
+     "edge": "E06",
+     "source_concept": "C_EVICTION_NONPAY",
+     "dimension_node": "D_TENANT_CURE",
+     "necessity": "CONDITIONAL",
+     "gt_dimension_id": "tenant_cure_defense",
+     "gt_required": true,
+     "gt_critical": true,
+     "gt_role": "exception",
+     "planner_already_found": false,
+     "verdict": "MISSING_REQUIRED",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0021"
+     ],
+     "provenance": [
+      "legis-35-1978-m20"
+     ]
+    },
+    {
+     "edge": "E23",
+     "source_concept": "C_EVICTION_NONPAY",
+     "dimension_node": "D_RENT_DEPOSIT",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": null,
+     "gt_required": false,
+     "gt_critical": false,
+     "gt_role": null,
+     "planner_already_found": false,
+     "verdict": "NOT_IN_GROUND_TRUTH",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0021"
+     ],
+     "provenance": [
+      "legis-35-1978-m10"
+     ]
+    }
+   ]
+  },
+  {
+   "case_id": "gs-0007",
+   "seeds": [],
+   "n_gt_dimensions": 4,
+   "expansions": []
+  },
+  {
+   "case_id": "gs-0008",
+   "seeds": [],
+   "n_gt_dimensions": 3,
+   "expansions": []
+  },
+  {
+   "case_id": "gs-0009",
+   "seeds": [
+    {
+     "node": "C_WLL_MANAGER_REMOVAL",
+     "matched_surface_form": "عزل المدير"
+    }
+   ],
+   "n_gt_dimensions": 4,
+   "expansions": [
+    {
+     "edge": "E07",
+     "source_concept": "C_WLL_MANAGER_REMOVAL",
+     "dimension_node": "D_JUDICIAL_REMOVAL_GROUNDS",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": "judicial_removal_specific_grounds",
+     "gt_required": true,
+     "gt_critical": true,
+     "gt_role": "substantive_condition",
+     "planner_already_found": false,
+     "verdict": "MISSING_REQUIRED",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0036"
+     ],
+     "provenance": [
+      "legis-1-2016-m104"
+     ]
+    }
+   ]
+  },
+  {
+   "case_id": "gs-0010",
+   "seeds": [],
+   "n_gt_dimensions": 4,
+   "expansions": []
+  },
+  {
+   "case_id": "gs-0011",
+   "seeds": [
+    {
+     "node": "C_PATERNITY_CLAIM",
+     "matched_surface_form": "إثبات النسب"
+    }
+   ],
+   "n_gt_dimensions": 4,
+   "expansions": [
+    {
+     "edge": "E08",
+     "source_concept": "C_PATERNITY_CLAIM",
+     "dimension_node": "D_PATERNITY_COMMITTEE",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": "lijnat_alnasab_wujubiya",
+     "gt_required": true,
+     "gt_critical": true,
+     "gt_role": "mandatory_prior_procedure",
+     "planner_already_found": false,
+     "verdict": "MISSING_REQUIRED",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0033"
+     ],
+     "provenance": [
+      "legis-53-2026-m8"
+     ]
+    },
+    {
+     "edge": "E09",
+     "source_concept": "C_PATERNITY_CLAIM",
+     "dimension_node": "D_COMMITTEE_DEADLINE",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": null,
+     "gt_required": false,
+     "gt_critical": false,
+     "gt_role": null,
+     "planner_already_found": false,
+     "verdict": "NOT_IN_GROUND_TRUTH",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0033"
+     ],
+     "provenance": [
+      "legis-53-2026-m8"
+     ]
+    },
+    {
+     "edge": "E10",
+     "source_concept": "C_PATERNITY_CLAIM",
+     "dimension_node": "D_COMMITTEE_PROCEDURE",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": null,
+     "gt_required": false,
+     "gt_critical": false,
+     "gt_role": null,
+     "planner_already_found": false,
+     "verdict": "NOT_IN_GROUND_TRUTH",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0033"
+     ],
+     "provenance": [
+      "legis-53-2026-m7"
+     ]
+    },
+    {
+     "edge": "E11",
+     "source_concept": "C_PATERNITY_CLAIM",
+     "dimension_node": "D_PROSECUTION_INTERVENTION",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": "tadakhkhul_alniyaba_alamma_wujubi",
+     "gt_required": true,
+     "gt_critical": true,
+     "gt_role": "mandatory_prior_procedure",
+     "planner_already_found": false,
+     "verdict": "MISSING_REQUIRED",
+     "loco_admissible": false,
+     "loco_witness_cases": [],
+     "provenance": [
+      "legis-51-1984-m338",
+      "legis-51-1984-m337"
+     ]
+    }
+   ]
+  },
+  {
+   "case_id": "gs-0012",
+   "seeds": [
+    {
+     "node": "C_BUSINESS_SALE",
+     "matched_surface_form": "بيع محل تجاري"
+    }
+   ],
+   "n_gt_dimensions": 4,
+   "expansions": [
+    {
+     "edge": "E18",
+     "source_concept": "C_BUSINESS_SALE",
+     "dimension_node": "D_SELLER_AUCTION_RIGHT",
+     "necessity": "CONDITIONAL",
+     "gt_dimension_id": "haqq_albaie_ind_adam_alwafa",
+     "gt_required": true,
+     "gt_critical": false,
+     "gt_role": "remedy_route",
+     "planner_already_found": false,
+     "verdict": "MISSING_REQUIRED",
+     "loco_admissible": false,
+     "loco_witness_cases": [],
+     "provenance": [
+      "legis-68-1980-m44"
+     ]
+    }
+   ]
+  },
+  {
+   "case_id": "gs-0013",
+   "seeds": [
+    {
+     "node": "C_AMR_ADA",
+     "matched_surface_form": "أمر أداء"
+    },
+    {
+     "node": "C_TRAVEL_BAN",
+     "matched_surface_form": "منع من السفر"
+    },
+    {
+     "node": "C_CHEQUE_PRESCRIPTION",
+     "matched_surface_form": "التقادم الصرفي"
+    }
+   ],
+   "n_gt_dimensions": 5,
+   "expansions": [
+    {
+     "edge": "E01",
+     "source_concept": "C_AMR_ADA",
+     "dimension_node": "D_PAYMENT_DEMAND",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": null,
+     "gt_required": false,
+     "gt_critical": false,
+     "gt_role": null,
+     "planner_already_found": false,
+     "verdict": "NOT_IN_GROUND_TRUTH",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0001",
+      "gs-0002"
+     ],
+     "provenance": [
+      "legis-38-1980-m167"
+     ]
+    },
+    {
+     "edge": "E02",
+     "source_concept": "C_TRAVEL_BAN",
+     "dimension_node": "D_TRAVEL_BAN_LAPSE",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": null,
+     "gt_required": false,
+     "gt_critical": false,
+     "gt_role": null,
+     "planner_already_found": false,
+     "verdict": "NOT_IN_GROUND_TRUTH",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0001"
+     ],
+     "provenance": [
+      "legis-38-1980-m298"
+     ]
+    },
+    {
+     "edge": "E14",
+     "source_concept": "C_CHEQUE_PRESCRIPTION",
+     "dimension_node": "D_UNJUST_ENRICHMENT_ROUTE",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": "taqadum_sarfi_wa_baqaa_tariq_alithra",
+     "gt_required": true,
+     "gt_critical": true,
+     "gt_role": "exception",
+     "planner_already_found": true,
+     "verdict": "COVERED",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0002"
+     ],
+     "provenance": [
+      "legis-68-1980-m553"
+     ]
+    }
+   ]
+  },
+  {
+   "case_id": "gs-0014",
+   "seeds": [
+    {
+     "node": "C_NATIONAL_SERVICE",
+     "matched_surface_form": "الخدمة الوطنية"
+    }
+   ],
+   "n_gt_dimensions": 3,
+   "expansions": [
+    {
+     "edge": "E20",
+     "source_concept": "C_NATIONAL_SERVICE",
+     "dimension_node": "D_SERVICE_CERTIFICATE_FOR_APPOINTMENT",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": "shahadat_ada_alkhidma_shart_altayeen",
+     "gt_required": true,
+     "gt_critical": false,
+     "gt_role": "other",
+     "planner_already_found": false,
+     "verdict": "MISSING_REQUIRED",
+     "loco_admissible": false,
+     "loco_witness_cases": [],
+     "provenance": [
+      "LEG-20-3-bcffde99b733e588"
+     ]
+    }
+   ]
+  },
+  {
+   "case_id": "gs-0015",
+   "seeds": [],
+   "n_gt_dimensions": 3,
+   "expansions": []
+  },
+  {
+   "case_id": "gs-0016",
+   "seeds": [
+    {
+     "node": "C_TORT_LIABILITY",
+     "matched_surface_form": "المسؤولية عن الفعل الضار"
+    }
+   ],
+   "n_gt_dimensions": 3,
+   "expansions": [
+    {
+     "edge": "E16",
+     "source_concept": "C_TORT_LIABILITY",
+     "dimension_node": "D_NON_DISCERNMENT",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": "liability_despite_non_discernment",
+     "gt_required": true,
+     "gt_critical": false,
+     "gt_role": "substantive_condition",
+     "planner_already_found": false,
+     "verdict": "MISSING_REQUIRED",
+     "loco_admissible": false,
+     "loco_witness_cases": [],
+     "provenance": [
+      "legis-67-1980-m227"
+     ]
+    }
+   ]
+  },
+  {
+   "case_id": "gs-0017",
+   "seeds": [],
+   "n_gt_dimensions": 4,
+   "expansions": []
+  },
+  {
+   "case_id": "gs-0018",
+   "seeds": [
+    {
+     "node": "C_TORT_LIABILITY",
+     "matched_surface_form": "المسؤولية التقصيرية"
+    }
+   ],
+   "n_gt_dimensions": 2,
+   "expansions": [
+    {
+     "edge": "E16",
+     "source_concept": "C_TORT_LIABILITY",
+     "dimension_node": "D_NON_DISCERNMENT",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": null,
+     "gt_required": false,
+     "gt_critical": false,
+     "gt_role": null,
+     "planner_already_found": false,
+     "verdict": "NOT_IN_GROUND_TRUTH",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0016"
+     ],
+     "provenance": [
+      "legis-67-1980-m227"
+     ]
+    }
+   ]
+  },
+  {
+   "case_id": "gs-0019",
+   "seeds": [],
+   "n_gt_dimensions": 5,
+   "expansions": []
+  },
+  {
+   "case_id": "gs-0020",
+   "seeds": [],
+   "n_gt_dimensions": 4,
+   "expansions": []
+  },
+  {
+   "case_id": "gs-0021",
+   "seeds": [
+    {
+     "node": "C_EVICTION_NONPAY",
+     "matched_surface_form": "تأخر المستأجر"
+    }
+   ],
+   "n_gt_dimensions": 3,
+   "expansions": [
+    {
+     "edge": "E06",
+     "source_concept": "C_EVICTION_NONPAY",
+     "dimension_node": "D_TENANT_CURE",
+     "necessity": "CONDITIONAL",
+     "gt_dimension_id": null,
+     "gt_required": false,
+     "gt_critical": false,
+     "gt_role": null,
+     "planner_already_found": false,
+     "verdict": "NOT_IN_GROUND_TRUTH",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0006"
+     ],
+     "provenance": [
+      "legis-35-1978-m20"
+     ]
+    },
+    {
+     "edge": "E23",
+     "source_concept": "C_EVICTION_NONPAY",
+     "dimension_node": "D_RENT_DEPOSIT",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": "late_payment_deposit_mechanism",
+     "gt_required": true,
+     "gt_critical": false,
+     "gt_role": "other",
+     "planner_already_found": false,
+     "verdict": "MISSING_REQUIRED",
+     "loco_admissible": false,
+     "loco_witness_cases": [],
+     "provenance": [
+      "legis-35-1978-m10"
+     ]
+    }
+   ]
+  },
+  {
+   "case_id": "gs-0022",
+   "seeds": [],
+   "n_gt_dimensions": 3,
+   "expansions": []
+  },
+  {
+   "case_id": "gs-0023",
+   "seeds": [
+    {
+     "node": "C_TAFRIQ_DARAR",
+     "matched_surface_form": "تفريق للضرر"
+    },
+    {
+     "node": "C_FAMILY_CLAIM",
+     "matched_surface_form": "محكمة الأسرة"
+    }
+   ],
+   "n_gt_dimensions": 4,
+   "expansions": [
+    {
+     "edge": "E03",
+     "source_concept": "C_TAFRIQ_DARAR",
+     "dimension_node": "D_ARBITRATORS",
+     "necessity": "CONDITIONAL",
+     "gt_dimension_id": "court_reconciliation_arbitrators_procedure",
+     "gt_required": true,
+     "gt_critical": true,
+     "gt_role": "mandatory_prior_procedure",
+     "planner_already_found": true,
+     "verdict": "COVERED",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0003",
+      "gs-0032",
+      "gs-0034"
+     ],
+     "provenance": [
+      "legis-51-1984-m127",
+      "legis-51-1984-m129"
+     ]
+    },
+    {
+     "edge": "E04",
+     "source_concept": "C_FAMILY_CLAIM",
+     "dimension_node": "D_FAMILY_COURT_JURISDICTION",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": null,
+     "gt_required": false,
+     "gt_critical": false,
+     "gt_role": null,
+     "planner_already_found": false,
+     "verdict": "NOT_IN_GROUND_TRUTH",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0003",
+      "gs-0004"
+     ],
+     "provenance": [
+      "legis-12-2015-m6"
+     ]
+    }
+   ]
+  },
+  {
+   "case_id": "gs-0024",
+   "seeds": [],
+   "n_gt_dimensions": 1,
+   "expansions": []
+  },
+  {
+   "case_id": "gs-0025",
+   "seeds": [
+    {
+     "node": "C_DISMISSAL",
+     "matched_surface_form": "الفصل التعسفي"
+    }
+   ],
+   "n_gt_dimensions": 1,
+   "expansions": [
+    {
+     "edge": "E05",
+     "source_concept": "C_DISMISSAL",
+     "dimension_node": "D_LABOR_CHALLENGE_ROUTE",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": null,
+     "gt_required": false,
+     "gt_critical": false,
+     "gt_role": null,
+     "planner_already_found": false,
+     "verdict": "NOT_IN_GROUND_TRUTH",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0005",
+      "gs-0035"
+     ],
+     "provenance": [
+      "legis-6-2010-m41"
+     ]
+    }
+   ]
+  },
+  {
+   "case_id": "gs-0026",
+   "seeds": [],
+   "n_gt_dimensions": 2,
+   "expansions": []
+  },
+  {
+   "case_id": "gs-0027",
+   "seeds": [],
+   "n_gt_dimensions": 3,
+   "expansions": []
+  },
+  {
+   "case_id": "gs-0028",
+   "seeds": [],
+   "n_gt_dimensions": 2,
+   "expansions": []
+  },
+  {
+   "case_id": "gs-0029",
+   "seeds": [
+    {
+     "node": "C_ELECTRONIC_TRANSACTIONS",
+     "matched_surface_form": "المعاملات الإلكترونية"
+    }
+   ],
+   "n_gt_dimensions": 3,
+   "expansions": [
+    {
+     "edge": "E19",
+     "source_concept": "C_ELECTRONIC_TRANSACTIONS",
+     "dimension_node": "D_ELECTRONIC_EQUIVALENCE",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": "legal_effect_equivalence_m3",
+     "gt_required": true,
+     "gt_critical": false,
+     "gt_role": "substantive_condition",
+     "planner_already_found": false,
+     "verdict": "MISSING_REQUIRED",
+     "loco_admissible": false,
+     "loco_witness_cases": [],
+     "provenance": [
+      "legis-20-2014-m3"
+     ]
+    }
+   ]
+  },
+  {
+   "case_id": "gs-0030",
+   "seeds": [
+    {
+     "node": "C_ATTACHMENT_FOR_DEBT",
+     "matched_surface_form": "يوقع حجزًا"
+    }
+   ],
+   "n_gt_dimensions": 3,
+   "expansions": [
+    {
+     "edge": "E17",
+     "source_concept": "C_ATTACHMENT_FOR_DEBT",
+     "dimension_node": "D_DEBTOR_ASSETS_GUARANTEE",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": "general_rule_debtor_assets_guarantee",
+     "gt_required": true,
+     "gt_critical": false,
+     "gt_role": "other",
+     "planner_already_found": false,
+     "verdict": "MISSING_REQUIRED",
+     "loco_admissible": false,
+     "loco_witness_cases": [],
+     "provenance": [
+      "legis-67-1980-m307"
+     ]
+    }
+   ]
+  },
+  {
+   "case_id": "gs-0031",
+   "seeds": [],
+   "n_gt_dimensions": 3,
+   "expansions": []
+  },
+  {
+   "case_id": "gs-0032",
+   "seeds": [
+    {
+     "node": "C_TAFRIQ_DARAR",
+     "matched_surface_form": "تفريق للضرر"
+    },
+    {
+     "node": "C_FAMILY_CLAIM",
+     "matched_surface_form": "دعوى التفريق"
+    }
+   ],
+   "n_gt_dimensions": 4,
+   "expansions": [
+    {
+     "edge": "E03",
+     "source_concept": "C_TAFRIQ_DARAR",
+     "dimension_node": "D_ARBITRATORS",
+     "necessity": "CONDITIONAL",
+     "gt_dimension_id": "arbitrators_when_harm_unproven",
+     "gt_required": true,
+     "gt_critical": true,
+     "gt_role": "mandatory_prior_procedure",
+     "planner_already_found": true,
+     "verdict": "COVERED",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0003",
+      "gs-0023",
+      "gs-0034"
+     ],
+     "provenance": [
+      "legis-51-1984-m127",
+      "legis-51-1984-m129"
+     ]
+    },
+    {
+     "edge": "E04",
+     "source_concept": "C_FAMILY_CLAIM",
+     "dimension_node": "D_FAMILY_COURT_JURISDICTION",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": null,
+     "gt_required": false,
+     "gt_critical": false,
+     "gt_role": null,
+     "planner_already_found": false,
+     "verdict": "NOT_IN_GROUND_TRUTH",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0003",
+      "gs-0004"
+     ],
+     "provenance": [
+      "legis-12-2015-m6"
+     ]
+    }
+   ]
+  },
+  {
+   "case_id": "gs-0033",
+   "seeds": [
+    {
+     "node": "C_PATERNITY_CLAIM",
+     "matched_surface_form": "إثبات النسب"
+    }
+   ],
+   "n_gt_dimensions": 4,
+   "expansions": [
+    {
+     "edge": "E08",
+     "source_concept": "C_PATERNITY_CLAIM",
+     "dimension_node": "D_PATERNITY_COMMITTEE",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": "mandatory_paternity_committee_investigation",
+     "gt_required": true,
+     "gt_critical": true,
+     "gt_role": "mandatory_prior_procedure",
+     "planner_already_found": true,
+     "verdict": "COVERED",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0011"
+     ],
+     "provenance": [
+      "legis-53-2026-m8"
+     ]
+    },
+    {
+     "edge": "E09",
+     "source_concept": "C_PATERNITY_CLAIM",
+     "dimension_node": "D_COMMITTEE_DEADLINE",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": "committee_decision_deadline_and_court_access",
+     "gt_required": true,
+     "gt_critical": true,
+     "gt_role": "deadline",
+     "planner_already_found": false,
+     "verdict": "MISSING_REQUIRED",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0011"
+     ],
+     "provenance": [
+      "legis-53-2026-m8"
+     ]
+    },
+    {
+     "edge": "E10",
+     "source_concept": "C_PATERNITY_CLAIM",
+     "dimension_node": "D_COMMITTEE_PROCEDURE",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": "committee_investigation_procedure",
+     "gt_required": true,
+     "gt_critical": false,
+     "gt_role": "other",
+     "planner_already_found": false,
+     "verdict": "MISSING_REQUIRED",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0011"
+     ],
+     "provenance": [
+      "legis-53-2026-m7"
+     ]
+    },
+    {
+     "edge": "E11",
+     "source_concept": "C_PATERNITY_CLAIM",
+     "dimension_node": "D_PROSECUTION_INTERVENTION",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": null,
+     "gt_required": false,
+     "gt_critical": false,
+     "gt_role": null,
+     "planner_already_found": false,
+     "verdict": "NOT_IN_GROUND_TRUTH",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0011"
+     ],
+     "provenance": [
+      "legis-51-1984-m338",
+      "legis-51-1984-m337"
+     ]
+    }
+   ]
+  },
+  {
+   "case_id": "gs-0034",
+   "seeds": [
+    {
+     "node": "C_TAFRIQ_DARAR",
+     "matched_surface_form": "التطليق للضرر"
+    }
+   ],
+   "n_gt_dimensions": 6,
+   "expansions": [
+    {
+     "edge": "E03",
+     "source_concept": "C_TAFRIQ_DARAR",
+     "dimension_node": "D_ARBITRATORS",
+     "necessity": "CONDITIONAL",
+     "gt_dimension_id": "arbitrators_when_harm_unproven",
+     "gt_required": true,
+     "gt_critical": true,
+     "gt_role": "mandatory_prior_procedure",
+     "planner_already_found": false,
+     "verdict": "MISSING_REQUIRED",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0003",
+      "gs-0023",
+      "gs-0032"
+     ],
+     "provenance": [
+      "legis-51-1984-m127",
+      "legis-51-1984-m129"
+     ]
+    }
+   ]
+  },
+  {
+   "case_id": "gs-0035",
+   "seeds": [
+    {
+     "node": "C_DISMISSAL",
+     "matched_surface_form": "الفصل التعسفي"
+    },
+    {
+     "node": "C_LABOR_CLAIM",
+     "matched_surface_form": "مكافأة نهاية الخدمة"
+    }
+   ],
+   "n_gt_dimensions": 6,
+   "expansions": [
+    {
+     "edge": "E05",
+     "source_concept": "C_DISMISSAL",
+     "dimension_node": "D_LABOR_CHALLENGE_ROUTE",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": "right_to_challenge_and_compensation_if_arbitrary",
+     "gt_required": true,
+     "gt_critical": true,
+     "gt_role": "remedy_route",
+     "planner_already_found": true,
+     "verdict": "COVERED",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0005"
+     ],
+     "provenance": [
+      "legis-6-2010-m41"
+     ]
+    },
+    {
+     "edge": "E22",
+     "source_concept": "C_LABOR_CLAIM",
+     "dimension_node": "D_LABOR_LIMITATION",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": "labor_claims_limitation_period",
+     "gt_required": true,
+     "gt_critical": true,
+     "gt_role": "deadline",
+     "planner_already_found": false,
+     "verdict": "MISSING_REQUIRED",
+     "loco_admissible": false,
+     "loco_witness_cases": [],
+     "provenance": [
+      "legis-6-2010-m144"
+     ]
+    }
+   ]
+  },
+  {
+   "case_id": "gs-0036",
+   "seeds": [
+    {
+     "node": "C_WLL_MANAGER_REMOVAL",
+     "matched_surface_form": "عزل المدير"
+    },
+    {
+     "node": "C_MANAGER_REFUSES_CONVENE",
+     "matched_surface_form": "يمتنع المدير عن دعوة الجمعية"
+    }
+   ],
+   "n_gt_dimensions": 4,
+   "expansions": [
+    {
+     "edge": "E07",
+     "source_concept": "C_WLL_MANAGER_REMOVAL",
+     "dimension_node": "D_JUDICIAL_REMOVAL_GROUNDS",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": "judicial_removal_of_manager",
+     "gt_required": true,
+     "gt_critical": true,
+     "gt_role": "substantive_condition",
+     "planner_already_found": true,
+     "verdict": "COVERED",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0009"
+     ],
+     "provenance": [
+      "legis-1-2016-m104"
+     ]
+    },
+    {
+     "edge": "E12",
+     "source_concept": "C_MANAGER_REFUSES_CONVENE",
+     "dimension_node": "D_MINISTRY_CONVENING",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": "ministry_convening_on_manager_refusal",
+     "gt_required": true,
+     "gt_critical": true,
+     "gt_role": "remedy_route",
+     "planner_already_found": false,
+     "verdict": "MISSING_REQUIRED",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0009"
+     ],
+     "provenance": [
+      "legis-1-2016-m111",
+      "regl-1-2016-m65"
+     ]
+    },
+    {
+     "edge": "E13",
+     "source_concept": "C_MANAGER_REFUSES_CONVENE",
+     "dimension_node": "D_MANAGER_CRIMINAL_LIABILITY",
+     "necessity": "CONDITIONAL",
+     "gt_dimension_id": "criminal_liability_for_willful_refusal_to_convene",
+     "gt_required": true,
+     "gt_critical": false,
+     "gt_role": "other",
+     "planner_already_found": false,
+     "verdict": "MISSING_REQUIRED",
+     "loco_admissible": false,
+     "loco_witness_cases": [],
+     "provenance": [
+      "legis-1-2016-m304"
+     ]
+    }
+   ]
+  },
+  {
+   "case_id": "gs-0037",
+   "seeds": [
+    {
+     "node": "C_AMR_ADA",
+     "matched_surface_form": "أمر الأداء"
+    }
+   ],
+   "n_gt_dimensions": 2,
+   "expansions": [
+    {
+     "edge": "E01",
+     "source_concept": "C_AMR_ADA",
+     "dimension_node": "D_PAYMENT_DEMAND",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": null,
+     "gt_required": false,
+     "gt_critical": false,
+     "gt_role": null,
+     "planner_already_found": false,
+     "verdict": "NOT_IN_GROUND_TRUTH",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0001",
+      "gs-0002",
+      "gs-0013"
+     ],
+     "provenance": [
+      "legis-38-1980-m167"
+     ]
+    }
+   ]
+  },
+  {
+   "case_id": "gs-0038",
+   "seeds": [],
+   "n_gt_dimensions": 1,
+   "expansions": []
+  },
+  {
+   "case_id": "gs-0039",
+   "seeds": [],
+   "n_gt_dimensions": 1,
+   "expansions": []
+  },
+  {
+   "case_id": "gs-0040",
+   "seeds": [
+    {
+     "node": "C_FAMILY_CLAIM",
+     "matched_surface_form": "نفقة"
+    }
+   ],
+   "n_gt_dimensions": 1,
+   "expansions": [
+    {
+     "edge": "E04",
+     "source_concept": "C_FAMILY_CLAIM",
+     "dimension_node": "D_FAMILY_COURT_JURISDICTION",
+     "necessity": "MANDATORY",
+     "gt_dimension_id": null,
+     "gt_required": false,
+     "gt_critical": false,
+     "gt_role": null,
+     "planner_already_found": false,
+     "verdict": "NOT_IN_GROUND_TRUTH",
+     "loco_admissible": true,
+     "loco_witness_cases": [
+      "gs-0003",
+      "gs-0004"
+     ],
+     "provenance": [
+      "legis-12-2015-m6"
+     ]
+    }
+   ]
+  }
+ ],
+ "baseline_B_graph_alone_LOCO_CLEAN": {
+  "dimension_recall": 0.1338,
+  "critical_dimension_recall": 0.1495,
+  "covered": 19,
+  "total": 142
+ },
+ "baseline_B_graph_alone_WITH_LEAKAGE": {
+  "dimension_recall": 0.2113,
+  "critical_dimension_recall": 0.1776,
+  "covered": 30,
+  "total": 142
+ },
+ "negative_controls_O": {
+  "_note": "ضابط سلبي خارج Gold Set40 كليًا: 10 حالات Gold-tier + Dev Set. البذور تُطابَق هنا على نص السؤال مباشرة (أشدّ من الإنتاج، إذ لا مخرج Planner محفوظ لها) فأي إطلاق هنا يُحتسب ضد الـgraph لا لها.",
+  "n_cases": 36,
+  "n_cases_with_any_firing": 4,
+  "n_total_edges_fired": 6,
+  "detail": [
+   {
+    "case_id": "gt-01",
+    "kind": "single_issue",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "gt-02",
+    "kind": "negative_control",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "gt-03",
+    "kind": "two_issue",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "gt-04",
+    "kind": "three_four_issue",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "gt-05",
+    "kind": "cross_law",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "gt-06",
+    "kind": "procedural_substantive",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "gt-07",
+    "kind": "temporal_version",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "gt-08",
+    "kind": "exception_defense",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "gt-09",
+    "kind": "single_issue",
+    "seeds": [
+     "C_LABOR_CLAIM"
+    ],
+    "edges_fired": [
+     "E22"
+    ]
+   },
+   {
+    "case_id": "gt-10",
+    "kind": "evidentiary",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "dv-neg-1",
+    "kind": "negative_control",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "dv-neg-2",
+    "kind": "negative_control",
+    "seeds": [
+     "C_FAMILY_CLAIM",
+     "C_MAINTENANCE_CLAIM"
+    ],
+    "edges_fired": [
+     "E04",
+     "E21"
+    ]
+   },
+   {
+    "case_id": "dv-neg-3",
+    "kind": "negative_control",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "dv-neg-4",
+    "kind": "negative_control",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "dv-sgl-1",
+    "kind": "single_issue",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "dv-sgl-2",
+    "kind": "single_issue",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "dv-sgl-3",
+    "kind": "single_issue",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "dv-sgl-4",
+    "kind": "single_issue",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "dv-two-1",
+    "kind": "two_issue",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "dv-two-2",
+    "kind": "two_issue",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "dv-two-3",
+    "kind": "two_issue",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "dv-two-4",
+    "kind": "two_issue",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "dv-multi-1",
+    "kind": "three_four_issue",
+    "seeds": [
+     "C_FAMILY_CLAIM"
+    ],
+    "edges_fired": [
+     "E04"
+    ]
+   },
+   {
+    "case_id": "dv-multi-2",
+    "kind": "three_four_issue",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "dv-multi-3",
+    "kind": "three_four_issue",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "dv-cross-1",
+    "kind": "cross_law",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "dv-cross-2",
+    "kind": "cross_law",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "dv-cross-3",
+    "kind": "cross_law",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "dv-procsub-1",
+    "kind": "procedural_substantive",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "dv-procsub-2",
+    "kind": "procedural_substantive",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "dv-temp-1",
+    "kind": "temporal_version",
+    "seeds": [
+     "C_EVICTION_NONPAY"
+    ],
+    "edges_fired": [
+     "E06",
+     "E23"
+    ]
+   },
+   {
+    "case_id": "dv-temp-2",
+    "kind": "temporal_version",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "dv-temp-3",
+    "kind": "temporal_version",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "dv-exc-1",
+    "kind": "exception_defense",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "dv-exc-2",
+    "kind": "exception_defense",
+    "seeds": [],
+    "edges_fired": []
+   },
+   {
+    "case_id": "dv-exc-3",
+    "kind": "exception_defense",
+    "seeds": [],
+    "edges_fired": []
+   }
+  ]
+ },
+ "rescue_chains_LOCO_CLEAN": [
+  {
+   "case_id": "gs-0001",
+   "1_seed_concept": "C_AMR_ADA",
+   "1_seed_surface_form_in_planner_output": "أمر أداء",
+   "2_verified_edge": {
+    "id": "E01",
+    "relation": "PRECEDES",
+    "necessity": "MANDATORY",
+    "provenance": [
+     "legis-38-1980-m167"
+    ],
+    "legal_rationale": "م167 مرافعات: «على الدائن أن يكلف المدين أولاً بالوفاء بميعاد عشرة أيام على الأقل ثم يستصدر أمر بالأداء» — التكليف شرط سابق لا خيار."
+   },
+   "3_hidden_dimension_node": "D_PAYMENT_DEMAND",
+   "4_gold_match": {
+    "dimension_id": "mandatory_payment_demand",
+    "label": "التكليف بالوفاء قبل استصدار الأمر (إجراء سابق وجوبي)",
+    "critical": true,
+    "legal_role": "mandatory_prior_procedure"
+   },
+   "loco_witness_cases": [
+    "gs-0002",
+    "gs-0013"
+   ]
+  },
+  {
+   "case_id": "gs-0001",
+   "1_seed_concept": "C_TRAVEL_BAN",
+   "1_seed_surface_form_in_planner_output": "منع من السفر",
+   "2_verified_edge": {
+    "id": "E02",
+    "relation": "EXCEPTION_CHECK",
+    "necessity": "MANDATORY",
+    "provenance": [
+     "legis-38-1980-m298"
+    ],
+    "legal_rationale": "م298 مرافعات تعدّد حالات سقوط أمر المنع من السفر صراحة: «يسقط الأمر سالف الذكر في الأحوال الآتية: أ- إذا سقط أي شرط من الشروط اللازم توفرها للأمر...»."
+   },
+   "3_hidden_dimension_node": "D_TRAVEL_BAN_LAPSE",
+   "4_gold_match": {
+    "dimension_id": "travel_ban_lifting_grounds",
+    "label": "حالات سقوط أمر منع السفر (منها سقوط شرط من شروط الأمر)",
+    "critical": true,
+    "legal_role": "exception"
+   },
+   "loco_witness_cases": [
+    "gs-0013"
+   ]
+  },
+  {
+   "case_id": "gs-0003",
+   "1_seed_concept": "C_TAFRIQ_DARAR",
+   "1_seed_surface_form_in_planner_output": "التطليق للضرر",
+   "2_verified_edge": {
+    "id": "E03",
+    "relation": "REQUIRES",
+    "necessity": "CONDITIONAL",
+    "provenance": [
+     "legis-51-1984-m127",
+     "legis-51-1984-m129"
+    ],
+    "legal_rationale": "م127 أحوال شخصية: «فإذا تعذر الإصلاح وثبت الضرر حكم بالتفريق بينهما بطلقة بائنة، وإن لم يثبت الضرر عينت حكمين للتوفيق أو التفريق» — الشرط منصوص حرفيًا."
+   },
+   "3_hidden_dimension_node": "D_ARBITRATORS",
+   "4_gold_match": {
+    "dimension_id": "hakamayn_arbitration_when_harm_unproven",
+    "label": "إجراء الحكمين الوجوبي عند تعذر إثبات الضرر مباشرة",
+    "critical": true,
+    "legal_role": "mandatory_prior_procedure"
+   },
+   "loco_witness_cases": [
+    "gs-0023",
+    "gs-0032",
+    "gs-0034"
+   ]
+  },
+  {
+   "case_id": "gs-0003",
+   "1_seed_concept": "C_FAMILY_CLAIM",
+   "1_seed_surface_form_in_planner_output": "دعوى التطليق",
+   "2_verified_edge": {
+    "id": "E04",
+    "relation": "JURISDICTION_CHECK",
+    "necessity": "MANDATORY",
+    "provenance": [
+     "legis-12-2015-m6"
+    ],
+    "legal_rationale": "م6 محكمة الأسرة: «تكون محكمة الأسرة المختصة محليًا بنظر أول دعوى... هي المختصة دون غيرها بنظر جميع دعاوى الأحوال الشخصية التي ترفع بعد ذلك... بما في ذلك دعاوى النفقات... ودعاوى حضانة الصغير»."
+   },
+   "3_hidden_dimension_node": "D_FAMILY_COURT_JURISDICTION",
+   "4_gold_match": {
+    "dimension_id": "family_court_jurisdiction",
+    "label": "اختصاص محكمة الأسرة بجميع دعاوى الأسرة ذاتها لاحقا",
+    "critical": false,
+    "legal_role": "jurisdiction"
+   },
+   "loco_witness_cases": [
+    "gs-0004"
+   ]
+  },
+  {
+   "case_id": "gs-0005",
+   "1_seed_concept": "C_DISMISSAL",
+   "1_seed_surface_form_in_planner_output": "فصل تعسفي",
+   "2_verified_edge": {
+    "id": "E05",
+    "relation": "JURISDICTION_CHECK",
+    "necessity": "MANDATORY",
+    "provenance": [
+     "legis-6-2010-m41"
+    ],
+    "legal_rationale": "م41(ج) قانون العمل: «للعامل المفصول... حق الطعن في قرار الفصل أمام الدائرة العمالية المختصة... وإذا ثبت بموجب حكم نهائي أن صاحب العمل قد تعسف في فصله استحق... مكافأة نهاية الخدمة وتعويضًا»."
+   },
+   "3_hidden_dimension_node": "D_LABOR_CHALLENGE_ROUTE",
+   "4_gold_match": {
+    "dimension_id": "labor_dispute_challenge_route",
+    "label": "حق الطعن في قرار الفصل أمام الدائرة العمالية المختصة",
+    "critical": true,
+    "legal_role": "jurisdiction"
+   },
+   "loco_witness_cases": [
+    "gs-0035"
+   ]
+  },
+  {
+   "case_id": "gs-0006",
+   "1_seed_concept": "C_EVICTION_NONPAY",
+   "1_seed_surface_form_in_planner_output": "إخلاء المستأجر",
+   "2_verified_edge": {
+    "id": "E06",
+    "relation": "EXCEPTION_CHECK",
+    "necessity": "CONDITIONAL",
+    "provenance": [
+     "legis-35-1978-m20"
+    ],
+    "legal_rationale": "م20/1 إيجار العقارات: «يجوز للقاضي أن يحكم باعتبار الدعوى كأن لم تكن... إذا أثبت المستأجر أن تأخره يرجع إلى عذر قوي تقبله المحكمة وأوفى حتى نهاية أول جلسة تم إعلانه بها إعلانًا صحيحًا بجميع الأجرة المستحقة»."
+   },
+   "3_hidden_dimension_node": "D_TENANT_CURE",
+   "4_gold_match": {
+    "dimension_id": "tenant_cure_defense",
+    "label": "رخصة اعتبار الدعوى كأن لم تكن إذا سدد المستأجر كامل المتأخر حتى أول جلسة بعذر مقبول",
+    "critical": true,
+    "legal_role": "exception"
+   },
+   "loco_witness_cases": [
+    "gs-0021"
+   ]
+  },
+  {
+   "case_id": "gs-0009",
+   "1_seed_concept": "C_WLL_MANAGER_REMOVAL",
+   "1_seed_surface_form_in_planner_output": "عزل المدير",
+   "2_verified_edge": {
+    "id": "E07",
+    "relation": "DEPENDS_ON",
+    "necessity": "MANDATORY",
+    "provenance": [
+     "legis-1-2016-m104"
+    ],
+    "legal_rationale": "م104 شركات: «يجوز عزل مدير الشركة بحكم قضائي — بناءً على طلب شريك أو أكثر ممن يملكون ربع حصص رأس المال على الأقل — وذلك للأسباب التالية: 1- الغش 2- خطأ ألحق بالشركة ضررًا جسيمًا...»."
+   },
+   "3_hidden_dimension_node": "D_JUDICIAL_REMOVAL_GROUNDS",
+   "4_gold_match": {
+    "dimension_id": "judicial_removal_specific_grounds",
+    "label": "شروط طلب العزل القضائي للمدير: نصاب ربع رأس المال وأسباب الغش أو الضرر الجسيم",
+    "critical": true,
+    "legal_role": "substantive_condition"
+   },
+   "loco_witness_cases": [
+    "gs-0036"
+   ]
+  },
+  {
+   "case_id": "gs-0011",
+   "1_seed_concept": "C_PATERNITY_CLAIM",
+   "1_seed_surface_form_in_planner_output": "إثبات النسب",
+   "2_verified_edge": {
+    "id": "E08",
+    "relation": "PRECEDES",
+    "necessity": "MANDATORY",
+    "provenance": [
+     "legis-53-2026-m8"
+    ],
+    "legal_rationale": "م8 دعاوى النسب: «لا تقبل دعوى النسب إلا إذا سبقها تحقيق تجريه اللجنة في طلب إثبات النسب المباشر أو نفيه» — شرط قبول صريح."
+   },
+   "3_hidden_dimension_node": "D_PATERNITY_COMMITTEE",
+   "4_gold_match": {
+    "dimension_id": "lijnat_alnasab_wujubiya",
+    "label": "وجوب عرض دعوى إثبات النسب على لجنة دعاوى النسب قبل رفعها للقضاء",
+    "critical": true,
+    "legal_role": "mandatory_prior_procedure"
+   },
+   "loco_witness_cases": [
+    "gs-0033"
+   ]
+  },
+  {
+   "case_id": "gs-0033",
+   "1_seed_concept": "C_PATERNITY_CLAIM",
+   "1_seed_surface_form_in_planner_output": "إثبات النسب",
+   "2_verified_edge": {
+    "id": "E09",
+    "relation": "SUBJECT_TO",
+    "necessity": "MANDATORY",
+    "provenance": [
+     "legis-53-2026-m8"
+    ],
+    "legal_rationale": "م8 دعاوى النسب: «وعلى اللجنة إحالته إلى المحكمة المختصة بتقرير مفصل... خلال ستة أشهر من تاريخ تقديم الطلب إليها، وثلاثة أشهر إذا كان الطلب نفي النسب باللعان، فإذا انتهت هذه المدة دون البت في الطلب كان لصاحب الشأن اللجوء إلى القضاء»."
+   },
+   "3_hidden_dimension_node": "D_COMMITTEE_DEADLINE",
+   "4_gold_match": {
+    "dimension_id": "committee_decision_deadline_and_court_access",
+    "label": "المهلة الزمنية للجنة (6 أشهر عادة/3 أشهر عند اللعان) وأثر انقضائها على اللجوء للقضاء",
+    "critical": true,
+    "legal_role": "deadline"
+   },
+   "loco_witness_cases": [
+    "gs-0011"
+   ]
+  },
+  {
+   "case_id": "gs-0033",
+   "1_seed_concept": "C_PATERNITY_CLAIM",
+   "1_seed_surface_form_in_planner_output": "إثبات النسب",
+   "2_verified_edge": {
+    "id": "E10",
+    "relation": "CHECKS",
+    "necessity": "MANDATORY",
+    "provenance": [
+     "legis-53-2026-m7"
+    ],
+    "legal_rationale": "م7 دعاوى النسب: «...استدعاء مقدم الطلب وكل من ترى لزوم استدعائه... وسماع شهادتهم بعد حلف اليمين... وللجنة أن تأمر بإجراء فحص البصمة الوراثية وغيره من الوسائل العلمية الحديثة»."
+   },
+   "3_hidden_dimension_node": "D_COMMITTEE_PROCEDURE",
+   "4_gold_match": {
+    "dimension_id": "committee_investigation_procedure",
+    "label": "إجراءات تحقيق اللجنة (سماع الشهود، فحص البصمة الوراثية)",
+    "critical": false,
+    "legal_role": "other"
+   },
+   "loco_witness_cases": [
+    "gs-0011"
+   ]
+  },
+  {
+   "case_id": "gs-0034",
+   "1_seed_concept": "C_TAFRIQ_DARAR",
+   "1_seed_surface_form_in_planner_output": "التطليق للضرر",
+   "2_verified_edge": {
+    "id": "E03",
+    "relation": "REQUIRES",
+    "necessity": "CONDITIONAL",
+    "provenance": [
+     "legis-51-1984-m127",
+     "legis-51-1984-m129"
+    ],
+    "legal_rationale": "م127 أحوال شخصية: «فإذا تعذر الإصلاح وثبت الضرر حكم بالتفريق بينهما بطلقة بائنة، وإن لم يثبت الضرر عينت حكمين للتوفيق أو التفريق» — الشرط منصوص حرفيًا."
+   },
+   "3_hidden_dimension_node": "D_ARBITRATORS",
+   "4_gold_match": {
+    "dimension_id": "arbitrators_when_harm_unproven",
+    "label": "تعيين حكمين للتوفيق أو التفريق إذا لم يثبت الضرر بالمعيار المطلوب",
+    "critical": true,
+    "legal_role": "mandatory_prior_procedure"
+   },
+   "loco_witness_cases": [
+    "gs-0003",
+    "gs-0023",
+    "gs-0032"
+   ]
+  },
+  {
+   "case_id": "gs-0036",
+   "1_seed_concept": "C_MANAGER_REFUSES_CONVENE",
+   "1_seed_surface_form_in_planner_output": "يمتنع المدير عن دعوة الجمعية",
+   "2_verified_edge": {
+    "id": "E12",
+    "relation": "DEPENDS_ON",
+    "necessity": "MANDATORY",
+    "provenance": [
+     "legis-1-2016-m111",
+     "regl-1-2016-m65"
+    ],
+    "legal_rationale": "م111 شركات: «كما يجوز للوزارة دعوة الجمعية للاجتماع وحضوره في أي وقت في الحالات التي يتعين فيها على المدير دعوتها للاجتماع دون أن يقوم بذلك» — مسار مقرر لحالة الامتناع بعينها."
+   },
+   "3_hidden_dimension_node": "D_MINISTRY_CONVENING",
+   "4_gold_match": {
+    "dimension_id": "ministry_convening_on_manager_refusal",
+    "label": "دعوة الوزارة لاجتماع الجمعية العامة عند امتناع المدير عن الدعوة (إنذار + 15 يومًا)",
+    "critical": true,
+    "legal_role": "remedy_route"
+   },
+   "loco_witness_cases": [
+    "gs-0009"
+   ]
+  }
+ ],
+ "threshold_verdict": {
+  "verified_dimension_recall": {
+   "measured": 0.8662,
+   "threshold": 0.9,
+   "op": ">=",
+   "pass": false
+  },
+  "critical_dimension_recall": {
+   "measured": 0.9533,
+   "threshold": 0.95,
+   "op": ">=",
+   "pass": true
+  },
+  "graph_addition_precision": {
+   "measured": 0.4615,
+   "threshold": 0.9,
+   "op": ">=",
+   "pass": false
+  }
+ }
+}
