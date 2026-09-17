@@ -1,0 +1,281 @@
+{
+ "_note": "P2.7-V الأقسام 10-11-15-16 — المقاييس بطبقتين منفصلتين لا تُخلطان.",
+ "A_HISTORICAL_BENCHMARK_METRICS": {
+  "_definition": "على Gold Set40 كما هي حرفيًا. الإضافة صحيحة فقط إن طابقت بُعدًا في الحقيقة الأرضية لحالتها. لم تُمس الحقيقة الأرضية ولا أُعيد تصنيف أي بند لصالح الرقم.",
+  "P2_7": {
+   "graph_additions": 26,
+   "correct": 12,
+   "incorrect": 14,
+   "graph_addition_precision": 0.4615,
+   "dimension_recall": 0.8662,
+   "critical_recall": 0.9533,
+   "strict_completeness": 0.875,
+   "mandatory_procedure_recall": 0.8824,
+   "loco_rescues": 12,
+   "critical_rescues": 10,
+   "unsupported_dimension_rate": 0.0
+  },
+  "P2_7_V": {
+   "graph_additions": 22,
+   "correct": 12,
+   "incorrect": 10,
+   "graph_addition_precision": 0.5455,
+   "dimension_recall": 0.8662,
+   "critical_recall": 0.9533,
+   "strict_completeness": 0.875,
+   "mandatory_procedure_recall": 0.8824,
+   "loco_rescues": 12,
+   "critical_rescues": 10,
+   "unsupported_dimension_rate": 0.0
+  },
+  "false_additions_removed": 4,
+  "true_additions_accidentally_removed": 0,
+  "structural_ceiling_without_discarding_legally_correct_additions": 0.6316,
+  "ceiling_note": "لبلوغ 0.90 يلزم أن تصير الإضافات ≤ 13.33؛ أي إسقاط 9 من الـ22 المقبولة، وسبعٌ منها واجبة قانونًا بنص محقق. فـ0.90 على benchmark الحالي غير قابلة للبلوغ إلا بإسقاط أبعاد صحيحة."
+ },
+ "B_LEGAL_AUDIT_METRICS": {
+  "_definition": "بعد مراجعة قانونية مستقلة لكل إضافة. GROUND_TRUTH_POSSIBLE_OMISSION تُحتسب صحيحة هنا **ولا تُحوَّل إلى TP في benchmark التاريخي**.",
+  "admitted_additions_after_gates": 22,
+  "distribution": {
+   "TRUE_REQUIRED": 9,
+   "TRUE_CONDITIONAL": 3,
+   "GROUND_TRUTH_POSSIBLE_OMISSION": 7,
+   "TRUE_POSSIBLE": 3
+  },
+  "LEGALLY_REVIEWED_ADDITION_PRECISION_strict": 0.8636,
+  "_strict_def": "TRUE_REQUIRED + TRUE_CONDITIONAL + GROUND_TRUTH_POSSIBLE_OMISSION / الكل",
+  "LEGALLY_REVIEWED_ADDITION_PRECISION_inclusive": 1.0,
+  "_inclusive_def": "+ TRUE_POSSIBLE (صحيح ومنطبق لكنه غير لازم للسؤال)",
+  "legally_false_remaining": 0
+ },
+ "NEGATIVE_CONTROLS": {
+  "passed": 8,
+  "total": 9,
+  "detail": [
+   {
+    "probe_id": "A1",
+    "family": "A",
+    "edge_id": "E01",
+    "expected": "NO_GRAPH_EXPANSION",
+    "scope_status": "OUT_OF_SCOPE",
+    "applicability": "APPLIES",
+    "actual_pipeline_verdict": "NO_GRAPH_EXPANSION",
+    "pass": true
+   },
+   {
+    "probe_id": "A2",
+    "family": "A",
+    "edge_id": "E03",
+    "expected": "NO_GRAPH_EXPANSION",
+    "scope_status": "OUT_OF_SCOPE",
+    "applicability": "APPLIES",
+    "actual_pipeline_verdict": "NO_GRAPH_EXPANSION",
+    "pass": true
+   },
+   {
+    "probe_id": "A3",
+    "family": "A",
+    "edge_id": "E08",
+    "expected": "NO_GRAPH_EXPANSION",
+    "scope_status": "OUT_OF_SCOPE",
+    "applicability": "APPLIES",
+    "actual_pipeline_verdict": "NO_GRAPH_EXPANSION",
+    "pass": true
+   },
+   {
+    "probe_id": "B1",
+    "family": "B",
+    "edge_id": "E02",
+    "expected": "DOES_NOT_APPLY",
+    "scope_status": "IN_SCOPE",
+    "applicability": "DOES_NOT_APPLY",
+    "actual_pipeline_verdict": "DOES_NOT_APPLY",
+    "pass": true
+   },
+   {
+    "probe_id": "B2",
+    "family": "B",
+    "edge_id": "E12",
+    "expected": "DOES_NOT_APPLY",
+    "scope_status": "IN_SCOPE",
+    "applicability": "DOES_NOT_APPLY",
+    "actual_pipeline_verdict": "DOES_NOT_APPLY",
+    "pass": true
+   },
+   {
+    "probe_id": "B3",
+    "family": "B",
+    "edge_id": "E22",
+    "expected": "DOES_NOT_APPLY",
+    "scope_status": "IN_SCOPE",
+    "applicability": "DOES_NOT_APPLY",
+    "actual_pipeline_verdict": "DOES_NOT_APPLY",
+    "pass": true
+   },
+   {
+    "probe_id": "C1",
+    "family": "C",
+    "edge_id": "E22",
+    "expected": "UNRESOLVED",
+    "scope_status": "IN_SCOPE",
+    "applicability": "APPLIES",
+    "actual_pipeline_verdict": "APPLIES",
+    "pass": false
+   },
+   {
+    "probe_id": "C2",
+    "family": "C",
+    "edge_id": "E02",
+    "expected": "UNRESOLVED",
+    "scope_status": "IN_SCOPE",
+    "applicability": "UNRESOLVED",
+    "actual_pipeline_verdict": "UNRESOLVED",
+    "pass": true
+   },
+   {
+    "probe_id": "C3",
+    "family": "C",
+    "edge_id": "E12",
+    "expected": "UNRESOLVED",
+    "scope_status": "IN_SCOPE",
+    "applicability": "UNRESOLVED",
+    "actual_pipeline_verdict": "UNRESOLVED",
+    "pass": true
+   }
+  ]
+ },
+ "RESCUE_PRESERVATION": [
+  {
+   "case_id": "gs-0001",
+   "dimension_id": "mandatory_payment_demand",
+   "edge_id": "E01",
+   "critical": true,
+   "before_gate": "rescued",
+   "after_scope_gate": "PASS",
+   "after_applicability_gate": "APPLIES",
+   "final_status": "ADMITTED",
+   "explanation": "حُفظ"
+  },
+  {
+   "case_id": "gs-0001",
+   "dimension_id": "travel_ban_lifting_grounds",
+   "edge_id": "E02",
+   "critical": true,
+   "before_gate": "rescued",
+   "after_scope_gate": "PASS",
+   "after_applicability_gate": "APPLIES",
+   "final_status": "ADMITTED",
+   "explanation": "حُفظ"
+  },
+  {
+   "case_id": "gs-0003",
+   "dimension_id": "hakamayn_arbitration_when_harm_unproven",
+   "edge_id": "E03",
+   "critical": true,
+   "before_gate": "rescued",
+   "after_scope_gate": "PASS",
+   "after_applicability_gate": "APPLIES",
+   "final_status": "ADMITTED",
+   "explanation": "حُفظ"
+  },
+  {
+   "case_id": "gs-0003",
+   "dimension_id": "family_court_jurisdiction",
+   "edge_id": "E04",
+   "critical": false,
+   "before_gate": "rescued",
+   "after_scope_gate": "PASS",
+   "after_applicability_gate": "APPLIES",
+   "final_status": "ADMITTED",
+   "explanation": "حُفظ"
+  },
+  {
+   "case_id": "gs-0005",
+   "dimension_id": "labor_dispute_challenge_route",
+   "edge_id": "E05",
+   "critical": true,
+   "before_gate": "rescued",
+   "after_scope_gate": "PASS",
+   "after_applicability_gate": "APPLIES",
+   "final_status": "ADMITTED",
+   "explanation": "حُفظ"
+  },
+  {
+   "case_id": "gs-0006",
+   "dimension_id": "tenant_cure_defense",
+   "edge_id": "E06",
+   "critical": true,
+   "before_gate": "rescued",
+   "after_scope_gate": "PASS",
+   "after_applicability_gate": "APPLIES",
+   "final_status": "ADMITTED",
+   "explanation": "حُفظ"
+  },
+  {
+   "case_id": "gs-0009",
+   "dimension_id": "judicial_removal_specific_grounds",
+   "edge_id": "E07",
+   "critical": true,
+   "before_gate": "rescued",
+   "after_scope_gate": "PASS",
+   "after_applicability_gate": "APPLIES",
+   "final_status": "ADMITTED",
+   "explanation": "حُفظ"
+  },
+  {
+   "case_id": "gs-0011",
+   "dimension_id": "lijnat_alnasab_wujubiya",
+   "edge_id": "E08",
+   "critical": true,
+   "before_gate": "rescued",
+   "after_scope_gate": "PASS",
+   "after_applicability_gate": "APPLIES",
+   "final_status": "ADMITTED",
+   "explanation": "حُفظ"
+  },
+  {
+   "case_id": "gs-0033",
+   "dimension_id": "committee_decision_deadline_and_court_access",
+   "edge_id": "E09",
+   "critical": true,
+   "before_gate": "rescued",
+   "after_scope_gate": "PASS",
+   "after_applicability_gate": "APPLIES",
+   "final_status": "ADMITTED",
+   "explanation": "حُفظ"
+  },
+  {
+   "case_id": "gs-0033",
+   "dimension_id": "committee_investigation_procedure",
+   "edge_id": "E10",
+   "critical": false,
+   "before_gate": "rescued",
+   "after_scope_gate": "PASS",
+   "after_applicability_gate": "APPLIES",
+   "final_status": "ADMITTED",
+   "explanation": "حُفظ"
+  },
+  {
+   "case_id": "gs-0034",
+   "dimension_id": "arbitrators_when_harm_unproven",
+   "edge_id": "E03",
+   "critical": true,
+   "before_gate": "rescued",
+   "after_scope_gate": "PASS",
+   "after_applicability_gate": "APPLIES",
+   "final_status": "ADMITTED",
+   "explanation": "حُفظ"
+  },
+  {
+   "case_id": "gs-0036",
+   "dimension_id": "ministry_convening_on_manager_refusal",
+   "edge_id": "E12",
+   "critical": true,
+   "before_gate": "rescued",
+   "after_scope_gate": "PASS",
+   "after_applicability_gate": "APPLIES",
+   "final_status": "ADMITTED",
+   "explanation": "حُفظ"
+  }
+ ]
+}

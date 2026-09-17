@@ -1,0 +1,63 @@
+{
+ "_note": "P2.7-V القسم 16-17 — تطبيق معايير النجاح المجمَّدة حرفيًا كما وردت في المواصفة.",
+ "criteria": [
+  {
+   "criterion": "Historical Graph Addition Precision",
+   "required": ">= 0.90",
+   "measured": 0.5455,
+   "pass": false,
+   "note": "ارتفعت 0.4615 -> 0.5455 لكنها دون العتبة؛ السقف البنيوي بلا إسقاط إضافة صحيحة قانونًا = 0.6316"
+  },
+  {
+   "criterion": "LOCO rescues preserved",
+   "required": ">= 11/12",
+   "measured": "12/12",
+   "pass": true,
+   "note": "صفر فقد"
+  },
+  {
+   "criterion": "Critical rescues preserved",
+   "required": "= 10/10",
+   "measured": "10/10",
+   "pass": true,
+   "note": "صفر فقد"
+  },
+  {
+   "criterion": "Critical Dimension Recall",
+   "required": ">= 0.95",
+   "measured": 0.9533,
+   "pass": true,
+   "note": "بلا تغيير عن P2.7"
+  },
+  {
+   "criterion": "Strict Completeness",
+   "required": ">= 0.85",
+   "measured": 0.875,
+   "pass": true,
+   "note": "بلا تغيير عن P2.7"
+  },
+  {
+   "criterion": "Zero foreign/out-of-scope Kuwaiti graph expansion",
+   "required": "= 0",
+   "measured": 0,
+   "pass": true,
+   "note": "حالتان حُجبتا بالكامل (gs-0025, gs-0040)"
+  },
+  {
+   "criterion": "No new unsupported required dimensions",
+   "required": "= 0",
+   "measured": 0,
+   "pass": true,
+   "note": "كل حافة مسنودة بمصدر محقق؛ لا بُعد بلا سند"
+  }
+ ],
+ "all_pass": false,
+ "failed_criteria": [
+  "Historical Graph Addition Precision"
+ ],
+ "legal_audit_precision_strict": 0.8636,
+ "legal_audit_precision_inclusive": 1.0,
+ "legally_false_remaining": 0,
+ "classification": "BENCHMARK_LIMITATION_DETECTED",
+ "classification_reasoning": "ستة من سبعة معايير مستوفاة، والمعيار الساقط وحيد: الدقة التاريخية 0.5455 دون 0.90. وشرط المواصفة للتصنيف متحقق حرفيًا: الدقة بعد المراجعة القانونية مرتفعة (صفر إضافة خاطئة قانونًا من 22، وstrict 0.8636) بينما بقيت الدقة التاريخية منخفضة **بسبب قصور محتمل في الحقيقة الأرضية**: سبع من الإضافات العشر غير المطابقة واجبة قانونًا بنص محقق، وكل واحدة منها مُدرَجة في الحقيقة الأرضية لحالة أخرى من الفئة نفسها — دليل موضوعي مشتق من البيانات لا حكم من المشغِّل. ولبلوغ 0.90 يلزم إسقاط ستة أبعاد صحيحة على الأقل، وهو إفساد للنظام لا تحسين له. فلا يُعلَن PASS قبل مراجعة بشرية مستقلة لـGold Set40."
+}

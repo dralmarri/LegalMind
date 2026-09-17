@@ -1,0 +1,141 @@
+{
+ "_note": "P2.7-V القسم 14 — مسار منفصل تمامًا. مرشحون لقصور محتمل في الحقيقة الأرضية لـGold Set40، أُنتجوا من التدقيق القانوني المستقل للإضافات.",
+ "_hard_rule": "**لا يُستعمل هذا الملف لتحسين أي رقم في P2.7-V ولا في P2.7.** الحقيقة الأرضية لم تُمس، وbenchmark التاريخي بقي كما هو. هذا عمل قانوني بشري لاحق فقط.",
+ "n_candidates": 7,
+ "candidates": [
+  {
+   "case_id": "gs-0005",
+   "question": "عامل في القطاع الأهلي فصل تعسفيا دون إنذار ويطالب بمكافأة نهاية الخدمة والتعويض",
+   "dimension": "عدم سماع الدعاوى العمالية بمضي سنة من انتهاء العقد",
+   "dimension_node": "D_LABOR_LIMITATION",
+   "supporting_legal_authority": [
+    "legis-6-2010-m144"
+   ],
+   "authority_text_quoted": "م144 قانون العمل: «لا تسمع عند الإنكار بمضي سنة من تاريخ انتهاء عقد العمل الدعاوى التي يرفعها العمال استنادًا إلى أحكام هذا القانون».",
+   "reason_it_may_be_required": "م144 عمل تمنع سماع دعاوى العمال بمضي سنة من انتهاء العقد — حاجز قانوني حاسم على الدعوى موضوع السؤال. وهو مُدرَج في حقيقة gs-0035 (سؤال مطابق موضوعيًا) وغائب هنا.",
+   "existing_gt_dimensions_for_this_case": [
+    "notice_period_requirement",
+    "arbitrary_dismissal_definition_and_grounds",
+    "labor_dispute_challenge_route",
+    "end_of_service_gratuity_calculation",
+    "full_gratuity_entitlement_on_employer_termination"
+   ],
+   "internal_inconsistency_evidence": "البُعد نفسه مُدرَج في الحقيقة الأرضية للحالات: ['gs-0035']",
+   "review_status": "UNREVIEWED"
+  },
+  {
+   "case_id": "gs-0006",
+   "question": "مؤجر يطلب إخلاء المستأجر لعدم سداد الأجرة المتأخرة وإلزامه بالمتأخر",
+   "dimension": "إيداع الأجرة خزانة إدارة التنفيذ بعد العرض القانوني خلال عشرين يومًا كوفاء معتبر",
+   "dimension_node": "D_RENT_DEPOSIT",
+   "supporting_legal_authority": [
+    "legis-35-1978-m10"
+   ],
+   "authority_text_quoted": "م10 إيجار العقارات: «وللمستأجر أن يودع الأجرة المستحقة خزانة إدارة التنفيذ بعد عرضها على المؤجر عرضًا قانونيًا، فإذا حصل الإيداع خلال عشرين يومًا من تاريخ الاستحقاق اعتبر وفاءً بالأجرة في الموعد المقرر».",
+   "reason_it_may_be_required": "م10 إيجار تجعل الإيداع خزانة إدارة التنفيذ خلال عشرين يومًا بعد العرض القانوني وفاءً معتبرًا — أي أن «عدم السداد» المدّعى قد يكون وفاءً صحيحًا. مُدرَج في حقيقة gs-0021 وغائب هنا.",
+   "existing_gt_dimensions_for_this_case": [
+    "eviction_nonpayment_grounds",
+    "tenant_cure_defense",
+    "rent_arrears_claim"
+   ],
+   "internal_inconsistency_evidence": "البُعد نفسه مُدرَج في الحقيقة الأرضية للحالات: ['gs-0021']",
+   "review_status": "UNREVIEWED"
+  },
+  {
+   "case_id": "gs-0011",
+   "question": "موكلتي امرأة جعفرية المذهب تزوجت من رجل سني بعقد زواج عرفي غير موثق وأنجبت منه طفلين ثم توفي الزوج وترك أبناء من زوجة أولى موثقة الزواج. أبناء الزوجة الأولى ينكرون الزواج الثاني وينكرون نسب الطفلين ويرفضون إدخالهم في الميراث. ما إجراءات إثبات الزواج والنسب وأثر اختلاف مذهب الزوجين على الميراث؟",
+   "dimension": "مهلة اللجنة (ستة أشهر/ثلاثة عند اللعان) وأثر انقضائها على فتح باب القضاء",
+   "dimension_node": "D_COMMITTEE_DEADLINE",
+   "supporting_legal_authority": [
+    "legis-53-2026-m8"
+   ],
+   "authority_text_quoted": "م8 دعاوى النسب: «وعلى اللجنة إحالته إلى المحكمة المختصة بتقرير مفصل... خلال ستة أشهر من تاريخ تقديم الطلب إليها، وثلاثة أشهر إذا كان الطلب نفي النسب باللعان، فإذا انتهت هذه المدة دون البت في الطلب كان لصاحب الشأن اللجوء إلى القضاء».",
+   "reason_it_may_be_required": "السؤال يطلب «إجراءات إثبات النسب»؛ ومهلة اللجنة (ستة أشهر/ثلاثة عند اللعان) وفتح باب القضاء بانقضائها منصوصان في م8 نفسها التي أُسندت بها وجوبية اللجنة — جزء من الإجراء لا زيادة عليه.",
+   "existing_gt_dimensions_for_this_case": [
+    "sima_dawa_alzawjiya_inkar",
+    "lijnat_alnasab_wujubiya",
+    "athar_ikhtilaf_almadhab_ala_alqanoon_almutabbaq",
+    "tadakhkhul_alniyaba_alamma_wujubi"
+   ],
+   "internal_inconsistency_evidence": "البُعد نفسه مُدرَج في الحقيقة الأرضية للحالات: ['gs-0033']",
+   "review_status": "UNREVIEWED"
+  },
+  {
+   "case_id": "gs-0011",
+   "question": "موكلتي امرأة جعفرية المذهب تزوجت من رجل سني بعقد زواج عرفي غير موثق وأنجبت منه طفلين ثم توفي الزوج وترك أبناء من زوجة أولى موثقة الزواج. أبناء الزوجة الأولى ينكرون الزواج الثاني وينكرون نسب الطفلين ويرفضون إدخالهم في الميراث. ما إجراءات إثبات الزواج والنسب وأثر اختلاف مذهب الزوجين على الميراث؟",
+   "dimension": "إجراءات تحقيق اللجنة (سماع الشهود وفحص البصمة الوراثية)",
+   "dimension_node": "D_COMMITTEE_PROCEDURE",
+   "supporting_legal_authority": [
+    "legis-53-2026-m7"
+   ],
+   "authority_text_quoted": "م7 دعاوى النسب: «...استدعاء مقدم الطلب وكل من ترى لزوم استدعائه... وسماع شهادتهم بعد حلف اليمين... وللجنة أن تأمر بإجراء فحص البصمة الوراثية وغيره من الوسائل العلمية الحديثة».",
+   "reason_it_may_be_required": "م7 تحدد كيفية التحقيق (سماع الشهود بعد اليمين، الأمر بالبصمة الوراثية) وهي جوهر «الإجراءات» المسؤول عنها. ومُدرَجة في حقيقة gs-0033 لنفس الموضوع.",
+   "existing_gt_dimensions_for_this_case": [
+    "sima_dawa_alzawjiya_inkar",
+    "lijnat_alnasab_wujubiya",
+    "athar_ikhtilaf_almadhab_ala_alqanoon_almutabbaq",
+    "tadakhkhul_alniyaba_alamma_wujubi"
+   ],
+   "internal_inconsistency_evidence": "البُعد نفسه مُدرَج في الحقيقة الأرضية للحالات: ['gs-0033']",
+   "review_status": "UNREVIEWED"
+  },
+  {
+   "case_id": "gs-0013",
+   "question": "موكلي مورّد بضائع باع لشركة ذات مسؤولية محدودة بضاعة بمبلغ 42,000 دينار، وتسلم منها شيكين ارتدّا لعدم كفاية الرصيد، ومضى على تاريخ استحقاق الشيك الأول ما يقارب السنتين والنصف. المطلوب: هل الطريق الأسلم أمر أداء أم دعوى موضوعية؟ وما شروط استصدار أمر الأداء وإجراءاته ومواعيد التظلم منه؟ وهل يجوز منع المدير المفوض بالتوقيع عن الشركة من السفر وبأي شروط وضمانات؟ وإن كان الشيك الأول قد لحقه التقادم الصرفي فهل تسقط المطالبة بأصل الدين أم يبقى طريق آخر للمطالبة؟ ومتى تمتد المسؤولية لمدير الشركة بشخصه؟",
+   "dimension": "التكليف بالوفاء قبل استصدار أمر الأداء",
+   "dimension_node": "D_PAYMENT_DEMAND",
+   "supporting_legal_authority": [
+    "legis-38-1980-m167"
+   ],
+   "authority_text_quoted": "م167 مرافعات: «على الدائن أن يكلف المدين أولاً بالوفاء بميعاد عشرة أيام على الأقل ثم يستصدر أمر بالأداء» — التكليف شرط سابق لا خيار.",
+   "reason_it_may_be_required": "السؤال ينص حرفيًا «وما شروط استصدار أمر الأداء وإجراءاته»؛ والتكليف بالوفاء (م167) إجراء سابق وجوبي يُلغى الأمر لبطلانه. أوضح حالة قصور محتمل في الحقيقة الأرضية عبر الملف كله.",
+   "existing_gt_dimensions_for_this_case": [
+    "shurut_amr_alada",
+    "tazallum_amr_alada_wa_miadihi",
+    "man_almudir_min_alsafar",
+    "taqadum_sarfi_wa_baqaa_tariq_alithra",
+    "masuliyat_mudir_alsharika_alshakhsiya"
+   ],
+   "internal_inconsistency_evidence": "البُعد نفسه مُدرَج في الحقيقة الأرضية للحالات: ['gs-0001']",
+   "review_status": "UNREVIEWED"
+  },
+  {
+   "case_id": "gs-0021",
+   "question": "ما التزام المستأجر بسداد الأجرة في المواعيد المتفق عليها، وما أثر تأخره على استمرار عقد الإيجار؟",
+   "dimension": "اعتبار دعوى الإخلاء كأن لم تكن عند الوفاء حتى أول جلسة بعذر مقبول",
+   "dimension_node": "D_TENANT_CURE",
+   "supporting_legal_authority": [
+    "legis-35-1978-m20"
+   ],
+   "authority_text_quoted": "م20/1 إيجار العقارات: «يجوز للقاضي أن يحكم باعتبار الدعوى كأن لم تكن... إذا أثبت المستأجر أن تأخره يرجع إلى عذر قوي تقبله المحكمة وأوفى حتى نهاية أول جلسة تم إعلانه بها إعلانًا صحيحًا بجميع الأجرة المستحقة».",
+   "reason_it_may_be_required": "السؤال عن «أثر تأخر المستأجر على استمرار عقد الإيجار»، وم20/1 هي النص الحاكم لهذا الأثر بعينه (اعتبار دعوى الإخلاء كأن لم تكن). مُدرَجة في حقيقة gs-0006 وغائبة هنا.",
+   "existing_gt_dimensions_for_this_case": [
+    "tenant_rent_payment_obligation",
+    "late_payment_deposit_mechanism",
+    "eviction_ground_nonpayment"
+   ],
+   "internal_inconsistency_evidence": "البُعد نفسه مُدرَج في الحقيقة الأرضية للحالات: ['gs-0006']",
+   "review_status": "UNREVIEWED"
+  },
+  {
+   "case_id": "gs-0033",
+   "question": "ما هو الشرط الإجرائي الذي يجب توافره قبل قبول دعوى إثبات النسب المباشر أمام المحكمة؟",
+   "dimension": "وجوب تدخل النيابة العامة في دعاوى النسب باعتبارها من النظام العام",
+   "dimension_node": "D_PROSECUTION_INTERVENTION",
+   "supporting_legal_authority": [
+    "legis-51-1984-m338",
+    "legis-51-1984-m337"
+   ],
+   "authority_text_quoted": "م338 أحوال شخصية تنص على أن المراد بالنظام العام يشمل «هـ- دعاوى النسب وتصحيح الأسماء»، وم337 توجب على النيابة العامة أن ترفع الدعاوى أو تتدخل فيها «في كل أمر يمس النظام العام» — السلسلة كاملة بنصين لا باستنتاج.",
+   "reason_it_may_be_required": "تدخل النيابة العامة وجوبي في دعاوى النسب بنصي م338+م337، وهو شرط إجرائي لصحة الخصومة فيدخل صلب السؤال. ومُدرَج في حقيقة gs-0011 وغائب هنا — تفاوت داخل الحقيقة الأرضية نفسها.",
+   "existing_gt_dimensions_for_this_case": [
+    "mandatory_paternity_committee_investigation",
+    "committee_decision_deadline_and_court_access",
+    "committee_jurisdiction_scope",
+    "committee_investigation_procedure"
+   ],
+   "internal_inconsistency_evidence": "البُعد نفسه مُدرَج في الحقيقة الأرضية للحالات: ['gs-0011']",
+   "review_status": "UNREVIEWED"
+  }
+ ]
+}

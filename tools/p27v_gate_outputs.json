@@ -1,0 +1,880 @@
+{
+ "_note": "P2.7-V — مخرجات البوابتين الخام كما أنتجها المصنِّفان المستقلان، محفوظة لإعادة التوليد. لم يرَ أي منهما الحقيقة الأرضية ولا أي مفتاح إجابة.",
+ "scope_gate_gold40": [
+  {
+   "case_id": "gs-0001",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti codified law",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "منع من السفر في المطار بسبب أمر أداء"
+   ],
+   "confidence": 0.95
+  },
+  {
+   "case_id": "gs-0002",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti codified law",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "شيك مرتجع بدون رصيد وملاحقة الساحب جزائيا"
+   ],
+   "confidence": 0.94
+  },
+  {
+   "case_id": "gs-0003",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti personal status law (Sunni, Law 51/1984 — default, no school specified)",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "زوجة تطلب التطليق للضرر من زوجها"
+   ],
+   "confidence": 0.92
+  },
+  {
+   "case_id": "gs-0004",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti personal status law — Jaafari school (Law 124/2019)",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "نزاع حضانة أطفال على المذهب الجعفري"
+   ],
+   "confidence": 0.95
+  },
+  {
+   "case_id": "gs-0005",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti labour law (private sector)",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "عامل في القطاع الأهلي فصل تعسفيا"
+   ],
+   "confidence": 0.93
+  },
+  {
+   "case_id": "gs-0006",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti codified law",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "مؤجر يطلب إخلاء المستأجر لعدم سداد الأجرة"
+   ],
+   "confidence": 0.93
+  },
+  {
+   "case_id": "gs-0007",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti administrative law",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "موظف حكومي صدر قرار بإنهاء خدماته ويريد الطعن بالإلغاء"
+   ],
+   "confidence": 0.93
+  },
+  {
+   "case_id": "gs-0008",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti codified law",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "بموجب قانون مكافحة التستر رقم 78 لسنة 2026"
+   ],
+   "confidence": 0.97
+  },
+  {
+   "case_id": "gs-0009",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti companies law",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "شركاء في شركة ذات مسئولية محدودة يريدون عزل المدير"
+   ],
+   "confidence": 0.92
+  },
+  {
+   "case_id": "gs-0010",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti personal status law (inheritance — no school specified)",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "توفي رجل عن زوجة وبنتين وأخ شقيق فكيف توزع التركة"
+   ],
+   "confidence": 0.9
+  },
+  {
+   "case_id": "gs-0011",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti personal status law — both codified schools (Jaafari 124/2019 and Sunni 51/1984)",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "امرأة جعفرية المذهب تزوجت من رجل سني",
+    "وأثر اختلاف مذهب الزوجين على الميراث؟"
+   ],
+   "confidence": 0.9
+  },
+  {
+   "case_id": "gs-0012",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti codified law",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "وفقا للقوانين الكويتية"
+   ],
+   "confidence": 0.99
+  },
+  {
+   "case_id": "gs-0013",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti commercial/procedural law",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "بمبلغ 42,000 دينار",
+    "وما شروط استصدار أمر الأداء وإجراءاته ومواعيد التظلم منه؟"
+   ],
+   "confidence": 0.94
+  },
+  {
+   "case_id": "gs-0014",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti codified law (national service)",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "مواطن كويتي مستدعى لأداء الخدمة الوطنية العسكرية"
+   ],
+   "confidence": 0.97
+  },
+  {
+   "case_id": "gs-0015",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti banking regulation (Central Bank of Kuwait instructions)",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "وفق تعليمات بنك الكويت المركزي لكفاية رأس المال"
+   ],
+   "confidence": 0.98
+  },
+  {
+   "case_id": "gs-0016",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti civil law",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "القانون المدني الكويتي رقم 67 لسنة 1980"
+   ],
+   "confidence": 0.99
+  },
+  {
+   "case_id": "gs-0017",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti procedural law",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "ومتى يكون القاضي غير صالح لنظر الدعوى وممنوعًا من سماعها"
+   ],
+   "confidence": 0.88
+  },
+  {
+   "case_id": "gs-0018",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti civil law",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "في القانون المدني الكويتي"
+   ],
+   "confidence": 0.99
+  },
+  {
+   "case_id": "gs-0019",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti civil law",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "في القانون المدني الكويتي"
+   ],
+   "confidence": 0.99
+  },
+  {
+   "case_id": "gs-0020",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti codified law",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "في القانون الكويتي"
+   ],
+   "confidence": 0.99
+  },
+  {
+   "case_id": "gs-0021",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti civil law",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "ما التزام المستأجر بسداد الأجرة في المواعيد المتفق عليها"
+   ],
+   "confidence": 0.85
+  },
+  {
+   "case_id": "gs-0022",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti maritime/commercial law",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "ما مدى مسؤولية الناقل البحري عن هلاك البضاعة أو تلفها"
+   ],
+   "confidence": 0.84
+  },
+  {
+   "case_id": "gs-0023",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti personal status law + family court procedure",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "قبل رفع الدعوى أمام محكمة الأسرة"
+   ],
+   "confidence": 0.94
+  },
+  {
+   "case_id": "gs-0024",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti codified law (criminal — narcotics)",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "مرسوم قانون مكافحة المخدرات رقم 159 لسنة 2025"
+   ],
+   "confidence": 0.96
+  },
+  {
+   "case_id": "gs-0025",
+   "jurisdiction": "Egypt",
+   "legal_system": "Egyptian law",
+   "scope_status": "OUT_OF_SCOPE",
+   "evidence_from_question": [
+    "ما حكم القانون المصري فيما يتعلق بالتعويض عن الفصل التعسفي من العمل؟"
+   ],
+   "confidence": 0.99
+  },
+  {
+   "case_id": "gs-0026",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti judicial organization law",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "المدة اللازمة كحد أدنى للبقاء في درجة وكيل نيابة قبل الترقية، وفق الجدول النافذ حاليًا"
+   ],
+   "confidence": 0.9
+  },
+  {
+   "case_id": "gs-0027",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti judicial organization law",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "من يتولى رئاسة دوائر محكمة الاستئناف، وكيف تشكَّل المحكمة الكلية"
+   ],
+   "confidence": 0.91
+  },
+  {
+   "case_id": "gs-0028",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti regulatory law (real-estate valuers)",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "المهلة المحددة لمقيّمي العقار الجدد لتوفيق أوضاعهم وفق النظام الحالي"
+   ],
+   "confidence": 0.88
+  },
+  {
+   "case_id": "gs-0029",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti codified law (electronic transactions)",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "هل يشترط قانون المعاملات الإلكترونية الحالي استثناءات معينة"
+   ],
+   "confidence": 0.9
+  },
+  {
+   "case_id": "gs-0030",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti codified law (state property / enforcement)",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "هل يجوز للدائن أن يوقع حجزًا على أموال الدولة العامة"
+   ],
+   "confidence": 0.87
+  },
+  {
+   "case_id": "gs-0031",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti criminal procedure law",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "المدة القصوى التي يجوز فيها الحبس الاحتياطي في قضية جنحة"
+   ],
+   "confidence": 0.88
+  },
+  {
+   "case_id": "gs-0032",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti personal status law",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "زوج رفع دعوى تفريق للضرر ولم تثبت المحكمة الضرر بشكل قاطع"
+   ],
+   "confidence": 0.9
+  },
+  {
+   "case_id": "gs-0033",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti codified law (filiation / nasab procedure)",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "الشرط الإجرائي الذي يجب توافره قبل قبول دعوى إثبات النسب المباشر"
+   ],
+   "confidence": 0.91
+  },
+  {
+   "case_id": "gs-0034",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti personal status law (no school specified)",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "زوجي ضربني وشتمني وابي اطلق منه، شنو أسوي؟"
+   ],
+   "confidence": 0.86
+  },
+  {
+   "case_id": "gs-0035",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti labour law",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "صاحب الشغل طردني من الشغل بدون سبب وابي اعرف حقوقي؟"
+   ],
+   "confidence": 0.86
+  },
+  {
+   "case_id": "gs-0036",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti companies law",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "شريك في شركة ذات مسؤولية محدودة يمتنع المدير عن دعوة الجمعية العامة لعزله"
+   ],
+   "confidence": 0.91
+  },
+  {
+   "case_id": "gs-0037",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti procedural/commercial law",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "هل يشترط أن يكون السند التجاري المستند إليه في طلب أمر الأداء من الأوراق التجارية تحديدًا"
+   ],
+   "confidence": 0.89
+  },
+  {
+   "case_id": "gs-0038",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti companies law",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "هل يجوز تعديل عقد شركة ذات مسؤولية محدودة بمجرد اتفاق الشركاء دون إفراغه في محرر رسمي؟"
+   ],
+   "confidence": 0.9
+  },
+  {
+   "case_id": "gs-0039",
+   "jurisdiction": "Kuwait",
+   "legal_system": "Kuwaiti criminal law (AML)",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "العقوبة المقررة تحديدًا لجريمة غسل الأموال"
+   ],
+   "confidence": 0.87
+  },
+  {
+   "case_id": "gs-0040",
+   "jurisdiction": "Kuwait (forum) — but answer requested under Jewish religious law",
+   "legal_system": "Jewish religious law (Halakha) — not part of Kuwait's codified personal-status framework (Sunni 51/1984 and Jaafari 124/2019 only)",
+   "scope_status": "OUT_OF_SCOPE",
+   "evidence_from_question": [
+    "ما هي أحكام الشريعة اليهودية المتبعة في مسائل الأحوال الشخصية للطوائف اليهودية في الكويت؟"
+   ],
+   "confidence": 0.95
+  }
+ ],
+ "applicability_gate_gold40": [
+  {
+   "pair_id": "gs-0001|E01",
+   "verdict": "APPLIES",
+   "reason": "صدر أمر أداء فعلًا ضد الموكل فطريق أمر الأداء مطروح وينطبق شرط النص المتعلق بالتكليف بالوفاء قبل استصداره.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0001|E02",
+   "verdict": "APPLIES",
+   "reason": "أمر المنع من السفر قائم فعلًا إذ مُنع الموكل في المطار، فينطبق النص الحاكم لسقوط الأمر القائم.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0002|E15",
+   "verdict": "APPLIES",
+   "reason": "السؤال يجمع ملاحقة جزائية للساحب ومطالبة مدنية بقيمة الشيك نفسه، وهو بالضبط فرض النص في نفي حجية الحكم الجزائي على أحقية القيمة.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0003|E03",
+   "verdict": "APPLIES",
+   "reason": "دعوى التطليق للضرر مطروحة ولم يثبت الضرر قطعًا بعد، فينطبق فرض النص في تعيين الحكمين.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0003|E04",
+   "verdict": "APPLIES",
+   "reason": "المسألة دعوى أحوال شخصية كويتية سترفع أمام محكمة الأسرة فينطبق نص الاختصاص.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0003|E21",
+   "verdict": "APPLIES",
+   "reason": "المطالبة بالنفقة مطروحة صراحة فينطبق النص الحاكم لمدة سماع دعوى النفقة عن المدة السابقة.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0004|E04",
+   "verdict": "APPLIES",
+   "reason": "نزاع الحضانة من دعاوى الأحوال الشخصية الخاضعة للتقنين الكويتي (الجعفري المقنَّن) فينطبق نص اختصاص محكمة الأسرة.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0005|E05",
+   "verdict": "APPLIES",
+   "reason": "العامل في القطاع الأهلي فُصل فعلًا وعلاقته خاضعة لقانون العمل الكويتي فينطبق نص حق العامل المفصول في الطعن.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0005|E22",
+   "verdict": "APPLIES",
+   "reason": "عقد العمل انتهى بالفصل والمطالبة بحقوق مترتبة عليه قائمة فينطبق نص عدم سماع الدعوى بمضي سنة.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0006|E06",
+   "verdict": "APPLIES",
+   "reason": "تأخر المستأجر عن الأجرة قائم ودعوى الإخلاء مطروحة، وهو فرض النص في اعتبار الدعوى كأن لم تكن عند الوفاء.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0006|E23",
+   "verdict": "APPLIES",
+   "reason": "المسألة في وفاء المستأجر بالأجرة المتأخرة فينطبق نص إيداع الأجرة خزانة إدارة التنفيذ واعتباره وفاءً.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0009|E07",
+   "verdict": "APPLIES",
+   "reason": "طلب عزل مدير شركة ذات مسؤولية محدودة مطروح ولم يثبت أن العزل تم بقرار الجمعية بالنصاب العادي، فينطبق نص العزل بحكم قضائي.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0011|E08",
+   "verdict": "APPLIES",
+   "reason": "نسب الطفلين منكور ومحل نزاع ودعوى إثباته مزمعة، فينطبق شرط سبق تحقيق اللجنة لقبول دعوى النسب.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0011|E09",
+   "verdict": "APPLIES",
+   "reason": "مسار لجنة النسب واجب في هذه المسألة فينطبق النص الحاكم لمدة الستة أشهر وأثر انقضائها.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0011|E10",
+   "verdict": "APPLIES",
+   "reason": "تحقيق لجنة النسب واجب هنا فينطبق النص المنظم لإجراءات اللجنة وفحص البصمة الوراثية.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0011|E11",
+   "verdict": "APPLIES",
+   "reason": "المسألة دعوى نسب مطروحة أمام القضاء وهي من النظام العام فينطبق نص تدخل النيابة.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0012|E18",
+   "verdict": "APPLIES",
+   "reason": "بيع المتجر هو موضوع الطلب فعلًا (نموذج عقد بيع محل تجاري) فينطبق النص المنظم لأثر عدم الوفاء بالثمن في بيع المتجر.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0013|E01",
+   "verdict": "APPLIES",
+   "reason": "السؤال يبحث صراحة سلوك طريق أمر الأداء وشروطه وإجراءاته فينطبق نص التكليف بالوفاء قبل استصدار الأمر.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0013|E02",
+   "verdict": "DOES_NOT_APPLY",
+   "reason": "السؤال منصبّ على جواز إصدار أمر المنع من السفر ابتداءً وشروطه وضماناته، لا على سقوط أمر صادر فعلًا، والنص يحكم سقوط أمر قائم.",
+   "unmet_required_fact": "أن يكون أمر منع من السفر قد صدر فعلًا",
+   "triggered_prohibited_fact": "السؤال عن جواز إصدار المنع ابتداءً وعن شروطه المستقبلية لا عن أمر قائم"
+  },
+  {
+   "pair_id": "gs-0013|E14",
+   "verdict": "APPLIES",
+   "reason": "التقادم الصرفي للشيك الأول مطروح صراحة وأثره على المطالبة بأصل الدين، وهو فرض النص في دعوى الإثراء بلا سبب.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0014|E20",
+   "verdict": "APPLIES",
+   "reason": "المسألة في الخدمة الوطنية العسكرية وأحكام سريانها على المجندين، فينطبق النص المتعلق بشهادة أداء الخدمة وأثرها.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0016|E16",
+   "verdict": "APPLIES",
+   "reason": "السؤال منصبّ صراحة على نطاق المسؤولية عن الفعل الضار والتزام محدث الضرر بالتعويض، وهو عين فرض النص.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0018|E16",
+   "verdict": "DOES_NOT_APPLY",
+   "reason": "السؤال محصور في مدة تقادم دعوى المسؤولية التقصيرية وبدء سريانها، لا في قيام التزام محدث الضرر بالتعويض ولا في نطاقه.",
+   "unmet_required_fact": "أن يكون التزام محدث الضرر بالتعويض أو نطاق مسؤوليته محل السؤال",
+   "triggered_prohibited_fact": "انحصار السؤال في مسألة زمنية إجرائية هي مدة التقادم وبدء سريانها"
+  },
+  {
+   "pair_id": "gs-0021|E06",
+   "verdict": "APPLIES",
+   "reason": "السؤال يطرح صراحة أثر تأخر المستأجر عن سداد الأجرة على استمرار العقد، وهو فرض النص.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0021|E23",
+   "verdict": "APPLIES",
+   "reason": "المسألة في وفاء المستأجر بالأجرة وأثر التأخر فينطبق نص الإيداع في خزانة إدارة التنفيذ واعتباره وفاءً.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0023|E03",
+   "verdict": "APPLIES",
+   "reason": "دعوى التفريق للضرر مزمعة ولم يثبت الضرر قطعًا أمام المحكمة، فينطبق فرض تعيين الحكمين.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0023|E04",
+   "verdict": "APPLIES",
+   "reason": "الدعوى ستُرفع أمام محكمة الأسرة في مسألة أحوال شخصية كويتية فينطبق نص الاختصاص.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0025|E05",
+   "verdict": "DOES_NOT_APPLY",
+   "reason": "السؤال عن حكم القانون المصري في الفصل التعسفي، فالعلاقة المسؤول عنها غير خاضعة لقانون العمل الكويتي الذي يقرر حق الطعن أمام الدائرة العمالية.",
+   "unmet_required_fact": "عامل خاضع لقانون العمل الكويتي أُنهيت خدمته أو فُصل",
+   "triggered_prohibited_fact": "المسألة محكومة بقانون أجنبي (القانون المصري) لا بقانون العمل الكويتي"
+  },
+  {
+   "pair_id": "gs-0029|E19",
+   "verdict": "APPLIES",
+   "reason": "السؤال في نطاق سريان قانون المعاملات الإلكترونية واستثناءاته فينطبق النص الحاكم لآثار السجل والمستند الإلكتروني.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0030|E17",
+   "verdict": "APPLIES",
+   "reason": "السؤال في الحجز على أموال الدولة وهو استثناء مطروح من قاعدة الضمان العام لأموال المدين، فينطبق النص.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0032|E03",
+   "verdict": "APPLIES",
+   "reason": "دعوى التفريق للضرر مرفوعة فعلًا ولم تثبت المحكمة الضرر بشكل قاطع، وهو حرفيًا فرض النص في تعيين الحكمين.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0032|E04",
+   "verdict": "APPLIES",
+   "reason": "الدعوى مرفوعة فعلًا في مسألة أحوال شخصية كويتية فينطبق نص اختصاص محكمة الأسرة.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0033|E08",
+   "verdict": "APPLIES",
+   "reason": "السؤال عن شرط قبول دعوى إثبات النسب المباشر، فدعوى النسب مطروحة وينطبق شرط سبق تحقيق اللجنة.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0033|E09",
+   "verdict": "APPLIES",
+   "reason": "مسار لجنة النسب واجب في دعوى إثبات النسب فينطبق النص الحاكم لمدة الستة أشهر وأثر انقضائها.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0033|E10",
+   "verdict": "APPLIES",
+   "reason": "تحقيق لجنة النسب واجب قبل قبول الدعوى فينطبق النص المنظم لإجراءات اللجنة.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0033|E11",
+   "verdict": "APPLIES",
+   "reason": "المسألة دعوى نسب أمام القضاء وهي من النظام العام فينطبق نص وجوب تدخل النيابة.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0034|E03",
+   "verdict": "APPLIES",
+   "reason": "السائلة تطلب الطلاق لإيذاء زوجها إياها فدعوى التفريق للضرر مزمعة والضرر لم يثبت قضاءً بعد، فينطبق فرض تعيين الحكمين.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0035|E05",
+   "verdict": "APPLIES",
+   "reason": "السائل عامل طُرد من عمله ولا شيء في السؤال يُخرج العلاقة عن قانون العمل الكويتي، فينطبق نص حق العامل المفصول في الطعن.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0035|E22",
+   "verdict": "APPLIES",
+   "reason": "عقد العمل انتهى بالطرد والسائل يطالب بمعرفة حقوقه المترتبة عليه، فينطبق نص عدم سماع الدعوى بمضي سنة من انتهاء العقد.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0036|E07",
+   "verdict": "APPLIES",
+   "reason": "طلب عزل مدير شركة ذات مسؤولية محدودة مطروح والنصاب معطَّل فتعذّر العزل بقرار الجمعية، فينطبق نص العزل بحكم قضائي.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0036|E12",
+   "verdict": "APPLIES",
+   "reason": "امتناع المدير عن دعوة الجمعية العامة متحقق فعلًا في حالة يتعين فيها دعوتها، وهو عين فرض النص في دعوة الوزارة لها.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0036|E13",
+   "verdict": "APPLIES",
+   "reason": "امتناع المدير عمدًا عن عقد اجتماع الجمعية متحقق في حالة يوجبها القانون، فينطبق النص العقابي على هذا الامتناع.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0037|E01",
+   "verdict": "APPLIES",
+   "reason": "السؤال منصبّ على شروط السند الذي يُستصدر به أمر الأداء، فطريق أمر الأداء مطروح وينطبق النص.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "gs-0040|E04",
+   "verdict": "DOES_NOT_APPLY",
+   "reason": "السؤال عن أحكام الشريعة اليهودية كمنظومة موضوعية مستقلة، لا عن دعوى أحوال شخصية ترفع خاضعة للتقنين الكويتي الذي ينعقد به الاختصاص لمحكمة الأسرة.",
+   "unmet_required_fact": "دعوى أحوال شخصية تُرفع أو ستُرفع خاضعة للمنظومة الكويتية المقنَّنة",
+   "triggered_prohibited_fact": "المسألة مطروحة كأحكام منظومة دينية غير مقنَّنة في الكويت لا كدعوى أحوال شخصية خاضعة للتقنين الكويتي"
+  }
+ ],
+ "scope_gate_negative_controls": [
+  {
+   "case_id": "A1",
+   "jurisdiction": "الأردن",
+   "legal_system": "قانون المرافعات المدنية الأردني (نظام مدني وضعي أجنبي)",
+   "scope_status": "OUT_OF_SCOPE",
+   "evidence_from_question": [
+    "قانون المرافعات الأردني"
+   ],
+   "confidence": "high"
+  },
+  {
+   "case_id": "A2",
+   "jurisdiction": "مصر",
+   "legal_system": "قانون الأحوال الشخصية المصري أمام محاكم الأسرة المصرية",
+   "scope_status": "OUT_OF_SCOPE",
+   "evidence_from_question": [
+    "محاكم الأسرة المصرية"
+   ],
+   "confidence": "high"
+  },
+  {
+   "case_id": "A3",
+   "jurisdiction": "فرنسا",
+   "legal_system": "القضاء الفرنسي (نظام مدني أجنبي)",
+   "scope_status": "OUT_OF_SCOPE",
+   "evidence_from_question": [
+    "أمام القضاء الفرنسي"
+   ],
+   "confidence": "high"
+  },
+  {
+   "case_id": "B1",
+   "jurisdiction": "الكويت",
+   "legal_system": "القانون الكويتي المقنَّن",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "لا ذكر لأي دولة أخرى أو نظام قانوني آخر",
+    "أمر منع من السفر — مسألة إجرائية/تنفيذية بلا إشارة لجهة أجنبية"
+   ],
+   "confidence": "high"
+  },
+  {
+   "case_id": "B2",
+   "jurisdiction": "الكويت",
+   "legal_system": "القانون الكويتي المقنَّن",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "لا ذكر لأي دولة أخرى أو نظام قانوني آخر",
+    "شركة ذات مسؤولية محدودة — مسألة شركات بلا إشارة لجهة أجنبية"
+   ],
+   "confidence": "high"
+  },
+  {
+   "case_id": "B3",
+   "jurisdiction": "الكويت",
+   "legal_system": "القانون الكويتي المقنَّن",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "لا ذكر لأي دولة أخرى أو نظام قانوني آخر",
+    "مسألة عمالية عامة (رصيد الإجازة السنوية) بلا إشارة لجهة أجنبية"
+   ],
+   "confidence": "high"
+  },
+  {
+   "case_id": "C1",
+   "jurisdiction": "الكويت",
+   "legal_system": "القانون الكويتي المقنَّن",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "لا ذكر لأي دولة أخرى أو نظام قانوني آخر",
+    "مطالبة عامل بمستحقاته المالية لدى صاحب العمل"
+   ],
+   "confidence": "high"
+  },
+  {
+   "case_id": "C2",
+   "jurisdiction": "الكويت",
+   "legal_system": "القانون الكويتي المقنَّن",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "لا ذكر لأي دولة أخرى أو نظام قانوني آخر",
+    "نزاع تنفيذي مع دائن وقيود سفر — بلا إشارة لجهة أجنبية"
+   ],
+   "confidence": "high"
+  },
+  {
+   "case_id": "C3",
+   "jurisdiction": "الكويت",
+   "legal_system": "القانون الكويتي المقنَّن",
+   "scope_status": "IN_SCOPE",
+   "evidence_from_question": [
+    "لا ذكر لأي دولة أخرى أو نظام قانوني آخر",
+    "شريك في شركة ذات مسؤولية محدودة — مسألة شركات بلا إشارة لجهة أجنبية"
+   ],
+   "confidence": "high"
+  }
+ ],
+ "applicability_gate_negative_controls": [
+  {
+   "pair_id": "A1",
+   "verdict": "APPLIES",
+   "reason": "السؤال ينظر صراحةً في سلوك طريق أمر الأداء وشروط استصداره وإجراءاته، فالواقعة المشترطة (طرح طريق أمر الأداء) حاضرة نصًا؛ ولا يسأل عن طريق قضائي آخر لا صلة له بأمر الأداء فلا تتحقق الواقعة المانعة. (كون السؤال عن ولاية أجنبية مسألة نطاق لا مسألة انطباق شرط النص.)",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "A2",
+   "verdict": "APPLIES",
+   "reason": "السؤال عن رفع دعوى التطليق للضرر وشروطها، أي دعوى تفريق للضرر مزمعة — الواقعة المشترطة حاضرة؛ ولا يذكر السؤال أن الضرر ثبت قطعًا أمام المحكمة، فالواقعة المانعة غير متحققة. (الولاية الأجنبية مسألة نطاق منفصلة.)",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "A3",
+   "verdict": "APPLIES",
+   "reason": "السؤال عن إجراءات إثبات النسب أمام القضاء، فدعوى النسب مزمعة بلزوم العبارة — الواقعة المشترطة حاضرة؛ ولا شيء في السؤال يفيد أن النسب غير متنازع عليه، فالواقعة المانعة غير متحققة. (الولاية الأجنبية مسألة نطاق منفصلة.)",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "B1",
+   "verdict": "DOES_NOT_APPLY",
+   "reason": "النص يحكم سقوط أمر منع سفر قائم، والسؤال ينفي صراحةً صدور أي أمر («ولم يصدر بحقه أي أمر حتى الآن») ويدور على الاحتياطات الوقائية المستقبلية — فالواقعة المشترطة منتفية يقينًا والواقعة المانعة متحققة نصًا.",
+   "unmet_required_fact": "صدور أمر منع من السفر فعلًا",
+   "triggered_prohibited_fact": "لم يصدر أمر بعدُ؛ السؤال عن احتياطات مستقبلية قبل الإصدار"
+  },
+  {
+   "pair_id": "B2",
+   "verdict": "DOES_NOT_APPLY",
+   "reason": "شرط النص امتناع المدير عن دعوة الجمعية، والسؤال يثبت عكسه صراحةً: المدير «دعا الجمعية العامة للانعقاد في موعدها وحضرها الشركاء جميعًا» — فالواقعة المانعة متحققة نصًا والواقعة المشترطة منتفية يقينًا.",
+   "unmet_required_fact": "امتناع فعلي أو متحقق من المدير عن دعوة الجمعية",
+   "triggered_prohibited_fact": "المدير دعا الجمعية فعلًا في موعدها وانعقدت بحضور الشركاء جميعًا"
+  },
+  {
+   "pair_id": "B3",
+   "verdict": "DOES_NOT_APPLY",
+   "reason": "النص مدة عدم سماع تسري من تاريخ انتهاء عقد العمل، والسؤال ينفي الانتهاء صراحةً («ما زال على رأس عمله ولم ينته عقده») ويقتصر على استفسار عن حق قائم أثناء سريان العقد لا مطالبة/دعوى — فالواقعة المانعة بشقيها متحققة.",
+   "unmet_required_fact": "انتهاء عقد العمل (أو مطالبة/دعوى قائمة بحقوق مترتبة عليه)",
+   "triggered_prohibited_fact": "العقد لم ينته والعامل ما زال على رأس عمله، ولا مطالبة قائمة — مجرد استفسار"
+  },
+  {
+   "pair_id": "C1",
+   "verdict": "APPLIES",
+   "reason": "الواقعة المشترطة مصوغة على التخيير، وشقها الثاني حاضر نصًا: «مطالبته بمستحقاته المالية لدى صاحب العمل» مطالبة بحقوق مترتبة على عقد العمل؛ ولأن المطالبة قائمة فالواقعة المانعة (المركّبة: لا انتهاء ولا مطالبة) غير متحققة، حتى مع سكوت السؤال عن انتهاء العقد.",
+   "unmet_required_fact": null,
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "C2",
+   "verdict": "UNRESOLVED",
+   "reason": "السؤال يثبت نزاعًا تنفيذيًا وقيودًا «قد تمس» السفر، ولا يفصح إن كان أمر منع السفر قد صدر فعلًا أم أن الخشية احتمالية سابقة على الإصدار — فلا الواقعة المشترطة ثابتة ولا نفيها ثابت، والصيغة تحتمل الأمرين.",
+   "unmet_required_fact": "غير محسوم: هل صدر أمر منع من السفر فعلًا أم لا",
+   "triggered_prohibited_fact": null
+  },
+  {
+   "pair_id": "C3",
+   "verdict": "UNRESOLVED",
+   "reason": "السؤال استفسار شريك عن كيفية دعوة الجمعية العامة للانعقاد، ولا يذكر أن المدير طُلب منه ذلك فامتنع، ولا ينفي الامتناع — فواقعة الامتناع المشترطة غير محسومة في أي من الاتجاهين.",
+   "unmet_required_fact": "غير محسوم: وجود امتناع فعلي أو متحقق من المدير عن دعوة الجمعية",
+   "triggered_prohibited_fact": null
+  }
+ ]
+}

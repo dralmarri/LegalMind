@@ -1,0 +1,293 @@
+{
+ "_note": "P2.7-V الأقسام 6 و7 و8 — تصميم بوابة الانطباق. المبدأ الحاكم: **وجود الحافة ≠ انطباقها على هذا السؤال**. طبقة تالية لبوابة النطاق وسابقة لقبول التوسعة.",
+ "_section_8_discipline": "كل شرط أدناه مشتق من **نص المصدر المُسنِد للحافة نفسها** (مقتبس في source_predicate_quote)، لا من تحليل إخفاق في Gold Set. المعيار المطبَّق: هل كنت لأكتب الشرط نفسه لو لم أرَ أي حالة اختبار؟ الشروط التي لم تجتز هذا المعيار لم تُكتب.",
+ "_section_7_no_lexical_patching": "لا شرط مبني على لفظ حالة بعينها. الشروط مصوغة كوقائع لازمة (required_facts) ووقائع مانعة (prohibited_facts) مستخلصة من مناط النص.",
+ "verdicts": {
+  "APPLIES": "الوقائع اللازمة متحققة ولا مانع",
+  "DOES_NOT_APPLY": "واقعة مانعة متحققة أو واقعة لازمة منتفية يقينًا",
+  "UNRESOLVED": "لا تُحسم من نص السؤال"
+ },
+ "hard_rule": "UNRESOLVED لا تتحول إلى APPLIES أبدًا، ولا تُصنَّف REQUIRED؛ تُسجَّل للمراجعة.",
+ "necessity_rule": "حافة CONDITIONAL شرطها المنصوص غير محسوم => تدخل كـCONDITIONAL لا REQUIRED (وهذا سلوك الـgraph الأصلي، بلا تغيير).",
+ "edges": [
+  {
+   "edge_id": "E01",
+   "source": "C_AMR_ADA",
+   "target": "D_PAYMENT_DEMAND",
+   "necessity": "MANDATORY",
+   "supporting_object_ids": [
+    "legis-38-1980-m167"
+   ],
+   "source_predicate_quote": "«على الدائن أن يكلف المدين أولاً بالوفاء... ثم يستصدر أمر بالأداء»",
+   "required_facts": "أن يكون طريق أمر الأداء مطروحًا: صدر أمر أداء فعلًا أو يُنظر في سلوك هذا الطريق",
+   "prohibited_facts": "أن يكون السؤال عن طريق قضائي آخر لا صلة له بأمر الأداء"
+  },
+  {
+   "edge_id": "E02",
+   "source": "C_TRAVEL_BAN",
+   "target": "D_TRAVEL_BAN_LAPSE",
+   "necessity": "MANDATORY",
+   "supporting_object_ids": [
+    "legis-38-1980-m298"
+   ],
+   "source_predicate_quote": "«**يسقط الأمر** سالف الذكر في الأحوال الآتية...»",
+   "required_facts": "أن يكون أمر منع من السفر **قد صدر فعلًا** — النص يحكم سقوط أمر قائم",
+   "prohibited_facts": "ألا يكون قد صدر أمر بعدُ (السؤال عن جواز إصداره ابتداءً أو عن شروطه المستقبلية)"
+  },
+  {
+   "edge_id": "E03",
+   "source": "C_TAFRIQ_DARAR",
+   "target": "D_ARBITRATORS",
+   "necessity": "CONDITIONAL",
+   "supporting_object_ids": [
+    "legis-51-1984-m127",
+    "legis-51-1984-m129"
+   ],
+   "source_predicate_quote": "«وإن **لم يثبت الضرر** عينت حكمين للتوفيق أو التفريق»",
+   "required_facts": "دعوى تفريق/تطليق للضرر مطروحة أو مزمعة",
+   "prohibited_facts": "أن يكون الضرر قد ثبت قطعًا أمام المحكمة (فيُحكم بالتفريق مباشرة)"
+  },
+  {
+   "edge_id": "E04",
+   "source": "C_FAMILY_CLAIM",
+   "target": "D_FAMILY_COURT_JURISDICTION",
+   "necessity": "MANDATORY",
+   "supporting_object_ids": [
+    "legis-12-2015-m6"
+   ],
+   "source_predicate_quote": "«تكون محكمة الأسرة... المختصة دون غيرها بنظر جميع دعاوى الأحوال الشخصية **التي ترفع**»",
+   "required_facts": "دعوى أحوال شخصية تُرفع أو ستُرفع خاضعة للمنظومة الكويتية المقنَّنة",
+   "prohibited_facts": "ألا تكون المسألة من دعاوى الأحوال الشخصية الخاضعة للتقنين الكويتي"
+  },
+  {
+   "edge_id": "E05",
+   "source": "C_DISMISSAL",
+   "target": "D_LABOR_CHALLENGE_ROUTE",
+   "necessity": "MANDATORY",
+   "supporting_object_ids": [
+    "legis-6-2010-m41"
+   ],
+   "source_predicate_quote": "«**للعامل المفصول**... حق الطعن في قرار الفصل أمام الدائرة العمالية المختصة»",
+   "required_facts": "عامل خاضع لقانون العمل الكويتي أُنهيت خدمته أو فُصل",
+   "prohibited_facts": "ألا تكون العلاقة خاضعة لقانون العمل الكويتي"
+  },
+  {
+   "edge_id": "E06",
+   "source": "C_EVICTION_NONPAY",
+   "target": "D_TENANT_CURE",
+   "necessity": "CONDITIONAL",
+   "supporting_object_ids": [
+    "legis-35-1978-m20"
+   ],
+   "source_predicate_quote": "«يجوز للقاضي أن يحكم باعتبار **الدعوى** كأن لم تكن... إذا أثبت المستأجر... وأوفى»",
+   "required_facts": "تأخر المستأجر عن الأجرة مع طرح أثر ذلك على الدعوى أو على بقاء العقد",
+   "prohibited_facts": "ألا يكون هناك تأخر في الأجرة أصلًا"
+  },
+  {
+   "edge_id": "E07",
+   "source": "C_WLL_MANAGER_REMOVAL",
+   "target": "D_JUDICIAL_REMOVAL_GROUNDS",
+   "necessity": "MANDATORY",
+   "supporting_object_ids": [
+    "legis-1-2016-m104"
+   ],
+   "source_predicate_quote": "«يجوز عزل مدير الشركة **بحكم قضائي** — بناءً على طلب شريك... للأسباب التالية»",
+   "required_facts": "طلب عزل مدير شركة ذات مسؤولية محدودة",
+   "prohibited_facts": "أن يكون العزل بقرار الجمعية بالنصاب العادي دون لجوء للقضاء"
+  },
+  {
+   "edge_id": "E08",
+   "source": "C_PATERNITY_CLAIM",
+   "target": "D_PATERNITY_COMMITTEE",
+   "necessity": "MANDATORY",
+   "supporting_object_ids": [
+    "legis-53-2026-m8"
+   ],
+   "source_predicate_quote": "«**لا تقبل دعوى النسب** إلا إذا سبقها تحقيق تجريه اللجنة»",
+   "required_facts": "دعوى إثبات نسب أو نفيه مطروحة أو مزمعة أمام القضاء",
+   "prohibited_facts": "ألا يكون النسب محل نزاع"
+  },
+  {
+   "edge_id": "E09",
+   "source": "C_PATERNITY_CLAIM",
+   "target": "D_COMMITTEE_DEADLINE",
+   "necessity": "MANDATORY",
+   "supporting_object_ids": [
+    "legis-53-2026-m8"
+   ],
+   "source_predicate_quote": "«وعلى اللجنة إحالته... **خلال ستة أشهر**... فإذا انتهت هذه المدة دون البت كان لصاحب الشأن اللجوء إلى القضاء»",
+   "required_facts": "طلب نسب معروض على اللجنة أو سيُعرض عليها (أي حيثما وجب مسار اللجنة)",
+   "prohibited_facts": "ألا يكون مسار اللجنة واجبًا أصلًا"
+  },
+  {
+   "edge_id": "E10",
+   "source": "C_PATERNITY_CLAIM",
+   "target": "D_COMMITTEE_PROCEDURE",
+   "necessity": "MANDATORY",
+   "supporting_object_ids": [
+    "legis-53-2026-m7"
+   ],
+   "source_predicate_quote": "«استدعاء مقدم الطلب... وسماع شهادتهم بعد حلف اليمين... وللجنة أن تأمر بإجراء فحص البصمة الوراثية»",
+   "required_facts": "تحقيق لجنة النسب واجب أو جارٍ في المسألة",
+   "prohibited_facts": "ألا يكون مسار اللجنة واجبًا أصلًا"
+  },
+  {
+   "edge_id": "E11",
+   "source": "C_PATERNITY_CLAIM",
+   "target": "D_PROSECUTION_INTERVENTION",
+   "necessity": "MANDATORY",
+   "supporting_object_ids": [
+    "legis-51-1984-m338",
+    "legis-51-1984-m337"
+   ],
+   "source_predicate_quote": "م338: النظام العام يشمل «دعاوى النسب وتصحيح الأسماء» + م337: على النيابة أن ترفع أو تتدخل «في كل أمر يمس النظام العام»",
+   "required_facts": "دعوى نسب أو تصحيح أسماء مطروحة أمام القضاء",
+   "prohibited_facts": "ألا تكون المسألة من دعاوى النسب أو تصحيح الأسماء"
+  },
+  {
+   "edge_id": "E12",
+   "source": "C_MANAGER_REFUSES_CONVENE",
+   "target": "D_MINISTRY_CONVENING",
+   "necessity": "MANDATORY",
+   "supporting_object_ids": [
+    "legis-1-2016-m111",
+    "regl-1-2016-m65"
+   ],
+   "source_predicate_quote": "«يجوز للوزارة دعوة الجمعية للاجتماع... في الحالات التي يتعين فيها على المدير دعوتها **دون أن يقوم بذلك**»",
+   "required_facts": "امتناع فعلي أو متحقق من المدير عن دعوة الجمعية في حالة يتعين فيها ذلك",
+   "prohibited_facts": "ألا يكون هناك امتناع (المدير دعا الجمعية أو لم يُطلب منه)"
+  },
+  {
+   "edge_id": "E13",
+   "source": "C_MANAGER_REFUSES_CONVENE",
+   "target": "D_MANAGER_CRIMINAL_LIABILITY",
+   "necessity": "CONDITIONAL",
+   "supporting_object_ids": [
+    "legis-1-2016-m304"
+   ],
+   "source_predicate_quote": "«كل... مدير **امتنع عمدًا ودون عذر مقبول بعد مرور شهر من إنذاره رسميًا** عن عقد اجتماع الجمعية»",
+   "required_facts": "امتناع المدير عن عقد الجمعية في حالة يوجبها القانون",
+   "prohibited_facts": "ألا يكون هناك امتناع أصلًا"
+  },
+  {
+   "edge_id": "E14",
+   "source": "C_CHEQUE_PRESCRIPTION",
+   "target": "D_UNJUST_ENRICHMENT_ROUTE",
+   "necessity": "MANDATORY",
+   "supporting_object_ids": [
+    "legis-68-1980-m553"
+   ],
+   "source_predicate_quote": "«**لا يحول تقادم دعوى المطالبة بقيمة الشيك** دون... مطالبة الساحب... برد ما أثري به دون حق»",
+   "required_facts": "شيك لحقه التقادم الصرفي أو يُبحث أثر تقادمه",
+   "prohibited_facts": "ألا يكون هناك شيك ولا تقادم صرفي مطروح"
+  },
+  {
+   "edge_id": "E15",
+   "source": "C_CRIMINAL_AND_CIVIL",
+   "target": "D_CIVIL_CRIMINAL_INDEPENDENCE",
+   "necessity": "MANDATORY",
+   "supporting_object_ids": [
+    "jprin-1068-2004-f808-18c18f6704"
+   ],
+   "source_predicate_quote": "«الحكم الجزائي الصادر بالإدانة... لا حجية له في مدى أحقية المستفيد لقيمة الشيك»",
+   "required_facts": "اجتماع مسار جزائي ومسار مدني عن الشيك نفسه",
+   "prohibited_facts": "ألا يوجد مسار جزائي مطروح"
+  },
+  {
+   "edge_id": "E16",
+   "source": "C_TORT_LIABILITY",
+   "target": "D_NON_DISCERNMENT",
+   "necessity": "MANDATORY",
+   "supporting_object_ids": [
+    "legis-67-1980-m227"
+   ],
+   "source_predicate_quote": "«**ويلتزم الشخص بتعويض** الضرر الناشئ عن فعله الخاطئ ولو كان غير مميز»",
+   "required_facts": "أن يكون **التزام محدث الضرر بالتعويض** أو نطاق مسؤوليته الشخصية محل السؤال",
+   "prohibited_facts": "أن يكون السؤال محصورًا في مسألة إجرائية أو زمنية (كمدة التقادم وبدء سريانها) لا في قيام المسؤولية ونطاقها"
+  },
+  {
+   "edge_id": "E17",
+   "source": "C_ATTACHMENT_FOR_DEBT",
+   "target": "D_DEBTOR_ASSETS_GUARANTEE",
+   "necessity": "MANDATORY",
+   "supporting_object_ids": [
+    "legis-67-1980-m307"
+   ],
+   "source_predicate_quote": "«**أموال المدين جميعها** ضامنة للوفاء بديونه»",
+   "required_facts": "مسألة في الضمان العام لأموال المدين أو في استثناء منه (حجز، امتياز، حصانة أموال)",
+   "prohibited_facts": "ألا تكون المسألة في الضمان العام ولا في استثناء منه"
+  },
+  {
+   "edge_id": "E18",
+   "source": "C_BUSINESS_SALE",
+   "target": "D_SELLER_AUCTION_RIGHT",
+   "necessity": "CONDITIONAL",
+   "supporting_object_ids": [
+    "legis-68-1980-m44"
+   ],
+   "source_predicate_quote": "«**إذا لم يوف صاحب المتجر بالثمن أو بباقيه**... جاز... بيع مقومات المتجر بالمزاد»",
+   "required_facts": "بيع متجر مطروح أو قائم",
+   "prohibited_facts": "ألا يكون هناك بيع متجر"
+  },
+  {
+   "edge_id": "E19",
+   "source": "C_ELECTRONIC_TRANSACTIONS",
+   "target": "D_ELECTRONIC_EQUIVALENCE",
+   "necessity": "MANDATORY",
+   "supporting_object_ids": [
+    "legis-20-2014-m3"
+   ],
+   "source_predicate_quote": "«يكون كل من السجل والمستند... الإلكتروني منتجًا لذات الآثار القانونية... بما في ذلك التسجيل أو الإشهار»",
+   "required_facts": "مسألة في حجية أو نطاق سريان المعاملات الإلكترونية",
+   "prohibited_facts": "ألا تكون المسألة في المعاملات الإلكترونية"
+  },
+  {
+   "edge_id": "E20",
+   "source": "C_NATIONAL_SERVICE",
+   "target": "D_SERVICE_CERTIFICATE_FOR_APPOINTMENT",
+   "necessity": "MANDATORY",
+   "supporting_object_ids": [
+    "LEG-20-3-bcffde99b733e588"
+   ],
+   "source_predicate_quote": "«**يشترط للتعيين** في أي من الوظائف... أو منح ترخيص بمزاولة مهنة حرة، تقديم شهادة أداء الخدمة العاملة أو تأجيلها أو الاستثناء أو الإعفاء منها»",
+   "required_facts": "مسألة في الخدمة الوطنية أو في أثرها على التعيين أو مزاولة المهنة",
+   "prohibited_facts": "ألا تكون المسألة في الخدمة الوطنية ولا في أثرها"
+  },
+  {
+   "edge_id": "E21",
+   "source": "C_MAINTENANCE_CLAIM",
+   "target": "D_RETROACTIVE_MAINTENANCE_LIMIT",
+   "necessity": "MANDATORY",
+   "supporting_object_ids": [
+    "legis-51-1984-m78"
+   ],
+   "source_predicate_quote": "«**ولا تسمع الدعوى بها عن مدة سابقة** تزيد على سنتين نهايتهما تاريخ رفع الدعوى»",
+   "required_facts": "مطالبة بنفقة مطروحة أو مزمعة",
+   "prohibited_facts": "ألا تكون هناك مطالبة بنفقة"
+  },
+  {
+   "edge_id": "E22",
+   "source": "C_LABOR_CLAIM",
+   "target": "D_LABOR_LIMITATION",
+   "necessity": "MANDATORY",
+   "supporting_object_ids": [
+    "legis-6-2010-m144"
+   ],
+   "source_predicate_quote": "«**لا تسمع عند الإنكار بمضي سنة من تاريخ انتهاء عقد العمل** الدعاوى التي يرفعها العمال»",
+   "required_facts": "دعوى عمالية بعد انتهاء عقد العمل أو مطالبة بحقوق مترتبة عليه",
+   "prohibited_facts": "ألا يكون عقد العمل قد انتهى ولا مطالبة قائمة"
+  },
+  {
+   "edge_id": "E23",
+   "source": "C_EVICTION_NONPAY",
+   "target": "D_RENT_DEPOSIT",
+   "necessity": "MANDATORY",
+   "supporting_object_ids": [
+    "legis-35-1978-m10"
+   ],
+   "source_predicate_quote": "«**وللمستأجر أن يودع الأجرة** المستحقة خزانة إدارة التنفيذ بعد عرضها... فإذا حصل الإيداع خلال عشرين يومًا... اعتبر وفاءً»",
+   "required_facts": "مسألة في وفاء المستأجر بالأجرة أو في أثر تأخره",
+   "prohibited_facts": "ألا تكون المسألة في الوفاء بالأجرة"
+  }
+ ]
+}

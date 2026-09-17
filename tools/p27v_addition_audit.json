@@ -1,0 +1,741 @@
+{
+ "_note": "P2.7-V الأقسام 2 و3 — تدقيق قانوني مستقل لـ**كل** إضافة أنتجتها P2.7 (37 إضافة، صفر عيّنة). القرار في كل بند اتُّخذ بقراءة السؤال ونص المصدر المُسنِد، لا باشتقاقه من الحقيقة الأرضية. **لم تُعدَّل الحقيقة الأرضية بناءً على أي تصنيف هنا.**",
+ "definitions": {
+  "TRUE_REQUIRED": "البُعد واجب قانونًا في هذه الوقائع بنص محقق",
+  "TRUE_CONDITIONAL": "واجب بشرط منصوص في المصدر، والشرط غير محسوم بوقائع السؤال",
+  "TRUE_POSSIBLE": "صحيح قانونًا ومنطبق، لكنه ليس لازمًا لإجابة السؤال كما صيغ",
+  "FALSE_SCOPE": "أُطلق على سؤال خارج نطاق المنظومة القانونية الكويتية المقنَّنة",
+  "FALSE_APPLICABILITY": "الحافة قائمة قانونًا لكن شرط انطباقها غير متحقق في وقائع السؤال",
+  "DUPLICATE": "مكرر لبُعد آخر في نفس الجولة",
+  "GROUND_TRUTH_POSSIBLE_OMISSION": "صحيح وواجب قانونًا وغائب عن الحقيقة الأرضية — مرشح قصور فيها لا خطأ في الـgraph",
+  "UNRESOLVED": "لا يمكن الحسم من المتاح"
+ },
+ "n_additions_all": 37,
+ "n_additions_loco_clean": 26,
+ "distribution_all": {
+  "TRUE_REQUIRED": 18,
+  "TRUE_CONDITIONAL": 5,
+  "GROUND_TRUTH_POSSIBLE_OMISSION": 7,
+  "TRUE_POSSIBLE": 4,
+  "FALSE_APPLICABILITY": 1,
+  "FALSE_SCOPE": 2
+ },
+ "distribution_loco_clean": {
+  "TRUE_REQUIRED": 9,
+  "TRUE_CONDITIONAL": 3,
+  "GROUND_TRUTH_POSSIBLE_OMISSION": 7,
+  "TRUE_POSSIBLE": 4,
+  "FALSE_APPLICABILITY": 1,
+  "FALSE_SCOPE": 2
+ },
+ "audit": [
+  {
+   "case_id": "gs-0001",
+   "seed_concept": "C_AMR_ADA",
+   "seed_surface_form": "أمر أداء",
+   "edge_id": "E01",
+   "relation": "PRECEDES",
+   "target_dimension": "D_PAYMENT_DEMAND",
+   "target_label": "التكليف بالوفاء قبل استصدار أمر الأداء",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-38-1980-m167"
+   ],
+   "gold_match": "mandatory_payment_demand",
+   "critical": true,
+   "loco_clean": true,
+   "legal_decision": "TRUE_REQUIRED",
+   "legal_reasoning": "م167 مرافعات تجعل التكليف بالوفاء بميعاد عشرة أيام شرطًا سابقًا لاستصدار الأمر، والسؤال عن أمر أداء صدر فعلًا ضد الموكل — فبطلان التكليف أو انعدامه سبب إلغاء مباشر."
+  },
+  {
+   "case_id": "gs-0001",
+   "seed_concept": "C_TRAVEL_BAN",
+   "seed_surface_form": "منع من السفر",
+   "edge_id": "E02",
+   "relation": "EXCEPTION_CHECK",
+   "target_dimension": "D_TRAVEL_BAN_LAPSE",
+   "target_label": "حالات سقوط أمر المنع من السفر",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-38-1980-m298"
+   ],
+   "gold_match": "travel_ban_lifting_grounds",
+   "critical": true,
+   "loco_clean": true,
+   "legal_decision": "TRUE_REQUIRED",
+   "legal_reasoning": "السؤال عن منع من السفر قائم فعلًا؛ وم298 تعدّد حالات سقوط الأمر ومنها سقوط شرط من شروطه — وهي طريق الخلاص العملي للموكل."
+  },
+  {
+   "case_id": "gs-0002",
+   "seed_concept": "C_CRIMINAL_AND_CIVIL",
+   "seed_surface_form": "ملاحقة الساحب جزائيا",
+   "edge_id": "E15",
+   "relation": "CHECKS",
+   "target_dimension": "D_CIVIL_CRIMINAL_INDEPENDENCE",
+   "target_label": "استقلال الدعوى المدنية عن نتيجة الدعوى الجزائية في الشيك",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "jprin-1068-2004-f808-18c18f6704"
+   ],
+   "gold_match": "civil_criminal_independence",
+   "critical": false,
+   "loco_clean": false,
+   "legal_decision": "TRUE_REQUIRED",
+   "legal_reasoning": "السؤال يجمع الملاحقة الجزائية والمطالبة المدنية عن الشيك نفسه، واستقلال المسارين (مبدأ 1068/2004) محدِّد مباشر لأثر الحكم الجزائي على المطالبة المدنية."
+  },
+  {
+   "case_id": "gs-0003",
+   "seed_concept": "C_TAFRIQ_DARAR",
+   "seed_surface_form": "التطليق للضرر",
+   "edge_id": "E03",
+   "relation": "REQUIRES",
+   "target_dimension": "D_ARBITRATORS",
+   "target_label": "بعث حكمين للتوفيق أو التفريق عند عدم ثبوت الضرر",
+   "necessity": "CONDITIONAL",
+   "condition": "ألا يثبت الضرر أمام المحكمة",
+   "supporting_object_ids": [
+    "legis-51-1984-m127",
+    "legis-51-1984-m129"
+   ],
+   "gold_match": "hakamayn_arbitration_when_harm_unproven",
+   "critical": true,
+   "loco_clean": true,
+   "legal_decision": "TRUE_CONDITIONAL",
+   "legal_reasoning": "م127 تعلّق بعث الحكمين على عدم ثبوت الضرر صراحةً؛ والسؤال لا يحسم ثبوته، فالبُعد واجب بشرطه المنصوص لا مطلقًا."
+  },
+  {
+   "case_id": "gs-0003",
+   "seed_concept": "C_FAMILY_CLAIM",
+   "seed_surface_form": "دعوى التطليق",
+   "edge_id": "E04",
+   "relation": "JURISDICTION_CHECK",
+   "target_dimension": "D_FAMILY_COURT_JURISDICTION",
+   "target_label": "اختصاص محكمة الأسرة بجميع دعاوى الأسرة",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-12-2015-m6"
+   ],
+   "gold_match": "family_court_jurisdiction",
+   "critical": false,
+   "loco_clean": true,
+   "legal_decision": "TRUE_REQUIRED",
+   "legal_reasoning": "دعوى تطليق ونفقة معًا، وم6 محكمة الأسرة تجعلها المختصة دون غيرها بجميع دعاوى الأسرة بما فيها النفقات — تحديد المحكمة شرط عملي لرفع الدعوى."
+  },
+  {
+   "case_id": "gs-0003",
+   "seed_concept": "C_MAINTENANCE_CLAIM",
+   "seed_surface_form": "تطلب نفقة",
+   "edge_id": "E21",
+   "relation": "SUBJECT_TO",
+   "target_dimension": "D_RETROACTIVE_MAINTENANCE_LIMIT",
+   "target_label": "حدّ سماع دعوى النفقة عن مدة سابقة (سنتان)",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-51-1984-m78"
+   ],
+   "gold_match": "retroactive_maintenance_time_limit",
+   "critical": true,
+   "loco_clean": false,
+   "legal_decision": "TRUE_REQUIRED",
+   "legal_reasoning": "السؤال يطلب نفقة صراحةً، وم78/ب تمنع سماع الدعوى بها عن مدة سابقة تزيد على سنتين — حدّ حاكم على مقدار المطلوب."
+  },
+  {
+   "case_id": "gs-0005",
+   "seed_concept": "C_DISMISSAL",
+   "seed_surface_form": "فصل تعسفي",
+   "edge_id": "E05",
+   "relation": "JURISDICTION_CHECK",
+   "target_dimension": "D_LABOR_CHALLENGE_ROUTE",
+   "target_label": "حق الطعن في قرار الفصل أمام الدائرة العمالية المختصة",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-6-2010-m41"
+   ],
+   "gold_match": "labor_dispute_challenge_route",
+   "critical": true,
+   "loco_clean": true,
+   "legal_decision": "TRUE_REQUIRED",
+   "legal_reasoning": "م41(ج) عمل تقرر حق الطعن في قرار الفصل أمام الدائرة العمالية المختصة وتربط التعويض بحكم نهائي بالتعسف — وهي طريق المطالبة نفسه المسؤول عنه."
+  },
+  {
+   "case_id": "gs-0005",
+   "seed_concept": "C_LABOR_CLAIM",
+   "seed_surface_form": "مكافأة نهاية الخدمة",
+   "edge_id": "E22",
+   "relation": "SUBJECT_TO",
+   "target_dimension": "D_LABOR_LIMITATION",
+   "target_label": "عدم سماع الدعاوى العمالية بمضي سنة من انتهاء العقد",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-6-2010-m144"
+   ],
+   "gold_match": null,
+   "critical": null,
+   "loco_clean": true,
+   "legal_decision": "GROUND_TRUTH_POSSIBLE_OMISSION",
+   "legal_reasoning": "م144 عمل تمنع سماع دعاوى العمال بمضي سنة من انتهاء العقد — حاجز قانوني حاسم على الدعوى موضوع السؤال. وهو مُدرَج في حقيقة gs-0035 (سؤال مطابق موضوعيًا) وغائب هنا."
+  },
+  {
+   "case_id": "gs-0006",
+   "seed_concept": "C_EVICTION_NONPAY",
+   "seed_surface_form": "إخلاء المستأجر",
+   "edge_id": "E06",
+   "relation": "EXCEPTION_CHECK",
+   "target_dimension": "D_TENANT_CURE",
+   "target_label": "اعتبار دعوى الإخلاء كأن لم تكن عند الوفاء حتى أول جلسة بعذر مقبول",
+   "necessity": "CONDITIONAL",
+   "condition": "أن يثبت المستأجر عذرًا قويًا تقبله المحكمة وأن يوفي بجميع الأجرة المستحقة حتى نهاية أول جلسة أُعلن بها إعلانًا صحيحًا",
+   "supporting_object_ids": [
+    "legis-35-1978-m20"
+   ],
+   "gold_match": "tenant_cure_defense",
+   "critical": true,
+   "loco_clean": true,
+   "legal_decision": "TRUE_CONDITIONAL",
+   "legal_reasoning": "م20/1 إيجار تعلّق اعتبار الدعوى كأن لم تكن على عذر قوي تقبله المحكمة ووفاء حتى أول جلسة — شرطان منصوصان غير محسومين بوقائع السؤال."
+  },
+  {
+   "case_id": "gs-0006",
+   "seed_concept": "C_EVICTION_NONPAY",
+   "seed_surface_form": "إخلاء المستأجر",
+   "edge_id": "E23",
+   "relation": "CHECKS",
+   "target_dimension": "D_RENT_DEPOSIT",
+   "target_label": "إيداع الأجرة خزانة إدارة التنفيذ بعد العرض القانوني خلال عشرين يومًا كوفاء معتبر",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-35-1978-m10"
+   ],
+   "gold_match": null,
+   "critical": null,
+   "loco_clean": true,
+   "legal_decision": "GROUND_TRUTH_POSSIBLE_OMISSION",
+   "legal_reasoning": "م10 إيجار تجعل الإيداع خزانة إدارة التنفيذ خلال عشرين يومًا بعد العرض القانوني وفاءً معتبرًا — أي أن «عدم السداد» المدّعى قد يكون وفاءً صحيحًا. مُدرَج في حقيقة gs-0021 وغائب هنا."
+  },
+  {
+   "case_id": "gs-0009",
+   "seed_concept": "C_WLL_MANAGER_REMOVAL",
+   "seed_surface_form": "عزل المدير",
+   "edge_id": "E07",
+   "relation": "DEPENDS_ON",
+   "target_dimension": "D_JUDICIAL_REMOVAL_GROUNDS",
+   "target_label": "شروط العزل القضائي للمدير: نصاب ربع رأس المال وأسباب الغش أو الضرر الجسيم",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-1-2016-m104"
+   ],
+   "gold_match": "judicial_removal_specific_grounds",
+   "critical": true,
+   "loco_clean": true,
+   "legal_decision": "TRUE_REQUIRED",
+   "legal_reasoning": "م104 شركات تحصر العزل القضائي في نصاب ربع رأس المال وأسباب الغش أو الخطأ الجسيم — شروط قبول الطلب المسؤول عنه حرفيًا."
+  },
+  {
+   "case_id": "gs-0011",
+   "seed_concept": "C_PATERNITY_CLAIM",
+   "seed_surface_form": "إثبات النسب",
+   "edge_id": "E08",
+   "relation": "PRECEDES",
+   "target_dimension": "D_PATERNITY_COMMITTEE",
+   "target_label": "وجوب سبق تحقيق لجنة دعاوى النسب قبل قبول الدعوى",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-53-2026-m8"
+   ],
+   "gold_match": "lijnat_alnasab_wujubiya",
+   "critical": true,
+   "loco_clean": true,
+   "legal_decision": "TRUE_REQUIRED",
+   "legal_reasoning": "م8 دعاوى النسب: «لا تقبل دعوى النسب إلا إذا سبقها تحقيق تجريه اللجنة» — شرط قبول صريح لدعوى موضوع السؤال."
+  },
+  {
+   "case_id": "gs-0011",
+   "seed_concept": "C_PATERNITY_CLAIM",
+   "seed_surface_form": "إثبات النسب",
+   "edge_id": "E09",
+   "relation": "SUBJECT_TO",
+   "target_dimension": "D_COMMITTEE_DEADLINE",
+   "target_label": "مهلة اللجنة (ستة أشهر/ثلاثة عند اللعان) وأثر انقضائها على فتح باب القضاء",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-53-2026-m8"
+   ],
+   "gold_match": null,
+   "critical": null,
+   "loco_clean": true,
+   "legal_decision": "GROUND_TRUTH_POSSIBLE_OMISSION",
+   "legal_reasoning": "السؤال يطلب «إجراءات إثبات النسب»؛ ومهلة اللجنة (ستة أشهر/ثلاثة عند اللعان) وفتح باب القضاء بانقضائها منصوصان في م8 نفسها التي أُسندت بها وجوبية اللجنة — جزء من الإجراء لا زيادة عليه."
+  },
+  {
+   "case_id": "gs-0011",
+   "seed_concept": "C_PATERNITY_CLAIM",
+   "seed_surface_form": "إثبات النسب",
+   "edge_id": "E10",
+   "relation": "CHECKS",
+   "target_dimension": "D_COMMITTEE_PROCEDURE",
+   "target_label": "إجراءات تحقيق اللجنة (سماع الشهود وفحص البصمة الوراثية)",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-53-2026-m7"
+   ],
+   "gold_match": null,
+   "critical": null,
+   "loco_clean": true,
+   "legal_decision": "GROUND_TRUTH_POSSIBLE_OMISSION",
+   "legal_reasoning": "م7 تحدد كيفية التحقيق (سماع الشهود بعد اليمين، الأمر بالبصمة الوراثية) وهي جوهر «الإجراءات» المسؤول عنها. ومُدرَجة في حقيقة gs-0033 لنفس الموضوع."
+  },
+  {
+   "case_id": "gs-0011",
+   "seed_concept": "C_PATERNITY_CLAIM",
+   "seed_surface_form": "إثبات النسب",
+   "edge_id": "E11",
+   "relation": "REQUIRES",
+   "target_dimension": "D_PROSECUTION_INTERVENTION",
+   "target_label": "وجوب تدخل النيابة العامة في دعاوى النسب باعتبارها من النظام العام",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-51-1984-m338",
+    "legis-51-1984-m337"
+   ],
+   "gold_match": "tadakhkhul_alniyaba_alamma_wujubi",
+   "critical": true,
+   "loco_clean": false,
+   "legal_decision": "TRUE_REQUIRED",
+   "legal_reasoning": "م338 تدرج دعاوى النسب ضمن النظام العام نصًّا، وم337 توجب على النيابة رفع الدعوى أو التدخل في كل أمر يمسه — طرف وجوبي ثالث يُبطل إغفاله الإجراء."
+  },
+  {
+   "case_id": "gs-0012",
+   "seed_concept": "C_BUSINESS_SALE",
+   "seed_surface_form": "بيع محل تجاري",
+   "edge_id": "E18",
+   "relation": "DEPENDS_ON",
+   "target_dimension": "D_SELLER_AUCTION_RIGHT",
+   "target_label": "حق البائع أو الدائن المرتهن في طلب بيع مقومات المتجر بالمزاد عند عدم الوفاء",
+   "necessity": "CONDITIONAL",
+   "condition": "ألا يوفي صاحب المتجر بالثمن أو بباقيه للبائع أو بالدين في تاريخ استحقاقه للدائن المرتهن",
+   "supporting_object_ids": [
+    "legis-68-1980-m44"
+   ],
+   "gold_match": "haqq_albaie_ind_adam_alwafa",
+   "critical": false,
+   "loco_clean": false,
+   "legal_decision": "TRUE_CONDITIONAL",
+   "legal_reasoning": "م44 تجارة تعلّق حق طلب بيع مقومات المتجر بالمزاد على عدم وفاء صاحب المتجر بالثمن أو باقيه — شرط منصوص، والسؤال طلب صيغة عقد فالشرط غير محقق بعد."
+  },
+  {
+   "case_id": "gs-0013",
+   "seed_concept": "C_AMR_ADA",
+   "seed_surface_form": "أمر أداء",
+   "edge_id": "E01",
+   "relation": "PRECEDES",
+   "target_dimension": "D_PAYMENT_DEMAND",
+   "target_label": "التكليف بالوفاء قبل استصدار أمر الأداء",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-38-1980-m167"
+   ],
+   "gold_match": null,
+   "critical": null,
+   "loco_clean": true,
+   "legal_decision": "GROUND_TRUTH_POSSIBLE_OMISSION",
+   "legal_reasoning": "السؤال ينص حرفيًا «وما شروط استصدار أمر الأداء وإجراءاته»؛ والتكليف بالوفاء (م167) إجراء سابق وجوبي يُلغى الأمر لبطلانه. أوضح حالة قصور محتمل في الحقيقة الأرضية عبر الملف كله."
+  },
+  {
+   "case_id": "gs-0013",
+   "seed_concept": "C_TRAVEL_BAN",
+   "seed_surface_form": "منع من السفر",
+   "edge_id": "E02",
+   "relation": "EXCEPTION_CHECK",
+   "target_dimension": "D_TRAVEL_BAN_LAPSE",
+   "target_label": "حالات سقوط أمر المنع من السفر",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-38-1980-m298"
+   ],
+   "gold_match": null,
+   "critical": null,
+   "loco_clean": true,
+   "legal_decision": "TRUE_POSSIBLE",
+   "legal_reasoning": "السؤال يتطرق لمنع المدير من السفر جوازًا؛ وحالات سقوط الأمر (م298) صحيحة قانونًا ومفيدة، لكنها ليست شرط إجابة السؤال كما صيغ."
+  },
+  {
+   "case_id": "gs-0014",
+   "seed_concept": "C_NATIONAL_SERVICE",
+   "seed_surface_form": "الخدمة الوطنية",
+   "edge_id": "E20",
+   "relation": "CHECKS",
+   "target_dimension": "D_SERVICE_CERTIFICATE_FOR_APPOINTMENT",
+   "target_label": "اشتراط شهادة أداء/تأجيل/إعفاء الخدمة الوطنية للتعيين",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "LEG-20-3-bcffde99b733e588"
+   ],
+   "gold_match": "shahadat_ada_alkhidma_shart_altayeen",
+   "critical": false,
+   "loco_clean": false,
+   "legal_decision": "TRUE_REQUIRED",
+   "legal_reasoning": "م3 الخدمة الوطنية تشترط شهادة الأداء أو التأجيل أو الإعفاء للتعيين ومزاولة المهن — الأثر العملي المباشر لوضع المستدعى المسؤول عنه."
+  },
+  {
+   "case_id": "gs-0016",
+   "seed_concept": "C_TORT_LIABILITY",
+   "seed_surface_form": "المسؤولية عن الفعل الضار",
+   "edge_id": "E16",
+   "relation": "CHECKS",
+   "target_dimension": "D_NON_DISCERNMENT",
+   "target_label": "بقاء الالتزام بالتعويض ولو كان محدث الضرر غير مميز",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-67-1980-m227"
+   ],
+   "gold_match": "liability_despite_non_discernment",
+   "critical": false,
+   "loco_clean": false,
+   "legal_decision": "TRUE_REQUIRED",
+   "legal_reasoning": "السؤال يسأل عن حكم م227 ونطاق المسؤولية عن الفعل الضار؛ وم227/2 نفسها تقرر الالتزام بالتعويض «ولو كان غير مميز» — جزء من نص المادة المسؤول عنها."
+  },
+  {
+   "case_id": "gs-0018",
+   "seed_concept": "C_TORT_LIABILITY",
+   "seed_surface_form": "المسؤولية التقصيرية",
+   "edge_id": "E16",
+   "relation": "CHECKS",
+   "target_dimension": "D_NON_DISCERNMENT",
+   "target_label": "بقاء الالتزام بالتعويض ولو كان محدث الضرر غير مميز",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-67-1980-m227"
+   ],
+   "gold_match": null,
+   "critical": null,
+   "loco_clean": true,
+   "legal_decision": "FALSE_APPLICABILITY",
+   "legal_reasoning": "السؤال محصور في **مدة التقادم** ومبدأ سريانها. وم227/2 قاعدة موضوعية في أهلية محدث الضرر، ولا واقعة في السؤال تثير انعدام التمييز أصلًا. الحافة قائمة قانونًا وغير منطبقة على هذا السؤال."
+  },
+  {
+   "case_id": "gs-0021",
+   "seed_concept": "C_EVICTION_NONPAY",
+   "seed_surface_form": "تأخر المستأجر",
+   "edge_id": "E06",
+   "relation": "EXCEPTION_CHECK",
+   "target_dimension": "D_TENANT_CURE",
+   "target_label": "اعتبار دعوى الإخلاء كأن لم تكن عند الوفاء حتى أول جلسة بعذر مقبول",
+   "necessity": "CONDITIONAL",
+   "condition": "أن يثبت المستأجر عذرًا قويًا تقبله المحكمة وأن يوفي بجميع الأجرة المستحقة حتى نهاية أول جلسة أُعلن بها إعلانًا صحيحًا",
+   "supporting_object_ids": [
+    "legis-35-1978-m20"
+   ],
+   "gold_match": null,
+   "critical": null,
+   "loco_clean": true,
+   "legal_decision": "GROUND_TRUTH_POSSIBLE_OMISSION",
+   "legal_reasoning": "السؤال عن «أثر تأخر المستأجر على استمرار عقد الإيجار»، وم20/1 هي النص الحاكم لهذا الأثر بعينه (اعتبار دعوى الإخلاء كأن لم تكن). مُدرَجة في حقيقة gs-0006 وغائبة هنا."
+  },
+  {
+   "case_id": "gs-0021",
+   "seed_concept": "C_EVICTION_NONPAY",
+   "seed_surface_form": "تأخر المستأجر",
+   "edge_id": "E23",
+   "relation": "CHECKS",
+   "target_dimension": "D_RENT_DEPOSIT",
+   "target_label": "إيداع الأجرة خزانة إدارة التنفيذ بعد العرض القانوني خلال عشرين يومًا كوفاء معتبر",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-35-1978-m10"
+   ],
+   "gold_match": "late_payment_deposit_mechanism",
+   "critical": false,
+   "loco_clean": false,
+   "legal_decision": "TRUE_REQUIRED",
+   "legal_reasoning": "م10 إيجار تحدد آلية الإيداع التي تجعل الأجرة المتأخرة موفاة في موعدها — صلب السؤال عن التزام المستأجر وأثر التأخر."
+  },
+  {
+   "case_id": "gs-0023",
+   "seed_concept": "C_FAMILY_CLAIM",
+   "seed_surface_form": "محكمة الأسرة",
+   "edge_id": "E04",
+   "relation": "JURISDICTION_CHECK",
+   "target_dimension": "D_FAMILY_COURT_JURISDICTION",
+   "target_label": "اختصاص محكمة الأسرة بجميع دعاوى الأسرة",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-12-2015-m6"
+   ],
+   "gold_match": null,
+   "critical": null,
+   "loco_clean": true,
+   "legal_decision": "TRUE_POSSIBLE",
+   "legal_reasoning": "السؤال يسمّي محكمة الأسرة بنفسه ويسأل عن الإجراء الوجوبي السابق؛ فبيان الاختصاص (م6) صحيح قانونًا ولا يضيف إلى ما سُئل عنه."
+  },
+  {
+   "case_id": "gs-0025",
+   "seed_concept": "C_DISMISSAL",
+   "seed_surface_form": "الفصل التعسفي",
+   "edge_id": "E05",
+   "relation": "JURISDICTION_CHECK",
+   "target_dimension": "D_LABOR_CHALLENGE_ROUTE",
+   "target_label": "حق الطعن في قرار الفصل أمام الدائرة العمالية المختصة",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-6-2010-m41"
+   ],
+   "gold_match": null,
+   "critical": null,
+   "loco_clean": true,
+   "legal_decision": "FALSE_SCOPE",
+   "legal_reasoning": "السؤال عن **القانون المصري** صراحةً. لا يجوز للـgraph الكويتية أن تضيف مسار الطعن العمالي الكويتي على سؤال عن نظام قانوني أجنبي مهما تطابق المفهوم لفظيًا."
+  },
+  {
+   "case_id": "gs-0029",
+   "seed_concept": "C_ELECTRONIC_TRANSACTIONS",
+   "seed_surface_form": "المعاملات الإلكترونية",
+   "edge_id": "E19",
+   "relation": "CHECKS",
+   "target_dimension": "D_ELECTRONIC_EQUIVALENCE",
+   "target_label": "حجية السجل والتوقيع الإلكتروني ومساواتهما بالورقي بما في ذلك التسجيل والإشهار",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-20-2014-m3"
+   ],
+   "gold_match": "legal_effect_equivalence_m3",
+   "critical": false,
+   "loco_clean": false,
+   "legal_decision": "TRUE_REQUIRED",
+   "legal_reasoning": "السؤال عن نطاق سريان قانون المعاملات الإلكترونية واستثناءاته، وم3 هي مادة المساواة في الأثر القانوني التي تُقاس عليها الاستثناءات."
+  },
+  {
+   "case_id": "gs-0030",
+   "seed_concept": "C_ATTACHMENT_FOR_DEBT",
+   "seed_surface_form": "يوقع حجزًا",
+   "edge_id": "E17",
+   "relation": "DEPENDS_ON",
+   "target_dimension": "D_DEBTOR_ASSETS_GUARANTEE",
+   "target_label": "الأصل العام: أموال المدين جميعها ضامنة للوفاء بديونه",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-67-1980-m307"
+   ],
+   "gold_match": "general_rule_debtor_assets_guarantee",
+   "critical": false,
+   "loco_clean": false,
+   "legal_decision": "TRUE_REQUIRED",
+   "legal_reasoning": "السؤال عن حجز على أموال الدولة، وم307/1 «أموال المدين جميعها ضامنة للوفاء بديونه» هي الأصل العام الذي يُبنى عليه الاستثناء المسؤول عنه."
+  },
+  {
+   "case_id": "gs-0032",
+   "seed_concept": "C_FAMILY_CLAIM",
+   "seed_surface_form": "دعوى التفريق",
+   "edge_id": "E04",
+   "relation": "JURISDICTION_CHECK",
+   "target_dimension": "D_FAMILY_COURT_JURISDICTION",
+   "target_label": "اختصاص محكمة الأسرة بجميع دعاوى الأسرة",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-12-2015-m6"
+   ],
+   "gold_match": null,
+   "critical": null,
+   "loco_clean": true,
+   "legal_decision": "TRUE_POSSIBLE",
+   "legal_reasoning": "الدعوى مرفوعة بالفعل والمحكمة منعقدة؛ فبيان اختصاص محكمة الأسرة صحيح قانونًا وخارج محور السؤال (واجب المحكمة عند عدم ثبوت الضرر)."
+  },
+  {
+   "case_id": "gs-0033",
+   "seed_concept": "C_PATERNITY_CLAIM",
+   "seed_surface_form": "إثبات النسب",
+   "edge_id": "E09",
+   "relation": "SUBJECT_TO",
+   "target_dimension": "D_COMMITTEE_DEADLINE",
+   "target_label": "مهلة اللجنة (ستة أشهر/ثلاثة عند اللعان) وأثر انقضائها على فتح باب القضاء",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-53-2026-m8"
+   ],
+   "gold_match": "committee_decision_deadline_and_court_access",
+   "critical": true,
+   "loco_clean": true,
+   "legal_decision": "TRUE_REQUIRED",
+   "legal_reasoning": "السؤال عن الشرط الإجرائي قبل قبول الدعوى، ومهلة اللجنة وأثر انقضائها على فتح باب القضاء (م8) جزء لا ينفصل عن ذلك الشرط."
+  },
+  {
+   "case_id": "gs-0033",
+   "seed_concept": "C_PATERNITY_CLAIM",
+   "seed_surface_form": "إثبات النسب",
+   "edge_id": "E10",
+   "relation": "CHECKS",
+   "target_dimension": "D_COMMITTEE_PROCEDURE",
+   "target_label": "إجراءات تحقيق اللجنة (سماع الشهود وفحص البصمة الوراثية)",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-53-2026-m7"
+   ],
+   "gold_match": "committee_investigation_procedure",
+   "critical": false,
+   "loco_clean": true,
+   "legal_decision": "TRUE_REQUIRED",
+   "legal_reasoning": "م7 تحدد التحقيق الذي يشترط م8 سبقه — فلا يُفهم الشرط الإجرائي بدونها."
+  },
+  {
+   "case_id": "gs-0033",
+   "seed_concept": "C_PATERNITY_CLAIM",
+   "seed_surface_form": "إثبات النسب",
+   "edge_id": "E11",
+   "relation": "REQUIRES",
+   "target_dimension": "D_PROSECUTION_INTERVENTION",
+   "target_label": "وجوب تدخل النيابة العامة في دعاوى النسب باعتبارها من النظام العام",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-51-1984-m338",
+    "legis-51-1984-m337"
+   ],
+   "gold_match": null,
+   "critical": null,
+   "loco_clean": true,
+   "legal_decision": "GROUND_TRUTH_POSSIBLE_OMISSION",
+   "legal_reasoning": "تدخل النيابة العامة وجوبي في دعاوى النسب بنصي م338+م337، وهو شرط إجرائي لصحة الخصومة فيدخل صلب السؤال. ومُدرَج في حقيقة gs-0011 وغائب هنا — تفاوت داخل الحقيقة الأرضية نفسها."
+  },
+  {
+   "case_id": "gs-0034",
+   "seed_concept": "C_TAFRIQ_DARAR",
+   "seed_surface_form": "التطليق للضرر",
+   "edge_id": "E03",
+   "relation": "REQUIRES",
+   "target_dimension": "D_ARBITRATORS",
+   "target_label": "بعث حكمين للتوفيق أو التفريق عند عدم ثبوت الضرر",
+   "necessity": "CONDITIONAL",
+   "condition": "ألا يثبت الضرر أمام المحكمة",
+   "supporting_object_ids": [
+    "legis-51-1984-m127",
+    "legis-51-1984-m129"
+   ],
+   "gold_match": "arbitrators_when_harm_unproven",
+   "critical": true,
+   "loco_clean": true,
+   "legal_decision": "TRUE_CONDITIONAL",
+   "legal_reasoning": "نفس م127: الشرط المنصوص «وإن لم يثبت الضرر»؛ ووقائع السؤال العامية لا تحسم الإثبات."
+  },
+  {
+   "case_id": "gs-0035",
+   "seed_concept": "C_LABOR_CLAIM",
+   "seed_surface_form": "مكافأة نهاية الخدمة",
+   "edge_id": "E22",
+   "relation": "SUBJECT_TO",
+   "target_dimension": "D_LABOR_LIMITATION",
+   "target_label": "عدم سماع الدعاوى العمالية بمضي سنة من انتهاء العقد",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-6-2010-m144"
+   ],
+   "gold_match": "labor_claims_limitation_period",
+   "critical": true,
+   "loco_clean": false,
+   "legal_decision": "TRUE_REQUIRED",
+   "legal_reasoning": "م144 عمل: عدم السماع بمضي سنة من انتهاء العقد — حاجز حاسم على «حقوقي» المسؤول عنها."
+  },
+  {
+   "case_id": "gs-0036",
+   "seed_concept": "C_MANAGER_REFUSES_CONVENE",
+   "seed_surface_form": "يمتنع المدير عن دعوة الجمعية",
+   "edge_id": "E12",
+   "relation": "DEPENDS_ON",
+   "target_dimension": "D_MINISTRY_CONVENING",
+   "target_label": "دعوة الوزارة للجمعية العامة عند امتناع المدير",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-1-2016-m111",
+    "regl-1-2016-m65"
+   ],
+   "gold_match": "ministry_convening_on_manager_refusal",
+   "critical": true,
+   "loco_clean": true,
+   "legal_decision": "TRUE_REQUIRED",
+   "legal_reasoning": "م111 شركات تجيز للوزارة دعوة الجمعية وحضورها في الحالات التي يتعين فيها على المدير دعوتها دون أن يفعل — مسار مقرر لحالة الامتناع بعينها المسؤول عنها."
+  },
+  {
+   "case_id": "gs-0036",
+   "seed_concept": "C_MANAGER_REFUSES_CONVENE",
+   "seed_surface_form": "يمتنع المدير عن دعوة الجمعية",
+   "edge_id": "E13",
+   "relation": "CHECKS",
+   "target_dimension": "D_MANAGER_CRIMINAL_LIABILITY",
+   "target_label": "المسؤولية الجزائية للمدير الممتنع عمدًا بعد إنذاره رسميًا بشهر",
+   "necessity": "CONDITIONAL",
+   "condition": "أن يكون الامتناع عمديًا ودون عذر مقبول وبعد مرور شهر من الإنذار الرسمي",
+   "supporting_object_ids": [
+    "legis-1-2016-m304"
+   ],
+   "gold_match": "criminal_liability_for_willful_refusal_to_convene",
+   "critical": false,
+   "loco_clean": false,
+   "legal_decision": "TRUE_CONDITIONAL",
+   "legal_reasoning": "م304/2 تشترط العمد وانتفاء العذر المقبول ومرور شهر من الإنذار الرسمي — ثلاثة شروط منصوصة، والإنذار لم يقع بعدُ في وقائع السؤال."
+  },
+  {
+   "case_id": "gs-0037",
+   "seed_concept": "C_AMR_ADA",
+   "seed_surface_form": "أمر الأداء",
+   "edge_id": "E01",
+   "relation": "PRECEDES",
+   "target_dimension": "D_PAYMENT_DEMAND",
+   "target_label": "التكليف بالوفاء قبل استصدار أمر الأداء",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-38-1980-m167"
+   ],
+   "gold_match": null,
+   "critical": null,
+   "loco_clean": true,
+   "legal_decision": "TRUE_POSSIBLE",
+   "legal_reasoning": "السؤال عن طبيعة السند (ورقة تجارية أم أي محرر) لا عن الإجراء السابق؛ والتكليف بالوفاء شرط صحيح لطريق أمر الأداء لكنه ليس محل السؤال."
+  },
+  {
+   "case_id": "gs-0040",
+   "seed_concept": "C_FAMILY_CLAIM",
+   "seed_surface_form": "نفقة",
+   "edge_id": "E04",
+   "relation": "JURISDICTION_CHECK",
+   "target_dimension": "D_FAMILY_COURT_JURISDICTION",
+   "target_label": "اختصاص محكمة الأسرة بجميع دعاوى الأسرة",
+   "necessity": "MANDATORY",
+   "condition": null,
+   "supporting_object_ids": [
+    "legis-12-2015-m6"
+   ],
+   "gold_match": null,
+   "critical": null,
+   "loco_clean": true,
+   "legal_decision": "FALSE_SCOPE",
+   "legal_reasoning": "السؤال عن **الشريعة اليهودية** كنظام قانوني للأحوال الشخصية؛ والمنظومة الكويتية المقنَّنة تغطي السنّي (51/1984) والجعفري (124/2019) دون غيرهما. إضافة اختصاص محكمة الأسرة الكويتية على سؤال عن نظام غير مغطى خطأ نطاق."
+  }
+ ]
+}
