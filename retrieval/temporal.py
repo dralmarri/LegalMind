@@ -21,7 +21,7 @@
                        بوصفه النافذ، ولا يُدَّعى تاريخ انتقال لا تثبته القاعدة.**
 """
 import re
-from .model import LAYER_PRINCIPLE
+from .model import LAYER_PRINCIPLE, LAYER_JUDGMENT
 
 CURRENT = "CURRENT"
 SUPERSEDED = "SUPERSEDED"
@@ -133,9 +133,11 @@ def annotate(candidates, row_of, text_of, xref_of=None):
     for c in candidates:
         st, _prov = classify_object(row_of(c.object_id) or {})
         conflict = None
-        # المبادئ وحدها: صياغتها قاعدية مركّزة فمُددها معتبرة. والأحكام الكاملة
-        # نصوص وقائعية طويلة، استخراج المدد منها يولّد تنبيهات كاذبة (قيس حيًّا).
-        if st == CURRENT and xref_of and c.layer == LAYER_PRINCIPLE:
+        # الأحكام الكاملة تُفحص كالمبادئ: حارس `MAX_CLASHES` وحده يميّز الضجيج
+        # (حكم وقائعي أعطى 15 تعارضًا فحُجب) من التعارض الحقيقي (حكم أعطى
+        # واحدًا: خمسة أيام مقابل النص النافذ). استبعاد الطبقة كلها كان أوسع
+        # من اللازم وأسقط حمايةً حقيقية — قيس حيًّا في Smoke.
+        if st == CURRENT and xref_of and c.layer in (LAYER_PRINCIPLE, LAYER_JUDGMENT):
             ptext = text_of(c.object_id) or ""
             for aid in (xref_of(c) or [])[:4]:
                 conflict = detect_conflict(ptext, text_of(aid) or "",

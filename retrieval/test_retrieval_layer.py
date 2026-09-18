@@ -415,6 +415,34 @@ check("عدد المُقيَّمين يفوق 300 (ما كان يُقصّ صار
 check("عدد النداءات محدود بسقف الدفعات",
       len(_D13.calls) <= PL.MAX_RERANK_BATCHES, _D13.calls)
 
+# ----------- 14. الحماية الزمنية تشمل الأحكام، والضجيج يُحجب بعدد التعارضات
+print("\n[14] الأحكام داخل الحماية الزمنية، والضجيج محجوب بالعدد لا بالطبقة")
+_noisy = "الماده 14 " + " ".join("%d يوما" % n for n in
+                                 (3, 7, 9, 10, 11, 12, 15, 18, 20, 26, 45, 60, 73, 90))
+check("مصدر بعشرات المدد يُحجب ضجيجًا",
+      TP.detect_conflict(_noisy, "خلال ثلاثين يوما") is None)
+check("مصدر بمدة واحدة مخالفة يُرصد",
+      (TP.detect_conflict("الماده 167 خلال خمسة أيام", "خلال عشرة أيام") or {})
+      .get("status") == TP.CONFLICT_DETECTED)
+class _D14(_D13):
+    def search(self, v, t, l):
+        pre = {"legislation_article": "legis-38-1980-m", "judicial_principle": "jprin-1-1-",
+               "full_judgment": "judgment-j-", "judicial_template": "tpl-"}.get(t[0], "o-")
+        return ([{"payload": {"object_id": "legis-38-1980-m167"}, "score": 0.9}]
+                if pre.startswith("legis") else
+                [{"payload": {"object_id": pre + str(i)}, "score": 0.9} for i in (1,)])
+    def fetch_texts(self, ids):
+        m = {"legis-38-1980-m167": "لا يصدر الأمر إلا بعد التكليف بالوفاء بعشرة أيام",
+             "judgment-j-1": "الماده 167 توجب التكليف بالوفاء خلال خمسة أيام"}
+        return {i: {"text": m.get(i, "نص " + i), "branch": "", "topic": "",
+                    "title": "", "publication": ""} for i in ids}
+    def rerank(self, q, pairs): return {i: 0.5 for i, _t in pairs}
+_r14 = PL.run(_D14(), "أمر أداء", [[0.1] * 4])
+check("الحكم الحامل للتعارض يُرصد (لا يُستبعد بطبقته)",
+      _r14["temporal"].get("CONFLICT_DETECTED", 0) > 0, _r14["temporal"])
+check("«خمسة أيام» في حكم لا تخرج بلا تحذير",
+      ("خمسة أيام" not in _r14["context"]) or ("تحذير زمني" in _r14["context"]))
+
 print("\n" + "=" * 62)
 print("نجح %d / %d" % (len(OK), len(OK) + len(FAIL)))
 if FAIL:
