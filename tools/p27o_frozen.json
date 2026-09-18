@@ -1,0 +1,93 @@
+{
+ "_note": "P2.7-O — تجسيد تنفيذي للتصميم المعتمد في be91855، بلا تعديل حرف في جوهره. يُجمَّد قبل أي تشغيل.",
+ "frozen_before_any_run": true,
+ "design_commit": "be91855",
+ "design_doc": "docs/p2_7_o_design.md",
+ "design_set_only": "الحالات المحروقة حصرًا — الـ34 لم تُقرأ ولن تُقرأ.",
+
+ "RESERVED_BUDGETS_per_anchor": {
+  "LEGISLATIVE_RESERVED": 9,
+  "JUDICIAL_RESERVED": 9,
+  "FULL_JUDGMENT_RESERVED": 2,
+  "_NO_REALLOCATION": "موضع محجوز لنوع لم يُملأ **يبقى فارغًا**. ممنوع منحه لنوع آخر بأي حال. هذا جوهر الإصلاح.",
+  "type_of": {
+   "legislative": "المعرّف يبدأ بـ legis- أو regl- أو lreg- أو LEG-",
+   "judicial": "المعرّف يبدأ بـ jprin- أو JUR-",
+   "full_judgment": "المعرّف يبدأ بـ judgment-"
+  }
+ },
+
+ "DETERMINISTIC_LANE_POLICY": {
+  "lanes_per_anchor": 19,
+  "map": {
+   "PREREQUISITE": ["تشريع","مبدأ"], "CONSEQUENCE": ["تشريع","مبدأ"],
+   "EXCEPTION": ["تشريع","مبدأ"], "PROCEDURAL_EFFECT": ["تشريع","مبدأ"],
+   "PROCEDURAL_REQUIREMENT": ["تشريع","مبدأ"], "ADJACENT_RELEVANT_PROVISION": ["تشريع"],
+   "JUDICIAL_INTERPRETATION": ["مبدأ"], "JUDICIAL_APPLICATION": ["مبدأ"],
+   "LIMITATION_OR_QUALIFICATION": ["تشريع","مبدأ"], "TEMPORAL_RELATION": ["تشريع","مبدأ"],
+   "CONFLICTING_AUTHORITY": ["تشريع","مبدأ"]
+  },
+  "states": {
+   "EXECUTED": "الوضع الافتراضي الإلزامي — استعلام واحد على الأقل، اثنان على الأكثر.",
+   "NOT_APPLICABLE": "لا تُعلَن إلا **قبل رؤية أي نتيجة**، ومع **اقتباس حرفي من نص المرساة** يبيّن الاستبعاد، وبحدٍّ أقصى **3 لكل مرساة**."
+  },
+  "_no_third_state": "«لم أرَ داعيًا للبحث» ليست حالة ومُلغاة.",
+  "min_executed_lanes_per_anchor": 16,
+  "kind_all_forbidden": true,
+  "search_limit": 20,
+  "kept_after_dedup": 8
+ },
+
+ "DEDUP_NORMALISATION_EXTENDED": {
+  "_gap_reported_by_the_N_executor": "تطبيع N لم يغطِّ التطويل ولا كراسي الهمزة ولا الأرقام الهندية فنجت عناقيد.",
+  "strip": ["التشكيل","التطويل ـ","علامات الترقيم","المسافات الزائدة"],
+  "unify": ["أ/إ/آ/ا","ي/ى","ة/ه","ؤ/ئ/ء","الأرقام الهندية ← اللاتينية"],
+  "fingerprint": "أول 120 حرفًا بعد التطبيع؛ المتطابقون نسخة واحدة ويبقى الأعلى درجة."
+ },
+
+ "PRESERVED_PROPERTIES": [
+  "NEAR_BUT_UNRELATED يبقى مرفوضًا — الضابط الصامد في L و N",
+  "ممنوع القرب الرقمي كمعيار صلة: لا مسافة أرقام، ولا ترتيب بالرقم، ولا اشتقاق رقم من رقم",
+  "same-law قيد توليد مرشحين فقط — القبول بالعلاقة القانونية بنص المادة حصرًا",
+  "فصل الاكتشاف عن التحقق (many-to-many) كما في v2"
+ ],
+
+ "FORBIDDEN_IDENTIFIERS": {
+  "ids": ["legis-68-1980-m552","legis-68-1980-m554","legis-68-1980-m548","legis-6-2010-m146"],
+  "rule": "ممنوع أي استعلام أو مرادف أو علاقة أو قاعدة تشير إليها، ولا حتى في تطوير التصميم. ولم تدخل اشتقاق الميزانيات."
+ },
+
+ "FUNNEL": ["LANE_REQUIRED","LANE_EXECUTED","DISCOVERED","FETCHED",
+            "RELATION_VALIDATED","TYPE_RESERVED","ADMITTED","PACKET_DELIVERED"],
+
+ "THRESHOLDS": {
+  "H_JOINT_LAYER_RECALL": {"_headline": true,
+   "requires_both_in_the_same_run": {"NEAR_AND_RELATED": ">= 6/11", "RELATED_BUT_NONADJACENT": ">= 5/6"},
+   "_why": "N بلغت الأولى وL بلغت الثانية، ولم تبلغهما جولة واحدة معًا قط. هذه «بلا إزاحة» مقيسةً."},
+  "C1_no_judicial_loss_to_legislative": "صفر سلطة قضائية صحيحة تسقط عند TYPE_RESERVED بسبب امتلاء حصة غير حصتها",
+  "C2_no_legislative_loss_to_judicial": "المرآة نفسها",
+  "C3_near_but_unrelated": "== 0 — سقوطه ينهي الجولة فورًا",
+  "C4_fan_out": {"value": 93, "_status": "مرصود لا حاكم — انظر _AMENDMENT_1"},
+  "C4b_admission_selectivity": {"op": "<=", "value": 0.30, "_baseline_N": 0.170},
+  "C5_coverage": "≥16 مسارًا منفَّذًا لكل مرساة، وNOT_APPLICABLE ≤3 ولكلٍّ اقتباس",
+  "C6_coexistence": "كل مرساة: ≥1 تشريعي و≥1 قضائي، كلاهما RELATION_VALIDATED بعلاقة بالمرساة"
+ },
+
+ "FULL_JUDGMENT_RULE": {
+  "no_candidate_appeared": "يُسجَّل FULL_JUDGMENT_NO_ELIGIBLE_CANDIDATE — **وليس فشلًا**، والمقعدان يبقيان فارغين بلا إعادة تخصيص.",
+  "counts_as_failure_only_if": "حكم كامل اجتاز RELATION_VALIDATED ثم سقط عند TYPE_RESERVED."
+ },
+
+ "DECISION": ["TYPE_RESERVED_ARCHITECTURE_SUPPORTED","TYPE_RESERVED_ARCHITECTURE_REJECTED",
+              "EXPERIMENT_INVALID","EXECUTION_INCOMPLETE"],
+
+ "_AMENDMENT_1": {
+  "source": "تعليمة المالك قبل التشغيل",
+  "run_output_files_present_at_amendment_time": [],
+  "_integrity": "القائمة فارغة — لم يُنتج أي مخرج بعد.",
+  "amendment": "fan-out ≤93 **لا يحكم وحده**. مع 19 مسارًا وحصص مستقلة فارتفاعه متوقَّع وهو ثمن الاستقلال. الحكم يقوم على H + selectivity + الضوابط السلبية؛ وتجاوز 93 يُسجَّل ملاحظةً ولا يُسقط الجولة تلقائيًا.",
+  "_direction": "هذا **تخفيف** لضابط واحد — ولذلك يُعلَن صراحةً بدل تمريره، ولا يمسّ H ولا C1/C2/C3 التي تبقى حاكمة."
+ },
+
+ "_carried_forward": "RESIDUAL_DESIGN_CONTAMINATION_RISK: PRESENT"
+}
