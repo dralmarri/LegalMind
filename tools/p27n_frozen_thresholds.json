@@ -1,0 +1,36 @@
+{
+ "_note": "P2.7-N — عتبات وضوابط مجمَّدة **قبل أي تشغيل**. لا تُغيَّر بعد رؤية النتائج.",
+ "frozen_before_any_run": true,
+ "design_set_only": "الحالات المحروقة حصرًا. **الـ34 لم تُقرأ ولن تُقرأ في هذه الجولة.**",
+
+ "rescue_target": {
+  "_scope": "الإخفاقات الستة المصنَّفة implementation gap في P2.7-M",
+  "ids": ["legis-68-1980-m553","legis-51-1984-m341","legis-51-1984-m339",
+          "legis-68-1980-m552","legis-68-1980-m554","legis-68-1980-m548"],
+  "threshold": ">= 4 من 6",
+  "_m146_excluded": "legis-6-2010-m146 مستبعَدة — KNOWN_REPRESENTATION_GAP"
+ },
+
+ "CAUSAL_CONTROLS_any_failure_ends_the_round": {
+  "C1_near_but_unrelated": {"op": "==", "value": 0, "of": 11,
+   "_rule": "أي قبول لمادة قريبة غير ذات صلة = **MECHANISM_COMPLETION_FAIL فورًا**. هذا هو الضابط الحامل."},
+  "C2_related_but_nonadjacent": {"op": ">=", "value": 5, "of": 6,
+   "_rule": "لا يجوز أن ينخفض عن مستوى P2.7-L."},
+  "C3_no_regression": {"_rule": "كل إصابة في P2.7-L تبقى مُصابة — أي فقد لنجاح سابق = فشل."},
+  "C4_fan_out": {"op": "<=", "value": 70,
+   "_baseline": "P2.7-L أدخل 47 سلطة مميَّزة؛ السقف 1.5× منها.",
+   "_rule": "تجاوزه = توسيع شبكة لا فهم علاقة = فشل."}
+ },
+
+ "_the_conjunction_is_the_test": "الوصول إلى البعيد ذي الصلة **مع** رفض القريب غير ذي الصلة **مع** fan-out مضبوط. تحقّق أحدها دون الآخرين ليس نجاحًا: بلوغ م553/م341 بمجرد kind=تشريع سهل ولا يُحتسب وحده إثباتًا — فهو بعينه ما يميّز توسيع البحث عن فهم العلاقة.",
+
+ "DECISION": {
+  "MECHANISM_COMPLETION_PASS": "الإنقاذ ≥4/6 **و** الضوابط الأربعة كلها مستوفاة",
+  "MECHANISM_COMPLETION_FAIL": "سقوط أي ضابط سببي، أو الإنقاذ <4/6",
+  "EXPERIMENT_INVALID": "تعذّر تنفيذ مسار لأسباب وصول لا تصميم",
+  "_only_allowed_recommendation_on_pass": "ELIGIBLE_FOR_BLIND_HOLDOUT_DESIGN — **ولا يعني فتح الـ34 تلقائيًا**",
+  "_forbidden": "READY_FOR_PRODUCTION ممنوع بأي حال"
+ },
+
+ "_carried_forward": "RESIDUAL_DESIGN_CONTAMINATION_RISK: PRESENT — باقٍ كما هو من P2.7-L."
+}
