@@ -165,6 +165,9 @@ def citation(pool, db_rows, text, resolve_law_prefix=None):
 # ------------------------------------------------------------ adjacency
 _ID_ART = re.compile(r"^(.*-)m(\d{1,4})(?:-|$)")
 
+# أولوية جوار القانون نفسه — نصف أولوية الإحالة بين القوانين (0.30)
+ADJACENCY_PRIOR = 0.15
+
 
 def law_prefix_of(object_id):
     m = _ID_ART.match(object_id or "")
@@ -207,7 +210,7 @@ def adjacency(pool, db_rows, anchor_ids, window=4):
                 continue
             n += 1
             pool.add(ids[j], T.CH_ADJACENCY, abs(j - pos), 0.0,
-                     T.LAYER_LEGISLATION)
+                     T.LAYER_LEGISLATION, prior=ADJACENCY_PRIOR)
     return pool
 
 

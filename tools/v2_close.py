@@ -52,6 +52,11 @@ def phase_a():
            M166: stage_of(b, M166), M167: stage_of(b, M167)}
     for k, v in out.items():
         print("   %-22s %s" % (k, v), flush=True)
+    for nm, r in (("العمل", a), ("الشيك", b)):
+        print("   [%s] مدخل المرتِّب %d ← مخرَجه %d %s | مقبول تشريعًا %d"
+              % (nm, len(r["rec"].rr_in), len(r["rec"].rr_out),
+                 "(المرتِّب أخفق)" if not r["rec"].rr_out else "",
+                 sum(1 for c in r["admitted"] if c.layer == LL)), flush=True)
     return out, a, b
 
 
