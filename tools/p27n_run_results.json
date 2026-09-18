@@ -1,0 +1,1936 @@
+[
+ {
+  "case": "A1",
+  "anchor_id": "legis-6-2010-m144",
+  "law_prefix": "legis-6-2010-",
+  "anchor_characterisation": {
+   "operation": "bars a claim from being heard (لا تسمع عند الإنكار) after a set time limit; also sets a time limit running from termination of the employment contract, grants a fee exemption, permits costs against a losing claimant, and directs expedited hearing",
+   "conditions": [
+    "الإنكار (denial by the defendant) — the bar operates 'عند الإنكار'",
+    "مضي سنة من تاريخ انتهاء عقد العمل (lapse of one year from the date the employment contract ended)",
+    "أن تكون الدعاوى مرفوعة من العمال استناداً إلى أحكام هذا القانون (claims brought by workers resting on THIS law's provisions)",
+    "يسري على الإنكار أحكام الفقرة (2) من المادة (442) من القانون المدني",
+    "تعفى الدعاوى التي يرفعها العمال أو المستحقون عنهم من الرسوم القضائية",
+    "يجوز للمحكمة عند رفض الدعاوى أن تحكم على رافعها بالمصروفات كلها أو بعضها",
+    "تنظر الدعاوى العمالية على وجه الاستعجال"
+   ],
+   "explicit_cross_references": [
+    "الفقرة (2) من المادة (442) من القانون المدني"
+   ],
+   "terms_of_art": [
+    "لا تسمع عند الإنكار",
+    "الإنكار",
+    "انتهاء عقد العمل",
+    "الدعاوى التي يرفعها العمال",
+    "المستحقون عنهم",
+    "الرسوم القضائية",
+    "المصروفات",
+    "على وجه الاستعجال"
+   ]
+  },
+  "lanes": [
+   {
+    "relation_type": "PREREQUISITE",
+    "kind": "تشريع",
+    "queries": [
+     "شروط عدم سماع الدعوى بمضي المدة عند الإنكار",
+     "بدء سريان مدة عدم سماع الدعوى من تاريخ انتهاء العقد"
+    ],
+    "raw_returned": 40,
+    "duplicates_dropped": 0,
+    "kept": 16,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PREREQUISITE",
+    "kind": "مبدأ",
+    "queries": [
+     "الإنكار شرط للتمسك بعدم سماع الدعوى بمضي المدة"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 5,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "CONSEQUENCE",
+    "kind": "تشريع",
+    "queries": [
+     "أثر عدم سماع الدعوى بالحق على ملحقاته وبقاء الحق لصاحبه"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "CONSEQUENCE",
+    "kind": "مبدأ",
+    "queries": [
+     "عدم سماع الدعوى لا يبطل الحق وإنما يمنع القاضي من سماعها"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 9,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "EXCEPTION",
+    "kind": "تشريع",
+    "queries": [
+     "وقف سريان المدة المقررة لعدم سماع الدعوى وانقطاعها بالمطالبة والإقرار"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "EXCEPTION",
+    "kind": "مبدأ",
+    "queries": [
+     "النزول عن التمسك بعدم سماع الدعوى صراحة أو ضمنا بعد ثبوت الحق فيه"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 8,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PROCEDURAL_EFFECT",
+    "kind": "تشريع",
+    "queries": [
+     "لا تقضي المحكمة بعدم سماع الدعوى من تلقاء نفسها ووجوب طلب صاحب المصلحة"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PROCEDURAL_EFFECT",
+    "kind": "مبدأ",
+    "queries": [
+     "الدفع بعدم سماع الدعوى دفع موضوعي يجوز إبداؤه في أية حالة كانت عليها الدعوى"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 8,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PROCEDURAL_REQUIREMENT",
+    "kind": "تشريع",
+    "queries": [
+     "إعفاء الدعاوى من الرسوم القضائية والحكم بالمصروفات ونظرها على وجه الاستعجال"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PROCEDURAL_REQUIREMENT",
+    "kind": "مبدأ",
+    "queries": [
+     "وجوب حلف اليمين على من يتمسك بعدم سماع الدعوى بأنه أدى الدين فعلا"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 12,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "ADJACENT_RELEVANT_PROVISION",
+    "kind": "تشريع",
+    "queries": [
+     "الأحكام الختامية وسريان أحكام قانون العمل في القطاع الأهلي على الدعاوى",
+     "حقوق العامل المستحقة عند انتهاء عقد العمل وامتيازها على أموال صاحب العمل"
+    ],
+    "raw_returned": 40,
+    "duplicates_dropped": 0,
+    "kept": 10,
+    "same_law_filter_applied": true,
+    "filtered_out_by_law_prefix": 6
+   },
+   {
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "kind": "مبدأ",
+    "queries": [
+     "المقصود بالدعاوى المستندة إلى أحكام قانون العمل وعلة تقصير مدة عدم سماعها"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 5,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "JUDICIAL_APPLICATION",
+    "kind": "مبدأ",
+    "queries": [
+     "احتساب بدء مدة السنة من تاريخ انتهاء عقد العمل وأثر الشكوى العمالية عليها"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 6,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "kind": "تشريع",
+    "queries": [
+     "عدم جواز الاتفاق على مدة تخالف المدة المقررة قانونا ولا التنازل قبل ثبوت الحق"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "kind": "مبدأ",
+    "queries": [
+     "شمول قيد السنة لجميع حقوق العامل دون تفرقة بين حق وآخر"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 4,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "TEMPORAL_RELATION",
+    "kind": "تشريع",
+    "queries": [
+     "إلغاء القانون السابق واحتفاظ أصحاب الحقوق بما ترتب قبل إلغائه"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "TEMPORAL_RELATION",
+    "kind": "مبدأ",
+    "queries": [
+     "سريان القوانين المتعلقة بالتقادم من وقت العمل بها على كل تقادم لم يكتمل"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 8,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "CONFLICTING_AUTHORITY",
+    "kind": "تشريع",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "CONFLICTING_AUTHORITY",
+    "kind": "مبدأ",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   }
+  ],
+  "discovery_pool_size": 127,
+  "admitted": [
+   {
+    "object_id": "legis-67-1980-m442",
+    "relation_type": "PROCEDURAL_REQUIREMENT",
+    "discovered_by_lane": "PREREQUISITE/تشريع",
+    "quoted_basis": "ويجب على من يتمسك بعدم سماع الدعوى في الفقرة السابقة أن يحلف اليمين بأنه أدى الدين فعلا ٬ فإن كان وارثا للمدين أو نائبا قانونيا عنه أو عن ورثته حلف اليمين بأنه لا يعلم بوجود الدين أو بأنه يعلم بوفائه وتوجه المحكمة هذه اليمين من تلقاء نفسها.",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "legis-67-1980-m445",
+    "relation_type": "PREREQUISITE",
+    "discovered_by_lane": "PREREQUISITE/تشريع",
+    "quoted_basis": "لايبدأ سريان المدة المقررة لعدم سماع الدعوى إلا من اليوم الذي يصبح فيه الدين مستحق الأداء ما لم ينص القانون على خلاف ذلك.",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "legis-67-1980-m448",
+    "relation_type": "EXCEPTION",
+    "discovered_by_lane": "EXCEPTION/تشريع",
+    "quoted_basis": "تنقطع المدة المقررة لعدم سماع الدعوى بالمطالبة القضائية ولو رفعت الدعوى إلى محكمة غير مختصة، كما تنقطع المدة أيضا بإعلان السند التنفيذي وبالحجز وبالطلب الذي يتقدم به الدائن لقبول حقه في تفليس أو في توزيع وبأي عمل يقوم به الدائن للتمسك بحقه أثناء السير في إحدى الدعوى.",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "legis-67-1980-m450",
+    "relation_type": "CONSEQUENCE",
+    "discovered_by_lane": "CONSEQUENCE/تشريع",
+    "quoted_basis": "إذا انقطعت المدة المقررة لعدم سماع الدعوى ٬ بدأت مدة جديدة من وقت انتهاء الأثر المترتب على سبب الانقطاع ٬ وتكون المدة الجديدة مماثلة للمدة الأولى.",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "legis-67-1980-m451",
+    "relation_type": "CONSEQUENCE",
+    "discovered_by_lane": "CONSEQUENCE/تشريع",
+    "quoted_basis": "يترتب على عدم سماع الدعوى بالحق عدم سماعها أيضا بالملحقات ولو لم تكتمل المدة المقررة لعدم سماع الدعوى بهذه الملقحات.",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "legis-67-1980-m452",
+    "relation_type": "PROCEDURAL_EFFECT",
+    "discovered_by_lane": "PROCEDURAL_EFFECT/تشريع",
+    "quoted_basis": "لا يجوز للمحكمة أن تقضي بعدم سماع الدعوى بمرور الزمان من تلقاء نفسها ٬ وإنما يجب أن يكون ذلك بناء على طلب المدين أو دائنة أو أي شخص له مصلحة فيه ولو لم يتمسك به المدين.",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "legis-67-1980-m453",
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "discovered_by_lane": "LIMITATION_OR_QUALIFICATION/تشريع",
+    "quoted_basis": "لا يجوز التنازل عن الدفع بعدم سماع الدعوى لمرور الزمان قبل ثبوت الحق فيه ٬ كما لا يجوز الاتفاق على عدم سماع الدعوى بمدة تختلف عن المدة المعينة في القانون.",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "legis-6-2010-m50",
+    "relation_type": "PREREQUISITE",
+    "discovered_by_lane": "ADJACENT_RELEVANT_PROVISION/تشريع",
+    "quoted_basis": "ينتهي عقد العمل في الأحوال التالية: أ) صدور حكم نهائي بإشهار إفلاس صاحب العمل. ب) إغلاق المنشأة نهائيا.",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "legis-6-2010-m149",
+    "relation_type": "TEMPORAL_RELATION",
+    "discovered_by_lane": "ADJACENT_RELEVANT_PROVISION/تشريع",
+    "quoted_basis": "يلغى القانون رقم 38 لسنة 1964 في شأن العمل في القطاع الأهلي ويحتفظ العمال بجميع الحقوق التي ترتبت عليه قبل إلغائه وتبقى كافة القرارات الصادرة تنفيذاًً له معمولا بها فيما لا تتعارض مع أحكام هذا القانون لحين صدور اللوائح والقرارات اللازمة لتنفيذه.",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "jprin-427-2014-x-bc6f7ee02235",
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "discovered_by_lane": "PROCEDURAL_REQUIREMENT/مبدأ",
+    "quoted_basis": "الدعاوى المرفوعة من العمال استناداً لأحكام قانون العمل رقم 6 لسنة 2010. عدم سماعها عند الإنكار بمضي سنة من تاريخ انتهاء عقد العمل وتسرى عندئذ أحكام المادة 442/2 مدني . مؤدى هذه المادة . أن على المتمسك بعدم سماع الدعوى أن يحلف يميناً بأدائه الدين للعامل فعلاً .",
+    "authority_kind": "principle"
+   },
+   {
+    "object_id": "jprin-113-1999-f5018",
+    "relation_type": "EXCEPTION",
+    "discovered_by_lane": "EXCEPTION/مبدأ",
+    "quoted_basis": "المدة المقررة لعدم سماع الدعوى. عدم سريانها كلما وجد مانع يتعذر معه على الدائن أن يطالب بحقه ولو كان أدبياً.",
+    "authority_kind": "principle"
+   },
+   {
+    "object_id": "jprin-14-1973-f4996",
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "discovered_by_lane": "JUDICIAL_INTERPRETATION/مبدأ",
+    "quoted_basis": "قيد سماع الدعوى العمالية بمدة سنة من تاريخ انتهاء عقد العمل. مدة تقادم مسقط وليست من مدد السقوط. لا يغير منه استعمال المشرع تعبير عدم سماع الدعوى أو تحديده مدة السنة من تاريخ انتهاء العقد بصفة مطلقة. علة ذلك.",
+    "authority_kind": "principle"
+   }
+  ],
+  "qualified_but_over_cap": [
+   {
+    "object_id": "legis-67-1980-m438",
+    "relation_type": "LIMITATION_OR_QUALIFICATION"
+   },
+   {
+    "object_id": "legis-6-2010-m2",
+    "relation_type": "ADJACENT_RELEVANT_PROVISION"
+   },
+   {
+    "object_id": "jprin-x-x-1-9a5ff2839f83",
+    "relation_type": "EXCEPTION"
+   },
+   {
+    "object_id": "jprin-85-2001-f4933",
+    "relation_type": "JUDICIAL_APPLICATION"
+   },
+   {
+    "object_id": "jprin-9-1994-w6559",
+    "relation_type": "PROCEDURAL_EFFECT"
+   },
+   {
+    "object_id": "jprin-226-2005-w8585",
+    "relation_type": "TEMPORAL_RELATION"
+   },
+   {
+    "object_id": "jprin-93-1997-e5461",
+    "relation_type": "PROCEDURAL_EFFECT"
+   }
+  ],
+  "rejected_sample": [
+   {
+    "object_id": "legis-51-1984-m92",
+    "why_rejected": "shares the phrase «لا تسمع عند الانكار» but states a rule about hearing claims of marriage; no relation to the anchor's rule — verbal similarity only"
+   },
+   {
+    "object_id": "legis-1-2016-m28",
+    "why_rejected": "a separate five-year bar for company creditors against partners; same topic family (non-hearing bars) but states nothing standing in any of the eleven relations to the anchor's rule"
+   },
+   {
+    "object_id": "legis-16-1960-m7",
+    "why_rejected": "concerns lapse of the criminal action; a different regime that neither conditions, qualifies nor contradicts the anchor's rule"
+   },
+   {
+    "object_id": "legis-6-2010-m145",
+    "why_rejected": "same law as the anchor (same-law lane) but governs priority of workers' debts over the employer's assets; same-law membership is never a reason to admit"
+   },
+   {
+    "object_id": "legis-17-1973-m14",
+    "why_rejected": "fee exemption for those unable to pay; merely appeared in the fee-exemption query results, states no rule related to the anchor's bar"
+   },
+   {
+    "object_id": "jprin-141-2015-q3",
+    "why_rejected": "annual-leave entitlement; surfaced by a drifting lexical query, no relation to the anchor's rule"
+   }
+  ],
+  "counts": {
+   "queries_issued": 19,
+   "raw_results_total": 380,
+   "duplicates_dropped_total": 65,
+   "discovery_pool": 127,
+   "admitted": 12
+  }
+ },
+ {
+  "case": "A2",
+  "anchor_id": "legis-51-1984-m337",
+  "law_prefix": "legis-51-1984-",
+  "anchor_characterisation": {
+   "operation": "imposes a duty (on the Public Prosecution) to bring claims or to intervene in them; it assigns that office a litigating role rather than granting a private right",
+   "conditions": [
+    "إذا لم يتقدم أحد من ذوي الشأن (no interested party has come forward)",
+    "في كل أمر يمس النظام العام (in every matter touching public order)"
+   ],
+   "explicit_cross_references": [],
+   "terms_of_art": [
+    "النيابة العامة",
+    "ترفع الدعاوى",
+    "تتدخل فيها",
+    "ذوو الشأن",
+    "النظام العام"
+   ]
+  },
+  "lanes": [
+   {
+    "relation_type": "PREREQUISITE",
+    "kind": "تشريع",
+    "queries": [
+     "متى يعتبر الأمر ماسا بالنظام العام موجبا تدخل النيابة العامة"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PREREQUISITE",
+    "kind": "مبدأ",
+    "queries": [
+     "تعلق المسألة بالنظام العام وأثره على وجوب تدخل النيابة في الدعوى"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 5,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "CONSEQUENCE",
+    "kind": "تشريع",
+    "queries": [
+     "حقوق النيابة العامة كخصم في الدعوى متى تدخلت فيها"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "CONSEQUENCE",
+    "kind": "مبدأ",
+    "queries": [
+     "أثر إغفال تمثيل النيابة العامة على صحة الحكم الصادر في الدعوى"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 6,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "EXCEPTION",
+    "kind": "تشريع",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "EXCEPTION",
+    "kind": "مبدأ",
+    "queries": [
+     "الأحوال التي لا يجب فيها تدخل النيابة العامة رغم كونها أحوالا شخصية"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 3,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PROCEDURAL_EFFECT",
+    "kind": "تشريع",
+    "queries": [
+     "حق النيابة في الطعن في الحكم ولو لم تكن قد تدخلت وميعاد مذكرتها"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PROCEDURAL_EFFECT",
+    "kind": "مبدأ",
+    "queries": [
+     "جواز التمسك ببطلان الحكم لعدم تدخل النيابة في أي حالة وقضاء المحكمة به من تلقاء نفسها"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 6,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PROCEDURAL_REQUIREMENT",
+    "kind": "تشريع",
+    "queries": [
+     "وجوب إبلاغ قلم كتاب المحكمة النيابة كتابة بمجرد قيد الدعوى"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PROCEDURAL_REQUIREMENT",
+    "kind": "مبدأ",
+    "queries": [
+     "كيفية تدخل النيابة العامة باعتبارها خصما أصيلا وتقديم طلباتها"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 2,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "ADJACENT_RELEVANT_PROVISION",
+    "kind": "تشريع",
+    "queries": [
+     "أحكام ختامية بشأن تمثيل النيابة العامة وميعاد مذكرتها في قانون الأحوال الشخصية"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 1,
+    "same_law_filter_applied": true,
+    "filtered_out_by_law_prefix": 7
+   },
+   {
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "kind": "مبدأ",
+    "queries": [
+     "شرط تطبيق نص رفع النيابة الدعاوى أن يستلزم الفصل فيها تطبيق أحكام الشريعة الإسلامية"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 4,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "JUDICIAL_APPLICATION",
+    "kind": "مبدأ",
+    "queries": [
+     "تطبيق وجوب رفع النيابة أو تدخلها في دعاوى الأوقاف الخيرية والوصايا"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 1,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "kind": "تشريع",
+    "queries": [
+     "لا يتعين حضور النيابة العامة إلا إذا رأت المحكمة ذلك وتمثيلها بمذكرة"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "kind": "مبدأ",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "TEMPORAL_RELATION",
+    "kind": "تشريع",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "TEMPORAL_RELATION",
+    "kind": "مبدأ",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "CONFLICTING_AUTHORITY",
+    "kind": "تشريع",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "CONFLICTING_AUTHORITY",
+    "kind": "مبدأ",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   }
+  ],
+  "discovery_pool_size": 77,
+  "admitted": [
+   {
+    "object_id": "legis-51-1984-m340",
+    "relation_type": "PROCEDURAL_REQUIREMENT",
+    "discovered_by_lane": "PREREQUISITE/تشريع",
+    "quoted_basis": "في جميع الاحوال التي ينص فيها القانون على تدخل النيابة العامة ، يجب على قلم كتاب المحكمة ابلاغ النيابة كتابة بمجرد قيد الدعوى.",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "legis-51-1984-m339",
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "discovered_by_lane": "LIMITATION_OR_QUALIFICATION/تشريع",
+    "quoted_basis": "أ- تعتبر النيابة العامة ممثلة في الدعوى متى قدمت مذكرة برأيها فيها ، ولا يتعين حضورها الا إذا رأت المحكمة ذلك.",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "legis-51-1984-m341",
+    "relation_type": "PROCEDURAL_EFFECT",
+    "discovered_by_lane": "PROCEDURAL_EFFECT/تشريع",
+    "quoted_basis": "تمنح النيابة بناء على طلبها ميعاد خمسة عشر يوما على الاقل ، لتقديم مذكرة بأقوالها من تاريخ ارسال ملف القضية اليها. وللنيابة حق الطعن في الحكم ولو لم تكن قد تدخلت .",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "jprin-13-2001-g1188",
+    "relation_type": "CONSEQUENCE",
+    "discovered_by_lane": "PREREQUISITE/مبدأ",
+    "quoted_basis": "وهو إجراء مقرر بقاعدة آمرة متعلقة بالنظام العام يترتب على إغفاله البطلان المطلق الذي يجوز التمسك به في أية حالة تكون عليها الدعوى وتقضي به المحكمة من تلقاء نفسها.",
+    "authority_kind": "principle"
+   },
+   {
+    "object_id": "jprin-39-2004-w4525",
+    "relation_type": "CONSEQUENCE",
+    "discovered_by_lane": "PROCEDURAL_REQUIREMENT/مبدأ",
+    "quoted_basis": "تدخل النيابة العامة في بعض الدعاوى التي أوجب المشرع تدخلها فيها. مؤداه. اعتبارها خصماً في هذه الدعاوى لها كافة الحقوق المقررة في القانون للخصوم أمام القضاء ومنها الحق في إبداء طلب الإحالة إلى التحقيق والطلبات الإجرائية والموضوعية.",
+    "authority_kind": "principle"
+   },
+   {
+    "object_id": "jprin-63-1995-w4520",
+    "relation_type": "EXCEPTION",
+    "discovered_by_lane": "EXCEPTION/مبدأ",
+    "quoted_basis": "تدخل النيابة الوجوبي في بعض قضايا الأحوال الشخصية. حالاته. عند إثارة أمر من الأمور المتعلقة بالنظام العام والمحددة على سبيل الحصر في المادة 338 من القانون 51 لسنة 1984 في شأن الأحوال الشخصية. انتفاء ذلك. عدم وجوب تدخلها .",
+    "authority_kind": "principle"
+   },
+   {
+    "object_id": "jprin-9-1997-e188",
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "discovered_by_lane": "CONSEQUENCE/مبدأ",
+    "quoted_basis": "تدخل النيابة العامة في بعض قضايا الأحوال الشخصية. وجوبي. وروده على سبيل الحصر. م 338 ق 51 لسنة 1984 ومنها قضايا فاقدي الأهلية وناقصيها.",
+    "authority_kind": "principle"
+   },
+   {
+    "object_id": "jprin-498-2003-w9216",
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "discovered_by_lane": "JUDICIAL_INTERPRETATION/مبدأ",
+    "quoted_basis": "تدخل النيابة العامة في الدعوى إعمالاً لنص المادتين 337، 338/و من قانون الأحوال الشخصية. شرطه. تعلق الدعوى بالأحوال الشخصية وأن يستلزم الفصل فيها تطبيق أحكام الشريعة الإسلامية.",
+    "authority_kind": "principle"
+   },
+   {
+    "object_id": "jprin-283-2000-w5563",
+    "relation_type": "EXCEPTION",
+    "discovered_by_lane": "PREREQUISITE/مبدأ",
+    "quoted_basis": "وجوب تدخل النيابة العامة في قضايا فاقدي الأهلية وناقصيها والغائبين والمفقودين. تعلق ذلك بالنظام العام. دعاوى الحضانة. لا وجوب لتدخلها فيها. علة ذلك.",
+    "authority_kind": "principle"
+   },
+   {
+    "object_id": "jprin-695-2007-e2460",
+    "relation_type": "JUDICIAL_APPLICATION",
+    "discovered_by_lane": "JUDICIAL_APPLICATION/مبدأ",
+    "quoted_basis": "وجوب تدخل النيابة العامة في المسائل المتعلقة بالنظام العام الواردة بالمادة 338 ق 51 لسنة 1984 ومن بينها الأوقاف والوصايا الخيرية. تعلق ذلك بالنظام العام. إغفاله. أثره. بطلان الحكم.",
+    "authority_kind": "principle"
+   },
+   {
+    "object_id": "jprin-338-2005-w9819",
+    "relation_type": "PROCEDURAL_EFFECT",
+    "discovered_by_lane": "PROCEDURAL_REQUIREMENT/مبدأ",
+    "quoted_basis": "دعاوى الأحوال الشخصية التي أوجب المشرع قيام النيابة العامة برفعها أو التدخل فيها. اعتبارها خصماً في الدعوى لها كافة الحقوق المقررة للخصوم.\nالنيابة العامة لا تتجزأ. مؤدى ذلك. جواز أن يكون عضو النيابة الذي مثلها بالحضور أو أبدى الرأي أمام محكمة الاستئناف هو ذاته الذي مثلها أمام محكمة أول درجة.",
+    "authority_kind": "principle"
+   },
+   {
+    "object_id": "jprin-29-1998-w2099",
+    "relation_type": "CONSEQUENCE",
+    "discovered_by_lane": "CONSEQUENCE/مبدأ",
+    "quoted_basis": "فصل الحكم في دعوى النسب دون إبداء النيابة العامة رأيها فيها يبطل الحكم ولمحكمة التمييز أن تقضي به من تلقاء نفسها.",
+    "authority_kind": "principle"
+   }
+  ],
+  "qualified_but_over_cap": [
+   {
+    "object_id": "jprin-51-1998-w5561",
+    "relation_type": "CONSEQUENCE"
+   },
+   {
+    "object_id": "jprin-21-2009-w2153",
+    "relation_type": "CONSEQUENCE"
+   },
+   {
+    "object_id": "jprin-147-1993-w4519",
+    "relation_type": "LIMITATION_OR_QUALIFICATION"
+   },
+   {
+    "object_id": "jprin-1570-2010-2-1dd8ffed6d91",
+    "relation_type": "JUDICIAL_INTERPRETATION"
+   },
+   {
+    "object_id": "jprin-32-1985-w4516",
+    "relation_type": "PROCEDURAL_EFFECT"
+   },
+   {
+    "object_id": "jprin-135-2001-g1189",
+    "relation_type": "JUDICIAL_APPLICATION"
+   },
+   {
+    "object_id": "jprin-6-1997-e2300",
+    "relation_type": "CONSEQUENCE"
+   }
+  ],
+  "rejected_sample": [
+   {
+    "object_id": "legis-124-2019-m506",
+    "why_rejected": "verbatim parallel provision in a different code (Jaafari 124/2019); a duplicate rule in another law is not one of the eleven relations to the anchor's rule"
+   },
+   {
+    "object_id": "legis-23-1990-m53",
+    "why_rejected": "states the Public Prosecution's powers over the criminal action; a different regime that neither conditions nor qualifies the anchor's civil-intervention duty"
+   },
+   {
+    "object_id": "regl-14-1973-m4",
+    "why_rejected": "Constitutional Court registry procedure; merely appeared in the registry-notification query"
+   },
+   {
+    "object_id": "jprin-191-1992-w356",
+    "why_rejected": "nullity arising from bench composition and signature of the draft judgment; unrelated to the anchor's rule, surfaced by a drifting lexical query"
+   },
+   {
+    "object_id": "jprin-259-2011-z2076",
+    "why_rejected": "criminal discretion to withhold pronouncement of penalty; noise"
+   },
+   {
+    "object_id": "legis-dustur-1962-m167",
+    "why_rejected": "constitutional statement of the Public Prosecution's role in the public (criminal) action; states no rule standing in any of the eleven relations to the anchor's duty"
+   }
+  ],
+  "counts": {
+   "queries_issued": 13,
+   "raw_results_total": 260,
+   "duplicates_dropped_total": 27,
+   "discovery_pool": 77,
+   "admitted": 12
+  }
+ },
+ {
+  "case": "A2",
+  "anchor_id": "legis-51-1984-m338",
+  "law_prefix": "legis-51-1984-",
+  "anchor_characterisation": {
+   "operation": "defines and exhaustively delimits a term used by the preceding article (المراد بالنظام العام ... في الأحوال الآتية), and in the same breath grants the Public Prosecution full litigant rights in those cases",
+   "conditions": [
+    "أن يكون الأمر من أحكام الشريعة الإسلامية",
+    "وأن يقع في إحدى الحالات الست: أ- الزواج بالمحرمات حرمة مؤبدة أو مؤقتة؛ ب- إثبات الطلاق البائن؛ ج- فسخ الزواج؛ د- الأوقاف والوصايا الخيرية؛ ه- دعاوى النسب وتصحيح الأسماء؛ و- الدعاوى الخاصة بفاقدي الأهلية وناقصيها والغائبين والمفقودين",
+    "ويكون للنيابة في هذه الأحوال ما للخصوم من حقوق"
+   ],
+   "explicit_cross_references": [
+    "المادة السابقة (referred to by words only — no article number appears in the anchor's own text)"
+   ],
+   "terms_of_art": [
+    "النظام العام",
+    "أحكام الشريعة الإسلامية",
+    "الزواج بالمحرمات حرمة مؤبدة أو مؤقتة",
+    "الطلاق البائن",
+    "فسخ الزواج",
+    "الأوقاف والوصايا الخيرية",
+    "دعاوى النسب",
+    "تصحيح الأسماء",
+    "فاقدو الأهلية وناقصوها",
+    "الغائبون",
+    "المفقودون",
+    "ما للخصوم من حقوق"
+   ]
+  },
+  "lanes": [
+   {
+    "relation_type": "PREREQUISITE",
+    "kind": "تشريع",
+    "queries": [
+     "شروط صحة دعوى النسب وسببها وثبوت النسب بالفراش والإقرار"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PREREQUISITE",
+    "kind": "مبدأ",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "CONSEQUENCE",
+    "kind": "تشريع",
+    "queries": [
+     "ثبوت تمثيل النيابة العامة في الدعوى وحقها في الطعن وميعاد مذكرتها"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "CONSEQUENCE",
+    "kind": "مبدأ",
+    "queries": [
+     "بطلان الحكم لعدم تدخل النيابة في الحالات المعتبرة من النظام العام وعدم تصحيحه بإبداء الرأي"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 4,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "EXCEPTION",
+    "kind": "تشريع",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "EXCEPTION",
+    "kind": "مبدأ",
+    "queries": [
+     "ما يخرج عن الحالات المحددة فلا تتدخل فيه النيابة العامة"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 2,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PROCEDURAL_EFFECT",
+    "kind": "تشريع",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PROCEDURAL_EFFECT",
+    "kind": "مبدأ",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PROCEDURAL_REQUIREMENT",
+    "kind": "تشريع",
+    "queries": [
+     "تحقيق اللجنة قبل قبول دعوى النسب وتصحيح الأسماء واختصاصها"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PROCEDURAL_REQUIREMENT",
+    "kind": "مبدأ",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "ADJACENT_RELEVANT_PROVISION",
+    "kind": "تشريع",
+    "queries": [
+     "دعوى النسب والطلاق البائن وفسخ الزواج والوصايا الخيرية في أحكام الأحوال الشخصية"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 7,
+    "same_law_filter_applied": true,
+    "filtered_out_by_law_prefix": 1
+   },
+   {
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "kind": "مبدأ",
+    "queries": [
+     "ورود حالات النظام العام على سبيل الحصر والمراد بها أحكام الشريعة الإسلامية"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 5,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "JUDICIAL_APPLICATION",
+    "kind": "مبدأ",
+    "queries": [
+     "اعتبار طلب تصحيح اللقب منطويا على إثبات النسب إلى الجد الأعلى"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 8,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "kind": "تشريع",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "kind": "مبدأ",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "TEMPORAL_RELATION",
+    "kind": "تشريع",
+    "queries": [
+     "إلغاء قانون تنظيم إجراءات دعاوى النسب وتصحيح الأسماء السابق والاستعاضة عنه"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "TEMPORAL_RELATION",
+    "kind": "مبدأ",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "CONFLICTING_AUTHORITY",
+    "kind": "تشريع",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "CONFLICTING_AUTHORITY",
+    "kind": "مبدأ",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   }
+  ],
+  "discovery_pool_size": 64,
+  "admitted": [
+   {
+    "object_id": "legis-53-2026-m8",
+    "relation_type": "PROCEDURAL_REQUIREMENT",
+    "discovered_by_lane": "PROCEDURAL_REQUIREMENT/تشريع",
+    "quoted_basis": "لا تقبل دعوى النسب إلا إذا سبقها تحقيق تجريه اللجنة في طلب إثبات النسب المباشر أو نفيه الذي يقدم إليها من ذوي الشأن، وعلى اللجنة إحالته إلى المحكمة المختصة بتقرير مفصل بما انتهت إليه خلال ستة أشهر من تاريخ تقديم الطلب إليها.",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "legis-53-2026-m4",
+    "relation_type": "PROCEDURAL_REQUIREMENT",
+    "discovered_by_lane": "PROCEDURAL_REQUIREMENT/تشريع",
+    "quoted_basis": "تختص اللجنة - دون غيرها - بالنظر في الطلبات الآتية: 1- طلب إثبات النسب المباشر أو نفيه. 2- طلب إثبات النسب غير المباشر أو نفيه. 3- طلب تصحيح الاسم أو تغييره وإضافة اللقب أو حذفه.",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "legis-51-1984-m182",
+    "relation_type": "PREREQUISITE",
+    "discovered_by_lane": "PREREQUISITE/تشريع",
+    "quoted_basis": "يشترط لصحة دعوى النسب ان تكون مشتملة على سببه .",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "legis-51-1984-m98",
+    "relation_type": "PREREQUISITE",
+    "discovered_by_lane": "ADJACENT_RELEVANT_PROVISION/تشريع",
+    "quoted_basis": "أ- الطلاق نوعان : رجعي وبائن. ب- الطلاق الرجعي لا يزيل الزوجية قبل مضي العدة. ج- والطلاق البائن يزيل الزوجية في الحال .",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "legis-51-1984-m110",
+    "relation_type": "PREREQUISITE",
+    "discovered_by_lane": "ADJACENT_RELEVANT_PROVISION/تشريع",
+    "quoted_basis": "كل طلاق يقع رجعيا الا الطلاق قبل الدخول ، والطلاق على بدل ، والطلاق المكمل للثلاث ، وما نص على كونه بائنا في هذا القانون .",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "legis-51-1984-m176",
+    "relation_type": "ADJACENT_RELEVANT_PROVISION",
+    "discovered_by_lane": "PREREQUISITE/تشريع",
+    "quoted_basis": "في الاحوال التي يثبت فيها نسب الولد بالفراش في زواج صحيح قائم او منحل ، او بالدخول في زواج فاسد او بشبهة ، يجوز للرجل ان ينفي عنه نسب الولد خلال سبعة ايام من وقت الولادة او العلم بها ، بشرط الا يكون قد اعترف بالنسب صراحة او ضمنا.",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "legis-51-1984-m339",
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "discovered_by_lane": "CONSEQUENCE/تشريع",
+    "quoted_basis": "أ- تعتبر النيابة العامة ممثلة في الدعوى متى قدمت مذكرة برأيها فيها ، ولا يتعين حضورها الا إذا رأت المحكمة ذلك.",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "legis-51-1984-m341",
+    "relation_type": "PROCEDURAL_EFFECT",
+    "discovered_by_lane": "CONSEQUENCE/تشريع",
+    "quoted_basis": "وللنيابة حق الطعن في الحكم ولو لم تكن قد تدخلت .",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "jprin-63-1995-w4520",
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "discovered_by_lane": "EXCEPTION/مبدأ",
+    "quoted_basis": "تدخل النيابة الوجوبي في بعض قضايا الأحوال الشخصية. حالاته. عند إثارة أمر من الأمور المتعلقة بالنظام العام والمحددة على سبيل الحصر في المادة 338 من القانون 51 لسنة 1984 في شأن الأحوال الشخصية. انتفاء ذلك. عدم وجوب تدخلها .",
+    "authority_kind": "principle"
+   },
+   {
+    "object_id": "jprin-147-1993-w4519",
+    "relation_type": "EXCEPTION",
+    "discovered_by_lane": "EXCEPTION/مبدأ",
+    "quoted_basis": "وجوب تدخل النيابة العامة في بعض قضايا الأحوال الشخصية التي تمس النظام العام. المراد بالنظام العام في هذا الصدد. ما يخرج عن ذلك. لا تتدخل فيه. مثال. طلب تعويض محجور عليها عن ضرر من حادث سيارة.",
+    "authority_kind": "principle"
+   },
+   {
+    "object_id": "jprin-30-2007-w4373",
+    "relation_type": "PROCEDURAL_REQUIREMENT",
+    "discovered_by_lane": "JUDICIAL_APPLICATION/مبدأ",
+    "quoted_basis": "الطلبات المتعلقة بالنسب وتصحيح الأسماء - عدا ما تختص به لجنة المواليد والوفيات - وجوب قبل عرضها على القضاء أن تعرض على اللجنة ... هذا الطلب هو الإجراء الذي تبدأ به المطالبة القضائية في هذه الدعاوى ويعد من النظام العام .",
+    "authority_kind": "principle"
+   },
+   {
+    "object_id": "jprin-697-2013-s2884",
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "discovered_by_lane": "JUDICIAL_APPLICATION/مبدأ",
+    "quoted_basis": "دعاوى تصحيح الأسماء التي تختص بنظرها دائرة الأحوال الشخصية والتي تتدخل فيها النيابة العامة وفق المادتين 337 ،338 من القانون 51 لسنة 1984 . مقصودها . الدعاوى المرفوعة في حالة النزاع على النسب والتي يتوقف الفصل فيها على ما ينتهي إليه البحث في مسألة النسب.",
+    "authority_kind": "principle"
+   }
+  ],
+  "qualified_but_over_cap": [
+   {
+    "object_id": "legis-53-2026-m7",
+    "relation_type": "PROCEDURAL_REQUIREMENT"
+   },
+   {
+    "object_id": "legis-53-2026-issue-3",
+    "relation_type": "TEMPORAL_RELATION"
+   },
+   {
+    "object_id": "legis-51-1984-m173",
+    "relation_type": "PREREQUISITE"
+   },
+   {
+    "object_id": "legis-51-1984-m169",
+    "relation_type": "PREREQUISITE"
+   },
+   {
+    "object_id": "jprin-125-1999-g1079",
+    "relation_type": "JUDICIAL_APPLICATION"
+   },
+   {
+    "object_id": "jprin-6-1997-e2300",
+    "relation_type": "CONSEQUENCE"
+   },
+   {
+    "object_id": "JUR-أحوال-شخصية-مرض-الموت-PR-13-d62163fd56568403",
+    "relation_type": "JUDICIAL_INTERPRETATION"
+   },
+   {
+    "object_id": "jprin-697-2013-s2764",
+    "relation_type": "PROCEDURAL_REQUIREMENT"
+   }
+  ],
+  "rejected_sample": [
+   {
+    "object_id": "legis-2-2016-m27",
+    "why_rejected": "exclusive prosecution jurisdiction over corruption offences; a criminal-jurisdiction rule with no relation to the anchor's definitional rule"
+   },
+   {
+    "object_id": "jprin-291-2003-e2634",
+    "why_rejected": "nullity for want of a party's standing is expressly NOT a public-order matter; opposite subject, states nothing standing in any relation to the anchor's enumeration"
+   },
+   {
+    "object_id": "legis-38-1980-m208",
+    "why_rejected": "succession to the creditor in enforcement proceedings; merely appeared in the repeal/succession query"
+   },
+   {
+    "object_id": "jprin-614-2003-w9008",
+    "why_rejected": "general-law/special-law precedence; a rule of legal method, not a rule standing in any of the eleven relations to the anchor's rule"
+   },
+   {
+    "object_id": "legis-51-1984-m299",
+    "why_rejected": "spousal shares in inheritance; same law as the anchor only — same-law membership is never a reason to admit"
+   },
+   {
+    "object_id": "legis-16-1960-m286",
+    "why_rejected": "prosecution competence over a class of penal offences; unrelated regime"
+   }
+  ],
+  "counts": {
+   "queries_issued": 9,
+   "raw_results_total": 180,
+   "duplicates_dropped_total": 19,
+   "discovery_pool": 64,
+   "admitted": 12
+  }
+ },
+ {
+  "case": "A3",
+  "anchor_id": "legis-68-1980-m550",
+  "law_prefix": "legis-68-1980-",
+  "anchor_characterisation": {
+   "operation": "sets a time limit that extinguishes (bars) recourse actions on a cheque — six months — and, in its third paragraph, imposes a duty on defendants to confirm their discharge by oath notwithstanding that the period has run",
+   "conditions": [
+    "مضي ستة شهور من تاريخ انقضاء ميعاد تقديم الشيك — for the holder's recourse against drawee, drawer, endorser and other obligors",
+    "مضي ستة شهور من اليوم الذي وفي فيه الملتزم أو من يوم مطالبته قضائيا — for recourse of obligors among themselves",
+    "إذا طلب منهم حلفها — the oath is owed only if it is demanded",
+    "وعلى ورثتهم أو خلفائهم الآخرين أن يحلفوا اليمين على أنهم لا يعلمون أن مورثهم مات وذمته مشغولة بالدين"
+   ],
+   "explicit_cross_references": [],
+   "terms_of_art": [
+    "تتقادم",
+    "دعاوى رجوع حامل الشيك",
+    "المسحوب عليه",
+    "الساحب",
+    "المظهر",
+    "الملتزمون بوفاء الشيك",
+    "ميعاد تقديم الشيك",
+    "اليمين",
+    "براءة الذمة",
+    "الورثة والخلفاء"
+   ]
+  },
+  "lanes": [
+   {
+    "relation_type": "PREREQUISITE",
+    "kind": "تشريع",
+    "queries": [
+     "ميعاد تقديم الشيك للوفاء وبدء سريانه من تاريخ الإصدار"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PREREQUISITE",
+    "kind": "مبدأ",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "CONSEQUENCE",
+    "kind": "تشريع",
+    "queries": [
+     "رجوع الحامل على الساحب برد ما أثرى به دون حق رغم التقادم"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "CONSEQUENCE",
+    "kind": "مبدأ",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "EXCEPTION",
+    "kind": "تشريع",
+    "queries": [
+     "عدم سريان مدة التقادم عند رفع الدعوى أو الإقرار بالدين بصك مستقل"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "EXCEPTION",
+    "kind": "مبدأ",
+    "queries": [
+     "عدم قبول الدفع بانقضاء الالتزام الصرفي بالتقادم عند إنكار المدين للدين"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 8,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PROCEDURAL_EFFECT",
+    "kind": "تشريع",
+    "queries": [
+     "تعزيز براءة الذمة باليمين رغم انقضاء مدة التقادم وحلف الورثة"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PROCEDURAL_EFFECT",
+    "kind": "مبدأ",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PROCEDURAL_REQUIREMENT",
+    "kind": "تشريع",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PROCEDURAL_REQUIREMENT",
+    "kind": "مبدأ",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "ADJACENT_RELEVANT_PROVISION",
+    "kind": "تشريع",
+    "queries": [
+     "رجوع الحامل على الساحب والمظهرين وسقوط حقه عند عدم التقديم في الميعاد",
+     "أحكام الشيك ومقابل الوفاء والتظهير والبروتستو في قانون التجارة"
+    ],
+    "raw_returned": 40,
+    "duplicates_dropped": 0,
+    "kept": 10,
+    "same_law_filter_applied": true,
+    "filtered_out_by_law_prefix": 6
+   },
+   {
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "kind": "مبدأ",
+    "queries": [
+     "تقادم دعوى حامل الشيك بستة أشهر وطبيعة التقادم الصرفي"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 8,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "JUDICIAL_APPLICATION",
+    "kind": "مبدأ",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "kind": "تشريع",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "kind": "مبدأ",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "TEMPORAL_RELATION",
+    "kind": "تشريع",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "TEMPORAL_RELATION",
+    "kind": "مبدأ",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "CONFLICTING_AUTHORITY",
+    "kind": "تشريع",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "CONFLICTING_AUTHORITY",
+    "kind": "مبدأ",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   }
+  ],
+  "discovery_pool_size": 54,
+  "admitted": [
+   {
+    "object_id": "legis-68-1980-m533",
+    "relation_type": "PREREQUISITE",
+    "discovered_by_lane": "PREREQUISITE/تشريع",
+    "quoted_basis": "-1 الشيك المسحوب في الكويت والمستحق الوفاء فيها تقديمه للوفاء خلال شهر. -2 فإذا كان مسحوبا خارج الكويت ومستحق الوفاء فيها. وجب تقديمه خلال ثلاثة أشهر. -3 وتبدأ المواعيد السالف ذكرها من التاريخ المبين في الشيك أنه تاريخ اصداره.",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "legis-68-1980-m532",
+    "relation_type": "PREREQUISITE",
+    "discovered_by_lane": "PREREQUISITE/تشريع",
+    "quoted_basis": "-1 يكون الشيك مستحق الوفاء بمجرد الاطلاع عليه وكل بيان مخالف لذلك يعتبر كأن لم يكن.",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "legis-68-1980-m551",
+    "relation_type": "EXCEPTION",
+    "discovered_by_lane": "EXCEPTION/تشريع",
+    "quoted_basis": "-1 لا تسري مدة التقادم المنصوص عليها في المادة السابقة في حالة رفع الدعوى إلا من تاريخ آخر إجراء فيها. -2 ولا يسري التقادم المذكور إذا صدر حكم بالدين أو أقر به المدين بصك مستقل إقرارا يترتب عليه تجديد الدين.",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "legis-68-1980-m553",
+    "relation_type": "CONSEQUENCE",
+    "discovered_by_lane": "CONSEQUENCE/تشريع",
+    "quoted_basis": "لا يحول تقادم دعوى المطالبة بقيمة الشيك دون الحامل ومطالبة الساحب الذي لم يقدم مقابل الوفاء أو قدمه واسترده كله أو بعضه برد ما أثري به دون حق.",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "legis-68-1980-m547",
+    "relation_type": "ADJACENT_RELEVANT_PROVISION",
+    "discovered_by_lane": "ADJACENT_RELEVANT_PROVISION/تشريع",
+    "quoted_basis": "يحتفظ الحامل بحقه في الرجوع على الساحب ولو لم يقدم الحامل الشيك إلى المسحوب عليه أو لم يقم بعمل البروتستو أو ما يقوم مقامه في الميعاد القانوني.",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "legis-68-1980-m546",
+    "relation_type": "ADJACENT_RELEVANT_PROVISION",
+    "discovered_by_lane": "ADJACENT_RELEVANT_PROVISION/تشريع",
+    "quoted_basis": "-1 لحامل الشيك الرجوع على الساحب أو المظهرين وغيرهم من الملتزمين به إذا قدمه في الميعاد القانوني ولم تدفع قيمته وأثبت الامتناع عن الدفع ببروتستو.",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "legis-68-1980-m530",
+    "relation_type": "ADJACENT_RELEVANT_PROVISION",
+    "discovered_by_lane": "ADJACENT_RELEVANT_PROVISION/تشريع",
+    "quoted_basis": "-1 التظهير اللاحق للبروتستو أو الحاصل بعد انقضاء ميعاد تقديم الشيك لا يرتب إلا آثار حوالة الحق.",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "jprin-86-1995-w6579",
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "discovered_by_lane": "JUDICIAL_INTERPRETATION/مبدأ",
+    "quoted_basis": "دعوى رجوع حامل الشيك. تقادمها بتقادم خاص مدته ستة أشهر من ميعاد تقديمه. أثر ذلك.",
+    "authority_kind": "principle"
+   },
+   {
+    "object_id": "jprin-1505-2012-q1",
+    "relation_type": "CONSEQUENCE",
+    "discovered_by_lane": "JUDICIAL_INTERPRETATION/مبدأ",
+    "quoted_basis": "تقادم دعوى المطالبة بالشيك لا تحول دون رجوع الحامل أو الملتزمين بالوفاء على الساحب. مؤدى ذلك. حقهما في الرجوع عليه بالتعويض في حدود ما أثرى به دون سبب مشروع . م 262 مدني .",
+    "authority_kind": "principle"
+   },
+   {
+    "object_id": "jprin-23-2009-e4514",
+    "relation_type": "EXCEPTION",
+    "discovered_by_lane": "JUDICIAL_INTERPRETATION/مبدأ",
+    "quoted_basis": "أن تناقض دفـاع المدين مع ما افترضه المشرع بمقتضى هذه القرينة كإنكار الدين أو الطعن عليه بالبطلان لأي سبـب من الأسباب التي لا تتفق مع حصول الوفاء. أثره. عدم قبول الدفع بانقضاء الالتزام الصرفي بالتقادم. م550 من قانـون التجارة.",
+    "authority_kind": "principle"
+   },
+   {
+    "object_id": "jprin-1501-2007-w8408",
+    "relation_type": "EXCEPTION",
+    "discovered_by_lane": "EXCEPTION/مبدأ",
+    "quoted_basis": "إذا تناقض دفاع المدين مع ما افترضه المشرع بمقتضى هذه القرينة من أنها دليل غير كامل كإنكار الدين أصلاً أو الطعن عليه بالبطلان. كان الدفع بانقضاء الالتزام الصرفي بالتقادم غير مقبول.",
+    "authority_kind": "principle"
+   },
+   {
+    "object_id": "jprin-42-1995-e1153",
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "discovered_by_lane": "EXCEPTION/مبدأ",
+    "quoted_basis": "التقادم الصرفي. قيامه على قرينة الوفاء بالدين.\n- قرينة الوفاء بالدين التي يقوم عليها التقادم الصرفي. دليل غير كامل. تعزيزها بيمين متممة يحلفها المدين.",
+    "authority_kind": "principle"
+   }
+  ],
+  "qualified_but_over_cap": [
+   {
+    "object_id": "jprin-86-1995-f3003",
+    "relation_type": "JUDICIAL_INTERPRETATION"
+   },
+   {
+    "object_id": "jprin-242-1996-f3754",
+    "relation_type": "JUDICIAL_INTERPRETATION"
+   },
+   {
+    "object_id": "jprin-545-2001-e1160",
+    "relation_type": "JUDICIAL_INTERPRETATION"
+   },
+   {
+    "object_id": "jprin-42-1995-i2295",
+    "relation_type": "EXCEPTION"
+   },
+   {
+    "object_id": "jprin-1501-2007-e5346",
+    "relation_type": "EXCEPTION"
+   },
+   {
+    "object_id": "jprin-23-2009-i2301",
+    "relation_type": "EXCEPTION"
+   },
+   {
+    "object_id": "legis-68-1980-m542",
+    "relation_type": "ADJACENT_RELEVANT_PROVISION"
+   },
+   {
+    "object_id": "legis-68-1980-m526",
+    "relation_type": "ADJACENT_RELEVANT_PROVISION"
+   }
+  ],
+  "rejected_sample": [
+   {
+    "object_id": "legis-68-1980-m503",
+    "why_rejected": "the parallel non-running rule for bills of exchange; a duplicate rule for a different instrument is not a relation to the cheque anchor's own rule"
+   },
+   {
+    "object_id": "legis-68-1980-m505",
+    "why_rejected": "the bills-of-exchange analogue of the oath duty; parallel provision, not related to the anchor's rule"
+   },
+   {
+    "object_id": "legis-16-1960-m237",
+    "why_rejected": "the penal cheque offence; a different regime that neither conditions nor qualifies the anchor's prescription rule"
+   },
+   {
+    "object_id": "legis-51-1984-m149",
+    "why_rejected": "the husband's right to take back a revocably divorced wife; pure lexical noise from the word «رجوع»"
+   },
+   {
+    "object_id": "legis-61-1976-m107",
+    "why_rejected": "deadline for social-insurance claims; merely appeared in the results"
+   },
+   {
+    "object_id": "legis-68-1980-m487",
+    "why_rejected": "forfeiture of the bill-holder's rights for missed deadlines; same law as the anchor but a different instrument and a different mechanism — same-law membership is never a reason to admit"
+   }
+  ],
+  "counts": {
+   "queries_issued": 8,
+   "raw_results_total": 160,
+   "duplicates_dropped_total": 16,
+   "discovery_pool": 54,
+   "admitted": 12
+  }
+ },
+ {
+  "case": "A3",
+  "anchor_id": "legis-68-1980-m551",
+  "law_prefix": "legis-68-1980-",
+  "anchor_characterisation": {
+   "operation": "qualifies a time limit: it stops the prescription period laid down by the preceding article from running — from the date of the last step while an action is pending, and altogether where a judgment on the debt was given or the debtor acknowledged it in a separate instrument amounting to novation",
+   "conditions": [
+    "في حالة رفع الدعوى — the period runs only «من تاريخ آخر إجراء فيها»",
+    "صدور حكم بالدين — then the prescription referred to does not run",
+    "أو أقر به المدين بصك مستقل إقرارا يترتب عليه تجديد الدين — acknowledgment must be in a SEPARATE instrument and must amount to novation"
+   ],
+   "explicit_cross_references": [
+    "المادة السابقة (referred to by words only — no article number appears in the anchor's own text)"
+   ],
+   "terms_of_art": [
+    "مدة التقادم",
+    "رفع الدعوى",
+    "آخر إجراء فيها",
+    "حكم بالدين",
+    "إقرار المدين بصك مستقل",
+    "تجديد الدين"
+   ]
+  },
+  "lanes": [
+   {
+    "relation_type": "PREREQUISITE",
+    "kind": "تشريع",
+    "queries": [
+     "متى تعتبر الدعوى مرفوعة وما يعد آخر إجراء فيها"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PREREQUISITE",
+    "kind": "مبدأ",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "CONSEQUENCE",
+    "kind": "تشريع",
+    "queries": [
+     "تجديد الدين بالإقرار في صك مستقل وأثره على الالتزام القائم"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "CONSEQUENCE",
+    "kind": "مبدأ",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "EXCEPTION",
+    "kind": "تشريع",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "EXCEPTION",
+    "kind": "مبدأ",
+    "queries": [
+     "انقطاع التقادم بإقرار المدين بالحق صراحة أو ضمنا وبدء مدة جديدة"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 6,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PROCEDURAL_EFFECT",
+    "kind": "تشريع",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PROCEDURAL_EFFECT",
+    "kind": "مبدأ",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PROCEDURAL_REQUIREMENT",
+    "kind": "تشريع",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PROCEDURAL_REQUIREMENT",
+    "kind": "مبدأ",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "ADJACENT_RELEVANT_PROVISION",
+    "kind": "تشريع",
+    "queries": [
+     "تقادم دعاوى الأوراق التجارية ومدده في قانون التجارة"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 2,
+    "same_law_filter_applied": true,
+    "filtered_out_by_law_prefix": 6
+   },
+   {
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "kind": "مبدأ",
+    "queries": [
+     "أثر صدور حكم بالدين على سريان مدة التقادم ومدة التقادم الجديدة"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 6,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "JUDICIAL_APPLICATION",
+    "kind": "مبدأ",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "kind": "تشريع",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "kind": "مبدأ",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "TEMPORAL_RELATION",
+    "kind": "تشريع",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "TEMPORAL_RELATION",
+    "kind": "مبدأ",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "CONFLICTING_AUTHORITY",
+    "kind": "تشريع",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "CONFLICTING_AUTHORITY",
+    "kind": "مبدأ",
+    "queries": [],
+    "raw_returned": 0,
+    "duplicates_dropped": 0,
+    "kept": 0,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   }
+  ],
+  "discovery_pool_size": 30,
+  "admitted": [
+   {
+    "object_id": "legis-67-1980-m448",
+    "relation_type": "PREREQUISITE",
+    "discovered_by_lane": "PREREQUISITE/تشريع",
+    "quoted_basis": "تنقطع المدة المقررة لعدم سماع الدعوى بالمطالبة القضائية ولو رفعت الدعوى إلى محكمة غير مختصة، كما تنقطع المدة أيضا بإعلان السند التنفيذي وبالحجز وبالطلب الذي يتقدم به الدائن لقبول حقه في تفليس أو في توزيع وبأي عمل يقوم به الدائن للتمسك بحقه أثناء السير في إحدى الدعوى.",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "legis-67-1980-m419",
+    "relation_type": "CONSEQUENCE",
+    "discovered_by_lane": "CONSEQUENCE/تشريع",
+    "quoted_basis": "سيترتب على التجديد انقضاء الالتزام الأصلي بتوابعه وإنشاء التزام جديد مكانه.",
+    "authority_kind": "statute"
+   },
+   {
+    "object_id": "jprin-602-1998-w869",
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "discovered_by_lane": "EXCEPTION/مبدأ",
+    "quoted_basis": "انقطاع مدة التقادم بإقرار المدين بالدين. شرطه. أن يصدر الإقرار أثناء سريان مدة التقادم. لا أثر لهذا الإقرار على التقادم بعد اكتمال مدته.",
+    "authority_kind": "principle"
+   },
+   {
+    "object_id": "jprin-1501-2012-s2928",
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "discovered_by_lane": "EXCEPTION/مبدأ",
+    "quoted_basis": "انقطاع مدة التقادم بناء على إقرار المدين بالدين. شرطه . أن يصدر الإقرار أثناء سريان مدة التقادم . انقضاء تلك المدة التي يكتمل بها التقادم . لا أثر لإقرار المدين من بعد بالدين.",
+    "authority_kind": "principle"
+   },
+   {
+    "object_id": "jprin-1501-2012-q3",
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "discovered_by_lane": "EXCEPTION/مبدأ",
+    "quoted_basis": "مفاده أنه يشترط لانقطاع مدة التقادم بإقرار المدين بالدين أن يصدر هذا الإقرار أثناء سريان مدة التقادم أي قبل انقضاء مدته ، فإذا انقضت تلك المدة واكتمل التقادم فإن اقرار المدين من بعد بالدين لا يكون له أثر على التقادم الذي بدأ واكتمل قبل صدوره.",
+    "authority_kind": "principle"
+   },
+   {
+    "object_id": "jprin-95-1982-f3028",
+    "relation_type": "CONSEQUENCE",
+    "discovered_by_lane": "JUDICIAL_INTERPRETATION/مبدأ",
+    "quoted_basis": "الإقرار بالدين. أثره. قطع التقادم وبدء سريان تقادم جديد تكون مدته مساوية للتقادم الأول. تحوله إلى تقادم طويل إذا أفرغ الإقرار في سند يكفي بذاته لإثبات الحق.",
+    "authority_kind": "principle"
+   },
+   {
+    "object_id": "jprin-782-2005-f3059",
+    "relation_type": "CONSEQUENCE",
+    "discovered_by_lane": "EXCEPTION/مبدأ",
+    "quoted_basis": "إقرار المدين بحق دائنه بأي تعبير عن الإرادة ملزم له.أثره. انقطاع التقادم وزوال أثره. بدء تقادم جديد مماثل للتقادم الذي انقطع من وقت صدور الإقرار.",
+    "authority_kind": "principle"
+   },
+   {
+    "object_id": "jprin-782-2005-i2697",
+    "relation_type": "CONSEQUENCE",
+    "discovered_by_lane": "EXCEPTION/مبدأ",
+    "quoted_basis": "إقرار المدين بحق دائنه بأي تعبير عن الإرادة ملزم له. أثره. انقطاع التقادم وزوال أثره. بدء تقادم جديد مماثل للتقادم الذي انقطع من وقت صدور الإقرار .",
+    "authority_kind": "principle"
+   },
+   {
+    "object_id": "jprin-602-1998-i2695",
+    "relation_type": "CONSEQUENCE",
+    "discovered_by_lane": "JUDICIAL_INTERPRETATION/مبدأ",
+    "quoted_basis": "انقطاع المدة المقررة لعدم سماع الدعوى يترتب عليه أن تبدأ مدة جديدة من وقت انتهاء الأثر المترتب على سبب الانقطاع. المدة الجديدة تكون مماثلة للمدة الأولى.",
+    "authority_kind": "principle"
+   },
+   {
+    "object_id": "jprin-101-1996-e1229",
+    "relation_type": "CONSEQUENCE",
+    "discovered_by_lane": "EXCEPTION/مبدأ",
+    "quoted_basis": "إقرار المدين بالدين. ينقطع به التقادم. مثال. لانقطاع المدة بالإقرار وبدء مدة جديدة.",
+    "authority_kind": "principle"
+   },
+   {
+    "object_id": "jprin-3-1975-e5409",
+    "relation_type": "JUDICIAL_APPLICATION",
+    "discovered_by_lane": "EXCEPTION/مبدأ",
+    "quoted_basis": "الدين الذي يتقادم بسنة واحدة. انقطاعه بإقرار المدين .أثره. مدة التقادم الجديدة خمسة عشرة سنة. م 372/3 ق التجارة.",
+    "authority_kind": "principle"
+   },
+   {
+    "object_id": "jprin-862-2009-e7746",
+    "relation_type": "TEMPORAL_RELATION",
+    "discovered_by_lane": "JUDICIAL_INTERPRETATION/مبدأ",
+    "quoted_basis": "القوانين المتعلقة بالتقادم. سريانها من وقت العمل بها على كل تقادم لم يكتمل طبقاً للأثر المباشر للتشريع. المدة التي سرت من التقادم وتعيين اللحظة التي بدأتها فيها وكيفية حسابها وما طرأ عليها من أسباب الانقطاع أو الوقف. يحكمها القانون القديم.",
+    "authority_kind": "principle"
+   }
+  ],
+  "qualified_but_over_cap": [
+   {
+    "object_id": "jprin-1501-2012-s2731",
+    "relation_type": "LIMITATION_OR_QUALIFICATION"
+   },
+   {
+    "object_id": "jprin-1501-2012-s3099",
+    "relation_type": "LIMITATION_OR_QUALIFICATION"
+   }
+  ],
+  "rejected_sample": [
+   {
+    "object_id": "legis-68-1980-m503",
+    "why_rejected": "the verbatim parallel rule for bills of exchange; a duplicate rule for a different instrument is not a relation to the anchor's own rule"
+   },
+   {
+    "object_id": "legis-67-1980-m435",
+    "why_rejected": "discharge by release (الإبراء); a different mode of extinguishing an obligation, states nothing about the running of the anchor's period"
+   },
+   {
+    "object_id": "legis-67-1980-m1057",
+    "why_rejected": "opposability of novation to a mortgagee creditor; concerns third-party effects, not the anchor's rule on when prescription runs"
+   },
+   {
+    "object_id": "legis-42-2014-m167",
+    "why_rejected": "limitation of pollution claims; merely appeared in the results, no relation to the anchor's rule"
+   },
+   {
+    "object_id": "legis-68-1980-m30",
+    "why_rejected": "form of commercial books; same law as the anchor only — same-law membership is never a reason to admit"
+   },
+   {
+    "object_id": "legis-38-1980-m81",
+    "why_rejected": "plea of inadmissibility of the action; surfaced by the «رفع الدعوى» wording but states no rule standing in any of the eleven relations to the anchor's rule"
+   }
+  ],
+  "counts": {
+   "queries_issued": 5,
+   "raw_results_total": 100,
+   "duplicates_dropped_total": 12,
+   "discovery_pool": 30,
+   "admitted": 12
+  }
+ }
+]
