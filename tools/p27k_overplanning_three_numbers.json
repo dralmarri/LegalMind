@@ -1,0 +1,186 @@
+{
+ "_note": "P2.7-K — ثلاثة أرقام منفصلة لا يُعاد بأيٍّ منها كتابة الحقيقة الأرضية.",
+ "_1_PRE_REGISTERED_OFFICIAL": {
+  "metric": "ROLE_OVERPLANNING_RATE",
+  "value": 0.275,
+  "formula": "11/40",
+  "threshold": 0.15,
+  "pass": false,
+  "status": "**الرقم الرسمي — يبقى كما هو والعتبة ساقطة**، ولا يُعدَّل بأي تحليل لاحق",
+  "_disclosed_gap": "جُمِّدت قيمة العتبة ولم تُجمَّد صيغتها — عيب انضباط في تسجيلي المسبق، يُسجَّل ولا يُتحايل عليه"
+ },
+ "_2_LEGALLY_ADJUDICATED_OVERPLANNING": {
+  "_status": "تحليل لاحق مستقل — **لا يُستعمل لتغيير الرقم الرسمي**",
+  "distribution": {
+   "JUSTIFIED": 9,
+   "REDUNDANT": 1,
+   "MARGINAL": 1
+  },
+  "n_extras": 11,
+  "genuinely_unjustified": 2,
+  "adjudicated_rate_if_it_were_official": 0.05,
+  "_explicit": "هذا الرقم **ليس رسميًا ولا يحل محل 0.2750** — يُعرض ليُقرأ بجانبه فقط",
+  "items": [
+   {
+    "case_id": "A_gs-0011",
+    "extra_role": "CONFLICT_CHECK",
+    "legal_verdict": "JUSTIFIED",
+    "legal_reasoning": "الوقائع تجمع زوجة جعفرية وزوج سني ونزاع نسب وميراث — فسؤال «أي منظومة تحكم» قائم فعلًا بين ق51/1984 وق124/2019. والأهم: تعارض البصمة الوراثية الذي جمّدتُه أنا حزمةً مستقلة (D) **حيٌّ في وقائع هذه الحالة نفسها** لأن إثبات النسب مطلوب فيها. فالحزمة المجمَّدة لـA أغفلت دورًا مقتضاه ظاهر من الوقائع.",
+    "benchmark_status": "UNREVIEWED_BENCHMARK_OMISSION",
+    "counts_as_true_positive": false
+   },
+   {
+    "case_id": "B_gs-0013",
+    "extra_role": "CONFLICT_CHECK",
+    "legal_verdict": "REDUNDANT",
+    "legal_reasoning": "علّة الوكيل أن القضاء قد يفسّر نصًا منسوخًا — وهذا **بعينه** ما يقيسه TEMPORAL_CHECK المتوقَّع أصلًا. الاختلاف زمني لا مذهبي، فالدور مكرر لا مضاف.",
+    "benchmark_status": "NOT_AN_OMISSION",
+    "counts_as_true_positive": false
+   },
+   {
+    "case_id": "B_gs-0013",
+    "extra_role": "JUDICIAL_APPLICATION",
+    "legal_verdict": "JUSTIFIED",
+    "legal_reasoning": "الوقائع مركّبة ومحددة (مورّد، شركة ذات مسؤولية محدودة، شيكان مرتدّان، منع مدير مفوَّض من السفر، امتداد المسؤولية لشخص المدير) — وامتداد المسؤولية للمدير وشروط منع السفر مسألتان يحكمهما نمط الوقائع لا التعريف المجرد.",
+    "benchmark_status": "UNREVIEWED_BENCHMARK_OMISSION",
+    "counts_as_true_positive": false
+   },
+   {
+    "case_id": "C_gs-0033",
+    "extra_role": "EXCEPTION_CHECK",
+    "legal_verdict": "JUSTIFIED",
+    "legal_reasoning": "م8 نفسها تحمل استثناءً صريحًا: «فإذا انتهت هذه المدة دون البت في الطلب كان لصاحب الشأن اللجوء إلى القضاء» — أي استثناء على شرط القبول ذاته. وحزمتي المجمَّدة لـC تتضمن هذه القضية فعلًا كـproposition، ثم لم تُدرج الدور المقابل لها في expected_roles. تناقض داخلي في حزمتي أنا.",
+    "benchmark_status": "UNREVIEWED_BENCHMARK_OMISSION",
+    "counts_as_true_positive": false
+   },
+   {
+    "case_id": "D_dna",
+    "extra_role": "EXCEPTION_CHECK",
+    "legal_verdict": "JUSTIFIED",
+    "legal_reasoning": "التفرقة بين استعمال البصمة للإثبات واستعمالها للنفي في مواجهة قرينة الفراش قيدٌ حقيقي على القاعدة، ومناطها مختلف في الحالتين.",
+    "benchmark_status": "UNREVIEWED_BENCHMARK_OMISSION",
+    "counts_as_true_positive": false
+   },
+   {
+    "case_id": "D_dna",
+    "extra_role": "JUDICIAL_APPLICATION",
+    "legal_verdict": "MARGINAL",
+    "legal_reasoning": "السؤال مصوغ مجردًا («هل يجوز… وما حجيته») بلا نمط وقائع يُطابَق عليه. الدور مشروع نظريًا وقيمته المضافة هنا منخفضة.",
+    "benchmark_status": "NOT_AN_OMISSION",
+    "counts_as_true_positive": false
+   },
+   {
+    "case_id": "D_dna",
+    "extra_role": "PROCEDURAL_REQUIREMENT",
+    "legal_verdict": "JUSTIFIED",
+    "legal_reasoning": "م7 من 53/2026 تنظّم بنفسها إجراء الأمر بالفحص وأثر تخلف الطالب خلال ثلاثين يومًا — فالبعد الإجرائي منصوص لا مفترَض.",
+    "benchmark_status": "UNREVIEWED_BENCHMARK_OMISSION",
+    "counts_as_true_positive": false
+   },
+   {
+    "case_id": "E_gs-0006",
+    "extra_role": "JUDICIAL_APPLICATION",
+    "legal_verdict": "JUSTIFIED",
+    "legal_reasoning": "دعوى الإخلاء لعدم السداد من أكثر المسائل ارتهانًا بنمط الوقائع (هل عُرضت الأجرة؟ هل أُودعت؟ هل سعى المؤجر؟)، والقضاء فيها تطبيقي بطبعه.",
+    "benchmark_status": "UNREVIEWED_BENCHMARK_OMISSION",
+    "counts_as_true_positive": false
+   },
+   {
+    "case_id": "E_gs-0006",
+    "extra_role": "TEMPORAL_CHECK",
+    "legal_verdict": "JUSTIFIED",
+    "legal_reasoning": "نص م20 الحالي يحمل فقرة لاحقة عن تعطيل المرافق العامة بقرار مجلس الوزراء — دليل مباشر على أن ق35/1978 عُدِّل، فالتحقق من النسخة النافذة مقتضى حقيقي.",
+    "benchmark_status": "UNREVIEWED_BENCHMARK_OMISSION",
+    "counts_as_true_positive": false
+   },
+   {
+    "case_id": "F_gs-0005",
+    "extra_role": "JUDICIAL_APPLICATION",
+    "legal_verdict": "JUSTIFIED",
+    "legal_reasoning": "معيار «التعسف» في الفصل ومعيار التعويض لا يُحسمان من النص المجرد بل من تطبيقه على أنماط وقائع.",
+    "benchmark_status": "UNREVIEWED_BENCHMARK_OMISSION",
+    "counts_as_true_positive": false
+   },
+   {
+    "case_id": "G_negative_control",
+    "extra_role": "TEMPORAL_CHECK",
+    "legal_verdict": "JUSTIFIED",
+    "legal_reasoning": "**أقوى الحالات**: مرسوم 136/2026 استبدل فعلًا الجدول المرافق للمرسوم 126/2018. فالتحقق من الجدول النافذ ليس توسعًا بل شرط صحة الجواب — والحزمة المجمَّدة هي التي أغفلته.",
+    "benchmark_status": "UNREVIEWED_BENCHMARK_OMISSION",
+    "counts_as_true_positive": false
+   }
+  ]
+ },
+ "_3_BENCHMARK_OMISSION_CANDIDATES": {
+  "_status": "UNREVIEWED — لا يتحول أيٌّ منها إلى true positive بأثر رجعي",
+  "n": 9,
+  "candidates": [
+   {
+    "case_id": "A_gs-0011",
+    "role": "CONFLICT_CHECK",
+    "reason": "الوقائع تجمع زوجة جعفرية وزوج سني ونزاع نسب وميراث — فسؤال «أي منظومة تحكم» قائم فعلًا بين ق51/1984 وق124/2019. والأهم: تعارض البصمة الوراثية الذي جمّدتُه أنا حزمةً مستقلة (D) **حيٌّ في وقائع هذه الحالة نفسها** لأن إثبات النسب مطلوب فيها. فالحزمة المجمَّدة لـA أغفلت دورًا مقتضاه ظاهر من الوقائع."
+   },
+   {
+    "case_id": "B_gs-0013",
+    "role": "JUDICIAL_APPLICATION",
+    "reason": "الوقائع مركّبة ومحددة (مورّد، شركة ذات مسؤولية محدودة، شيكان مرتدّان، منع مدير مفوَّض من السفر، امتداد المسؤولية لشخص المدير) — وامتداد المسؤولية للمدير وشروط منع السفر مسألتان يحكمهما نمط الوقائع لا التعريف المجرد."
+   },
+   {
+    "case_id": "C_gs-0033",
+    "role": "EXCEPTION_CHECK",
+    "reason": "م8 نفسها تحمل استثناءً صريحًا: «فإذا انتهت هذه المدة دون البت في الطلب كان لصاحب الشأن اللجوء إلى القضاء» — أي استثناء على شرط القبول ذاته. وحزمتي المجمَّدة لـC تتضمن هذه القضية فعلًا كـproposition، ثم لم تُدرج الدور المقابل لها في expected_roles. تناقض داخلي في حزمتي أنا."
+   },
+   {
+    "case_id": "D_dna",
+    "role": "EXCEPTION_CHECK",
+    "reason": "التفرقة بين استعمال البصمة للإثبات واستعمالها للنفي في مواجهة قرينة الفراش قيدٌ حقيقي على القاعدة، ومناطها مختلف في الحالتين."
+   },
+   {
+    "case_id": "D_dna",
+    "role": "PROCEDURAL_REQUIREMENT",
+    "reason": "م7 من 53/2026 تنظّم بنفسها إجراء الأمر بالفحص وأثر تخلف الطالب خلال ثلاثين يومًا — فالبعد الإجرائي منصوص لا مفترَض."
+   },
+   {
+    "case_id": "E_gs-0006",
+    "role": "JUDICIAL_APPLICATION",
+    "reason": "دعوى الإخلاء لعدم السداد من أكثر المسائل ارتهانًا بنمط الوقائع (هل عُرضت الأجرة؟ هل أُودعت؟ هل سعى المؤجر؟)، والقضاء فيها تطبيقي بطبعه."
+   },
+   {
+    "case_id": "E_gs-0006",
+    "role": "TEMPORAL_CHECK",
+    "reason": "نص م20 الحالي يحمل فقرة لاحقة عن تعطيل المرافق العامة بقرار مجلس الوزراء — دليل مباشر على أن ق35/1978 عُدِّل، فالتحقق من النسخة النافذة مقتضى حقيقي."
+   },
+   {
+    "case_id": "F_gs-0005",
+    "role": "JUDICIAL_APPLICATION",
+    "reason": "معيار «التعسف» في الفصل ومعيار التعويض لا يُحسمان من النص المجرد بل من تطبيقه على أنماط وقائع."
+   },
+   {
+    "case_id": "G_negative_control",
+    "role": "TEMPORAL_CHECK",
+    "reason": "**أقوى الحالات**: مرسوم 136/2026 استبدل فعلًا الجدول المرافق للمرسوم 126/2018. فالتحقق من الجدول النافذ ليس توسعًا بل شرط صحة الجواب — والحزمة المجمَّدة هي التي أغفلته."
+   }
+  ],
+  "validity_constraint_on_final_measurement": "إغفال الحزم المجمَّدة لأدوار مقتضاها ظاهر من الوقائع **قيد على صلاحية القياس النهائي** — يُعلَن في التقرير ولا يُصحَّح بعد فتح النتائج"
+ },
+ "_4_IS_IT_SYSTEMATIC_SEARCH_EVERYTHING": {
+  "_question": "هل اشترى Planner الـrecall بزيادة البحث؟",
+  "role_marks": 112,
+  "dimensions": 43,
+  "roles_available": 7,
+  "marks_per_dimension": 2.6,
+  "saturation_vs_max": 0.3721,
+  "evidence_against_blanket": [
+   "2.6 دور لكل بُعد من أصل 7 ممكنة = إشباع 37% فقط — ولو كان «ابحث كل شيء» لبلغ 7.0",
+   "JUDICIAL_APPLICATION عُلِّم في 7 مواضع فقط من 43 بُعدًا",
+   "CONFLICT_CHECK عُلِّم في 3 مواضع فقط من 43",
+   "الضابط السلبي أُعطي دورين من سبعة (28%) ولم يُعلَّم له أي دور قضائي إطلاقًا",
+   "C_gs-0033 حُرم صراحةً من JUDICIAL_APPLICATION وCONFLICT_CHECK بعلّة مكتوبة"
+  ],
+  "evidence_for_expansion": [
+   "JUDICIAL_APPLICATION هو أكثر الأدوار الزائدة تكرارًا (4 من 11) — نمط قابل للملاحظة",
+   "D_dna أخذ الأدوار السبعة كلها على سؤال مجرد قصير — أوضح حالة توسّع"
+  ],
+  "_verdict": "**ليس نمط «ابحث كل شيء»** — التمييز مُثبَت بخمسة شواهد. لكنه **ليس routing نظيفًا** أيضًا: ميل ملحوظ لتعليم JUDICIAL_APPLICATION، وحالة توسّع واضحة واحدة (D_dna). والحسم النهائي معلَّق على ما إذا كانت هذه الزيادات كلّفت دقة أو زمنًا في تنفيذ المسارات."
+ }
+}
