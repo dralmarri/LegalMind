@@ -1,0 +1,245 @@
+{
+ "_note": "P2.7-J — تدقيق معماري. تصميم وقياس فقط: صفر تعديل على Gold Set/Graph/Planner/Gates/القرارات البشرية/الاسترجاع الإنتاجي.",
+ "freeze_ref": "tools/p27j_freeze.json",
+ "retrieval_path_matrix": {
+  "_source": "قراءة كود الإنتاج من فرع main@902a3f9 (مزامنة الخادم 2026-09-17)، مع اسم الدالة ورقم السطر والفلتر الحرفي لكل خلية",
+  "matrix": {
+   "dense_full_query": {
+    "legislation": "YES",
+    "principles": "YES",
+    "judgments": "PARTIAL",
+    "templates": "PARTIAL",
+    "fn": "_draft_run plans[0] — app.py:5417-5420",
+    "filter": "LEGISLATION 10 / PRINCIPLE 10 / JUDGMENT **2** / TEMPLATE **2**",
+    "note": "الأحكام الكاملة حصتها 2 مقابل 10 للتشريعات — من متجه واحد فقط"
+   },
+   "dense_per_axis": {
+    "legislation": "YES",
+    "principles": "YES",
+    "judgments": "**NO**",
+    "templates": "**NO**",
+    "fn": "_draft_run plans[1:] — app.py:5423-5426",
+    "filter": "LEGISLATION 8 / PRINCIPLE 8 فقط",
+    "note": "محاور Haiku الثلاثة إلى الستة — وهي عصب الاسترجاع — **لا ترى الأحكام الكاملة إطلاقًا**"
+   },
+   "lexical": {
+    "legislation": "YES",
+    "principles": "**NO**",
+    "judgments": "**NO**",
+    "templates": "**NO**",
+    "fn": "app.py:862-863",
+    "filter": "object_type IN _kb.LEXICAL_TYPES = LEGISLATION_TYPES",
+    "note": "القناة المعجمية تشريعية بحتة"
+   },
+   "direct_id_citation": {
+    "legislation": "YES",
+    "principles": "**NO**",
+    "judgments": "**NO**",
+    "templates": "**NO**",
+    "fn": "_draft_direct_ids — app.py:4223-4224",
+    "filter": "object_type IN _kb.DIRECT_CITATION_TYPES = LEGISLATION_TYPES",
+    "note": "ذكر رقم طعن صراحةً في السؤال **لا يجلبه** — الاستشهاد الصريح تشريعي فقط"
+   },
+   "chapter_bundle": {
+    "legislation": "PARTIAL",
+    "principles": "**NO**",
+    "judgments": "**NO**",
+    "templates": "**NO**",
+    "fn": "_draft_chap_index — app.py:4328",
+    "filter": "object_type='legislation_article' AND id ~ '^legis-.+-m[0-9]+$'",
+    "note": "**حتى داخل التشريعات**: يستبعد legislation (LEG-*) وlegislation_archived وregl-* وlreg-*"
+   },
+   "gates": {
+    "legislation": "YES",
+    "principles": "**NO**",
+    "judgments": "**NO**",
+    "templates": "**NO**",
+    "fn": "_GATES — app.py:4441-4463",
+    "filter": "قوائم معرفات legis-* مرمَّزة يدويًا",
+    "note": "بوابات الاستلزام القانوني كلها تشريعية — ولا بوابة واحدة تجلب مبدأً أو حكمًا"
+   },
+   "xref": {
+    "legislation": "YES",
+    "principles": "**NO**",
+    "judgments": "**NO**",
+    "templates": "**NO**",
+    "fn": "_XREF — app.py:2037-2050, 5526",
+    "filter": "خريطة ثابتة من ملف: معرّف تشريعي ← معرفات تشريعية"
+   },
+   "sibling_xref": {
+    "legislation": "PARTIAL",
+    "principles": "**NO**",
+    "judgments": "**NO**",
+    "templates": "**NO**",
+    "fn": "_sib_expand — app.py:4916-4938",
+    "filter": "if lb != 'تشريع': continue + re.match(r'^(legis-[a-z0-9]+-[0-9]+)-m')",
+    "note": "تشريع←تشريع، وبنمط legis-* حصرًا"
+   },
+   "principle_xref": {
+    "legislation": "YES (كمخرَج)",
+    "principles": "مدخل فقط",
+    "judgments": "**NO**",
+    "templates": "**NO**",
+    "fn": "_prin_xref — app.py:4946-4990",
+    "filter": "مدخل: oid.startswith('jprin') or oid.startswith('JUR') ← مخرَج: معرفات تشريعية",
+    "note": "**جسر مبدأ←تشريع لا قناة استرجاع قضائي**: يقرأ المبادئ ليجلب موادها، ولا يجلب مبدأً واحدًا. وهو الموضع **الوحيد** في كل الكود الذي يتعرّف على بادئة JUR"
+   },
+   "gap_search": {
+    "legislation": "YES",
+    "principles": "YES",
+    "judgments": "**NO**",
+    "templates": "**NO**",
+    "fn": "_gap_search — app.py:5378-5379",
+    "filter": "object_type IN _kb.GAP_SEARCH_TYPES = LEGISLATION + PRINCIPLE",
+    "note": "طبقة سد الفجوة — آخر فرصة للإنقاذ — **عمياء عن الأحكام الكاملة**"
+   },
+   "reranker": {
+    "legislation": "YES",
+    "principles": "YES",
+    "judgments": "**NO**",
+    "templates": "**NO**",
+    "fn": "_draft_rerank call — app.py:5545-5547",
+    "filter": "if lb in ('تشريع','مبدأ قضائي') and sc < 0.99",
+    "note": "الأحكام الكاملة **لا تُرتَّب قط**: تحتفظ بدرجتها المتجهية الخام وتنافس درجات مُعاد ترتيبها — تشويه مقارنة بنيوي"
+   },
+   "budget": {
+    "legislation": "48000 حرفًا",
+    "principles": "24000",
+    "judgments": "**8000**",
+    "templates": "5000",
+    "fn": "LBL_BUDGET — app.py:5561",
+    "filter": "قاموس ثابت",
+    "note": "الحكم الكامل نص طويل جدًا (المقيس أعلاه ~9000 حرف لحكم واحد) وميزانيته 8000 — أي أن **حكمًا واحدًا كاملًا يستنفدها**"
+   },
+   "final_context": {
+    "legislation": "YES",
+    "principles": "YES",
+    "judgments": "YES",
+    "templates": "YES",
+    "fn": "app.py:5599-5602",
+    "filter": "أي بند نجا من كل ما سبق"
+   }
+  }
+ },
+ "judicial_value_add": {
+  "n_cases": 7,
+  "n_changed_analysis": 7,
+  "share": 1.0,
+  "per_case": {
+   "1_gs-0005_E22": {
+    "case_id": "gs-0005",
+    "n_unique_judicial": 5,
+    "relations": [
+     "ADDS_MISSING_DIMENSION",
+     "CONFIRMS",
+     "QUALIFIES"
+    ],
+    "added_required_dimension": true,
+    "added_exception_or_limit": true,
+    "resolved_ambiguity": false,
+    "temporal_correction": true,
+    "conflict_discovered": false,
+    "necessity_reclassified": true,
+    "changed_the_analysis": true
+   },
+   "2_gs-0006_E23": {
+    "case_id": "gs-0006",
+    "n_unique_judicial": 4,
+    "relations": [
+     "ADDS_MISSING_DIMENSION",
+     "CONFIRMS",
+     "CREATES_EXCEPTION",
+     "QUALIFIES"
+    ],
+    "added_required_dimension": true,
+    "added_exception_or_limit": true,
+    "resolved_ambiguity": false,
+    "temporal_correction": false,
+    "conflict_discovered": false,
+    "necessity_reclassified": false,
+    "changed_the_analysis": true
+   },
+   "3_gs-0011_E09": {
+    "case_id": "gs-0011",
+    "n_unique_judicial": 3,
+    "relations": [
+     "ADDS_MISSING_DIMENSION",
+     "CONFIRMS",
+     "RESOLVES_AMBIGUITY"
+    ],
+    "added_required_dimension": true,
+    "added_exception_or_limit": false,
+    "resolved_ambiguity": true,
+    "temporal_correction": true,
+    "conflict_discovered": false,
+    "necessity_reclassified": false,
+    "changed_the_analysis": true
+   },
+   "4_gs-0011_E10": {
+    "case_id": "gs-0011",
+    "n_unique_judicial": 2,
+    "relations": [
+     "CONFIRMS",
+     "CONTRADICTS"
+    ],
+    "added_required_dimension": false,
+    "added_exception_or_limit": false,
+    "resolved_ambiguity": false,
+    "temporal_correction": true,
+    "conflict_discovered": true,
+    "necessity_reclassified": false,
+    "changed_the_analysis": true
+   },
+   "5_gs-0013_E01": {
+    "case_id": "gs-0013",
+    "n_unique_judicial": 5,
+    "relations": [
+     "ADDS_MISSING_DIMENSION",
+     "CONFIRMS",
+     "QUALIFIES"
+    ],
+    "added_required_dimension": true,
+    "added_exception_or_limit": true,
+    "resolved_ambiguity": false,
+    "temporal_correction": true,
+    "conflict_discovered": false,
+    "necessity_reclassified": false,
+    "changed_the_analysis": true
+   },
+   "6_gs-0021_E06": {
+    "case_id": "gs-0021",
+    "n_unique_judicial": 2,
+    "relations": [
+     "CONFIRMS",
+     "CREATES_EXCEPTION"
+    ],
+    "added_required_dimension": false,
+    "added_exception_or_limit": true,
+    "resolved_ambiguity": false,
+    "temporal_correction": false,
+    "conflict_discovered": false,
+    "necessity_reclassified": false,
+    "changed_the_analysis": true
+   },
+   "7_gs-0033_E11": {
+    "case_id": "gs-0033",
+    "n_unique_judicial": 6,
+    "relations": [
+     "CONFIRMS",
+     "QUALIFIES",
+     "RESOLVES_AMBIGUITY"
+    ],
+    "added_required_dimension": false,
+    "added_exception_or_limit": true,
+    "resolved_ambiguity": true,
+    "temporal_correction": false,
+    "conflict_discovered": false,
+    "necessity_reclassified": false,
+    "changed_the_analysis": true
+   }
+  },
+  "total_unique_judicial_authorities": 27,
+  "judicially_discovered_dimensions": 9
+ },
+ "_eval_set_independence_limit": "حزمة التقييم ليست مستقلة عن Gold Set40 — هي قضايا P2.7-HJ نفسها (وهي الوحيدة التي أُنجز لها بحث قضائي كامل ومحقَّق). يُعلَن هذا حدًّا على قوة ادعاء القياس الموضعي؛ أما النتائج البنيوية (مصفوفة المسارات وتصنيف الحواف) فمشتقة من الكود لا من القضايا فلا يمسها هذا الحد."
+}

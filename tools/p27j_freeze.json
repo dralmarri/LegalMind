@@ -1,0 +1,69 @@
+{
+ "_note": "P2.7-J القسم 1 — تجميد. ولا تعديل لأي منها. ومعه **معايير الحكم مُسجَّلة قبل أي قياس** (القسم 19).",
+ "frozen_at_utc": "2026-09-18T07:03:20Z",
+ "git_head": "cc86dd34dd3bdb754fe35e75d5cf7b461759c662",
+ "git_branch": "claude/kuwaiti-legal-docs-qq0cx3",
+ "work_tree_clean": true,
+ "p27hj_commit": "cc86dd3",
+ "edge_set_hash": "93d7c585f44de082c81524014b1346e803019601d41185b1c8a67643b0946d91",
+ "edge_count": 23,
+ "file_hashes": {
+  "gold_set40_ground_truth": "a433b7fda60e56668ed72fe0973a2c69725515b5e046bbad76b3f8a9d1c8d536",
+  "gold_set40_questions": "90a55571a0d3c8465faa2b4b02afbb18d4036728bb89471233cd57e7269781f4",
+  "graph": "61331d68377991c57e6757ff5cfebb2212494a8f227a335da3756adc12ed10ca",
+  "planner_prompt": "ae40b77925a3d9be9dd521a35319048685e7a5047bcfe73eeac0166340c39801",
+  "planner_schema": "daa2f842dd905489531a432c595e401a7316c92d881be89feebda971eaf51489",
+  "evaluator": "755894c6612a463d906de342dc179e8d4e4cbb14d64e6a6f623abfb3d79ef09d",
+  "scope_gate": "af110c870f10ee56f157c13f5a2840a6bd1d588a22c555f7158c26bf39a3fc1e",
+  "applicability_gate": "cf00a851d006e5e902690ccd1d365c35e07ccff3bea509d995d21b106eb206bf",
+  "human_adjudication": "2f5716b8dcfac81f3c8ef5b6d18f6a79febbe107f530065b25ffc098e1ebc67a",
+  "p27hj_judicial_audit": "3b698ba646cef9cff591e4d78d0bb9e08cf26081b6e4ebc69a808da448771659",
+  "p27hj_systemwide": "8bfc437d3cdf3126680f75a689c71e46be6d679941bece378c967d9a8c6eb03e",
+  "p27hj_report": "f892f17234157609fb789d0902f1467fa18f693c6d05363eded0af5a64c1bce5"
+ },
+ "production_code_source": {
+  "_note": "كود الإنتاج يُقرأ من فرع main (مزامنة الخادم اليومية) لا من شجرة العمل — لقطاتها قديمة (درس موثق في CLAUDE.md §22).",
+  "main_commit": "902a3f9e61dfb3ae76b50c64efaa4dcb49fc3ee4",
+  "main_synced": "20260917_084645",
+  "hashes": {
+   "admin/app.py": "cf74a49c3eaa2bd095d57b0cea94f2c2c13025d542c9b342abb9a6be09bd2d73",
+   "mcp/server.py": "4adb8866de0b1773f95c83ad0e087d6aae310d999958cc6cacbcb39c4a4b0185",
+   "tools/battery_run.py": "811b885efb86a617656ba8ad83116e22605a4d6e45960afd1507e4a111b5ceb8",
+   "kb_types.py": "d103efd7022ad90714af30ba2c484e2559f3e540651bd6423e35c06f6b7f62ae",
+   "admin/cases_api.py": "50dba51bd63b5d1339cb9d095a0592d45ce13d8826882bcbec82f43323fbe598"
+  }
+ },
+ "PRE_REGISTERED_CLASSIFICATION_CRITERIA": {
+  "_discipline": "سُجِّلت قبل أي قياس. لا تُعدَّل بعد رؤية الأرقام (قاعدة راسخة: تخفيف معيار بعد رؤية نتيجته يُفسد قيمة البوابة).",
+  "MULTI_AUTHORITY_ARCHITECTURE_REQUIRED": {
+   "all_of": [
+    "فئة سلطة كاملة واحدة على الأقل مستبعدة **بنيويًا** من مسار الاكتشاف (لا مجرد نادرة الظهور) — يثبتها مصفوفة مسارات الاسترجاع من الكود",
+    "القضاء يغيّر التحليل القانوني فعليًا في ≥50% من قضايا حزمة التقييم: بإضافة بُعد واجب، أو تغيير تكييف لزوم، أو إضافة استثناء/شرط قبول، أو تصحيح زمني",
+    "حالة واحدة موثَّقة على الأقل يقود فيها الاعتماد على التشريع وحده إلى **نتيجة عملية خاطئة** (لا مجرد نقص)",
+    "البيانات الحالية تسمح ببناء علاقة منظمة واحدة على الأقل من علاقات القسم 9 بموثوقية قابلة للقياس"
+   ]
+  },
+  "MULTI_AUTHORITY_ARCHITECTURE_PROMISING": {
+   "all_of": [
+    "القضاء يغيّر التحليل في 25-49% من القضايا",
+    "لا حالة نتيجة عملية خاطئة موثَّقة، أو الاستبعاد البنيوي جزئي لا كامل"
+   ]
+  },
+  "MULTI_AUTHORITY_ARCHITECTURE_NOT_NEEDED": {
+   "all_of": [
+    "القضاء يغيّر التحليل في <25% من القضايا",
+    "وكل فئات السلطات قابلة للاكتشاف فعليًا عبر المسارات القائمة"
+   ]
+  },
+  "INSUFFICIENT_EVIDENCE": {
+   "any_of": [
+    "حزمة التقييم أصغر من 7 قضايا",
+    "تعذّر قراءة كود الإنتاج الفعلي فتعذّرت مصفوفة المسارات"
+   ]
+  },
+  "_measurement_scope_limits_declared_in_advance": [
+   "لا وصول مباشر لقاعدة PostgreSQL من هذه البيئة — عدّ الأنواع يُشتق من kb_types وmcp وملفات البيانات المحلية، ويُعلَن كل عدد بمصدره ودرجة يقينه",
+   "لا تشغيل لخط الاسترجاع الحي — مصفوفة المسارات تُشتق من **قراءة الكود** لا من تشغيله، وهذا حدٌّ معلَن"
+  ]
+ }
+}
