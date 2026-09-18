@@ -146,6 +146,21 @@ class Rec:
         self.rr_out |= set(out.keys())
         return out
 
+    xref_map = app._XREF      # توسعة على التجمّع كله (كالإنتاج) لا على الصريح وحده
+
+    @staticmethod
+    def sibling_xref(article_ids):
+        """إحالات المادة إلى شقيقاتها في قانونها — بدالة الإنتاج نفسها لا نسخة."""
+        ids = [i for i in article_ids][:60]
+        if not ids:
+            return []
+        txt = app._draft_fetch_texts(set(ids))
+        hits = [("تشريع", 0.5, {"object_id": i}) for i in ids if i in txt]
+        try:
+            return list(app._sib_expand(hits, txt, set(ids)) or [])
+        except Exception:
+            return []
+
     @staticmethod
     def resolve_law_prefix(num, year):
         r = app.db_rows("SELECT id FROM knowledge_objects WHERE id LIKE %s "

@@ -51,7 +51,27 @@ def retrieve(deps, query_text, vectors, anchor_ids=(), phrases=(),
         disabled += ["lexical", "citation", "adjacency"]
     for _e in extra:                              # حزم/فصول/إحالات من الإنتاج
         oid, ch, rank, score, layer = _e[:5]
-        pool.add(oid, ch, rank, score, layer, pinned=bool(_e[5]) if len(_e) > 5 else False)
+        pool.add(oid, ch, rank, score, layer,
+                 pinned=bool(_e[5]) if len(_e) > 5 else False,
+                 prior=float(_e[6]) if len(_e) > 6 else 0.0)
+    xmap = getattr(deps, "xref_map", None)
+    if xmap:
+        n = 0
+        for c in list(pool):
+            for tgt in (xmap.get(c.object_id) or ()):
+                if tgt in pool or n >= 24:
+                    continue
+                n += 1
+                pool.add(tgt, CH.T.CH_XREF, n, 0.0, LAYER_LEGISLATION, prior=0.30)
+    if getattr(deps, "sibling_xref", None):
+        # F3: إحالات المادة إلى شقيقاتها في قانونها نفسه (نظير _sib_expand الإنتاجي)
+        try:
+            for i, sid in enumerate(deps.sibling_xref(
+                    [c.object_id for c in pool.by_layer(LAYER_LEGISLATION)]) or [], 1):
+                if sid not in pool:
+                    pool.add(sid, CH.T.CH_SIBLING, i, 0.0, LAYER_LEGISLATION, prior=0.30)
+        except Exception:
+            pass
     if getattr(deps, "db_rows", None):
         # مسار السلطة القضائية بالاتجاهين: المبدأ ← حكمه الأم، والمادة ← سلطاتها
         CH.judgment_link(pool, deps.db_rows,

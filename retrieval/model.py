@@ -42,6 +42,7 @@ class Candidate:
     rerank_score: float = None
     final_score: float = 0.0
     pinned: bool = False        # استشهاد صريح من المستخدم — لا يُقصّ
+    prior: float = 0.0          # أولوية مسبقة من القناة (حزمة حاكمة مثلًا)
     admitted: bool = False
     drop_stage: str = ""        # أين سقط بالضبط، إن سقط
     temporal_status: str = ""

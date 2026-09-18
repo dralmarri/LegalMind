@@ -26,7 +26,8 @@ class CandidatePool:
     def get(self, oid):
         return self._by_id.get(oid)
 
-    def add(self, object_id, channel, rank, score=0.0, layer="", pinned=False):
+    def add(self, object_id, channel, rank, score=0.0, layer="", pinned=False,
+            prior=0.0):
         """يضيف مرشحًا أو يدمج ملاحظة قناة جديدة على مرشح قائم."""
         if not object_id:
             return None
@@ -37,6 +38,7 @@ class CandidatePool:
         if layer and not c.layer:
             c.layer = layer
         c.pinned = c.pinned or pinned
+        c.prior = max(c.prior, float(prior or 0.0))
         c.observe(channel, rank, score)
         self.channel_returned[channel] = self.channel_returned.get(channel, 0) + 1
         return c

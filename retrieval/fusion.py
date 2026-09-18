@@ -17,6 +17,12 @@ E5 يتراوح عمليًا في نطاق ضيق مرتفع (0.82–0.89 في �
 
 K = 60
 
+# وزن الأولوية المسبقة. مُعايَر لا مخمَّن: أعلى مرشح كثيف يساوي 2.0/(60+1)=0.0328،
+# فأولوية 0.85 (قيمة الإنتاج للحزمة الحاكمة) تساوي 0.85×0.04=0.034 — أي أنها
+# تجاور المرشح الكثيف الأول تمامًا، وهو المعنى المقصود في الإنتاج حرفيًا:
+# «المادة الأساس قد تكون بعيدة دلاليًّا فلا يجلبها المتجه».
+PRIOR_WEIGHT = 0.04
+
 CHANNEL_WEIGHT = {
     "citation":      3.0,   # رقم مادة صريح في السؤال/الأوراق
     "dense":         2.0,
@@ -40,6 +46,7 @@ def fuse(pool, weights=None, k=K):
         s = 0.0
         for ch, rank in c.channel_ranks.items():
             s += w.get(ch, 1.0) / (k + max(1, int(rank)))
+        s += PRIOR_WEIGHT * float(getattr(c, "prior", 0.0) or 0.0)
         c.fusion_score = round(s, 6)
     return sorted(pool, key=lambda c: (-c.fusion_score, c.object_id))
 
