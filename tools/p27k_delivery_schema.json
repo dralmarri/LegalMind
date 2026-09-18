@@ -1,0 +1,92 @@
+{
+ "_note": "P2.7-K — مخطط تقييم الـproposition بأربعة أوصاف مستقلة وقمع تسليم تسعي. **جُمِّد قبل وصول نتائج المسارات** — الترتيب الزمني مثبت بالالتزام في git.",
+ "frozen_at": "2026-09-18T07:27:29Z",
+ "core_distinction": {
+  "SOURCE_DISCOVERED": "النظام عثر على الكائن",
+  "LEGAL_PROPOSITION_DELIVERED": "النظام استخرج منه القاعدة القانونية الصالحة للاستعمال",
+  "_rule": "الأول **لا يُحتسب نجاح تغطية**. المحامي لا ينتفع بمعرّف حكم، بل بالقاعدة التي فيه."
+ },
+ "four_independent_descriptors": {
+  "1_authority_type": [
+   "STATUTE",
+   "JUDICIAL_PRINCIPLE",
+   "FULL_JUDGMENT"
+  ],
+  "2_legal_role": [
+   "GOVERNING_RULE",
+   "INTERPRETATION",
+   "APPLICATION",
+   "EXCEPTION_OR_LIMIT",
+   "EFFECT_OF_BREACH",
+   "TEMPORAL",
+   "CONFLICT"
+  ],
+  "3_temporal_status": [
+   "CURRENT",
+   "SUPERSEDED",
+   "UNCERTAIN"
+  ],
+  "4_delivery_state": [
+   "NOT_FOUND",
+   "FOUND",
+   "FETCHED",
+   "EXTRACTED",
+   "VALIDATED",
+   "DELIVERED",
+   "DELIVERED_UNSAFE"
+  ]
+ },
+ "delivery_state_definitions": {
+  "NOT_FOUND": "لم يصل إليه أي مسار",
+  "FOUND": "ظهر في نتيجة مسار — ولا شيء أكثر",
+  "FETCHED": "جُلب نصه (أو استُرد عبر المحوّل عند فشل get_object)",
+  "EXTRACTED": "استُخرجت منه القاعدة القانونية صراحةً",
+  "VALIDATED": "فُحصت حالته الزمنية وتعارضه عند الاقتضاء",
+  "DELIVERED": "قاعدة صالحة للاستعمال مع وصفها الزمني الصحيح — **وحده النجاح الكامل**",
+  "DELIVERED_UNSAFE": "**حالة أسوأ من NOT_FOUND**: سُلِّمت القاعدة بتفصيل منسوخ بلا كشف النسخ (مثال م167: «خمسة أيام» تُنقل كأنها النص النافذ). تُحتسب إخفاقًا، وتُعدّ منفصلة لأن ضررها إيجابي لا سلبي."
+ },
+ "causal_funnel_9_stages": [
+  "ROLE_EXPECTED",
+  "ROLE_PLANNED",
+  "LANE_EXECUTED",
+  "SOURCE_DISCOVERED",
+  "SOURCE_FETCHED",
+  "PROPOSITION_VERIFIED",
+  "TEMPORALLY_VALIDATED",
+  "CONFLICT_CHECKED",
+  "COVERAGE_DELIVERED"
+ ],
+ "funnel_to_miss_cause": {
+  "ROLE_PLANNED": "ROLE_PLANNING_MISS",
+  "LANE_EXECUTED": "ROLE_ROUTING_MISS",
+  "SOURCE_DISCOVERED": "RETRIEVAL_MISS",
+  "SOURCE_FETCHED": "FETCH_ACCESS_MISS",
+  "PROPOSITION_VERIFIED": "VERIFICATION_MISS",
+  "TEMPORALLY_VALIDATED": "TEMPORAL_MISS",
+  "CONFLICT_CHECKED": "CONFLICT_MISS",
+  "COVERAGE_DELIVERED": "DELIVERY_MISS"
+ },
+ "_funnel_rule": "سبب الإخفاق = **أول مرحلة سقطت**، لا آخرها. فإن لم يُجلب الحكم 754/2013 فالسبب FETCH_ACCESS_MISS وليس RETRIEVAL_MISS — وهذا ما يفرّق بين عيب بحث وعيب وصول.",
+ "reference_end_to_end_test": {
+  "case": "A_gs-0011",
+  "_status": "اختبار مرجعي حاسم",
+  "question_is_not": "هل وجد النظام مواد لجنة النسب؟",
+  "question_is": "هل يصل من **الوقائع وحدها** إلى الحزمة التي تمنع المحامي من الخطأ الذي كشفه الحكم 754/2013؟",
+  "required_package": [
+   "اللجنة وحدها لا تكفي",
+   "المطالبة بالتركة وحدها لا تكفي",
+   "ثمة متطلبات قبول قضائية إضافية: تحديد الورثة وتسلسل الوراثة والنصيب الشرعي وصفة المُختصَم"
+  ],
+  "pass_condition": "تسليم القاعدة الثالثة بحالة DELIVERED — لا مجرد العثور على الحكم"
+ },
+ "secondary_reference_tests": {
+  "B_gs-0013_m167": "النجاح = القاعدة مُسلَّمة DELIVERED مع وسم «خمسة أيام» SUPERSEDED. وتسليمها بلا هذا الوسم = DELIVERED_UNSAFE",
+  "D_dna": "النجاح = رفع POTENTIAL_TEMPORAL_CONFLICT بلا اختيار فائز"
+ },
+ "planner_classification_kept_open": {
+  "_instruction": "يبقى مفتوحًا حتى تظهر آثار الزيادات التسع",
+  "BENCHMARK_INSUFFICIENT_if": "الأدوار التسعة «الزائدة» أنتجت propositions ذات قيمة قانونية حقيقية",
+  "ROLE_ROUTING_PROMISING_if": "صحيحة نظريًا ولم تضف propositions ذات قيمة",
+  "_never": "لا PASS ما دام الرقم الرسمي 0.275، ولا FAIL بالرقم وحده قبل رؤية أثر الزيادات"
+ }
+}
