@@ -2,7 +2,7 @@
  "_note": "P2.7-H القسم 8 — قرارات المراجعة القانونية البشرية. **Gold Set40 لم تُمس ولن تُمس من هذا الملف.** لا يملأ Claude حقل human_decision إطلاقًا.",
  "freeze_ref": "tools/p27h_freeze.json",
  "cards_ref": "tools/p27h_review_cards.json",
- "status": "AWAITING_HUMAN_DECISIONS",
+ "status": "HUMAN_DECISIONS_RECORDED",
  "decisions": [
   {
    "card_no": 1,
@@ -10,11 +10,12 @@
    "dimension": "عدم سماع الدعاوى العمالية بمضي سنة من انتهاء العقد",
    "dimension_node": "D_LABOR_LIMITATION",
    "edge_id": "E22",
-   "human_decision": "PENDING",
-   "condition_if_any": null,
+   "human_decision": "CONDITIONAL",
+   "condition_if_any": "مضي سنة من تاريخ انتهاء عقد العمل مع تحقق الإنكار — والسؤال لا يذكر أيًّا منهما",
    "duplicate_of": null,
-   "reviewer_note": null,
-   "reviewed_at": null
+   "reviewer_note": "التقادم/عدم السماع مهم في المطالبات العمالية، لكن السؤال لا يذكر مضي سنة ولا تحقق الإنكار، فلا يصح اعتباره REQUIRED في هذه الوقائع. والنص نفسه يربطه بمضي سنة «عند الإنكار».",
+   "reviewed_at": "2026-09-18T06:46:11Z",
+   "reviewer": "الخبير القانوني (المالك)"
   },
   {
    "card_no": 2,
@@ -22,11 +23,12 @@
    "dimension": "إيداع الأجرة خزانة إدارة التنفيذ بعد العرض القانوني خلال عشرين يومًا كوفاء معتبر",
    "dimension_node": "D_RENT_DEPOSIT",
    "edge_id": "E23",
-   "human_decision": "PENDING",
+   "human_decision": "REQUIRED",
    "condition_if_any": null,
    "duplicate_of": null,
-   "reviewer_note": null,
-   "reviewed_at": null
+   "reviewer_note": "النزاع ذاته قائم على عدم سداد الأجرة وطلب الإخلاء. الاستشارة لا تكتمل ببيان سبب الإخلاء وحده؛ يجب فحص ما إذا كان المستأجر عرض الأجرة أو أودعها بالطريق الذي يعتبره القانون وفاءً. وعدم ذكر الإيداع في السؤال لا يجعل البعد مشروطًا، بل يجعله واقعة يجب الاستعلام عنها وفحصها.",
+   "reviewed_at": "2026-09-18T06:46:11Z",
+   "reviewer": "الخبير القانوني (المالك)"
   },
   {
    "card_no": 3,
@@ -34,11 +36,12 @@
    "dimension": "مهلة اللجنة (ستة أشهر/ثلاثة عند اللعان) وأثر انقضائها على فتح باب القضاء",
    "dimension_node": "D_COMMITTEE_DEADLINE",
    "edge_id": "E09",
-   "human_decision": "PENDING",
+   "human_decision": "REQUIRED",
    "condition_if_any": null,
    "duplicate_of": null,
-   "reviewer_note": null,
-   "reviewed_at": null
+   "reviewer_note": "النزاع يطلب إجراءات إثبات النسب، والحقيقة الأرضية نفسها تقر بوجوبية لجنة النسب. ومتى كان المرور باللجنة شرط قبول، فمدة بقائها مختصة والوقت الذي ينفتح بعده باب القضاء جزء لازم من بيان المسار الإجرائي.",
+   "reviewed_at": "2026-09-18T06:46:11Z",
+   "reviewer": "الخبير القانوني (المالك)"
   },
   {
    "card_no": 4,
@@ -46,11 +49,12 @@
    "dimension": "إجراءات تحقيق اللجنة (سماع الشهود وفحص البصمة الوراثية)",
    "dimension_node": "D_COMMITTEE_PROCEDURE",
    "edge_id": "E10",
-   "human_decision": "PENDING",
+   "human_decision": "REQUIRED",
    "condition_if_any": null,
    "duplicate_of": null,
-   "reviewer_note": null,
-   "reviewed_at": null
+   "reviewer_note": "السؤال يطلب إجراءات إثبات النسب تحديدًا؛ وسماع الشهود وطلب المستندات والبصمة الوراثية هي آليات الإثبات أمام الجهة التي أوجب القانون المرور بها. وحذفها يجعل بيان الإجراءات ناقصًا.",
+   "reviewed_at": "2026-09-18T06:46:11Z",
+   "reviewer": "الخبير القانوني (المالك)"
   },
   {
    "card_no": 5,
@@ -58,11 +62,12 @@
    "dimension": "التكليف بالوفاء قبل استصدار أمر الأداء",
    "dimension_node": "D_PAYMENT_DEMAND",
    "edge_id": "E01",
-   "human_decision": "PENDING",
+   "human_decision": "REQUIRED",
    "condition_if_any": null,
    "duplicate_of": null,
-   "reviewer_note": null,
-   "reviewed_at": null
+   "reviewer_note": "أوضح الحالات. السؤال يسأل صراحة عن شروط استصدار أمر الأداء وإجراءاته، وم167 تجعل التكليف بالوفاء لعشرة أيام سابقًا على استصدار الأمر وتوجب إثباته مع العريضة — شرط سابق مباشر لا تفصيل اختياري.",
+   "reviewed_at": "2026-09-18T06:46:11Z",
+   "reviewer": "الخبير القانوني (المالك)"
   },
   {
    "card_no": 6,
@@ -70,11 +75,12 @@
    "dimension": "اعتبار دعوى الإخلاء كأن لم تكن عند الوفاء حتى أول جلسة بعذر مقبول",
    "dimension_node": "D_TENANT_CURE",
    "edge_id": "E06",
-   "human_decision": "PENDING",
-   "condition_if_any": null,
+   "human_decision": "CONDITIONAL",
+   "condition_if_any": "دعوى إخلاء قائمة + عذر قوي تقبله المحكمة + وفاء بجميع الأجرة حتى نهاية أول جلسة — وهي وقائع غير موجودة في السؤال",
    "duplicate_of": null,
-   "reviewer_note": null,
-   "reviewed_at": null
+   "reviewer_note": "السؤال عام عن أثر التأخر في استمرار عقد الإيجار، فينبغي التنبيه إلى إمكانية التدارك؛ لكن الأثر الخاص الوارد بالنص يفترض وقائع غير موجودة في السؤال.",
+   "reviewed_at": "2026-09-18T06:46:11Z",
+   "reviewer": "الخبير القانوني (المالك)"
   },
   {
    "card_no": 7,
@@ -82,11 +88,16 @@
    "dimension": "وجوب تدخل النيابة العامة في دعاوى النسب باعتبارها من النظام العام",
    "dimension_node": "D_PROSECUTION_INTERVENTION",
    "edge_id": "E11",
-   "human_decision": "PENDING",
+   "human_decision": "INSUFFICIENT_EVIDENCE",
    "condition_if_any": null,
    "duplicate_of": null,
-   "reviewer_note": null,
-   "reviewed_at": null
+   "reviewer_note": "لا تُقبل REQUIRED اعتمادًا على المادتين المعروضتين وحدهما. م338 تجعل دعاوى النسب من النظام العام، لكن صياغة م337 تثير إشكالًا حقيقيًا في مدى تعلق قيد «إذا لم يتقدم أحد من ذوي الشأن» بالتدخل. يلزم سند قضائي/تفسيري يحسم القراءة قبل اعتماد الوجوب.",
+   "reviewed_at": "2026-09-18T06:46:11Z",
+   "reviewer": "الخبير القانوني (المالك)"
   }
- ]
+ ],
+ "recorded_at": "2026-09-18T06:46:11Z",
+ "gold_set40_modified": false,
+ "_gold_set_note": "Gold Set40 لم تُمس ولن تُمس من هذا الملف. القرارات تُسجَّل هنا فقط.",
+ "reviewer_architectural_note": "ملاحظة معمارية من الخبير على البطاقة 2: غياب واقعة من السؤال لا يعني دائمًا أن البُعد CONDITIONAL. ثمة فرق بين **شرط قانوني غير متحقق** وبين **واقعة حاسمة مجهولة يجب على المحامي فحصها**. في دعوى الإخلاء لعدم السداد، سؤال «هل عرض المستأجر الأجرة أو أودعها؟» جزء من التحليل الواجب نفسه. وهذا قد يستدعي مستقبلًا حالة رابعة غير required/conditional/possible مثل REQUIRED_CHECK / FACT_TO_VERIFY. **مسجَّلة كمقترح تصميم، غير منفَّذة.**"
 }

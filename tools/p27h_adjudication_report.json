@@ -1,0 +1,176 @@
+{
+ "_note": "P2.7-H القسم 9 — تقرير التحكيم. ثلاثة أرقام منفصلة لا تُخلط، وGold Set40 **لم تُعدَّل**.",
+ "gold_set40_modified": false,
+ "freeze_ref": "tools/p27h_freeze.json",
+ "human_decision_counts": {
+  "REQUIRED": 4,
+  "CONDITIONAL": 2,
+  "POSSIBLE": 0,
+  "NOT_APPLICABLE": 0,
+  "DUPLICATE": 0,
+  "INSUFFICIENT_EVIDENCE": 1
+ },
+ "dimension_vs_necessity": {
+  "_principle": "صحة اكتشاف البُعد شيء، وصحة وصف لزومه شيء آخر — يُفصلان (القسم 10).",
+  "dimension_correctness": {
+   "CORRECT": 6,
+   "UNDETERMINED": 1
+  },
+  "necessity_correctness": {
+   "MISLABELLED_TOO_STRONG": 1,
+   "CORRECT": 5,
+   "UNDETERMINED": 1
+  },
+  "per_card": [
+   {
+    "card_no": 1,
+    "case_id": "gs-0005",
+    "edge_id": "E22",
+    "dimension": "عدم سماع الدعاوى العمالية بمضي سنة من انتهاء العقد",
+    "graph_necessity": "MANDATORY",
+    "human_decision": "CONDITIONAL",
+    "dimension_correctness": "CORRECT",
+    "necessity_correctness": "MISLABELLED_TOO_STRONG"
+   },
+   {
+    "card_no": 2,
+    "case_id": "gs-0006",
+    "edge_id": "E23",
+    "dimension": "إيداع الأجرة خزانة إدارة التنفيذ بعد العرض القانوني خلال عشرين يومًا كوفاء معتبر",
+    "graph_necessity": "MANDATORY",
+    "human_decision": "REQUIRED",
+    "dimension_correctness": "CORRECT",
+    "necessity_correctness": "CORRECT"
+   },
+   {
+    "card_no": 3,
+    "case_id": "gs-0011",
+    "edge_id": "E09",
+    "dimension": "مهلة اللجنة (ستة أشهر/ثلاثة عند اللعان) وأثر انقضائها على فتح باب القضاء",
+    "graph_necessity": "MANDATORY",
+    "human_decision": "REQUIRED",
+    "dimension_correctness": "CORRECT",
+    "necessity_correctness": "CORRECT"
+   },
+   {
+    "card_no": 4,
+    "case_id": "gs-0011",
+    "edge_id": "E10",
+    "dimension": "إجراءات تحقيق اللجنة (سماع الشهود وفحص البصمة الوراثية)",
+    "graph_necessity": "MANDATORY",
+    "human_decision": "REQUIRED",
+    "dimension_correctness": "CORRECT",
+    "necessity_correctness": "CORRECT"
+   },
+   {
+    "card_no": 5,
+    "case_id": "gs-0013",
+    "edge_id": "E01",
+    "dimension": "التكليف بالوفاء قبل استصدار أمر الأداء",
+    "graph_necessity": "MANDATORY",
+    "human_decision": "REQUIRED",
+    "dimension_correctness": "CORRECT",
+    "necessity_correctness": "CORRECT"
+   },
+   {
+    "card_no": 6,
+    "case_id": "gs-0021",
+    "edge_id": "E06",
+    "dimension": "اعتبار دعوى الإخلاء كأن لم تكن عند الوفاء حتى أول جلسة بعذر مقبول",
+    "graph_necessity": "CONDITIONAL",
+    "human_decision": "CONDITIONAL",
+    "dimension_correctness": "CORRECT",
+    "necessity_correctness": "CORRECT"
+   },
+   {
+    "card_no": 7,
+    "case_id": "gs-0033",
+    "edge_id": "E11",
+    "dimension": "وجوب تدخل النيابة العامة في دعاوى النسب باعتبارها من النظام العام",
+    "graph_necessity": "MANDATORY",
+    "human_decision": "INSUFFICIENT_EVIDENCE",
+    "dimension_correctness": "UNDETERMINED",
+    "necessity_correctness": "UNDETERMINED"
+   }
+  ]
+ },
+ "A_HISTORICAL_BENCHMARK_PRECISION": {
+  "value": 0.5455,
+  "formula": "12/22",
+  "status": "UNCHANGED — لم يُعَد تصنيف أي بند ولم تُمس الحقيقة الأرضية"
+ },
+ "B_HUMAN_ADJUDICATED_LEGAL_PRECISION": {
+  "_basis": "12 إضافة تطابق الحقيقة الأرضية (وهي بشرية المنشأ أصلًا) + قرارات الخبير على السبع. الثلاث غير المُحكَّمة تبقى تصنيفًا آليًا لا بشريًا وتُحتسب غير صحيحة في الحساب المتحفظ.",
+  "strict_required_only": {
+   "value": 0.7273,
+   "formula": "(12+4)/22",
+   "meaning": "REQUIRED وحدها تُحتسب نجاحًا — CONDITIONAL لا تُحتسب نجاح REQUIRED (القسم 10)"
+  },
+  "dimension_level": {
+   "value": 0.8182,
+   "formula": "(12+4+2)/22",
+   "meaning": "البُعد نفسه صحيح قانونًا (REQUIRED أو CONDITIONAL)، بصرف النظر عن صحة وصف اللزوم"
+  },
+  "unadjudicated_additions": [
+   {
+    "case_id": "gs-0023",
+    "edge": "E04",
+    "node": "D_FAMILY_COURT_JURISDICTION",
+    "claude_classification": "TRUE_POSSIBLE"
+   },
+   {
+    "case_id": "gs-0032",
+    "edge": "E04",
+    "node": "D_FAMILY_COURT_JURISDICTION",
+    "claude_classification": "TRUE_POSSIBLE"
+   },
+   {
+    "case_id": "gs-0037",
+    "edge": "E01",
+    "node": "D_PAYMENT_DEMAND",
+    "claude_classification": "TRUE_POSSIBLE"
+   }
+  ],
+  "_unadjudicated_note": "لم تُعرض على الخبير (المواصفة حصرت المراجعة في السبعة) فتبقى غير محكَّمة."
+ },
+ "C_CORRECTED_BENCHMARK_COUNTERFACTUAL": {
+  "_status": "COUNTERFACTUAL ONLY — لم يُعدَّل benchmark ولا Gold Set40",
+  "_assumptions": [
+   "الأبعاد المضافة افتراضًا غير حاكمة (الخبير لم يُسأل عن الحاكمية) فالاستدعاء الحاكم واكتمال الحالة الصارم يبقيان كما هما؛ لو كان أيٌّ منها حاكمًا لتغيّر الرقمان.",
+   "الأبعاد المضافة يصيبها الـgraph ولا يصيبها Planner (فهي أصلًا إضافات graph)."
+  ],
+  "C1_required_only": {
+   "gt_total": 146,
+   "covered": 127,
+   "dimension_recall": 0.8699,
+   "graph_addition_precision": 0.7273,
+   "correct_additions": 16,
+   "total_additions": 22,
+   "_desc": "الأربعة REQUIRED وحدها تدخل الحقيقة الأرضية"
+  },
+  "C2_required_plus_conditional": {
+   "gt_total": 148,
+   "covered": 129,
+   "dimension_recall": 0.8716,
+   "graph_addition_precision": 0.8182,
+   "correct_additions": 18,
+   "total_additions": 22,
+   "_desc": "الأربعة REQUIRED + الاثنتان CONDITIONAL"
+  },
+  "C3_plus_relevance_layer": {
+   "gt_total": 148,
+   "covered": 129,
+   "dimension_recall": 0.8716,
+   "graph_addition_precision": 0.9474,
+   "correct_additions": 18,
+   "total_additions": 19,
+   "_desc": "C2 مع افتراض إضافي أن طبقة صلة أزالت الثلاث غير المحكَّمة — **افتراض مزدوج، أضعف من C1/C2، ولا يُبنى عليه قرار**"
+  },
+  "unchanged_under_all": {
+   "critical_dimension_recall": 0.9533,
+   "strict_case_completeness": 0.875,
+   "loco_rescues": 12,
+   "critical_rescues": 10
+  }
+ }
+}
