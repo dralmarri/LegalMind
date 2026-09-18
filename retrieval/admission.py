@@ -35,6 +35,19 @@ PRODUCTION_BUDGET = {
 }
 PROTECTED_FRACTION = 0.5
 
+# سقف أعلى لكل طبقة — يحدّ نصيبها من **الفائض المشترك**، والحدّ المحمي يبقى كما هو.
+# سببه مقيس: بلا سقف التهمت الأحكام (3,500 حرفًا للكتلة) والنماذج حصةَ التشريع،
+# فارتفعت الأحكام 30→139 والنماذج 18→61 بينما هبط التشريع 1,391→514 والمبادئ
+# 425→308. القيم معلَنة لا مضبوطة على هدف: التشريع والمبادئ بميزانية الإنتاج
+# كاملةً، والأحكام **ضعف** ميزانية الإنتاج (مكسب قضائي مقصود لكنه محدود)،
+# والنماذج عند حدّها المحمي فقط لأنها **غير قابلة للاستشهاد** أصلًا.
+LAYER_CEILING = {
+    LAYER_LEGISLATION: 48000,
+    LAYER_PRINCIPLE:   24000,
+    LAYER_JUDGMENT:    16000,
+    LAYER_TEMPLATE:     2500,
+}
+
 
 def build_floors(total_budget=None, fraction=PROTECTED_FRACTION):
     b = dict(total_budget or PRODUCTION_BUDGET)
@@ -94,9 +107,26 @@ def admit(candidates, block_size_of, budget=None, fraction=PROTECTED_FRACTION):
     shared_total = (total - sum(floors.values())) + released
     shared_used = 0
 
-    # --- المرحلة 2: السعة المشتركة، بالدرجة عبر كل الطبقات ---
+    # سقفُ طبقةٍ **لا مرشح لها إطلاقًا** يُوزَّع على الطبقات الحاضرة بنسبة سقوفها
+    # — بنفس منطق تحرير الحدّ المحمي أعلاه، ولنفس السبب: ما لا طالب له لا يُجمَّد.
+    # والتوزيع مقصورٌ على الطبقات **الغائبة كليًا** فلا يفتح بابًا لاحتكار طبقةٍ
+    # حاضرةٍ نصيبَ أخرى حاضرة (وهو ما منعه السقف أصلًا).
+    ceilings = dict(LAYER_CEILING)
+    present = {c.layer for c in pending}
+    absent_cap = sum(v for k, v in ceilings.items() if k not in present)
+    if absent_cap:
+        live = {k: v for k, v in ceilings.items() if k in present}
+        tot_live = sum(live.values()) or 1
+        for k, v in live.items():
+            ceilings[k] = v + int(absent_cap * v / tot_live)
+
+    # --- المرحلة 2: السعة المشتركة، بالدرجة عبر كل الطبقات، بسقف لكل طبقة ---
     for c in left:
         s = sizes[c.object_id]
+        ceil = ceilings.get(c.layer)
+        if ceil is not None and used.get(c.layer, 0) + s > ceil:
+            c.drop_stage = "layer_ceiling"   # الطبقة بلغت سقفها، ولا تزاحم غيرها
+            continue
         # لا يجوز أن يتعدى أي مرشح على حدٍّ محميٍّ لطبقة أخرى ما زالت تطلبه
         if shared_used + s > shared_total or total_used + s > total:
             c.drop_stage = "shared_overflow_full"
@@ -104,12 +134,16 @@ def admit(candidates, block_size_of, budget=None, fraction=PROTECTED_FRACTION):
         shared_used += s
         take(c, s, "shared_overflow")
 
+    # السقف لا يُحرَّر بعد ذلك: كل صيغة تحرير جرّبتُها أعادت الاحتكار (قيس:
+    # الأحكام أخذت 33,480 ثم 22,320 من سقف 16,000). التوزيع الوحيد المسموح هو
+    # نصيبُ طبقةٍ غائبة كليًا، وقد جرى قبل المرحلة 2.
     report = {
         "total_budget": total,
         "protected_fraction": fraction,
         "floors": floors,
         "used_by_layer": used,
         "released_unused_floor": released,
+        "layer_ceiling": ceilings,
         "shared_capacity": shared_total,
         "shared_used": shared_used,
         "admitted_count": len(admitted),

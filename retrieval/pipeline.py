@@ -12,8 +12,10 @@ from .fusion import fuse, apply_rerank, rerank_input
 from .admission import admit, PRODUCTION_BUDGET, PROTECTED_FRACTION
 from .temporal import annotate
 from .packet import build as build_packet, block_chars
-from .conflicts import detect as detect_conflicts
-from .model import LAYER_PRINCIPLE, LAYER_LEGISLATION
+from .conflicts import detect as detect_conflicts, _cited_articles
+import re as _re
+_ART_ID = _re.compile(r"^.*-m(\d{1,4})$")
+from .model import LAYER_PRINCIPLE, LAYER_LEGISLATION, LAYER_JUDGMENT
 
 # مُشتقٌّ من البيانات لا مخمَّن: منحنى Recall@k على 98 نداء بحث حقيقيًا (1,959
 # نتيجة خام، tools/depth_curve.py) يبلغ الهضبة عند k=9 بقيمة 0.706، ولا يزيد
@@ -47,8 +49,9 @@ def retrieve(deps, query_text, vectors, anchor_ids=(), phrases=(),
             CH.adjacency(pool, deps.db_rows, anchor_ids)
     else:
         disabled += ["lexical", "citation", "adjacency"]
-    for oid, ch, rank, score, layer in extra:      # حزم/فصول/إحالات من الإنتاج
-        pool.add(oid, ch, rank, score, layer)
+    for _e in extra:                              # حزم/فصول/إحالات من الإنتاج
+        oid, ch, rank, score, layer = _e[:5]
+        pool.add(oid, ch, rank, score, layer, pinned=bool(_e[5]) if len(_e) > 5 else False)
     if getattr(deps, "db_rows", None):
         # مسار السلطة القضائية بالاتجاهين: المبدأ ← حكمه الأم، والمادة ← سلطاتها
         CH.judgment_link(pool, deps.db_rows,
@@ -90,9 +93,27 @@ def run(deps, query_text, vectors, anchor_ids=(), phrases=(), issues=None,
     ranked = apply_rerank(ranked, rr)
 
     row_of = getattr(deps, "row_of", lambda i: {})
-    temporal = annotate(ranked, row_of,
-                        lambda i: (texts.get(i) or {}).get("text") or "",
-                        getattr(deps, "xref_of", None))
+    _txt = lambda i: (texts.get(i) or {}).get("text") or ""
+
+    def _xref_of(c):
+        """المواد التي يفسّرها هذا المصدر — تُشتق من نصّه هو لا من اعتمادية خارجية.
+
+        كانت الطبقة تنتظر `deps.xref_of` ولا أحد يمرّره، فبقي كشف التعارض
+        الزمني **ميتًا صامتًا** (صفر CONFLICT_DETECTED في التشغيل الحي، وحالة
+        م167 أخرجت «خمسة أيام» بلا تحذير). الاشتقاق الآن داخلي فيعمل دائمًا."""
+        if c.layer not in (LAYER_PRINCIPLE, LAYER_JUDGMENT):
+            return []
+        nums = _cited_articles(_txt(c.object_id))
+        out = []
+        for cand in ranked:
+            if cand.layer != LAYER_LEGISLATION:
+                continue
+            m = _ART_ID.match(cand.object_id or "")
+            if m and m.group(1) in nums:
+                out.append(cand.object_id)
+        return out[:4]
+    temporal = annotate(ranked, row_of, _txt,
+                        getattr(deps, "xref_of", None) or _xref_of)
 
     def block_size(c):
         t = texts.get(c.object_id)

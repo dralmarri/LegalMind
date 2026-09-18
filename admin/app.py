@@ -5425,11 +5425,11 @@ def _draft_build_context_v2(client, inp: _DraftIn, facts_ret: str) -> dict:
                                              inp.madhab, inp.branch), 1):
         _extra.append((_oid, "bundle", _i, 0.0, _LL)); _bundle.append(_oid)
     for _i, _oid in enumerate(_draft_chap_ids(inp.request_type, facts_ret, subqueries), 1):
-        _extra.append((_oid, "chapter", _i, 0.0, _LL)); _chap.append(_oid)
+        _extra.append((_oid, "chapter", _i, 1.0, _LL, True)); _chap.append(_oid)
     _docrefs = _draft_doc_refs(client, _early_media)
     for _i, _oid in enumerate(list(_draft_direct_ids(inp.request_type, facts_ret,
                                                      subqueries)) + list(_docrefs), 1):
-        _extra.append((_oid, "citation", _i, 1.0, _LL)); _direct.append(_oid)
+        _extra.append((_oid, "citation", _i, 1.0, _LL, True)); _direct.append(_oid)
     for _oid in list(_direct) + list(_bundle):
         for _tgt in _XREF.get(_oid, ()):
             _extra.append((_tgt, "xref", 1, 0.0, _LL))

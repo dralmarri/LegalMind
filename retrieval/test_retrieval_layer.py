@@ -12,7 +12,7 @@ from retrieval.admission import admit, build_floors, PRODUCTION_BUDGET
 from retrieval import temporal as TP
 from retrieval import channels as CH
 from retrieval import pipeline as PL
-from retrieval.model import (Candidate, LAYER_LEGISLATION, LAYER_PRINCIPLE,
+from retrieval.model import (Candidate, LAYER_LEGISLATION, LAYER_PRINCIPLE, LAYER_TEMPLATE,
                              LAYER_JUDGMENT, CH_DENSE, CH_LEXICAL)
 
 OK, FAIL = [], []
@@ -80,17 +80,24 @@ check("لا طبقة تُزيح أخرى تحت حدّها المحمي",
       rep["used_by_layer"])
 check("الحدّ غير المستعمَل لطبقة بلا مرشحين يُحرَّر للمشترك",
       rep["released_unused_floor"] > 0, rep["released_unused_floor"])
-check("السعة الميتة تحت 5% من الميزانية",
-      rep["dead_capacity"] < 0.05 * rep["total_budget"], rep["dead_capacity"])
+check("السعة الميتة تحت 8% من الميزانية (مع سقوف الطبقات)",
+      rep["dead_capacity"] < 0.08 * rep["total_budget"], rep["dead_capacity"])
 check("الميزانية الكلية لم تُتجاوَز",
       sum(rep["used_by_layer"].values()) <= rep["total_budget"])
 # طبقة بلا مرشحين إطلاقًا: حدّها يُحرَّر بالكامل ولا يبقى ميتًا (عيب O بعينه)
-onlyL = [mk("L%d" % i, LAYER_LEGISLATION, 0.9 - i * 0.001) for i in range(80)]
-adm2, rep2 = admit(onlyL, lambda c: 2000)
-check("طبقة غائبة لا تجمّد سعتها (عيب 9/9/2 الميت)",
-      rep2["dead_capacity"] < 2500, rep2["dead_capacity"])
+# المقصد: حدُّ طبقة **غائبة** لا يُجمَّد. (السيناريو أحادي الطبقة كان يخلط هذا
+# بالسقف المتعمَّد لكل طبقة، فأُعيد إلى حالة واقعية: تشريع ومبادئ حاضران،
+# والأحكام والنماذج غائبة تمامًا — فيجب أن يُحرَّر حدّاهما لا أن يموتا.)
+twoL = ([mk("L%d" % i, LAYER_LEGISLATION, 0.9 - i * 0.001) for i in range(40)]
+        + [mk("P%d" % i, LAYER_PRINCIPLE, 0.85 - i * 0.001) for i in range(40)])
+adm2, rep2 = admit(twoL, lambda c: 2000)
+check("حدّ الطبقة الغائبة يُحرَّر لا يُجمَّد (عيب 9/9/2 الميت)",
+      rep2["released_unused_floor"] >= build_floors()[LAYER_JUDGMENT]
+      + build_floors()[LAYER_TEMPLATE], rep2["released_unused_floor"])
+check("السعة الميتة تبقى صغيرة مع حضور طبقتين",
+      rep2["dead_capacity"] < 0.05 * rep2["total_budget"], rep2["dead_capacity"])
 pin = mk("PIN", LAYER_JUDGMENT, 0.0); pin.pinned = True
-adm3, rep3 = admit([pin] + onlyL, lambda c: 2000)
+adm3, rep3 = admit([pin] + twoL, lambda c: 2000)
 check("المثبَّت يُقبل رغم أدنى درجة", pin.admitted)
 for c in cands:
     if not c.admitted:
@@ -308,6 +315,58 @@ check("المادة تجرّ سلطاتها القضائية (تشريع ← ق�
       {c.layer for c in _p})
 check("معرّف بلا شكل مادة لا يُطلق استعلامًا",
       len(CH.statute_to_judicial(CandidatePool(), db_law, ["LEG-غير-منتظم"])) == 0)
+
+# ------------------------------- 11. أعطال رصدتها البوابة الحية وأُصلحت
+print("\n[11] انحدارات البوابة الحية — الأعطال الثلاثة")
+from retrieval.admission import LAYER_CEILING
+# D1: السلطة الحتمية المثبَّتة تُقبل ولو كانت أدنى الدرجات
+_gate = mk("legis-51-1984-m92", LAYER_LEGISLATION, 0.0); _gate.pinned = True
+_flood = [mk("F%d" % i, LAYER_LEGISLATION, 0.99) for i in range(60)]
+_adm, _rep = admit([_gate] + _flood, lambda c: 2420)
+check("البوابة الحتمية المثبَّتة تنجو من الزحام (D1)", _gate.admitted, _rep)
+# D2: سقف الطبقة يمنع الأحكام والنماذج من التهام حصة التشريع
+# الطبقات الأربع حاضرة (كحال كل جولة حقيقية) فلا يقع توزيع سقفِ غائب
+_j = [mk("J%d" % i, LAYER_JUDGMENT, 0.99) for i in range(40)]
+_t = [mk("T%d" % i, LAYER_TEMPLATE, 0.98) for i in range(40)]
+_pp = [mk("PR%d" % i, LAYER_PRINCIPLE, 0.50 - i * 0.0001) for i in range(40)]
+_l = [mk("L%d" % i, LAYER_LEGISLATION, 0.10 - i * 0.0001) for i in range(40)]
+_adm2, _rep2 = admit(_j + _t + _pp + _l, lambda c: 3720 if c.layer in
+                     (LAYER_JUDGMENT, LAYER_TEMPLATE) else 2420)
+_u, _eff = _rep2["used_by_layer"], _rep2["layer_ceiling"]
+check("لا طبقة تتجاوز سقفها الفعلي (D2)",
+      all(_u.get(l, 0) <= _eff.get(l, 10 ** 9) for l in _eff), (_u, _eff))
+check("سقوف الطبقات الحاضرة لم تُرفع (لا غائب يوزَّع)",
+      _eff[LAYER_JUDGMENT] == LAYER_CEILING[LAYER_JUDGMENT], _eff)
+check("النماذج محصورة بسقفها الضيق (غير قابلة للاستشهاد)",
+      _u.get(LAYER_TEMPLATE, 0) <= LAYER_CEILING[LAYER_TEMPLATE], _u)
+check("التشريع يبقى حاضرًا رغم اكتساح الأحكام بالدرجة (D2)",
+      _u.get(LAYER_LEGISLATION, 0) > 0, _u)
+check("الساقط بالسقف يُوسَم بمرحلته",
+      any(c.drop_stage == "layer_ceiling" for c in _j + _t))
+# D3: الكشف الزمني يعمل بلا xref_of خارجي
+class _D3:
+    def search(self, v, t, l):
+        pre = {"legislation_article": "legis-38-1980-m", "judicial_principle": "jprin-240-2002-",
+               "full_judgment": "judgment-x-", "judicial_template": "tpl-"}.get(t[0], "o-")
+        return [{"payload": {"object_id": pre + ("167" if pre.startswith("legis") else str(i))},
+                 "score": 0.9} for i in range(1, 3)]
+    def db_rows(self, sql, params): return []
+    def fetch_texts(self, ids):
+        m = {"legis-38-1980-m167": "لا يصدر الأمر إلا بعد التكليف بالوفاء بعشرة أيام",
+             "jprin-240-2002-1": "المادة 167 توجب التكليف بالوفاء خلال خمسة أيام",
+             "jprin-240-2002-2": "المادة 167 والتكليف بالوفاء خلال خمسة أيام"}
+        return {i: {"text": m.get(i, "نص " + i), "branch": "", "topic": "",
+                    "title": "", "publication": ""} for i in ids}
+    def rerank(self, q, pairs): return {}
+    def row_of(self, i): return {"metadata": {}}
+_r3 = PL.run(_D3(), "أمر أداء", [[0.1] * 4])
+check("الكشف الزمني يعمل بلا اعتمادية خارجية (D3)",
+      _r3["temporal"].get("CONFLICT_DETECTED", 0) > 0, _r3["temporal"])
+check("«خمسة أيام» لا تخرج بلا تحذير زمني (D3)",
+      ("خمسة أيام" not in _r3["context"]) or ("تحذير زمني" in _r3["context"]))
+check("التعارض يُوسَم ولا يُحسم بلا سند",
+      all(x["resolution"] is None for x in _r3["conflicts"]
+          if not x.get("basis_available")), _r3["conflicts"])
 
 print("\n" + "=" * 62)
 print("نجح %d / %d" % (len(OK), len(OK) + len(FAIL)))

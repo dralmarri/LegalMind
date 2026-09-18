@@ -193,9 +193,11 @@ def run_v2(rt, q, anchors_extra=()):
     for i, oid in enumerate(app._draft_bundles(rt, q, subq, None, None), 1):
         extra.append((oid, "bundle", i, 0.0, LL))
     for i, oid in enumerate(app._draft_chap_ids(rt, q, subq), 1):
-        extra.append((oid, "chapter", i, 0.0, LL))
+        # مثبَّتة كما في الإنتاج (0.99): هذه «فصول الاستلزام القانوني» التي لا
+        # يصلها تشابه لفظي ولا دلالي — وسقوطها هو ما أفقد m92/m553/m532.
+        extra.append((oid, "chapter", i, 1.0, LL, True))
     for i, oid in enumerate(app._draft_direct_ids(rt, q, subq), 1):
-        extra.append((oid, "citation", i, 1.0, LL))
+        extra.append((oid, "citation", i, 1.0, LL, True))
         direct.append(oid)
     for oid in list(direct):
         for tgt in app._XREF.get(oid, ()):
@@ -204,7 +206,7 @@ def run_v2(rt, q, anchors_extra=()):
     rec = Rec()
     # المرشحون المحقونون لا يمرّون بأي اعتمادية، فلا يلتقطهم وكيل التسجيل —
     # وبدونهم يخرج DEDUPED أكبر من GENERATED وهو مستحيل منطقيًا (كشفته المحاكاة).
-    rec.generated |= {oid for oid, _c, _r, _s, _l in extra}
+    rec.generated |= {_e[0] for _e in extra}   # الطول متغيّر (5 أو 6 بالتثبيت)
     t0 = time.time()
     res = PL.run(rec, query, vectors, anchor_ids=anchors, phrases=subq,
                  extra=extra, norm_ar=app._draft_norm_ar)
