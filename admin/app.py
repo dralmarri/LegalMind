@@ -5392,11 +5392,113 @@ def _gap_search(answer, seen):
     return confirmed[:4], tentative[:4]
 
 
+# ==== طبقة الاسترجاع v2 (retrieval/) — خلف علم بيئة، مطفأة افتراضيًا ====
+# التفعيل: LEGALMIND_RETRIEVAL_V2=1 في deploy/.env (يُقرأ عند كل طلب كغيره).
+# مطفأةً، لا يتغير حرف واحد في سلوك الإنتاج — الدالة أدناه لا تُستدعى أصلًا.
+def _draft_build_context_v2(client, inp: _DraftIn, facts_ret: str) -> dict:
+    """نفس عقد المخرَج حرفيًا (`context/attr/seen/hits/...`) بخط استرجاع جديد:
+    توليد واسع من كل القنوات ← دمج وإزالة تكرار ← زمن ← ترتيب ← قبول محمي
+    بفائض مشترك ← حزمة أدلة منظَّمة. حجم السياق يبقى في ميزانية الإنتاج نفسها."""
+    import sys as _s
+    if "/opt/LegalMind" not in _s.path:
+        _s.path.insert(0, "/opt/LegalMind")
+    from retrieval import pipeline as _PL
+    from retrieval.model import (LAYER_LEGISLATION as _LL,
+                                 LAYER_PRINCIPLE as _LP, LAYER_JUDGMENT as _LJ)
+
+    query = inp.request_type + " - " + facts_ret[:1500]
+    if inp.madhab:
+        query += " (مذهب " + inp.madhab + ")"
+    _early_media = []
+    for _a in ([inp.attachment] if inp.attachment else []) + list(inp.attachments or []):
+        _k = getattr(_a, "kind", None) or (isinstance(_a, dict) and _a.get("kind"))
+        _d = getattr(_a, "data", None) or (isinstance(_a, dict) and _a.get("data"))
+        _mt = getattr(_a, "media_type", None) or (isinstance(_a, dict) and _a.get("media_type"))
+        if _k in ("image", "pdf") and _d:
+            _early_media.append((_k, _mt, _d))
+    subqueries = _draft_subqueries(client, inp.request_type, facts_ret, inp.madhab, _early_media)
+    vectors = _draft_embed_multi([query] + subqueries)
+
+    # القنوات القائمة تبقى كما هي وتدخل التجمّع مرشحاتٍ لا مقبولاتٍ مسبقًا
+    _extra, _bundle, _chap, _direct = [], [], [], []
+    for _i, _oid in enumerate(_draft_bundles(inp.request_type, facts_ret, subqueries,
+                                             inp.madhab, inp.branch), 1):
+        _extra.append((_oid, "bundle", _i, 0.0, _LL)); _bundle.append(_oid)
+    for _i, _oid in enumerate(_draft_chap_ids(inp.request_type, facts_ret, subqueries), 1):
+        _extra.append((_oid, "chapter", _i, 0.0, _LL)); _chap.append(_oid)
+    _docrefs = _draft_doc_refs(client, _early_media)
+    for _i, _oid in enumerate(list(_draft_direct_ids(inp.request_type, facts_ret,
+                                                     subqueries)) + list(_docrefs), 1):
+        _extra.append((_oid, "citation", _i, 1.0, _LL)); _direct.append(_oid)
+    for _oid in list(_direct) + list(_bundle):
+        for _tgt in _XREF.get(_oid, ()):
+            _extra.append((_tgt, "xref", 1, 0.0, _LL))
+
+    class _Deps:
+        search = staticmethod(lambda v, t, l: _draft_search(v, list(t), l))
+        db_rows = staticmethod(db_rows)
+        fetch_texts = staticmethod(lambda ids: _draft_fetch_texts(set(ids)))
+        rerank = staticmethod(_draft_rerank)
+
+        @staticmethod
+        def resolve_law_prefix(num, year):
+            _r = db_rows("SELECT id FROM knowledge_objects WHERE id LIKE %s "
+                         "AND object_type = ANY(%s) LIMIT 1",
+                         ("legis-%s-%s-m%%" % (num, year), list(_kb.LEGISLATION_TYPES)))
+            return ("legis-%s-%s-" % (num, year)) if _r else None
+
+        _rc = {}
+
+        @staticmethod
+        def row_of(oid):
+            if oid not in _Deps._rc:
+                _r = db_rows("SELECT id, verification_status, metadata "
+                             "FROM knowledge_objects WHERE id = %s", (oid,))
+                _Deps._rc[oid] = (_r or [{}])[0]
+            return _Deps._rc[oid]
+
+    _res = _PL.run(_Deps(), query, vectors, anchor_ids=_direct[:12],
+                   phrases=subqueries, extra=_extra, norm_ar=_draft_norm_ar)
+    _adm = _res["admitted"]
+    _seen = {c.object_id for c in _adm}
+    _hits = [(c.layer, float(c.final_score or 0.0),
+              {"object_id": c.object_id,
+               "_source": sorted(c.channels)[0] if c.channels else "dense",
+               "_pre_rerank_score": c.fusion_score,
+               "_reranker_raw": c.rerank_score}) for c in _adm]
+    _attr = {"retrieval_version": "v2", "per_axis": [],
+             "true_union_count": _res["pool_size_raw"],
+             "dense_union_count": _res["pool_stats"]["by_channel"].get("dense", 0),
+             "pool_after_dedupe": _res["pool_size_after_dedupe"],
+             "principle_precap_dup_dropped": _res["pool_stats"]["content_duplicates_removed"],
+             "by_channel": _res["pool_stats"]["by_channel"],
+             "by_layer": _res["pool_stats"]["by_layer"],
+             "rerank_output_count": _res["reranked"],
+             "admission": _res["admission"], "temporal": _res["temporal"],
+             "budget_admitted_count": len(_seen),
+             "final_context_count": len(_seen),
+             "selectivity": _res["selectivity"],
+             "disabled_channels": _res["disabled_channels"]}
+    print("[draft] retrieval-v2:", _djson.dumps(_attr, ensure_ascii=False)[:4000], flush=True)
+    return {"context": _res["context"], "attr": _attr, "seen": _seen, "hits": _hits,
+            "subqueries": subqueries, "bundle_added": _bundle,
+            "direct_added": _direct, "chap_added": _chap, "lex_added": [],
+            "sources_used": len(_seen), "provenance": _res["packet"]["provenance"],
+            "budget_dropped_full": [], "packet": _res["packet"]}
+
+
 def _draft_build_context(client, inp: _DraftIn, facts_ret: str) -> dict:
     """يبني السياق المسترجَع الكامل بلا أي نداء توليد/صياغة — استخراج حرفي بالفهرس
     من _draft_run (P1-6 في docs/p1_retrieval_evaluation_framework.md، بأمر المالك
     2026-09-10) ليتيح قياس الاسترجاع (Gold Set) بلا كلفة توليد حقيقية. صفر تغيير
     سلوكي عن الكتلة الأصلية — فقط عزل في دالة مستقلة قابلة للنداء بمفردها."""
+    # علم بيئة يحوّل الطلب كله إلى طبقة الاسترجاع الجديدة؛ مطفأً لا أثر له.
+    # وأي عطب في الطبقة الجديدة يرجع للخط القائم بدل أن يُسقط الطلب.
+    if (_draft_env("LEGALMIND_RETRIEVAL_V2") or "").strip() in ("1", "true", "on"):
+        try:
+            return _draft_build_context_v2(client, inp, facts_ret)
+        except Exception as _v2e:
+            print("[draft] retrieval-v2-error:", repr(_v2e), flush=True)
     query = inp.request_type + " - " + facts_ret[:1500]
     if inp.madhab:
         query += " (مذهب " + inp.madhab + ")"
