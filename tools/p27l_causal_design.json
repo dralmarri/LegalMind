@@ -2,15 +2,12 @@
  "_note": "P2.7-L القسم الخامس — التصميم السببي وتنبؤاته. **سُجِّل بالكامل قبل أي تشغيل**، وهذا هو ما يجعل النتيجة سببية لا وصفية.",
  "frozen_before_any_run": true,
  "design_set_only": "الحالات المحروقة من P2.7-K حصرًا. **صفر استهلاك من الـ34.**",
-
  "three_arms_same_anchors_same_call_budget": {
   "ARM_ANCHOR": "الآلية المجمَّدة في p27l_mechanism_spec.json.",
   "ARM_ADJACENT": "خط أساس منحطّ: كل مواد القانون نفسه ضمن ±3 من رقم المرساة. بلا بحث ولا حكم.",
   "ARM_TOPICAL": "خط أساس ثانٍ: بحث دلالي واسع من **موضوع القضية** بميزانية النداءات نفسها — وهو تقريبًا ما فعلته مسارات P2.7-K."
  },
-
  "_why_three": "المالك سمّى ثلاث فرضيات منافسة للنجاح: علاقة قانونية، أو قرب رقمي، أو بحث موضوعي واسع. لكل فرضية ذراع يجسّدها، فلا يبقى تفسير بديل بلا تمثيل.",
-
  "REGISTERED_PREDICTIONS": {
   "_status": "مسجَّلة قبل الفتح. أي انحراف عنها يُعلَن كما هو.",
   "P1": "ARM_ADJACENT سيصيب م553 وم340 (كلاهما داخل ±3) — أي أن استدعاءه على النوع ADJACENT_RELEVANT_PROVISION سيبدو ناجحًا. **وهذا بالضبط سبب عدم صلاحية الاستدعاء وحده حَكَمًا.**",
@@ -19,18 +16,32 @@
   "P4": "ARM_TOPICAL هو المنافس الجاد: إن أصاب الأهداف نفسها فالإرساء لا يضيف شيئًا. التنبؤ المسجَّل أنه يخفق كما أخفقت مسارات K — لأنه آليتها نفسها.",
   "P5": "ARM_ANCHOR وحده يجمع: يصل لما يعجز عنه ARM_ADJACENT بنيويًا، ويرفض ما يقبله من NEAR_BUT_UNRELATED."
  },
-
  "CAUSAL_VERDICT_RULE": {
   "_registered_before_run": true,
   "LEGAL_RELATION_DISCOVERY_CONFIRMED_requires_ALL": [
    "ARM_ANCHOR يصيب هدفًا واحدًا على الأقل من RELATED_BUT_NONADJACENT يعجز عنه ARM_ADJACENT بنيويًا",
    "ARM_ANCHOR يقبل NEAR_BUT_UNRELATED أقل من ARM_ADJACENT بفارق حقيقي",
-   "ARM_ANCHOR يصيب هدفًا واحدًا على الأقل يخفق فيه ARM_TOPICAL"
+   "ARM_ANCHOR يصيب هدفًا واحدًا على الأقل يخفق فيه ARM_TOPICAL",
+   "ARM_ANCHOR يتفوق على ARM_TOPICAL في الدقة أو الـfan-out (أُضيف بـ_AMENDMENT_1 قبل وصول أي مخرج)"
   ],
   "NUMERIC_ADJACENCY_SUFFICIENT_if": "كل ما أصابه ARM_ANCHOR أصابه ARM_ADJACENT",
   "BROAD_TOPICAL_SUFFICIENT_if": "كل ما أصابه ARM_ANCHOR أصابه ARM_TOPICAL",
   "CAUSALLY_INDETERMINATE_if": "تعذّر التفريق — **والمواصفة تأمر حينها بالتوقف وعدم فتح الـ34**"
  },
-
- "_scope_limit_declared_in_advance": "ADJACENT_RELEVANT_PROVISION مثالاه الوحيدان داخل ±3، فحتى لو أصابهما ARM_ANCHOR **لا يُحتسب ذلك دليلًا على آليته M3**؛ الدليل عليه يأتي من الضابطين وحدهما. وهذا قيد بنيوي في Design Set لا يُرفع إلا على الـ34."
+ "_scope_limit_declared_in_advance": "ADJACENT_RELEVANT_PROVISION مثالاه الوحيدان داخل ±3، فحتى لو أصابهما ARM_ANCHOR **لا يُحتسب ذلك دليلًا على آليته M3**؛ الدليل عليه يأتي من الضابطين وحدهما. وهذا قيد بنيوي في Design Set لا يُرفع إلا على الـ34.",
+ "_AMENDMENT_1": {
+  "registered_at": "2026-09-18T11:52:21.061175+00:00",
+  "source": "تعليمة المالك أثناء انتظار الذراعين",
+  "arm_files_present_at_amendment_time": [],
+  "_integrity": "القائمة أعلاه **فارغة** — أي أن التعديل سُجِّل ولم يكن أيٌّ من الذراعين قد أنتج مخرجًا بعد. وهو **يشدّد المعيار ولا يخففه**، فلا يمكن أن يكون تفصيلًا على نتيجة.",
+  "amendment": {
+   "rule": "التفوق على ARM_ADJACENT وحده **لا يكفي** للحكم بـLEGAL_RELATION_DISCOVERY_CONFIRMED.",
+   "added_condition": "يجب أن يتفوق ARM_ANCHOR على ARM_TOPICAL في **الدقة أو الـfan-out** — لا في إصابة هدف واحد فقط.",
+   "why": "بدون هذا الشرط يمكن لآلية أن تجتاز الرقم وهي في حقيقتها بحث موضوعي واسع لبس ثوب المرساة؛ فنكون استبدلنا توسعًا رقميًا بتوسع موضوعي لا أكثر.",
+   "new_metrics_required": [
+    "Anchored Expansion Precision لكل ذراع",
+    "Expansion Fan-out لكل ذراع"
+   ]
+  }
+ }
 }
