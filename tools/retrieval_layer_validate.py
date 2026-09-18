@@ -1,184 +1,448 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""بوابة التحقق الخادمية لطبقة الاسترجاع الجديدة — تُشغَّل على الخادم وحده.
+"""بوابة التحقق الحية لطبقة الاسترجاع v2 — تُشغَّل على الخادم وحده.
 
-لا تمسّ أي نقطة إنتاج ولا تعدّل قاعدة ولا فهرسًا: تستدعي دوال الإنتاج للقراءة
-فقط (`_draft_search` / `db_rows` / `_draft_fetch_texts` / `_draft_rerank`) ثم
-تشغّل الخط الجديد بجانب الخط القائم على **نفس** الحالات وتقارن.
+قراءة فقط: لا تمسّ نقطة إنتاج، ولا تكتب في القاعدة ولا في الفهرس، ولا تعدّل
+حرفًا من `retrieval/`. تستدعي دوال الإنتاج نفسها وتقيس.
+
+السؤال الوحيد: هل v2 تحسّن الوصول الفعلي إلى التشريعات والمبادئ والأحكام
+ذات الصلة **دون** زيادة غير مقبولة في الضجيج أو الزمن؟
 
 التشغيل:
     cd /opt/LegalMind; set -a; . deploy/.env; set +a
-    /opt/LegalMind/admin/.venv/bin/python tools/retrieval_layer_validate.py
-
-المقاييس المطلوبة التي **لا يمكن قياسها إلا هنا** (لأنها تحتاج Qdrant والمرتِّب
-المتقاطع الحيَّين): فصل الضابط السالب تحت الترتيب الحقيقي، وزمن الاستجابة،
-واسترجاع الأحكام الكاملة فعليًا."""
-import sys, json, time, os
-
-sys.path.insert(0, "/opt/LegalMind")
-sys.path.insert(0, "/opt/LegalMind/admin")
-from admin import app                                    # noqa: E402
-import kb_types as _kb                                   # noqa: E402
-from retrieval import pipeline as PL                     # noqa: E402
-from retrieval.model import (LAYER_LEGISLATION, LAYER_PRINCIPLE,  # noqa: E402
-                             LAYER_JUDGMENT)
-import re                                                # noqa: E402
+    nohup /opt/LegalMind/admin/.venv/bin/python tools/retrieval_layer_validate.py \
+          > /tmp/v2val.log 2>&1 &
+    tail -f /tmp/v2val.log
+"""
+import sys, os, json, time, statistics
 
 ROOT = "/opt/LegalMind"
+sys.path.insert(0, ROOT)
+sys.path.insert(0, os.path.join(ROOT, "admin"))
+
+from admin import app                                        # noqa: E402
+import kb_types as _kb                                       # noqa: E402
+from retrieval import pipeline as PL                          # noqa: E402
+from retrieval.model import (LAYER_LEGISLATION as LL, LAYER_PRINCIPLE as LP,
+                             LAYER_JUDGMENT as LJ, LAYER_TEMPLATE as LT)
+
+LAYERS = (LL, LP, LJ, LT)
+OUT = os.path.join(ROOT, "tools/retrieval_v2_validation.json")
+REG_JUDGMENT = "judgment-civ-754-2013"     # حارس انتكاس على مجموعة التصميم فقط
 
 
-class Deps:
-    """كل اعتمادية تُوصَل بدالة الإنتاج نفسها — لا نسخة منها."""
-    search = staticmethod(lambda vec, types, limit: app._draft_search(vec, list(types), limit))
-    db_rows = staticmethod(lambda sql, params: app.db_rows(sql, params))
-    fetch_texts = staticmethod(lambda ids: app._draft_fetch_texts(set(ids)))
-    rerank = staticmethod(lambda q, pairs: app._draft_rerank(q, pairs))
+# ───────────────────────── أدوات مشتركة ─────────────────────────
+_TYPE_CACHE = {}
+
+
+def layers_of(ids):
+    """طبقة كل معرّف من `object_type` الحقيقي في القاعدة — لا تخمين من الشكل."""
+    miss = [i for i in set(ids) if i and i not in _TYPE_CACHE]
+    for k in range(0, len(miss), 500):
+        chunk = miss[k:k + 500]
+        try:
+            rows = app.db_rows("SELECT id, object_type FROM knowledge_objects "
+                               "WHERE id = ANY(%s)", (chunk,))
+        except Exception:
+            rows = []
+        for r in rows:
+            ot = r.get("object_type")
+            _TYPE_CACHE[r["id"]] = (LL if ot in _kb.LEGISLATION_TYPES else
+                                    LP if ot in _kb.PRINCIPLE_TYPES else
+                                    LJ if ot in _kb.JUDGMENT_TYPES else
+                                    LT if ot in _kb.TEMPLATE_TYPES else "?")
+        for i in chunk:
+            _TYPE_CACHE.setdefault(i, "?")
+    return {i: _TYPE_CACHE.get(i, "?") for i in ids}
+
+
+def by_layer(ids):
+    m = layers_of(list(ids))
+    out = {l: 0 for l in LAYERS}
+    for i in ids:
+        out[m.get(i, "?")] = out.get(m.get(i, "?"), 0) + 1
+    return {k: v for k, v in out.items() if k in LAYERS}
+
+
+def pct(a, b):
+    return round(100.0 * a / b, 1) if b else 0.0
+
+
+# ─────────────── تجميد المحاور: مقارنة مزدوجة حقيقية ───────────────
+_FROZEN = {}
+_ORIG_SUBQ = app._draft_subqueries
+
+
+def _frozen_subqueries(client, request_type, facts, madhab, media=None):
+    """نداء Haiku **مرة واحدة** لكل حالة، ويُعاد المخرَج نفسه للخطين.
+
+    بلا هذا التجميد تُقارَن نسختان على محاور مختلفة (تفكيك Haiku غير حتمي —
+    موثَّق في §prinxref أنه مصدر تقلب الاسترجاع كله)، فيصير الفرق المقيس خليطًا
+    من أثر البنية وأثر قرعة المحاور."""
+    key = (request_type or "", (facts or "")[:400], madhab or "")
+    if key not in _FROZEN:
+        _FROZEN[key] = _ORIG_SUBQ(client, request_type, facts, madhab, media)
+    return list(_FROZEN[key])
+
+
+app._draft_subqueries = _frozen_subqueries
+
+
+# ─────────────── وكلاء تسجيل حول الاعتماديات (بلا مساس بالطبقة) ───────────────
+class Rec:
+    """يلفّ دوال الإنتاج ليسجّل ما مرّ بكل مرحلة — الطبقة نفسها لا تعلم بوجوده."""
+
+    def __init__(self):
+        self.reset()
+
+    def reset(self):
+        self.generated = set()      # كل ما أعادته أي قناة قبل أي إزالة تكرار
+        self.fetched = set()        # مجموعة ما بعد إزالة التكرار (مدخل الترتيب)
+        self.rr_in = set()          # ما عُرض على المرتِّب فعلًا
+        self.rr_out = set()         # ما أعطاه المرتِّب درجةً
+        self.rr_called = 0
+        self.rr_failed = 0
+
+    # الاعتماديات كما تراها الطبقة
+    def search(self, vec, types, limit):
+        hits = app._draft_search(vec, list(types), limit) or []
+        for h in hits:
+            oid = (h.get("payload") or {}).get("object_id")
+            if oid:
+                self.generated.add(oid)
+        return hits
+
+    def db_rows(self, sql, params):
+        rows = app.db_rows(sql, params)
+        for r in (rows or []):
+            for k in ("id", "jid"):
+                if r.get(k):
+                    self.generated.add(r[k])
+        return rows
+
+    def fetch_texts(self, ids):
+        ids = set(ids)
+        self.fetched |= ids
+        return app._draft_fetch_texts(ids)
+
+    def rerank(self, q, pairs):
+        self.rr_called += 1
+        self.rr_in |= {i for i, _t in pairs}
+        try:
+            out = app._draft_rerank(q, pairs) or {}
+        except Exception:
+            out = {}
+        if not out and pairs:
+            self.rr_failed += 1
+        self.rr_out |= set(out.keys())
+        return out
 
     @staticmethod
     def resolve_law_prefix(num, year):
-        rows = app.db_rows(
-            "SELECT id FROM knowledge_objects WHERE id LIKE %s "
-            "AND object_type = ANY(%s) LIMIT 1",
-            ("legis-%s-%s-m%%" % (num, year), list(_kb.LEGISLATION_TYPES)))
-        return ("legis-%s-%s-" % (num, year)) if rows else None
+        r = app.db_rows("SELECT id FROM knowledge_objects WHERE id LIKE %s "
+                        "AND object_type = ANY(%s) LIMIT 1",
+                        ("legis-%s-%s-m%%" % (num, year), list(_kb.LEGISLATION_TYPES)))
+        return ("legis-%s-%s-" % (num, year)) if r else None
 
-    _row_cache = {}
+    _rc = {}
 
     @staticmethod
     def row_of(oid):
-        if oid not in Deps._row_cache:
+        if oid not in Rec._rc:
             r = app.db_rows("SELECT id, verification_status, metadata "
                             "FROM knowledge_objects WHERE id = %s", (oid,))
-            Deps._row_cache[oid] = (r or [{}])[0]
-        return Deps._row_cache[oid]
+            Rec._rc[oid] = (r or [{}])[0]
+        return Rec._rc[oid]
 
 
-def axes_and_vectors(rt, facts, madhab=None):
+# ───────────────────────── تشغيل الخطين ─────────────────────────
+class _In:
+    def __init__(self, rt, q, madhab=None):
+        self.request_type, self.facts, self.madhab = rt, q, madhab
+        self.branch = None
+        self.attachment, self.attachments = None, []
+
+
+def _client():
     import anthropic
-    client = anthropic.Anthropic(api_key=app._draft_env("ANTHROPIC_API_KEY"))
-    subq = app._draft_subqueries(client, rt, facts, madhab)
-    query = rt + " - " + facts[:1500]
-    return query, subq, app._draft_embed_multi([query] + subq)
+    return anthropic.Anthropic(api_key=app._draft_env("ANTHROPIC_API_KEY"))
 
 
-_ART_IN_TEXT = re.compile(r"legis-[0-9a-zA-Z-]+-m\d+")
-
-
-def anchors_from(text, subq):
-    """مراسي الجوار البنيوي: المواد المذكورة صراحةً + ما يجلبه محلّ الإنتاج."""
-    out = list(app._draft_direct_ids("", text, subq))[:12]
-    return out
-
-
-def run_new(rt, facts, madhab=None, depth=PL.DEFAULT_DENSE_DEPTH):
-    query, subq, vectors = axes_and_vectors(rt, facts, madhab)
-    anchors = anchors_from(facts, subq)
-    extra = []
-    for i, oid in enumerate(app._draft_bundles(rt, facts, subq, madhab, None), 1):
-        extra.append((oid, "bundle", i, 0.0, LAYER_LEGISLATION))
-    for i, oid in enumerate(app._draft_chap_ids(rt, facts, subq), 1):
-        extra.append((oid, "chapter", i, 0.0, LAYER_LEGISLATION))
+def run_baseline(rt, q):
     t0 = time.time()
-    res = PL.run(Deps(), query, vectors, anchor_ids=anchors,
-                 phrases=subq, dense_depth=depth, extra=extra,
-                 norm_ar=app._draft_norm_ar)
-    res["latency_sec"] = round(time.time() - t0, 2)
+    ctx = app._draft_build_context(_client(), _In(rt, q), q)
+    return ctx, round(time.time() - t0, 2)
+
+
+def run_v2(rt, q, anchors_extra=()):
+    cl = _client()
+    inp = _In(rt, q)
+    subq = app._draft_subqueries(cl, rt, q, None)
+    query = rt + " - " + q[:1500]
+    vectors = app._draft_embed_multi([query] + subq)
+    extra, direct = [], []
+    for i, oid in enumerate(app._draft_bundles(rt, q, subq, None, None), 1):
+        extra.append((oid, "bundle", i, 0.0, LL))
+    for i, oid in enumerate(app._draft_chap_ids(rt, q, subq), 1):
+        extra.append((oid, "chapter", i, 0.0, LL))
+    for i, oid in enumerate(app._draft_direct_ids(rt, q, subq), 1):
+        extra.append((oid, "citation", i, 1.0, LL))
+        direct.append(oid)
+    for oid in list(direct):
+        for tgt in app._XREF.get(oid, ()):
+            extra.append((tgt, "xref", 1, 0.0, LL))
+    anchors = (list(anchors_extra) + direct)[:14]
+    rec = Rec()
+    # المرشحون المحقونون لا يمرّون بأي اعتمادية، فلا يلتقطهم وكيل التسجيل —
+    # وبدونهم يخرج DEDUPED أكبر من GENERATED وهو مستحيل منطقيًا (كشفته المحاكاة).
+    rec.generated |= {oid for oid, _c, _r, _s, _l in extra}
+    t0 = time.time()
+    res = PL.run(rec, query, vectors, anchor_ids=anchors, phrases=subq,
+                 extra=extra, norm_ar=app._draft_norm_ar)
+    res["latency"] = round(time.time() - t0, 2)
+    res["rec"] = rec
     res["anchors"] = anchors
     return res
 
 
-def run_production(rt, facts, madhab=None):
-    import anthropic
+def funnel(res):
+    """قمع منفصل لكل طبقة سلطة.
 
-    class _In:
-        request_type, facts, madhab, branch = rt, facts, madhab, None
-        attachment, attachments = None, []
-    client = anthropic.Anthropic(api_key=app._draft_env("ANTHROPIC_API_KEY"))
-    t0 = time.time()
-    ctx = app._draft_build_context(client, _In(), facts)
-    ctx["latency_sec"] = round(time.time() - t0, 2)
-    return ctx
+    ملاحظة أمانة: `RELATION_VALIDATED` **غير منفَّذة كمرحلة في v2** — الطبقة
+    تحتوي تحققًا زمنيًا لا تحققًا من العلاقة، وحقل `Candidate.relation` لا
+    يُسنَد في أي مسار. فتُبلَّغ `null` ولا تُختلق لها أرقام."""
+    rec = res["rec"]
+    adm = [c.object_id for c in res["admitted"]]
+    # قياس مستقل: ما وصل النموذج فعلًا يُقرأ من نص السياق نفسه، لا من قائمة
+    # المقبولين — فلو سقطت كتلة لغياب نص ظهر الفرق بدل أن يتساوى الرقمان حتمًا.
+    import re as _re
+    ctx_ids = _re.findall(r'معرف="([^"]+)"', res.get("context") or "")
+    return {
+        "GENERATED": by_layer(rec.generated),
+        "DEDUPED": by_layer(rec.fetched),
+        "RELATION_VALIDATED": None,
+        "RERANKER_INPUT": by_layer(rec.rr_in),
+        "RERANKED": by_layer(rec.rr_out),
+        "ADMITTED": by_layer(adm),
+        "FINAL_CONTEXT": by_layer(ctx_ids),
+    }
 
 
+# ───────────────────────── الضوابط المجمَّدة ─────────────────────────
+def load_controls():
+    gt = json.load(open(os.path.join(ROOT, "tools/p27l_controls_ground_truth.json")))["anchors"]
+    ex = json.load(open(os.path.join(ROOT, "tools/p27l_exec_in.json")))["cases"]
+    qmap = {c["case"]: c for c in ex}
+    key = {"A1_labour_limitation": "A1", "A2_prosecution_intervention": "A2",
+           "A3_cheque_limitation": "A3"}
+    out = []
+    for g, a in gt.items():
+        c = qmap[key[g]]
+        out.append({"case": key[g], "group": g, "question": c["question"],
+                    "anchors": c["anchor_ids"],
+                    "NAR": [x["id"] for x in a.get("NEAR_AND_RELATED", [])],
+                    "RBN": [x["id"] for x in a.get("RELATED_BUT_NONADJACENT", [])],
+                    "NBU": [x["id"] for x in a.get("NEAR_BUT_UNRELATED", [])],
+                    "nbu_scored": a.get("DISCRIMINATION_POWER") is None})
+    return out
+
+
+def fam(i):
+    import re
+    m = re.match(r"^(jprin-\d+-\d+)-", i or "")
+    return m.group(1) if m else i
+
+
+def hit(ids, t):
+    fams = {fam(i) for i in ids}
+    return t in ids or fam(t) in fams
+
+
+# ───────────────────────── البوابة ─────────────────────────
 def main():
-    battery = json.load(open(os.path.join(ROOT, "battery.json")))
-    cases = battery if isinstance(battery, list) else battery.get("cases", [])
-    report = {"cases": [], "totals": {}}
-    tot = {"must": 0, "must_old": 0, "must_new": 0,
-           "pool_old": 0, "pool_new": 0, "adm_old": 0, "adm_new": 0,
-           "jud_old": 0, "jud_new": 0, "prin_old": 0, "prin_new": 0,
-           "lat_old": 0.0, "lat_new": 0.0}
+    R = {"started": time.strftime("%Y-%m-%d %H:%M:%S"), "blocking": []}
+
+    # 1) المرتِّب شرط لا يُتجاوز: بنية v2 تعتمد عليه لتقييم مرشحي القنوات الضعيفة
+    probe = app._draft_fetch_texts({"legis-38-1980-m166"})
+    pr = {}
+    try:
+        pr = app._draft_rerank("التكليف بالوفاء قبل أمر الأداء",
+                               [(k, v["text"]) for k, v in probe.items()]) or {}
+    except Exception as e:
+        R["rerank_probe_error"] = repr(e)
+    R["reranker_available"] = bool(pr)
+    if not pr:
+        R["blocking"].append("RERANKER_REQUIRED_BUT_UNAVAILABLE")
+        R["verdict"] = "VALIDATION_INCOMPLETE"
+        json.dump(R, open(OUT, "w"), ensure_ascii=False, indent=1)
+        print("RERANKER_REQUIRED_BUT_UNAVAILABLE — لا يجوز إعلان نجاح بمسار احتياطي.")
+        print("VERDICT: VALIDATION_INCOMPLETE")
+        sys.exit(2)
+    print("reranker: حيّ (%d درجة على مسبار)" % len(pr), flush=True)
+
+    # 2) حارس انتكاس الحكم الكامل المسمّى (مجموعة التصميم فقط، لا تعميم)
+    rr = app.db_rows("SELECT id FROM knowledge_objects WHERE id = %s", (REG_JUDGMENT,))
+    R["regression_judgment_present"] = bool(rr)
+    if not rr:
+        R["blocking"].append("FULL_JUDGMENT_REGRESSION_ID_ABSENT")
+        print("تنبيه: %s غير موجود في القاعدة — الحارس المسمّى لا ينطبق." % REG_JUDGMENT,
+              flush=True)
+
+    # 3) البطارية: خط الأساس مقابل v2 على المدخل نفسه وبالمحاور المجمَّدة نفسها
+    cases = json.load(open(os.path.join(ROOT, "battery.json")))
+    R["battery"] = []
+    tot = {"must": 0, "old": 0, "new": 0}
+    lat_o, lat_n, pool_n, rin_n, ctx_n = [], [], [], [], []
+    fun_sum = {k: {l: 0 for l in LAYERS} for k in
+               ("GENERATED", "DEDUPED", "RERANKER_INPUT", "RERANKED",
+                "ADMITTED", "FINAL_CONTEXT")}
+    old_layer_sum = {l: 0 for l in LAYERS}
+    temporal_sum, judg_proof = {}, []
     for c in cases:
-        rt = c.get("request_type") or ""
-        facts = c.get("facts") or c.get("question") or ""
+        rt, q = c.get("rt", ""), c.get("q", "")
         must = list(c.get("must") or [])
         try:
-            old = run_production(rt, facts, c.get("madhab"))
-            new = run_new(rt, facts, c.get("madhab"))
+            old, lo = run_baseline(rt, q)
+            new = run_v2(rt, q)
         except Exception as e:
-            report["cases"].append({"id": c.get("id"), "error": repr(e)})
+            R["battery"].append({"name": c.get("name"), "error": repr(e)})
+            print("  ✗ %s: %r" % (c.get("name"), e), flush=True)
             continue
-        old_ids, new_ids = set(old["seen"]), {x.object_id for x in new["admitted"]}
-        got_old = [m for m in must if m in old_ids]
-        got_new = [m for m in must if m in new_ids]
-        lay_new = new["packet"]["counts"]
-        lay_old = {}
-        for lb, _s, p in old["hits"]:
-            if p.get("object_id") in old_ids:
-                lay_old[lb] = lay_old.get(lb, 0) + 1
-        row = {
-            "id": c.get("id"), "must_total": len(must),
-            "must_old": len(got_old), "must_new": len(got_new),
-            "missing_old": [m for m in must if m not in old_ids],
-            "missing_new": [m for m in must if m not in new_ids],
-            "pool_old": old["attr"].get("true_union_count"),
-            "pool_new": new["pool_size_raw"],
-            "admitted_old": len(old_ids), "admitted_new": len(new_ids),
-            "by_layer_old": lay_old, "by_layer_new": lay_new,
-            "temporal": new["temporal"],
-            "selectivity_new": new["selectivity"],
-            "latency_old": old["latency_sec"], "latency_new": new["latency_sec"],
-            "context_chars_old": len(old["context"]),
-            "context_chars_new": len(new["context"]),
-            "admission": new["admission"],
-        }
-        report["cases"].append(row)
-        tot["must"] += len(must); tot["must_old"] += len(got_old)
-        tot["must_new"] += len(got_new)
-        tot["pool_old"] += row["pool_old"] or 0; tot["pool_new"] += row["pool_new"]
-        tot["adm_old"] += row["admitted_old"]; tot["adm_new"] += row["admitted_new"]
-        tot["jud_old"] += lay_old.get(LAYER_JUDGMENT, 0)
-        tot["jud_new"] += lay_new.get(LAYER_JUDGMENT, 0)
-        tot["prin_old"] += lay_old.get(LAYER_PRINCIPLE, 0)
-        tot["prin_new"] += lay_new.get(LAYER_PRINCIPLE, 0)
-        tot["lat_old"] += row["latency_old"]; tot["lat_new"] += row["latency_new"]
-        print("  %-10s must %d/%d → %d/%d | تجمّع %s→%d | أحكام %d→%d | زمن %.1f→%.1f"
-              % (c.get("id"), len(got_old), len(must), len(got_new), len(must),
-                 row["pool_old"], row["pool_new"],
-                 lay_old.get(LAYER_JUDGMENT, 0), lay_new.get(LAYER_JUDGMENT, 0),
-                 row["latency_old"], row["latency_new"]), flush=True)
-    n = max(1, len(report["cases"]))
-    report["totals"] = dict(
-        tot, legislative_recall_old=round(tot["must_old"] / max(1, tot["must"]), 4),
-        legislative_recall_new=round(tot["must_new"] / max(1, tot["must"]), 4),
-        avg_latency_old=round(tot["lat_old"] / n, 2),
-        avg_latency_new=round(tot["lat_new"] / n, 2))
-    out = os.path.join(ROOT, "tools/retrieval_layer_validation.json")
-    json.dump(report, open(out, "w"), ensure_ascii=False, indent=1)
-    t = report["totals"]
-    print("\n" + "=" * 66)
-    print("Legislative Recall (must):  %.3f → %.3f  (%d/%d → %d/%d)"
-          % (t["legislative_recall_old"], t["legislative_recall_new"],
-             t["must_old"], t["must"], t["must_new"], t["must"]))
-    print("تجمّع المرشحين:            %d → %d" % (t["pool_old"], t["pool_new"]))
-    print("المقبول في السياق:         %d → %d" % (t["adm_old"], t["adm_new"]))
-    print("مبادئ في السياق:           %d → %d" % (t["prin_old"], t["prin_new"]))
-    print("أحكام كاملة في السياق:      %d → %d" % (t["jud_old"], t["jud_new"]))
-    print("متوسط الزمن (ث):           %.1f → %.1f" % (t["avg_latency_old"], t["avg_latency_new"]))
-    ok = (t["legislative_recall_new"] >= t["legislative_recall_old"]
-          and t["jud_new"] >= t["jud_old"])
-    print("\nVALIDATION_" + ("PASS" if ok else "REGRESSION") + "  — التفصيل في " + out)
-    sys.exit(0 if ok else 1)
+        oid_set = set(old["seen"])
+        nid_set = {x.object_id for x in new["admitted"]}
+        f = funnel(new)
+        for k in fun_sum:
+            for l in LAYERS:
+                fun_sum[k][l] += f[k].get(l, 0)
+        for l, v in by_layer(oid_set).items():
+            old_layer_sum[l] += v
+        for k, v in (new["temporal"] or {}).items():
+            temporal_sum[k] = temporal_sum.get(k, 0) + v
+        jl = [i for i in nid_set if layers_of([i])[i] == LJ]
+        if jl:
+            judg_proof.append({"case": c.get("name"), "judgments": jl[:4]})
+        row = {"name": c.get("name"), "must_total": len(must),
+               "must_old": sum(1 for m in must if m in oid_set),
+               "must_new": sum(1 for m in must if m in nid_set),
+               "missing_new": [m for m in must if m not in nid_set],
+               "pool_v2": new["pool_size_raw"],
+               "pool_after_dedupe": new["pool_size_after_dedupe"],
+               "reranker_input": len(new["rec"].rr_in),
+               "admitted_old": len(oid_set), "admitted_new": len(nid_set),
+               "ctx_chars_old": len(old["context"]),
+               "ctx_chars_new": len(new["context"]),
+               "latency_old": lo, "latency_new": new["latency"],
+               "selectivity": new["selectivity"], "funnel": f}
+        R["battery"].append(row)
+        tot["must"] += len(must); tot["old"] += row["must_old"]; tot["new"] += row["must_new"]
+        if new["rec"].rr_failed:
+            R.setdefault("rerank_failures", []).append(c.get("name"))
+        lat_o.append(lo); lat_n.append(new["latency"])
+        pool_n.append(new["pool_size_raw"]); rin_n.append(len(new["rec"].rr_in))
+        ctx_n.append(len(new["context"]))
+        print("  %-34s must %d/%d→%d/%d | تجمّع %d | مرتِّب %d | حكم %d | %.0f→%.0fث"
+              % (str(c.get("name"))[:34], row["must_old"], len(must),
+                 row["must_new"], len(must), row["pool_v2"], row["reranker_input"],
+                 f["FINAL_CONTEXT"].get(LJ, 0), lo, new["latency"]), flush=True)
+
+    # 4) الضوابط: NAR / RBN / NBU بالخط الحقيقي كاملًا
+    R["controls"] = []
+    C = {"nar": 0, "nar_n": 0, "rbn": 0, "rbn_n": 0, "nbu": 0, "nbu_n": 0,
+         "b_nar": 0, "b_rbn": 0, "b_nbu": 0}
+    for ct in load_controls():
+        try:
+            old, _lo = run_baseline("استشارة", ct["question"])
+            new = run_v2("استشارة", ct["question"], anchors_extra=ct["anchors"])
+        except Exception as e:
+            R["controls"].append({"case": ct["case"], "error": repr(e)})
+            continue
+        o_ids, n_ids = set(old["seen"]), {x.object_id for x in new["admitted"]}
+        row = {"case": ct["case"],
+               "NAR_new": [t for t in ct["NAR"] if hit(n_ids, t)],
+               "RBN_new": [t for t in ct["RBN"] if hit(n_ids, t)],
+               "NBU_new": [t for t in ct["NBU"] if hit(n_ids, t)],
+               "NAR_base": [t for t in ct["NAR"] if hit(o_ids, t)],
+               "RBN_base": [t for t in ct["RBN"] if hit(o_ids, t)],
+               "NBU_base": [t for t in ct["NBU"] if hit(o_ids, t)],
+               "funnel": funnel(new), "latency_new": new["latency"]}
+        R["controls"].append(row)
+        C["nar"] += len(row["NAR_new"]); C["nar_n"] += len(ct["NAR"])
+        C["rbn"] += len(row["RBN_new"]); C["rbn_n"] += len(ct["RBN"])
+        C["b_nar"] += len(row["NAR_base"]); C["b_rbn"] += len(row["RBN_base"])
+        if ct["nbu_scored"]:
+            C["nbu"] += len(row["NBU_new"]); C["nbu_n"] += len(ct["NBU"])
+            C["b_nbu"] += len(row["NBU_base"])
+        print("  ضوابط %s: NAR %d/%d (أساس %d) · RBN %d/%d (أساس %d) · NBU %d (أساس %d)"
+              % (ct["case"], len(row["NAR_new"]), len(ct["NAR"]), len(row["NAR_base"]),
+                 len(row["RBN_new"]), len(ct["RBN"]), len(row["RBN_base"]),
+                 len(row["NBU_new"]), len(row["NBU_base"])), flush=True)
+
+    # 5) الخلاصة والحكم
+    def p(v, q):
+        return round(statistics.quantiles(v, n=100)[q - 1], 1) if len(v) > 2 else (
+            round(max(v), 1) if v else 0.0)
+    S = {
+        "legislative_must_recall_base": round(tot["old"] / max(1, tot["must"]), 4),
+        "legislative_must_recall_v2": round(tot["new"] / max(1, tot["must"]), 4),
+        "funnel_totals_v2": fun_sum,
+        "final_context_by_layer_base": old_layer_sum,
+        "controls": C,
+        "temporal_statuses": temporal_sum,
+        "latency_p50_base": round(statistics.median(lat_o), 1) if lat_o else 0,
+        "latency_p95_base": p(lat_o, 95),
+        "latency_p50_v2": round(statistics.median(lat_n), 1) if lat_n else 0,
+        "latency_p95_v2": p(lat_n, 95),
+        "pool_median_v2": round(statistics.median(pool_n), 1) if pool_n else 0,
+        "reranker_input_median_v2": round(statistics.median(rin_n), 1) if rin_n else 0,
+        "ctx_chars_median_v2": round(statistics.median(ctx_n), 1) if ctx_n else 0,
+        "full_judgment_end_to_end": judg_proof[:6],
+        "relation_validator": "NOT_IMPLEMENTED_IN_V2",
+    }
+    R["summary"] = S
+
+    nbu_reg = C["nbu"] > C["b_nbu"]
+    leg_reg = S["legislative_must_recall_v2"] < S["legislative_must_recall_base"]
+    judg_gain = fun_sum["FINAL_CONTEXT"][LJ] > old_layer_sum.get(LJ, 0)
+    prin_reg = fun_sum["FINAL_CONTEXT"][LP] < old_layer_sum.get(LP, 0)
+    lat_reg = S["latency_p95_v2"] > 2.0 * max(1.0, S["latency_p95_base"])
+    if R.get("rerank_failures"):
+        R["blocking"].append("RERANKER_REQUIRED_BUT_UNAVAILABLE")
+    ran = len([x for x in R["battery"] if "error" not in x])
+    gains = (S["legislative_must_recall_v2"] >= S["legislative_must_recall_base"]
+             and C["rbn"] >= C["b_rbn"] and C["nar"] >= C["b_nar"])
+
+    if ran < len(cases) or R["blocking"]:
+        verdict = "VALIDATION_INCOMPLETE"
+    elif nbu_reg or leg_reg or lat_reg:
+        verdict = "RETRIEVAL_V2_VALIDATION_FAIL"
+    elif gains and C["nbu"] == 0 and not prin_reg and judg_gain:
+        verdict = "RETRIEVAL_V2_VALIDATION_PASS"
+    else:
+        verdict = "RETRIEVAL_V2_PROMISING_WITH_REGRESSIONS"
+    R["verdict"] = verdict
+    R["regressions"] = {"nbu_worse": nbu_reg, "legislative_worse": leg_reg,
+                        "principles_worse": prin_reg, "latency_p95_doubled": lat_reg,
+                        "judgments_gained": judg_gain}
+    json.dump(R, open(OUT, "w"), ensure_ascii=False, indent=1)
+
+    print("\n" + "=" * 70)
+    print("Legislative must-recall : %.3f → %.3f" % (
+        S["legislative_must_recall_base"], S["legislative_must_recall_v2"]))
+    print("NAR %d/%d (أساس %d) · RBN %d/%d (أساس %d) · NBU %d (أساس %d)" % (
+        C["nar"], C["nar_n"], C["b_nar"], C["rbn"], C["rbn_n"], C["b_rbn"],
+        C["nbu"], C["b_nbu"]))
+    print("السياق النهائي بالطبقة — أساس: %s" % old_layer_sum)
+    print("السياق النهائي بالطبقة — v2  : %s" % fun_sum["FINAL_CONTEXT"])
+    print("القمع v2: %s" % json.dumps(fun_sum, ensure_ascii=False))
+    print("الحالات الزمنية: %s" % temporal_sum)
+    print("زمن p50/p95: أساس %.1f/%.1f  →  v2 %.1f/%.1f ث" % (
+        S["latency_p50_base"], S["latency_p95_base"],
+        S["latency_p50_v2"], S["latency_p95_v2"]))
+    print("وسيط التجمّع %.0f · مدخل المرتِّب %.0f · أحرف السياق %.0f" % (
+        S["pool_median_v2"], S["reranker_input_median_v2"], S["ctx_chars_median_v2"]))
+    print("مُحقِّق العلاقة: NOT_IMPLEMENTED_IN_V2 (تحقق زمني فقط)")
+    print("\nVERDICT: %s   — التفصيل في %s" % (verdict, OUT))
+    sys.exit(0 if verdict == "RETRIEVAL_V2_VALIDATION_PASS" else 1)
 
 
 if __name__ == "__main__":
