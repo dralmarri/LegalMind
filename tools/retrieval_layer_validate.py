@@ -28,7 +28,16 @@ from retrieval.model import (LAYER_LEGISLATION as LL, LAYER_PRINCIPLE as LP,
 
 LAYERS = (LL, LP, LJ, LT)
 OUT = os.path.join(ROOT, "tools/retrieval_v2_validation.json")
-REG_JUDGMENT = "judgment-civ-754-2013"     # حارس انتكاس على مجموعة التصميم فقط
+# البند 11: `judgment-civ-754-2013` **لا وجود له في القاعدة** — مرجع خاطئ في
+# التوثيق (§26). الكائنات الحقيقية، مُتحقَّقة حيًّا عبر MCP:
+#   jprin-754-2013-s1454-50db709d0f  ← مبدأ الطعن 754/2013 أحوال شخصية
+#       (جلسة 6/2/2014): «عدم قبول دعوى النسب إذا كان المدعى عليه ميتًا إلا
+#        ضمن دعوى حق أخرى» — وهو مضمون الحالة الموصوفة في §26 بالضبط.
+#   judgment-civ-697-2013-9e001784   ← حكم تمييز كامل حقيقي في الموضوع نفسه
+#       (تصحيح الأسماء ولجنة النسب وم337/338).
+# لا كائن وهمي، ولا استبدال بحكم قريب الموضوع.
+REG_JUDGMENT_PRINCIPLE = "jprin-754-2013-s1454-50db709d0f"
+REG_JUDGMENT_FULL = "judgment-civ-697-2013-9e001784"
 
 
 # ───────────────────────── أدوات مشتركة ─────────────────────────
@@ -280,13 +289,16 @@ def main():
         sys.exit(2)
     print("reranker: حيّ (%d درجة على مسبار)" % len(pr), flush=True)
 
-    # 2) حارس انتكاس الحكم الكامل المسمّى (مجموعة التصميم فقط، لا تعميم)
-    rr = app.db_rows("SELECT id FROM knowledge_objects WHERE id = %s", (REG_JUDGMENT,))
-    R["regression_judgment_present"] = bool(rr)
-    if not rr:
-        R["blocking"].append("FULL_JUDGMENT_REGRESSION_ID_ABSENT")
-        print("تنبيه: %s غير موجود في القاعدة — الحارس المسمّى لا ينطبق." % REG_JUDGMENT,
-              flush=True)
+    # 2) حارس انتكاس مرجعي (مجموعة التصميم فقط، لا تعميم) — بمعرّفات حقيقية
+    pres = {}
+    for oid in (REG_JUDGMENT_PRINCIPLE, REG_JUDGMENT_FULL):
+        pres[oid] = bool(app.db_rows(
+            "SELECT id FROM knowledge_objects WHERE id = %s", (oid,)))
+    R["regression_refs_present"] = pres
+    if not all(pres.values()):
+        R["blocking"].append("REGRESSION_REF_ABSENT")
+        print("تنبيه: مرجع حارس غير موجود:", 
+              [k for k, v in pres.items() if not v], flush=True)
 
     # 3) البطارية: خط الأساس مقابل v2 على المدخل نفسه وبالمحاور المجمَّدة نفسها
     cases = json.load(open(os.path.join(ROOT, "battery.json")))
@@ -321,7 +333,12 @@ def main():
         jl = [i for i in nid_set if layers_of([i])[i] == LJ]
         if jl:
             judg_proof.append({"case": c.get("name"), "judgments": jl[:4]})
-        row = {"name": c.get("name"), "must_total": len(must),
+        lost = [m for m in must if m in oid_set and m not in nid_set]
+        if lost:
+            R.setdefault("lost_vs_baseline", []).append(
+                {"case": c.get("name"), "lost": lost})
+        row = {"name": c.get("name"), "lost_vs_baseline": lost,
+               "must_total": len(must),
                "must_old": sum(1 for m in must if m in oid_set),
                "must_new": sum(1 for m in must if m in nid_set),
                "missing_new": [m for m in must if m not in nid_set],
@@ -377,6 +394,49 @@ def main():
                  len(row["RBN_new"]), len(ct["RBN"]), len(row["RBN_base"]),
                  len(row["NBU_new"]), len(row["NBU_base"])), flush=True)
 
+    # 4-مكرر) الحالات المرجعية الثلاث (البند 12)
+    R["reference_cases"] = []
+    REFS = [
+        {"id": "نسب", "rt": "استشارة",
+         "q": "ما الشرط الإجرائي الواجب توافره قبل قبول دعوى إثبات النسب، "
+              "وما حكم رفعها على متوفى؟",
+         "expect_judicial": True},
+        {"id": "م167", "rt": "استشارة",
+         "q": "موكلي يريد استصدار أمر أداء بقيمة شيك مرتد — ما ميعاد التكليف "
+              "بالوفاء الواجب قبل تقديم الطلب؟",
+         "check_167": True},
+        {"id": "الحمض النووي", "rt": "استشارة",
+         "q": "دعوى نسب طُلب فيها فحص الحمض النووي ورفض المدعى عليه — ما أثر "
+              "الرفض وهل يُقضى بالنسب استنادًا إليه؟",
+         "expect_conflict_safe": True},
+    ]
+    for rf in REFS:
+        try:
+            new = run_v2(rf["rt"], rf["q"])
+        except Exception as e:
+            R["reference_cases"].append({"id": rf["id"], "error": repr(e)})
+            continue
+        ctx = new["context"]
+        ids = {x.object_id for x in new["admitted"]}
+        lay = by_layer(ids)
+        row = {"id": rf["id"], "by_layer": lay,
+               "judicial_in_context": lay.get(LP, 0) + lay.get(LJ, 0),
+               "conflicts": new.get("conflicts") or [],
+               "latency": new["latency"]}
+        if rf.get("check_167"):
+            # النافذ «عشرة أيام»؛ وأي مبدأ يقتبس «خمسة أيام» يجب أن يحمل التحذير
+            row["m167_in_context"] = "legis-38-1980-m167" in ids
+            row["five_days_unwarned"] = ("خمسة أيام" in ctx
+                                          and "تحذير زمني" not in ctx)
+        if rf.get("expect_conflict_safe"):
+            row["unsupported_resolution"] = [
+                x for x in (new.get("conflicts") or [])
+                if x.get("resolution") and not x.get("basis_available")]
+        R["reference_cases"].append(row)
+        print("  مرجعية %-12s قضاء في السياق %d | تعارضات %d"
+              % (rf["id"], row["judicial_in_context"], len(row["conflicts"])),
+              flush=True)
+
     # 5) الخلاصة والحكم
     def p(v, q):
         return round(statistics.quantiles(v, n=100)[q - 1], 1) if len(v) > 2 else (
@@ -400,6 +460,14 @@ def main():
     }
     R["summary"] = S
 
+    lost_any = bool(R.get("lost_vs_baseline"))
+    refs = R.get("reference_cases", [])
+    m167 = next((x for x in refs if x.get("id") == "م167"), {})
+    dna = next((x for x in refs if x.get("id") == "الحمض النووي"), {})
+    nasab = next((x for x in refs if x.get("id") == "نسب"), {})
+    ref_fail = (m167.get("five_days_unwarned") is True
+                or bool(dna.get("unsupported_resolution"))
+                or nasab.get("judicial_in_context", 0) < 1)
     nbu_reg = C["nbu"] > C["b_nbu"]
     leg_reg = S["legislative_must_recall_v2"] < S["legislative_must_recall_base"]
     judg_gain = fun_sum["FINAL_CONTEXT"][LJ] > old_layer_sum.get(LJ, 0)
@@ -413,7 +481,7 @@ def main():
 
     if ran < len(cases) or R["blocking"]:
         verdict = "VALIDATION_INCOMPLETE"
-    elif nbu_reg or leg_reg or lat_reg:
+    elif nbu_reg or leg_reg or lat_reg or lost_any or ref_fail:
         verdict = "RETRIEVAL_V2_VALIDATION_FAIL"
     elif gains and C["nbu"] == 0 and not prin_reg and judg_gain:
         verdict = "RETRIEVAL_V2_VALIDATION_PASS"
@@ -421,6 +489,7 @@ def main():
         verdict = "RETRIEVAL_V2_PROMISING_WITH_REGRESSIONS"
     R["verdict"] = verdict
     R["regressions"] = {"nbu_worse": nbu_reg, "legislative_worse": leg_reg,
+                        "lost_vs_baseline": lost_any, "reference_case_fail": ref_fail,
                         "principles_worse": prin_reg, "latency_p95_doubled": lat_reg,
                         "judgments_gained": judg_gain}
     json.dump(R, open(OUT, "w"), ensure_ascii=False, indent=1)
@@ -440,6 +509,10 @@ def main():
         S["latency_p50_v2"], S["latency_p95_v2"]))
     print("وسيط التجمّع %.0f · مدخل المرتِّب %.0f · أحرف السياق %.0f" % (
         S["pool_median_v2"], S["reranker_input_median_v2"], S["ctx_chars_median_v2"]))
+    print("سلطات كانت تصل في الأساس وفُقدت في v2: %d حالة" % len(R.get("lost_vs_baseline") or []))
+    print("الحالات المرجعية: م167 «خمسة أيام» بلا تحذير=%s · الحمض ترجيح بلا سند=%s · النسب قضاء في السياق=%s"
+          % (m167.get("five_days_unwarned"), bool(dna.get("unsupported_resolution")),
+             nasab.get("judicial_in_context")))
     print("مُحقِّق العلاقة: NOT_IMPLEMENTED_IN_V2 (تحقق زمني فقط)")
     print("\nVERDICT: %s   — التفصيل في %s" % (verdict, OUT))
     sys.exit(0 if verdict == "RETRIEVAL_V2_VALIDATION_PASS" else 1)

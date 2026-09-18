@@ -238,3 +238,37 @@ def judgment_link(pool, db_rows, principle_ids, limit=24):
         n += 1
         pool.add(jid, T.CH_JUDGMENT, n, 0.0, T.LAYER_JUDGMENT)
     return pool
+
+
+# ─────────────────── مسار السلطة القضائية: تشريع ← قضاء ───────────────────
+def statute_to_judicial(pool, db_rows, article_ids, per_article=6, limit=40):
+    """كل مادة تشريعية مسترجَعة تجرّ السلطات القضائية التي **تذكرها صراحةً**.
+
+    الاتجاه المعاكس لـ`_prin_xref` الإنتاجي (قضاء ← تشريع): هناك المبدأ يجرّ
+    مادته، وهنا المادة تجرّ مبادئها وأحكامها. وهو رابط **موجود في البيانات
+    نصًا** لا مستنتَج: نصوص المبادئ تكتب «المادة N من القانون رقم X لسنة Y».
+    الشرط مزدوج (رقم المادة **و** رقم القانون وسنته) تفاديًا لضجيج الأرقام."""
+    n = 0
+    for aid in list(article_ids)[:24]:
+        m = re.match(r"^legis-(\d{1,4})-(\d{4})-m(\d{1,4})$", aid or "")
+        if not m:
+            continue
+        law, yr, art = m.group(1), m.group(2), m.group(3)
+        sql = ("SELECT id, object_type FROM knowledge_objects "
+               "WHERE object_type = ANY(%s) AND normalized_text LIKE %s "
+               "AND (normalized_text LIKE %s OR normalized_text LIKE %s) "
+               "ORDER BY id LIMIT %s")
+        try:
+            rows = db_rows(sql, (list(_kb.PRINCIPLE_TYPES) + list(_kb.JUDGMENT_TYPES),
+                                 "%الماده " + art + "%",
+                                 "%" + law + " لسنه " + yr + "%",
+                                 "%" + law + "/" + yr + "%", per_article))
+        except Exception:
+            continue
+        for i, r in enumerate(rows or [], 1):
+            if n >= limit:
+                break
+            n += 1
+            pool.add(r.get("id"), T.CH_PRIN_XREF, i, 0.0,
+                     layer_of_type(r.get("object_type")))
+    return pool

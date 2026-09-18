@@ -11,8 +11,9 @@ from .pool import CandidatePool
 from .fusion import fuse, apply_rerank, rerank_input
 from .admission import admit, PRODUCTION_BUDGET, PROTECTED_FRACTION
 from .temporal import annotate
-from .packet import build as build_packet
-from .model import LAYER_PRINCIPLE
+from .packet import build as build_packet, block_chars
+from .conflicts import detect as detect_conflicts
+from .model import LAYER_PRINCIPLE, LAYER_LEGISLATION
 
 # مُشتقٌّ من البيانات لا مخمَّن: منحنى Recall@k على 98 نداء بحث حقيقيًا (1,959
 # نتيجة خام، tools/depth_curve.py) يبلغ الهضبة عند k=9 بقيمة 0.706، ولا يزيد
@@ -49,8 +50,11 @@ def retrieve(deps, query_text, vectors, anchor_ids=(), phrases=(),
     for oid, ch, rank, score, layer in extra:      # حزم/فصول/إحالات من الإنتاج
         pool.add(oid, ch, rank, score, layer)
     if getattr(deps, "db_rows", None):
+        # مسار السلطة القضائية بالاتجاهين: المبدأ ← حكمه الأم، والمادة ← سلطاتها
         CH.judgment_link(pool, deps.db_rows,
                          [c.object_id for c in pool.by_layer(LAYER_PRINCIPLE)])
+        CH.statute_to_judicial(pool, deps.db_rows,
+                               [c.object_id for c in pool.by_layer(LAYER_LEGISLATION)])
     return pool, disabled
 
 
@@ -94,14 +98,24 @@ def run(deps, query_text, vectors, anchor_ids=(), phrases=(), issues=None,
         t = texts.get(c.object_id)
         if not t:
             return None
-        return len(t.get("text") or "") + 220        # تقدير وسوم الكتلة
+        # **نفس دالة الطباعة**: القياس والطباعة من مصدر واحد، وإلا عاد عيب
+        # إنفاق الميزانية على نص كامل ثم طباعة نص مقصوص (أو العكس).
+        return block_chars(c.layer, t.get("text"))
     admitted, arep = admit(ranked, block_size, budget, fraction)
-    packet, context = build_packet(admitted, texts, issues)
+    try:
+        confl = detect_conflicts(admitted,
+                                 lambda i: (texts.get(i) or {}).get("text") or "",
+                                 row_of)
+    except Exception as _ce:
+        print("[retrieval] conflicts-error:", repr(_ce), flush=True)
+        confl = []
+    packet, context = build_packet(admitted, texts, issues, conflicts=confl)
     return {
         "context": context, "packet": packet, "admitted": admitted,
         "pool_size_raw": raw_size, "pool_size_after_dedupe": len(pool),
         "pool_stats": pool.stats(), "admission": arep,
         "temporal": temporal, "disabled_channels": disabled,
+        "conflicts": confl,
         "reranked": len(rr),
         "selectivity": round(len(admitted) / max(1, len(pool)), 4),
     }

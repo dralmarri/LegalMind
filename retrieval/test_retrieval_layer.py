@@ -226,6 +226,89 @@ check("المنحنى لا يزيد بعد الهضبة (تعميق القناة
       _curve["curve"]["20"] == _curve["curve"][str(_curve["plateau_k"])],
       _curve["curve"]["20"])
 
+# ---------------------------------------- 7. القصّ واستعادة التغطية
+print("\n[7] سقوف النص واستهلاك الميزانية (العلّة المقيسة حيًّا)")
+from retrieval.packet import clip_text, block_chars, CAPS, temporal_warning
+from retrieval import conflicts as CF
+from retrieval.temporal import CONFLICT_DETECTED, SUPERSEDED
+check("سقوف v2 مطابقة لسقوف الإنتاج حرفيًا",
+      CAPS[LAYER_LEGISLATION] == 2200 and CAPS[LAYER_PRINCIPLE] == 1400
+      and CAPS[LAYER_JUDGMENT] == 3500, CAPS)
+_long = "ن" * 6000
+check("المادة الطويلة تُقصّ لسقفها", len(clip_text(LAYER_LEGISLATION, _long)) <= 2300,
+      len(clip_text(LAYER_LEGISLATION, _long)))
+_prin = "ق" * 3000 + "\n(الطعن 754/2013 أحوال شخصية جلسة 6/2/2014)"
+check("سند المبدأ الختامي يبقى بعد القصّ",
+      "الطعن 754/2013" in clip_text(LAYER_PRINCIPLE, _prin))
+check("النص القصير لا يُمسّ", clip_text(LAYER_LEGISLATION, "قصير") == "قصير")
+check("تكلفة الميزانية = طول المطبوع + وسوم",
+      block_chars(LAYER_LEGISLATION, _long)
+      == len(clip_text(LAYER_LEGISLATION, _long)) + 220)
+# استعادة التغطية: نفس الميزانية ونفس المرشحين، بقصّ وبلا قصّ
+_cands = [mk("L%d" % i, LAYER_LEGISLATION, 0.9 - i * 0.001) for i in range(80)]
+_adm_clip, _ = admit([mk(c.object_id, c.layer, c.final_score) for c in _cands],
+                     lambda c: block_chars(LAYER_LEGISLATION, _long))
+_adm_raw, _ = admit([mk(c.object_id, c.layer, c.final_score) for c in _cands],
+                    lambda c: len(_long) + 220)
+check("القصّ يعيد التغطية: مصادر مقبولة أكثر بنفس الميزانية",
+      len(_adm_clip) > 2 * len(_adm_raw), (len(_adm_clip), len(_adm_raw)))
+
+# ---------------------------------------- 8. الحماية الزمنية في الكتلة
+print("\n[8] الحماية الزمنية — وسمُ المتجاوَز لا حذفُ المبدأ")
+_c = Candidate("jprin-240-2002-x", LAYER_PRINCIPLE)
+_c.temporal_status = CONFLICT_DETECTED
+_c.temporal_conflict = {"clashes": [{"unit": "يوم", "principle_value": 5,
+                                     "article_values": [10]}],
+                        "article_id": "legis-38-1980-m167"}
+_w = temporal_warning(_c)
+check("التحذير يذكر القديم والنافذ معًا", "5" in _w and "10" in _w, _w)
+check("التحذير ينهى عن تقديم القديم نافذًا", "لا تقدّم التفصيل القديم" in _w)
+check("المبدأ يبقى صالحًا فيما عدا النقطة", "يبقى المبدأ صالحًا" in _w)
+_s = Candidate("legis-23-1990-m1", LAYER_LEGISLATION); _s.temporal_status = SUPERSEDED
+check("الملغى يُوسَم صراحةً", "ملغى" in temporal_warning(_s))
+check("المصدر النافذ بلا تحذير", temporal_warning(Candidate("x", LAYER_LEGISLATION)) == "")
+
+# ---------------------------------------- 9. كشف التعارض بلا حسم آلي
+print("\n[9] التعارض — ثلاثة محاور، وبلا ترجيح غير مسنود")
+_a = Candidate("jprin-a", LAYER_PRINCIPLE); _a.temporal_status = CONFLICT_DETECTED
+_a.temporal_conflict = {"clashes": [{"unit": "يوم", "principle_value": 5,
+                                     "article_values": [10]}],
+                        "article_id": "legis-38-1980-m167"}
+_b = Candidate("jprin-b", LAYER_PRINCIPLE)
+_d = Candidate("jprin-d", LAYER_PRINCIPLE)
+_sup = Candidate("legis-23-1990-m5", LAYER_LEGISLATION); _sup.temporal_status = SUPERSEDED
+_cur = Candidate("legis-80-2026-m5", LAYER_LEGISLATION)
+_txt = {"jprin-a": "المادة 167 والميعاد خمسة أيام",
+        "jprin-b": "المادة 167 الميعاد عشرة أيام",
+        "jprin-d": "المادة 167 الميعاد خمسة أيام",
+        "legis-23-1990-m5": "نص ملغى", "legis-80-2026-m5": "نص نافذ"}
+_rows = {"legis-23-1990-m5": {"metadata": {"repealed_by": "80/2026"}}}
+_cf = CF.detect([_a, _b, _d, _sup, _cur], lambda i: _txt.get(i, ""),
+                lambda i: _rows.get(i, {}))
+_ax = {x["axis"] for x in _cf}
+check("محور تشريع↔قضاء مرصود", "statute_vs_judicial" in _ax, _ax)
+check("محور قضاء↔قضاء مرصود", "judicial_vs_judicial" in _ax, _ax)
+check("محور نافذ↔ملغى مرصود", "current_vs_superseded" in _ax, _ax)
+check("كل تعارض يحمل الوسم المطلوب",
+      all(x["flag"] == "POTENTIAL_AUTHORITY_CONFLICT" for x in _cf))
+check("لا ترجيح حيث لا سند",
+      all(x["resolution"] is None for x in _cf if not x["basis_available"]))
+check("الترجيح مسموح حيث السند موجود (سند إلغاء)",
+      any(x["basis_available"] and x["resolution"] for x in _cf
+          if x["axis"] == "current_vs_superseded"))
+_clean = CF.detect([_b], lambda i: _txt.get(i, ""), lambda i: {})
+check("بلا تعارض حقيقي لا يُولَّد وسم", _clean == [], _clean)
+
+# ---------------------------------------- 10. مسار السلطة القضائية
+print("\n[10] مسار السلطة القضائية بالاتجاهين")
+_p = CandidatePool()
+CH.statute_to_judicial(_p, db_law, ["legis-68-1980-m550"])
+check("المادة تجرّ سلطاتها القضائية (تشريع ← قضاء)",
+      {c.layer for c in _p} == {LAYER_PRINCIPLE, LAYER_JUDGMENT},
+      {c.layer for c in _p})
+check("معرّف بلا شكل مادة لا يُطلق استعلامًا",
+      len(CH.statute_to_judicial(CandidatePool(), db_law, ["LEG-غير-منتظم"])) == 0)
+
 print("\n" + "=" * 62)
 print("نجح %d / %d" % (len(OK), len(OK) + len(FAIL)))
 if FAIL:
