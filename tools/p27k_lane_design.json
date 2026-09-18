@@ -1,0 +1,69 @@
+{
+ "_note": "P2.7-K الأقسام 4 و5 و16 — تصميم مسارات الأدوار. **كل دور مسار مستقل**: لا تجمّع مرشحين مشترك، ولا ترتيب مشترك، ولا تنافس على ميزانية. صُمِّم قبل رؤية خطة الوكيل الأعمى.",
+ "design_rules": [
+  "لا dense pool مشترك بين تشريع/مبدأ/حكم",
+  "لا reranking مشترك",
+  "لا budget competition",
+  "لا سياق توليد في هذه المرحلة — القياس تغطية لا صياغة"
+ ],
+ "lanes": {
+  "GOVERNING_STATUTE": {
+   "channel": "search_legal(kind='تشريع')",
+   "types": "LEGISLATION_TYPES",
+   "verify": "get_article / get_object",
+   "note": "القناة التشريعية وحدها — وهي المُشبَعة أصلًا في الإنتاج"
+  },
+  "JUDICIAL_INTERPRETATION": {
+   "channel": "search_legal(kind='مبدأ') بصياغة مفهومية",
+   "types": "judicial_principle",
+   "verify": "get_object، ومحوّل JUR-* عند تعذّره",
+   "note": "**مسار مستقل تمامًا** — لا ينافس التشريعات على أي حصة"
+  },
+  "JUDICIAL_APPLICATION": {
+   "channel": "search_legal(kind='الكل') بصياغة **نمط وقائع**",
+   "types": "full_judgment أساسًا",
+   "verify": "get_object",
+   "note": "الصياغة بنمط الوقائع لا بالمفهوم المجرد — وهذا هو الفارق التصميمي عن مسار التفسير"
+  },
+  "PROCEDURAL_REQUIREMENT": {
+   "channel": "مساران متوازيان: kind='تشريع' + kind='مبدأ' بصياغة إجرائية",
+   "types": "LEGISLATION + PRINCIPLE",
+   "verify": "get_article / get_object",
+   "note": "الإجراء الوجوبي قد يكون مقررًا نصًا أو قضاءً — فالمسار مزدوج بالتصميم"
+  },
+  "EXCEPTION_CHECK": {
+   "channel": "kind='مبدأ' بصياغة الاستثناء/القيد + kind='تشريع'",
+   "types": "PRINCIPLE + LEGISLATION",
+   "verify": "get_object",
+   "note": "صياغة الاستعلام بالاستثناء نفسه لا بالقاعدة"
+  },
+  "TEMPORAL_CHECK": {
+   "channel": "مقارنة نص المادة النافذة بنص المبدأ المسترجَع (فحص برمجي لا بحث)",
+   "types": "LEGISLATION (نافذ) × PRINCIPLE (تاريخ الجلسة)",
+   "verify": "get_article + تواريخ المبادئ",
+   "note": "**ليس مسار بحث بل مسار تحقق**: يستهلك مخرجات المسارين السابقين ويقارن الأرقام والمدد"
+  },
+  "CONFLICT_CHECK": {
+   "channel": "تجميع كل السلطات على القضية نفسها ومقارنة تواريخها واتجاهها",
+   "types": "ALL",
+   "verify": "—",
+   "note": "**مسار كشف لا حسم**: يرفع علم POTENTIAL_TEMPORAL_CONFLICT ولا يختار فائزًا"
+  }
+ },
+ "miss_taxonomy": {
+  "ROLE_PLANNING_MISS": "الدور لم يُخطَّط له أصلًا",
+  "ROLE_ROUTING_MISS": "خُطط له ولم يُنفَّذ مساره",
+  "RETRIEVAL_MISS": "نُفِّذ المسار ولم يجد الـproposition",
+  "FETCH_ACCESS_MISS": "وُجد المصدر وتعذّر جلبه",
+  "VERIFICATION_MISS": "جُلب ولم يُتحقق",
+  "TEMPORAL_MISS": "لم يُكتشف أن السلطة تفسّر نصًا سابقًا",
+  "CONFLICT_MISS": "لم يُكتشف تعارض مجمَّد"
+ },
+ "coverage_states": {
+  "COMPLETE": "كل الأدوار الواجبة بُحثت، وكل سلطة مكتشفة تُحُقق منها، والزمن/التعارض فُحصا عند الحاجة",
+  "PARTIAL": "بعض الأدوار الواجبة لم تُبحث أو لم تُحسم",
+  "UNRESOLVED": "تعارض أو غموض غير محسوم",
+  "NO_AUTHORITY_FOUND": "البحث الصحيح تم كاملًا ولم يوجد سند كافٍ — **نتيجة مشروعة لا نقص**"
+ },
+ "searched_none_vs_not_searched": "التمييز جوهري (القسم 10): SEARCHED_NO_RELEVANT_AUTHORITY قد تكون تغطية مكتملة، وNOT_SEARCHED تغطية ناقصة دائمًا."
+}
