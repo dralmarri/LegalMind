@@ -77,7 +77,7 @@ import kb_types as _kb
 
 def search_legal(query: str, kind: str = "الكل", limit: int = 8) -> str:
     """بحث دلالي في قاعدة المعرفة القانونية الكويتية (58 ألف كائن: تشريعات نافذة بنصوصها
-    الرسمية، ومبادئ محكمة التمييز بأسانيدها). kind: «الكل» أو «تشريع» أو «مبدأ»."""
+    الرسمية، ومبادئ محكمة التمييز بأسانيدها). kind: «الكل» أو «تشريع» أو «مبدأ» أو «حكم»."""
     query = (query or "").strip()
     if len(query) < 2:
         return "اكتب استعلامًا لا يقل عن حرفين."
@@ -87,7 +87,13 @@ def search_legal(query: str, kind: str = "الكل", limit: int = 8) -> str:
         flt = {"must": [{"key": "object_type", "match": {
             "any": list(_kb.MCP_LEGISLATION_TYPES)}}]}
     elif kind == "مبدأ":
-        flt = {"must": [{"key": "object_type", "match": {"value": "judicial_principle"}}]}
+        flt = {"must": [{"key": "object_type", "match": {
+            "any": list(_kb.PRINCIPLE_TYPES)}}]}
+    elif kind in ("حكم", "حكم كامل"):
+        # الأحكام الكاملة لم يكن لها ترشيح خاص، فكانت تزاحَم بـ48 ألف مبدأ تحت
+        # «الكل» فلا تظهر عمليًا. صارت طبقةً قابلة للطلب صراحةً كغيرها.
+        flt = {"must": [{"key": "object_type", "match": {
+            "any": list(_kb.JUDGMENT_TYPES)}}]}
     body = {"vector": _embed(query), "limit": limit, "with_payload": True}
     if flt:
         body["filter"] = flt
@@ -111,7 +117,11 @@ def search_legal(query: str, kind: str = "الكل", limit: int = 8) -> str:
 def get_object(object_id: str) -> str:
     """النص الكامل الموثق لأي كائن بمعرفه (مثل legis-38-1980-m166 أو jprin-911-2006-…)."""
     oid = (object_id or "").strip()
-    if not re.fullmatch(r"[A-Za-z0-9._-]{3,80}", oid):
+    # المعرفات في القاعدة ليست لاتينية كلها: كائنات JUR-* تحمل كلمات عربية في
+    # معرّفها، وكان النمط اللاتيني يرفضها **قبل أي استعلام** فتظهر في البحث ولا
+    # تُجلَب أبدًا (رُصد حيًّا: JUR-أحوال-شخصية-… = «معرف غير صالح»). الشرط الآن
+    # على ما يُحظَر لا على ما يُسمح: طول معقول وبلا محارف تحكّم أو علامات اقتباس.
+    if not (3 <= len(oid) <= 200) or re.search(r"[\x00-\x1f'\"%;\\]", oid):
         return "معرف غير صالح."
     rows = _pg("SELECT id, object_type, branch, topic, subtopic, title, original_text, "
                "usable_as_citation FROM knowledge_objects WHERE id = %s", (oid,))
@@ -151,9 +161,9 @@ def legislation_inventory() -> str:
     rows = _pg(
         "SELECT substring(id from '^((?:legis|regl)-[A-Za-z]*-?[0-9]+-[0-9]+)') AS law, "
         "count(*) AS n, min(title) AS sample "
-        "FROM knowledge_objects WHERE id LIKE 'legis-%' OR id LIKE 'regl-%' "
+        "FROM knowledge_objects WHERE object_type = ANY(%s) "
         "GROUP BY 1 HAVING substring(id from '^((?:legis|regl)-[A-Za-z]*-?[0-9]+-[0-9]+)') "
-        "IS NOT NULL ORDER BY 1")
+        "IS NOT NULL ORDER BY 1", (list(_kb.LEGISLATION_TYPES),))
     out = ["الجرد الحي (محسوب من القاعدة الآن) — %d تشريعًا/لائحة:" % len(rows), ""]
     for r in rows:
         name = (r.get("sample") or "").split("—")[-1].strip()
