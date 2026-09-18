@@ -26,6 +26,10 @@ from .model import LAYER_PRINCIPLE, LAYER_LEGISLATION, LAYER_JUDGMENT
 # يشتري ضجيجًا لا تغطية.)
 DEFAULT_DENSE_DEPTH = 12
 
+# حجم الدفعة = سقف `_draft_rerank` الداخلي حرفيًا، وعدد الدفعات يحدّ الزمن
+RERANK_BATCH = 300
+MAX_RERANK_BATCHES = 3
+
 
 def retrieve(deps, query_text, vectors, anchor_ids=(), phrases=(),
              dense_depth=DEFAULT_DENSE_DEPTH, extra=()):
@@ -101,15 +105,31 @@ def run(deps, query_text, vectors, anchor_ids=(), phrases=(), issues=None,
 
     rr = {}
     if getattr(deps, "rerank", None):
-        # حصّة مضمونة لكل قناة: بلا هذا يُقصي القصُّ مرشحي القنوات الضعيفة
-        # الوزن قبل أن يراهم المرتِّب، فتُهدر القناة التي وُجدت لتجاوز المتجه
-        pairs = [(c.object_id, texts[c.object_id]["text"])
-                 for c in rerank_input([c for c in ranked if not c.pinned])
-                 if c.object_id in texts]
-        try:
-            rr = deps.rerank(query_text, pairs) or {}
-        except Exception:
-            rr = {}
+        # دالة المرتِّب في الإنتاج تقصّ **داخليًا عند 300 زوج** (`[:300]` في
+        # `_draft_rerank`)، فأي مرشح بعد الثلاثمئة يصل إليها ولا يعود له درجة —
+        # ويظهر `RERANKER_INPUT_ONLY`. وتجمّع v2 يتجاوز 300 بانتظام (159 تشريعًا
+        # + 63 مبدأً + 76 حكمًا + 27 نموذجًا في حالة واحدة مقيسة). العلاج
+        # **تقطيعٌ لا قصّ**: تُنادى الدالة على دفعات بحجم سقفها ثم تُدمج
+        # مخرجاتها، فيُقيَّم كل مرشح بلا استثناء. السقف ثلاث دفعات يحدّ الزمن.
+        allp = [(c.object_id, texts[c.object_id]["text"])
+                for c in ranked if not c.pinned and c.object_id in texts]
+        batches = [allp[i:i + RERANK_BATCH]
+                   for i in range(0, min(len(allp), RERANK_BATCH * MAX_RERANK_BATCHES),
+                                  RERANK_BATCH)]
+        if len(allp) > RERANK_BATCH * MAX_RERANK_BATCHES:
+            # ما يفوق طاقة الدفعات يُنتقى بحصّة لكل قناة لا بالقصّ الأعمى
+            batches = [rerank_input(
+                [c for c in ranked if not c.pinned],
+                cap=RERANK_BATCH * MAX_RERANK_BATCHES)]
+            batches = [[(c.object_id, texts[c.object_id]["text"])
+                        for c in batches[0] if c.object_id in texts]]
+            batches = [batches[0][i:i + RERANK_BATCH]
+                       for i in range(0, len(batches[0]), RERANK_BATCH)]
+        for _b in batches:
+            try:
+                rr.update(deps.rerank(query_text, _b) or {})
+            except Exception:
+                continue
     ranked = apply_rerank(ranked, rr)
 
     row_of = getattr(deps, "row_of", lambda i: {})

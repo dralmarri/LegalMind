@@ -386,6 +386,35 @@ _n_l = sum(1 for c in _a12 if c.layer == LAYER_LEGISLATION)
 check("عدد السلطات التشريعية المقبولة يقارب طاقة سقفها",
       _n_l >= 25, _n_l)
 
+# ------------------- 13. تقطيع المرتِّب: لا مرشح يصل إليه بلا درجة
+print("\n[13] المرتِّب يُنادى على دفعات لا يُقصّ عند 300")
+class _D13:
+    calls = []
+    def search(self, v, t, l):
+        pre = {"legislation_article": "legis-1-1-m", "judicial_principle": "jprin-1-1-",
+               "full_judgment": "judgment-x-", "judicial_template": "tpl-"}.get(t[0], "o-")
+        off = int(abs(v[0]) * 1000)
+        return [{"payload": {"object_id": pre + str(off + i)}, "score": 0.9}
+                for i in range(1, l + 1)]
+    def db_rows(self, sql, params): return []
+    def fetch_texts(self, ids):
+        return {i: {"text": "نص " + i, "branch": "", "topic": "", "title": "",
+                    "publication": ""} for i in ids}
+    def rerank(self, q, pairs):
+        _D13.calls.append(len(pairs))
+        return {i: 0.5 for i, _t in pairs[:300]}   # نفس سقف الإنتاج الداخلي
+    def row_of(self, i): return {"metadata": {}}
+_r13 = PL.run(_D13(), "س", [[0.1 * k] * 4 for k in range(1, 12)], dense_depth=20)
+_pool_nonpinned = _r13["pool_size_after_dedupe"]
+check("التجمّع تجاوز سقف الدفعة الواحدة", _pool_nonpinned > PL.RERANK_BATCH, _pool_nonpinned)
+check("نودي المرتِّب أكثر من مرة (تقطيع لا قصّ)", len(_D13.calls) > 1, _D13.calls)
+check("لا دفعة تتجاوز سقف الإنتاج الداخلي",
+      all(n <= PL.RERANK_BATCH for n in _D13.calls), _D13.calls)
+check("عدد المُقيَّمين يفوق 300 (ما كان يُقصّ صار يُقيَّم)",
+      _r13["reranked"] > PL.RERANK_BATCH, _r13["reranked"])
+check("عدد النداءات محدود بسقف الدفعات",
+      len(_D13.calls) <= PL.MAX_RERANK_BATCHES, _D13.calls)
+
 print("\n" + "=" * 62)
 print("نجح %d / %d" % (len(OK), len(OK) + len(FAIL)))
 if FAIL:
