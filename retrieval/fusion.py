@@ -81,3 +81,36 @@ def apply_rerank(candidates, rerank_scores, alpha=0.5):
             c.final_score = round((1 - alpha) * fn + alpha * rn, 6)
     # المثبَّت يسبق عند التعادل: درجته سقفٌ يشاركه فيه غيرُه، وأسبقيتُه قرار لا صدفة ترتيب
     return sorted(candidates, key=lambda c: (not c.pinned, -c.final_score, c.object_id))
+
+
+def rerank_input(candidates, cap=300, min_per_channel=12):
+    """يختار ما يُعرَض على المرتِّب المتقاطع **بحصّة مضمونة لكل قناة**.
+
+    لماذا لا «أعلى N بدرجة الدمج» ببساطة: قياسٌ على بيانات P2.7-O الحقيقية أظهر
+    أن مرشحي القنوات الضعيفة الوزن (الجوار البنيوي خاصةً) يقعون كلهم في ذيل
+    الترتيب المدمَج — الرتب 178–346 من تجمّع 185–346. فالقصّ بأعلى N يُقصيهم
+    **قبل أن يراهم المرتِّب**، وهو الوحيد القادر على الحكم بصلتهم الدلالية.
+    والنتيجة عيبٌ دائري: قناةٌ وُجدت لتصل إلى ما لا يصله المتجه، ثم يُرتَّب
+    ناتجها بمعيارٍ يعتمد على المتجه وحده.
+
+    فالحصّة هنا ليست ترجيحًا لقناة على أخرى — بل ضمان أن **كل قناة تُقيَّم**؛
+    والحكم النهائي يبقى للمرتِّب وسياسة القبول بعده."""
+    if len(candidates) <= cap:
+        return list(candidates)
+    chosen, taken = [], set()
+    by_channel = {}
+    for c in candidates:
+        for ch in c.channels:
+            by_channel.setdefault(ch, []).append(c)
+    for ch, lst in sorted(by_channel.items()):
+        for c in lst[:min_per_channel]:
+            if c.object_id not in taken:
+                taken.add(c.object_id)
+                chosen.append(c)
+    for c in candidates:
+        if len(chosen) >= cap:
+            break
+        if c.object_id not in taken:
+            taken.add(c.object_id)
+            chosen.append(c)
+    return chosen[:cap]

@@ -1,0 +1,1035 @@
+[
+ {
+  "case": "A1",
+  "anchor_id": "legis-6-2010-m144",
+  "law_prefix": "legis-6-2010-",
+  "anchor_characterisation": {
+   "operation": "يقرر عدم سماع الدعاوى التي يرفعها العمال استناداً إلى أحكام هذا القانون عند الإنكار بمضي سنة من تاريخ انتهاء عقد العمل، ويحيل في شأن الإنكار إلى الفقرة (2) من المادة (442) مدني، ويعفي دعاوى العمال والمستحقين عنهم من الرسوم القضائية، ويجيز للمحكمة عند رفض الدعوى الحكم على رافعها بالمصروفات كلها أو بعضها، ويوجب نظر الدعاوى العمالية على وجه الاستعجال",
+   "conditions": [
+    "أن يكون هناك إنكار («لا تسمع عند الإنكار»)",
+    "مضي سنة من تاريخ انتهاء عقد العمل",
+    "أن تكون الدعوى مرفوعة من العمال استناداً إلى أحكام هذا القانون",
+    "سريان أحكام الفقرة (2) من المادة (442) من القانون المدني على الإنكار",
+    "الإعفاء من الرسوم مقرر للدعاوى التي يرفعها العمال أو المستحقون عنهم",
+    "الحكم بالمصروفات على رافع الدعوى جوازي ومشروط بـ«عند رفض الدعاوى»",
+    "نظر الدعاوى العمالية على وجه الاستعجال"
+   ],
+   "explicit_cross_references": [
+    "الفقرة (2) من المادة (442) من القانون المدني"
+   ],
+   "terms_of_art": [
+    "لا تسمع عند الإنكار",
+    "الإنكار",
+    "انتهاء عقد العمل",
+    "الدعاوى التي يرفعها العمال",
+    "المستحقون عنهم",
+    "الرسوم القضائية",
+    "المصروفات",
+    "رفض الدعاوى",
+    "الدعاوى العمالية",
+    "على وجه الاستعجال"
+   ]
+  },
+  "lanes": [
+   {
+    "relation_type": "PREREQUISITE",
+    "kind": "تشريع",
+    "state": "EXECUTED",
+    "queries": [
+     "شروط عدم سماع الدعوى عند الإنكار بمضي المدة",
+     "الفقرة الثانية من المادة 442 من القانون المدني حلف اليمين عند التمسك بعدم سماع الدعوى"
+    ],
+    "raw_returned": 40,
+    "duplicates_dropped": 0,
+    "kept": 16,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PREREQUISITE",
+    "kind": "مبدأ",
+    "state": "EXECUTED",
+    "queries": [
+     "التمسك بالدفع بعدم سماع الدعوى لمضي المدة أمام محكمة الموضوع وشروط إعماله"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 9,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "CONSEQUENCE",
+    "kind": "تشريع",
+    "state": "EXECUTED",
+    "queries": [
+     "أثر امتناع سماع الدعوى بالحق على الملحقات وعلى المقاصة"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "CONSEQUENCE",
+    "kind": "مبدأ",
+    "state": "EXECUTED",
+    "queries": [
+     "أثر انقضاء مدة عدم سماع الدعوى على حق العامل في المطالبة بمستحقاته"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 11,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "EXCEPTION",
+    "kind": "تشريع",
+    "state": "EXECUTED",
+    "queries": [
+     "وقف سريان المدة المقررة لعدم سماع الدعوى لوجود مانع يتعذر معه المطالبة"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "EXCEPTION",
+    "kind": "مبدأ",
+    "state": "EXECUTED",
+    "queries": [
+     "انقطاع مدة عدم سماع الدعوى بإقرار المدين بالحق وبالمطالبة القضائية"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 6,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PROCEDURAL_EFFECT",
+    "kind": "تشريع",
+    "state": "EXECUTED",
+    "queries": [
+     "الإعفاء من الرسوم القضائية والحكم بالمصروفات عند رفض الدعوى ونظرها على وجه الاستعجال"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PROCEDURAL_EFFECT",
+    "kind": "مبدأ",
+    "state": "EXECUTED",
+    "queries": [
+     "إعفاء الدعوى العمالية من الرسوم القضائية والحكم على رافعها بالمصروفات"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 6,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PROCEDURAL_REQUIREMENT",
+    "kind": "تشريع",
+    "state": "EXECUTED",
+    "queries": [
+     "الإجراء الذي تبدأ به الدعوى العمالية وتقديم الطلب إلى الجهة المختصة قبل إحالته إلى المحكمة"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "PROCEDURAL_REQUIREMENT",
+    "kind": "مبدأ",
+    "state": "EXECUTED",
+    "queries": [
+     "وجوب تمسك الخصم بالدفع بعدم سماع الدعوى ولا تقضي به المحكمة من تلقاء نفسها"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 5,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "ADJACENT_RELEVANT_PROVISION",
+    "kind": "تشريع",
+    "state": "EXECUTED",
+    "queries": [
+     "أحكام ختامية بشأن الدعاوى التي يرفعها العمال وحقوقهم الممتازة عند انتهاء عقد العمل"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 5,
+    "same_law_filter_applied": true,
+    "filtered_out_by_law_prefix": 3
+   },
+   {
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "kind": "مبدأ",
+    "state": "EXECUTED",
+    "queries": [
+     "تفسير قاعدة عدم سماع الدعوى عند الإنكار بمضي سنة من تاريخ انتهاء عقد العمل ومداها"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 10,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "JUDICIAL_APPLICATION",
+    "kind": "مبدأ",
+    "state": "EXECUTED",
+    "queries": [
+     "تطبيق محكمة التمييز لمدة السنة على دعوى العامل ورفض أو قبول الدفع بعدم سماعها"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 6,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "kind": "تشريع",
+    "state": "EXECUTED",
+    "queries": [
+     "قصر عدم سماع الدعوى على الدعاوى المستندة إلى أحكام هذا القانون دون غيرها من الحقوق"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "kind": "مبدأ",
+    "state": "EXECUTED",
+    "queries": [
+     "حدود نطاق عدم سماع الدعوى العمالية وما يخرج عنها من حقوق لا تستند إلى قانون العمل"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 10,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "TEMPORAL_RELATION",
+    "kind": "تشريع",
+    "state": "EXECUTED",
+    "queries": [
+     "بدء سريان المدة المقررة لعدم سماع الدعوى من وقت استحقاق الدين ومن تاريخ انتهاء العقد"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "TEMPORAL_RELATION",
+    "kind": "مبدأ",
+    "state": "EXECUTED",
+    "queries": [
+     "تعاقب قانوني العمل وسريان قاعدة عدم سماع الدعوى على عقود انتهت قبل العمل بالقانون الجديد"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 9,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "CONFLICTING_AUTHORITY",
+    "kind": "تشريع",
+    "state": "EXECUTED",
+    "queries": [
+     "عدم الإخلال بما تقضي به القوانين الخاصة في شأن مدد عدم سماع الدعوى"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 0,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   },
+   {
+    "relation_type": "CONFLICTING_AUTHORITY",
+    "kind": "مبدأ",
+    "state": "EXECUTED",
+    "queries": [
+     "تعارض تطبيق مدة التقادم الحولي مع التقادم الخمسي على الأجر كحق دوري متجدد"
+    ],
+    "raw_returned": 20,
+    "duplicates_dropped": 7,
+    "kept": 8,
+    "same_law_filter_applied": false,
+    "filtered_out_by_law_prefix": 0
+   }
+  ],
+  "discovery_pool_size": 113,
+  "relation_validated": [
+   {
+    "object_id": "legis-67-1980-m442",
+    "relation_type": "PREREQUISITE",
+    "authority_type": "legislative",
+    "quoted_basis": "ويجب على من يتمسك بعدم سماع الدعوى في الفقرة السابقة أن يحلف اليمين بأنه أدى الدين فعلا"
+   },
+   {
+    "object_id": "legis-67-1980-m446",
+    "relation_type": "EXCEPTION",
+    "authority_type": "legislative",
+    "quoted_basis": "لا تسري المدة المقررة لعدم سماع الدعوى كلما وجد مانع يتعذر معه على الدائن أن يطالب بحقه ولو كان المانع أدبيا"
+   },
+   {
+    "object_id": "legis-67-1980-m447",
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "authority_type": "legislative",
+    "quoted_basis": "إذا وجد سبب يوقف سريان المدة المقررة لعدم سماع الدعوى بالنسبة إلى بعض ورثة الدائن ٬ فإن المدة لا توقف بالنسبة إلى بقية الورثة"
+   },
+   {
+    "object_id": "legis-67-1980-m450",
+    "relation_type": "CONSEQUENCE",
+    "authority_type": "legislative",
+    "quoted_basis": "إذا انقطعت المدة المقررة لعدم سماع الدعوى ٬ بدأت مدة جديدة من وقت انتهاء الأثر المترتب على سبب الانقطاع ٬ وتكون المدة الجديدة مماثلة للمدة الأولى"
+   },
+   {
+    "object_id": "legis-67-1980-m451",
+    "relation_type": "CONSEQUENCE",
+    "authority_type": "legislative",
+    "quoted_basis": "يترتب على عدم سماع الدعوى بالحق عدم سماعها أيضا بالملحقات ولو لم تكتمل المدة المقررة لعدم سماع الدعوى بهذه الملقحات"
+   },
+   {
+    "object_id": "legis-67-1980-m453",
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "authority_type": "legislative",
+    "quoted_basis": "كما لا يجوز الاتفاق على عدم سماع الدعوى بمدة تختلف عن المدة المعينة في القانون"
+   },
+   {
+    "object_id": "legis-67-1980-m438",
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "authority_type": "legislative",
+    "quoted_basis": "لا تسمع عند الإنكار الدعوى بحق من الحقوق الشخصية بمضي خمس عشرة سنة وذلك فيما عدا الأحوال التي يعين فيها القانون مدة أخرى"
+   },
+   {
+    "object_id": "legis-67-1980-m439",
+    "relation_type": "CONFLICTING_AUTHORITY",
+    "authority_type": "legislative",
+    "quoted_basis": "لا تسمع عند الإنكار الدعوى بمضي خمس سنوات ٬ إذا كانت بحق دوري متجدد كأجرة المباني والأراضي الزراعية والمرتبات والأجور"
+   },
+   {
+    "object_id": "legis-67-1980-m445",
+    "relation_type": "TEMPORAL_RELATION",
+    "authority_type": "legislative",
+    "quoted_basis": "لايبدأ سريان المدة المقررة لعدم سماع الدعوى إلا من اليوم الذي يصبح فيه الدين مستحق الأداء ما لم ينص القانون على خلاف ذلك"
+   },
+   {
+    "object_id": "legis-67-1980-m354",
+    "relation_type": "CONSEQUENCE",
+    "authority_type": "legislative",
+    "quoted_basis": "إذا امتنع سماع الدعوى بمرور الزمان بالنسبة إلى أحد المدينين المتضامنين فلا يستفيد من ذلك باقي المدينين إلا بقدر حصة هذا المدين"
+   },
+   {
+    "object_id": "legis-67-1980-m429",
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "authority_type": "legislative",
+    "quoted_basis": "إذا كان الدين لا تسمع به الدعوى لمرور الزمان وقت التمسك بالمقاصة فإن ذلك لا يمنع من وقوع المقاصة"
+   },
+   {
+    "object_id": "legis-67-1980-issue-3",
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "authority_type": "legislative",
+    "quoted_basis": "لا تخل أحكام القانون المرافق بالأحكام الواردة في التشريعات الخاصة"
+   },
+   {
+    "object_id": "legis-38-1980-m211",
+    "relation_type": "CONSEQUENCE",
+    "authority_type": "legislative",
+    "quoted_basis": "وتعفي الحكومة من ايداع الكفالة كما يعفي من ايداعها او تقديمها من يعفي من الرسوم القضائية"
+   },
+   {
+    "object_id": "legis-6-2010-m122",
+    "relation_type": "ADJACENT_RELEVANT_PROVISION",
+    "authority_type": "legislative",
+    "quoted_basis": "لمنظمات العمال وأصحاب الأعمال التي تكون طرفاًً في عقد العمل الجماعي أن ترفع جميع الدعاوى الناشئة عن الإخلال بأحكام العقد لمصلحة أي عضو من أعضائها دون الحاجة إلى توكيل منه بذلك"
+   },
+   {
+    "object_id": "legis-6-2010-m6",
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "authority_type": "legislative",
+    "quoted_basis": "مع عدم الإخلال بأي مزايا أو حقوق أفضل تتقرر للعمال في عقود العمل الفردية أو الجماعية ... تمثل أحكام هذا القانون الحد الأدنى لحقوق العمال"
+   },
+   {
+    "object_id": "legis-6-2010-m50",
+    "relation_type": "TEMPORAL_RELATION",
+    "authority_type": "legislative",
+    "quoted_basis": "ينتهي عقد العمل في الأحوال التالية: أ) صدور حكم نهائي بإشهار إفلاس صاحب العمل. ب) إغلاق المنشأة نهائيا"
+   },
+   {
+    "object_id": "jprin-427-2014-x-f16b373941fe",
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "authority_type": "judicial",
+    "quoted_basis": "الدعاوى المرفوعة من العمال استناداً لأحكام قانون العمل رقم 6 لسنة 2010. عدم سماعها عند الإنكار بمضي سنة من تاريخ انتهاء عقد العمل وتسرى عندئذ أحكام المادة 442/2 مدني"
+   },
+   {
+    "object_id": "jprin-427-2014-s3106-04db080975",
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "authority_type": "judicial",
+    "quoted_basis": "للمحكمة توجيه اليمين من تلقاء نفسها. م 144 من القانون رقم 6 لسنة 2010 في شأن العمل في القطاع الأهلي ومذكرته الإيضاحية"
+   },
+   {
+    "object_id": "jprin-427-2014-x-328e5529d6ab",
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "authority_type": "judicial",
+    "quoted_basis": "أن على المتمسك بعدم سماع الدعوى أن يحلف يميناً بأدائه الدين للعامل فعلاً"
+   },
+   {
+    "object_id": "jprin-427-2014-s3191-04db080975",
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "authority_type": "judicial",
+    "quoted_basis": "عدم سماعها عند الإنكار بمضي سنة من تاريخ انتهاء عقد العمل وتسرى عندئذ أحكام المادة 442/2 مدني"
+   },
+   {
+    "object_id": "jprin-441-2014-s2392-4fee10f6f0",
+    "relation_type": "JUDICIAL_APPLICATION",
+    "authority_type": "judicial",
+    "quoted_basis": "قضاء الحكم المطعون برفض الدفع بعدم سماع الدعوى بمضي سنة من تاريخ انتهاء عقد العمل قبل تقديم الشكوى العمالية"
+   },
+   {
+    "object_id": "jprin-15-1998-e5291-1c3f4d306a",
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "authority_type": "judicial",
+    "quoted_basis": "مطالبة العامل بحقوقه استناداً إلى أحكام قانون العمل في القطاع الأهلي. لا يجوز سماعها بعد مضي سنة من وقت انتهاء عقد العمل"
+   },
+   {
+    "object_id": "jprin-18-1996-w6586-d28adaecfe",
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "authority_type": "judicial",
+    "quoted_basis": "لا يجوز سماع الدعوى العمالية بعد سنة من وقت انتهاء العقد بما يدل على تقادم الدعوى التي يرفعها العامل عن أي حق من حقوقه الناشئة عن عقد العمل"
+   },
+   {
+    "object_id": "jprin-18-1996-e5285-c05451d13b",
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "authority_type": "judicial",
+    "quoted_basis": "لا يجوز سماع الدعوى العمالية بعد سنة من وقت انتهاء العقد. مؤدى ذلك. تقادم الدعوى التي يرفعها العامل عن أي حق من حقوقه الناشئة عن عقد العمل"
+   },
+   {
+    "object_id": "jprin-3-1987-w6517-d7b8a9c739",
+    "relation_type": "PROCEDURAL_REQUIREMENT",
+    "authority_type": "judicial",
+    "quoted_basis": "عدم سماع الدعوى العمالية لرفعها بعد سنة من تاريخ انتهاء علاقة العمل. الدفع به لا يتعلق بالنظام العام. لا يقبل إبداؤه لأول مرة أمام محكمة التمييز"
+   },
+   {
+    "object_id": "jprin-x-x-e5552-1e6eaa09f1",
+    "relation_type": "PROCEDURAL_REQUIREMENT",
+    "authority_type": "judicial",
+    "quoted_basis": "عدم سماع الدعوى العمّاليّة لرفعها بعد سنة من تاريخ انتهاء عقد العمل. الدفع به لا يتعلّق بالنظام العام"
+   },
+   {
+    "object_id": "jprin-85-2001-e5304-9afb1c9dec",
+    "relation_type": "PROCEDURAL_REQUIREMENT",
+    "authority_type": "judicial",
+    "quoted_basis": "الإجراء الذي تبدأ به الدعوى العمالية. ماهيته. تقديم الطاعن طلبه إلى وزارة الشئون الاجتماعية والعمل بعد ما يزيد على سنة من تاريخ انتهاء عقد العمل. أثره. الدفع بعدم سماع الدعوى في محله"
+   },
+   {
+    "object_id": "jprin-135-2000-e1922-ebdc87291a",
+    "relation_type": "EXCEPTION",
+    "authority_type": "judicial",
+    "quoted_basis": "الدعوى العمالية. سقوطها بمضي سنة من تاريخ انتهاء عقد العمل. وجود مانع من المطالبة بالحق. أثره. وقف سريان تلك المدة واستكمالها بزواله"
+   },
+   {
+    "object_id": "jprin-93-1997-e5461-4e884ccee5",
+    "relation_type": "EXCEPTION",
+    "authority_type": "judicial",
+    "quoted_basis": "رفع العامل الدعوى العمالية مباشرةً دون اتباع الطريق الذي رسمه القانون لاقتضاء حقه . لا ينتج أثرًا في قطع التقادم"
+   },
+   {
+    "object_id": "jprin-82-2003-e5477-1392aff49f",
+    "relation_type": "EXCEPTION",
+    "authority_type": "judicial",
+    "quoted_basis": "المدة المقررة لعدم سماع الدعوى العمالية يرد عليها الانقطاع والوقف. أساس ذلك"
+   },
+   {
+    "object_id": "jprin-7-1996-e5376-66fde4a508",
+    "relation_type": "EXCEPTION",
+    "authority_type": "judicial",
+    "quoted_basis": "الدعوى العمالية لا تسمع بعد سنة من انتهاء عقد العمل. هذه المدة يرد عليها الوقف والانقطاع"
+   },
+   {
+    "object_id": "jprin-23-1995-e5368-2ea58f849c",
+    "relation_type": "EXCEPTION",
+    "authority_type": "judicial",
+    "quoted_basis": "مدة السنة التي قيد المشرع سماع الدعوى بانقضائها من تاريخ إنتهاء عقد العمل. ماهيتها. لا تسري المدة المقررة لعدم سماع الدعوى كلما وجد مانع يتعذر معه على الدائن أن يطالب بحقه"
+   },
+   {
+    "object_id": "jprin-113-1999-f5018-079747969a",
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "authority_type": "judicial",
+    "quoted_basis": "الحقوق الناشئة عن تطبيق أحكام قانون العمل في القطاع الأهلي. عدم جواز سماع المطالبة بها بمضي سنة من تاريخ انتهاء العقد. علة ذلك"
+   },
+   {
+    "object_id": "jprin-113-1999-f4550-dbe442cbc1",
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "authority_type": "judicial",
+    "quoted_basis": "سماع الدعوى العمالية مقيد بمدة سنة من تاريخ انتهاء عقد العمل. أساس ذلك"
+   },
+   {
+    "object_id": "jprin-113-1999-f5017-c6f0749167",
+    "relation_type": "EXCEPTION",
+    "authority_type": "judicial",
+    "quoted_basis": "الدعوى العمالية. عدم سماعها بمضي سنة من انتهاء عقد العمل. ورود الوقف والانقطاع على هذه المدة"
+   },
+   {
+    "object_id": "jprin-626-1992-w6557-a65d0b75ed",
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "authority_type": "judicial",
+    "quoted_basis": "الدعوى العمالية لا تسمع بعد سنة من انتهاء عقد العمل"
+   },
+   {
+    "object_id": "jprin-5-1994-w6049-3d496a313e",
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "authority_type": "judicial",
+    "quoted_basis": "الدعوى العمالية لا تسمع بعد سنه من انتهاء عقد العمل"
+   },
+   {
+    "object_id": "jprin-52-1998-f4927-f0a527e8d9",
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "authority_type": "judicial",
+    "quoted_basis": "عدم سماع دعوى العمال. اقتصاره على الدعاوى التي يرفعها العمال على أصحاب العمل عن الحقوق العمالية التي تؤسس على قانون العمل"
+   },
+   {
+    "object_id": "jprin-71-1986-e7762-c7c9d1c242",
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "authority_type": "judicial",
+    "quoted_basis": "تحديد نطاق الدعوى موضوعاً وسبباً بالمطالبة بالحقوق العمالية وفقاً لقانون العمل. لا محل لتطبيق أحكام القانون المدني عليها"
+   },
+   {
+    "object_id": "jprin-123-1999-f4960-deb9278b70",
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "authority_type": "judicial",
+    "quoted_basis": "الدعاوى التي يرفعها العمال طبقاً لقانون العمل. تعفى من الرسوم. نظرها يكون على وجه الاستعجال. عدم جواز سماعها بعد سنة من وقت انتهاء العقد دون تفرقة بين حق وآخر"
+   },
+   {
+    "object_id": "jprin-138-1996-w4217-ae842d4286",
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "authority_type": "judicial",
+    "quoted_basis": "إعفاء العمال من الرسوم القضائية للدعاوى التي يرفعونها بالمطالبة بحقوقهم المقررة في قانون العمل. جواز إلزامهم بالمصروفات كلها أو بعضها بما فيها أتعاب المحاماة عند رفض الدعوى"
+   },
+   {
+    "object_id": "jprin-342-2004-f4961-6238021ad6",
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "authority_type": "judicial",
+    "quoted_basis": "إعفاء الدعاوى التي يرفعها العامل من الرسوم. للمحكمة في حال رفض الدعوى إلزامه بالمصروفات كلها أو بعضها بما فيها مقابل أتعاب المحاماة"
+   },
+   {
+    "object_id": "jprin-252-2011-1-f59aef302684",
+    "relation_type": "PROCEDURAL_REQUIREMENT",
+    "authority_type": "judicial",
+    "quoted_basis": "الطلب الذي يقدمه العامل إلى إدارة العمل المختصة للمطالبة بحقوقه العمالية. هو الإجراء الوحيد الذي يتعين على العامل القيام به في الدعاوي العمالية وبه تبدأ إجراءات المطالبة القضائية"
+   },
+   {
+    "object_id": "jprin-264-2005-e5314-85679bc04d",
+    "relation_type": "CONSEQUENCE",
+    "authority_type": "judicial",
+    "quoted_basis": "المدة المقررة لعدم سماع الدعوى تنقطع بالمطالبة القضائية ولو أمام محكمة غير مختصة. الحكم فيها برفضها أو عدم قبولها. أثره. اعتبار انقطاع التقادم المبني عليها كأن لم يكن"
+   },
+   {
+    "object_id": "jprin-20-1997-e4960-49a110271d",
+    "relation_type": "CONFLICTING_AUTHORITY",
+    "authority_type": "judicial",
+    "quoted_basis": "الأجر باعتباره حقا دورياً متجدداً يخضع للتقادم الخمسي أو الحولي"
+   },
+   {
+    "object_id": "jprin-33-1990-e5177-2115489f75",
+    "relation_type": "CONFLICTING_AUTHORITY",
+    "authority_type": "judicial",
+    "quoted_basis": "أجر العامل. حق دوري متجدد. حق صاحب العمل في التمسك بتقادمه. مناطه"
+   },
+   {
+    "object_id": "jprin-172-2001-f5022-62412e17e9",
+    "relation_type": "CONFLICTING_AUTHORITY",
+    "authority_type": "judicial",
+    "quoted_basis": "أجر العامل. من الحقوق الدورية المتجددة. لصاحب العمل التمسك بعدم سماع الدعوى به ولو كان عقد العمل قائماً لم ينته أو كان قد انتهى ولكن لم تمض سنة على انتهائه"
+   },
+   {
+    "object_id": "jprin-1184-2014-4-856746720eb2",
+    "relation_type": "CONFLICTING_AUTHORITY",
+    "authority_type": "judicial",
+    "quoted_basis": "لا تسمع عند الإنكار الدعوى بمضي خمس سنوات إذا كانت بحق دوري متجدد كأجرة المباني والأراضي الزراعية والمرتبات والأجور"
+   },
+   {
+    "object_id": "jprin-1384-2013-q3-9d74d9a0f2",
+    "relation_type": "CONFLICTING_AUTHORITY",
+    "authority_type": "judicial",
+    "quoted_basis": "لا تسمع عند الإنكار الدعوى بمضي خمس سنوات إذا كانت بحق دوري متجدد كأجرة المباني والأر ا ضي الزراعية والمرتبات والأجور"
+   },
+   {
+    "object_id": "jprin-128-1999-w8277-5e0d76d22c",
+    "relation_type": "PROCEDURAL_REQUIREMENT",
+    "authority_type": "judicial",
+    "quoted_basis": "الدفع بعدم سماع الدعوى لمرور الزمان. جواز التمسك به في أية حالة تكون عليها الدعوى ما لم يكن قد بدر من المتمسك بالدفع ما يدل على تنازله عنه"
+   },
+   {
+    "object_id": "jprin-128-1999-f3077-844b4fdeb2",
+    "relation_type": "PROCEDURAL_REQUIREMENT",
+    "authority_type": "judicial",
+    "quoted_basis": "الدفع بعدم سماع الدعوى لمرور الزمان. جواز التمسك به في أية حالة تكون عليها الدعوى ما لم يكن بدا من المتمسك بالدفع ما يدل على تنازله عنه"
+   },
+   {
+    "object_id": "jprin-13-1981-w3219-870ffbd9b4",
+    "relation_type": "PROCEDURAL_EFFECT",
+    "authority_type": "judicial",
+    "quoted_basis": "الدفع بعدم سماع الدعوى لمرور الزمان. موضوعي. الحكم الابتدائي بقبوله قضاء تستنفد به المحكمة ولايتها"
+   },
+   {
+    "object_id": "jprin-13-1982-w5672-91b6b0769e",
+    "relation_type": "PROCEDURAL_EFFECT",
+    "authority_type": "judicial",
+    "quoted_basis": "الدفع بعدم سماع الدعوى لمرور الزمان. دفع موضوعي تستنفد به محكمة أول درجة ولايتها في نظر موضوع الدعوى"
+   },
+   {
+    "object_id": "jprin-3-2003-w8286-fbb6cae952",
+    "relation_type": "PROCEDURAL_EFFECT",
+    "authority_type": "judicial",
+    "quoted_basis": "الدفع بعدم سماع الدعوى لمرور الزمان. موضوعي. قضاء محكمة أول درجة بقبوله تستنفد به ولايتها في نظر الموضوع"
+   },
+   {
+    "object_id": "jprin-145-2001-w6602-c4ebd60980",
+    "relation_type": "PROCEDURAL_EFFECT",
+    "authority_type": "judicial",
+    "quoted_basis": "الدفع بعدم سماع الدعوى. موضوعي تستنفد به محكمة أول درجة ولايتها. إلغاء محكمة الدرجة الثانية الحكم الصادر به. وجوب تصديها للفصل في الدعوى"
+   },
+   {
+    "object_id": "jprin-23-2008-w9752-4128ffcad8",
+    "relation_type": "PROCEDURAL_REQUIREMENT",
+    "authority_type": "judicial",
+    "quoted_basis": "الدفع بانقضاء المدة المحددة في القانون لرفع الدعوى. دفع موضوعي بعدم قبولها ... عدم تعلقه بالنظام العام. غير مانع من التمسك به في أية حالة كانت عليها الدعوى ولو لأول مرة أمام المحكمة الاستئنافية"
+   },
+   {
+    "object_id": "jprin-1293-2007-e5403-9deca050bc",
+    "relation_type": "EXCEPTION",
+    "authority_type": "judicial",
+    "quoted_basis": "المدة المقررة لعدم سماع الدعوى. انقطاعها بالمطالبة القضائية ولو رفعت لمحكمة غير مختصة أو بإعلان السند التنفيذي أو بالحجز"
+   },
+   {
+    "object_id": "jprin-1293-2007-e5494-0baaa9b827",
+    "relation_type": "EXCEPTION",
+    "authority_type": "judicial",
+    "quoted_basis": "انقطاع التقادم. ورود أسبابه على سبيل الحصر"
+   },
+   {
+    "object_id": "jprin-678-2002-e1061-c00b4f4cf1",
+    "relation_type": "EXCEPTION",
+    "authority_type": "judicial",
+    "quoted_basis": "المدة المقررة لعدم سماع الدعوى بالتقادم وفقاً للمادة ٤٤٩ مدني. انقطاعها بإقرار المدين بحق الدائن صراحة أو ضمناً"
+   },
+   {
+    "object_id": "jprin-442-2001-w4875-134b279be5",
+    "relation_type": "EXCEPTION",
+    "authority_type": "judicial",
+    "quoted_basis": "المدة المقررة لعدم سماع الدعوى. انقطاعها بإقرار المدين بحق الدائن صراحة أو ضمناً"
+   },
+   {
+    "object_id": "jprin-16-1990-e5435-27799b783d",
+    "relation_type": "EXCEPTION",
+    "authority_type": "judicial",
+    "quoted_basis": "المدة المقررة لعدم سماع الدعوى تنقطع بالمطالبة القضائية ولو أمام محكمة غير مختصة أو لا ولاية لها أو أي جهة إدارية ناط بها القانون الفصل في منازعات معينة"
+   },
+   {
+    "object_id": "jprin-93-1997-f5013-3ef65fc777",
+    "relation_type": "EXCEPTION",
+    "authority_type": "judicial",
+    "quoted_basis": "المدة المقررة لعدم سماع الدعوى تنقطع بالمطالبة القضائية ولو رفعت الدعوى إلى محكمة غير مختصة متى صحت تلك المطالبة شكلاً وموضوعاً"
+   },
+   {
+    "object_id": "jprin-28-1996-w7968-6b8aecb11e",
+    "relation_type": "PROCEDURAL_REQUIREMENT",
+    "authority_type": "judicial",
+    "quoted_basis": "الدفاع الذي يختلط فيه الواقع بالقانون لا يقبل إثارته لأول مرة أمام محكمة التمييز. مثال بشأن الدفع بعدم سماع الدعوى"
+   }
+  ],
+  "admitted": [
+   {
+    "object_id": "legis-67-1980-m442",
+    "relation_type": "PREREQUISITE",
+    "authority_type": "legislative",
+    "discovered_by_lane": "PREREQUISITE/تشريع",
+    "quoted_basis": "ويجب على من يتمسك بعدم سماع الدعوى في الفقرة السابقة أن يحلف اليمين بأنه أدى الدين فعلا"
+   },
+   {
+    "object_id": "legis-67-1980-m446",
+    "relation_type": "EXCEPTION",
+    "authority_type": "legislative",
+    "discovered_by_lane": "PREREQUISITE/تشريع",
+    "quoted_basis": "لا تسري المدة المقررة لعدم سماع الدعوى كلما وجد مانع يتعذر معه على الدائن أن يطالب بحقه ولو كان المانع أدبيا"
+   },
+   {
+    "object_id": "legis-67-1980-m450",
+    "relation_type": "CONSEQUENCE",
+    "authority_type": "legislative",
+    "discovered_by_lane": "CONSEQUENCE/تشريع",
+    "quoted_basis": "إذا انقطعت المدة المقررة لعدم سماع الدعوى ٬ بدأت مدة جديدة من وقت انتهاء الأثر المترتب على سبب الانقطاع ٬ وتكون المدة الجديدة مماثلة للمدة الأولى"
+   },
+   {
+    "object_id": "legis-67-1980-m451",
+    "relation_type": "CONSEQUENCE",
+    "authority_type": "legislative",
+    "discovered_by_lane": "PREREQUISITE/تشريع",
+    "quoted_basis": "يترتب على عدم سماع الدعوى بالحق عدم سماعها أيضا بالملحقات ولو لم تكتمل المدة المقررة لعدم سماع الدعوى بهذه الملقحات"
+   },
+   {
+    "object_id": "legis-67-1980-m453",
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "authority_type": "legislative",
+    "discovered_by_lane": "CONFLICTING_AUTHORITY/تشريع",
+    "quoted_basis": "كما لا يجوز الاتفاق على عدم سماع الدعوى بمدة تختلف عن المدة المعينة في القانون"
+   },
+   {
+    "object_id": "legis-67-1980-m438",
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "authority_type": "legislative",
+    "discovered_by_lane": "PREREQUISITE/تشريع",
+    "quoted_basis": "لا تسمع عند الإنكار الدعوى بحق من الحقوق الشخصية بمضي خمس عشرة سنة وذلك فيما عدا الأحوال التي يعين فيها القانون مدة أخرى"
+   },
+   {
+    "object_id": "legis-67-1980-m439",
+    "relation_type": "CONFLICTING_AUTHORITY",
+    "authority_type": "legislative",
+    "discovered_by_lane": "PREREQUISITE/تشريع",
+    "quoted_basis": "لا تسمع عند الإنكار الدعوى بمضي خمس سنوات ٬ إذا كانت بحق دوري متجدد كأجرة المباني والأراضي الزراعية والمرتبات والأجور"
+   },
+   {
+    "object_id": "legis-6-2010-m6",
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "authority_type": "legislative",
+    "discovered_by_lane": "ADJACENT_RELEVANT_PROVISION/تشريع",
+    "quoted_basis": "مع عدم الإخلال بأي مزايا أو حقوق أفضل تتقرر للعمال في عقود العمل الفردية أو الجماعية ... تمثل أحكام هذا القانون الحد الأدنى لحقوق العمال"
+   },
+   {
+    "object_id": "legis-6-2010-m50",
+    "relation_type": "TEMPORAL_RELATION",
+    "authority_type": "legislative",
+    "discovered_by_lane": "ADJACENT_RELEVANT_PROVISION/تشريع",
+    "quoted_basis": "ينتهي عقد العمل في الأحوال التالية: أ) صدور حكم نهائي بإشهار إفلاس صاحب العمل. ب) إغلاق المنشأة نهائيا"
+   },
+   {
+    "object_id": "jprin-427-2014-x-f16b373941fe",
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "authority_type": "judicial",
+    "discovered_by_lane": "LIMITATION_OR_QUALIFICATION/مبدأ",
+    "quoted_basis": "الدعاوى المرفوعة من العمال استناداً لأحكام قانون العمل رقم 6 لسنة 2010. عدم سماعها عند الإنكار بمضي سنة من تاريخ انتهاء عقد العمل وتسرى عندئذ أحكام المادة 442/2 مدني"
+   },
+   {
+    "object_id": "jprin-427-2014-s3106-04db080975",
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "authority_type": "judicial",
+    "discovered_by_lane": "LIMITATION_OR_QUALIFICATION/مبدأ",
+    "quoted_basis": "للمحكمة توجيه اليمين من تلقاء نفسها. م 144 من القانون رقم 6 لسنة 2010 في شأن العمل في القطاع الأهلي ومذكرته الإيضاحية"
+   },
+   {
+    "object_id": "jprin-441-2014-s2392-4fee10f6f0",
+    "relation_type": "JUDICIAL_APPLICATION",
+    "authority_type": "judicial",
+    "discovered_by_lane": "JUDICIAL_APPLICATION/مبدأ",
+    "quoted_basis": "قضاء الحكم المطعون برفض الدفع بعدم سماع الدعوى بمضي سنة من تاريخ انتهاء عقد العمل قبل تقديم الشكوى العمالية"
+   },
+   {
+    "object_id": "jprin-85-2001-e5304-9afb1c9dec",
+    "relation_type": "PROCEDURAL_REQUIREMENT",
+    "authority_type": "judicial",
+    "discovered_by_lane": "CONSEQUENCE/مبدأ",
+    "quoted_basis": "الإجراء الذي تبدأ به الدعوى العمالية. ماهيته. تقديم الطاعن طلبه إلى وزارة الشئون الاجتماعية والعمل بعد ما يزيد على سنة من تاريخ انتهاء عقد العمل. أثره. الدفع بعدم سماع الدعوى في محله"
+   },
+   {
+    "object_id": "jprin-135-2000-e1922-ebdc87291a",
+    "relation_type": "EXCEPTION",
+    "authority_type": "judicial",
+    "discovered_by_lane": "CONSEQUENCE/مبدأ",
+    "quoted_basis": "الدعوى العمالية. سقوطها بمضي سنة من تاريخ انتهاء عقد العمل. وجود مانع من المطالبة بالحق. أثره. وقف سريان تلك المدة واستكمالها بزواله"
+   },
+   {
+    "object_id": "jprin-52-1998-f4927-f0a527e8d9",
+    "relation_type": "LIMITATION_OR_QUALIFICATION",
+    "authority_type": "judicial",
+    "discovered_by_lane": "LIMITATION_OR_QUALIFICATION/مبدأ",
+    "quoted_basis": "عدم سماع دعوى العمال. اقتصاره على الدعاوى التي يرفعها العمال على أصحاب العمل عن الحقوق العمالية التي تؤسس على قانون العمل"
+   },
+   {
+    "object_id": "jprin-123-1999-f4960-deb9278b70",
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "authority_type": "judicial",
+    "discovered_by_lane": "PROCEDURAL_EFFECT/مبدأ",
+    "quoted_basis": "الدعاوى التي يرفعها العمال طبقاً لقانون العمل. تعفى من الرسوم. نظرها يكون على وجه الاستعجال. عدم جواز سماعها بعد سنة من وقت انتهاء العقد دون تفرقة بين حق وآخر"
+   },
+   {
+    "object_id": "jprin-138-1996-w4217-ae842d4286",
+    "relation_type": "JUDICIAL_INTERPRETATION",
+    "authority_type": "judicial",
+    "discovered_by_lane": "PROCEDURAL_EFFECT/مبدأ",
+    "quoted_basis": "إعفاء العمال من الرسوم القضائية للدعاوى التي يرفعونها بالمطالبة بحقوقهم المقررة في قانون العمل. جواز إلزامهم بالمصروفات كلها أو بعضها بما فيها أتعاب المحاماة عند رفض الدعوى"
+   },
+   {
+    "object_id": "jprin-172-2001-f5022-62412e17e9",
+    "relation_type": "CONFLICTING_AUTHORITY",
+    "authority_type": "judicial",
+    "discovered_by_lane": "TEMPORAL_RELATION/مبدأ",
+    "quoted_basis": "أجر العامل. من الحقوق الدورية المتجددة. لصاحب العمل التمسك بعدم سماع الدعوى به ولو كان عقد العمل قائماً لم ينته أو كان قد انتهى ولكن لم تمض سنة على انتهائه"
+   }
+  ],
+  "dropped_at_type_reserved": [
+   {
+    "object_id": "legis-67-1980-m447",
+    "authority_type": "legislative",
+    "relation_type": "LIMITATION_OR_QUALIFICATION"
+   },
+   {
+    "object_id": "legis-67-1980-m445",
+    "authority_type": "legislative",
+    "relation_type": "TEMPORAL_RELATION"
+   },
+   {
+    "object_id": "legis-67-1980-m354",
+    "authority_type": "legislative",
+    "relation_type": "CONSEQUENCE"
+   },
+   {
+    "object_id": "legis-67-1980-m429",
+    "authority_type": "legislative",
+    "relation_type": "LIMITATION_OR_QUALIFICATION"
+   },
+   {
+    "object_id": "legis-67-1980-issue-3",
+    "authority_type": "legislative",
+    "relation_type": "LIMITATION_OR_QUALIFICATION"
+   },
+   {
+    "object_id": "legis-38-1980-m211",
+    "authority_type": "legislative",
+    "relation_type": "CONSEQUENCE"
+   },
+   {
+    "object_id": "legis-6-2010-m122",
+    "authority_type": "legislative",
+    "relation_type": "ADJACENT_RELEVANT_PROVISION"
+   },
+   {
+    "object_id": "jprin-427-2014-x-328e5529d6ab",
+    "authority_type": "judicial",
+    "relation_type": "JUDICIAL_INTERPRETATION"
+   },
+   {
+    "object_id": "jprin-427-2014-s3191-04db080975",
+    "authority_type": "judicial",
+    "relation_type": "JUDICIAL_INTERPRETATION"
+   },
+   {
+    "object_id": "jprin-15-1998-e5291-1c3f4d306a",
+    "authority_type": "judicial",
+    "relation_type": "JUDICIAL_INTERPRETATION"
+   },
+   {
+    "object_id": "jprin-18-1996-w6586-d28adaecfe",
+    "authority_type": "judicial",
+    "relation_type": "JUDICIAL_INTERPRETATION"
+   },
+   {
+    "object_id": "jprin-18-1996-e5285-c05451d13b",
+    "authority_type": "judicial",
+    "relation_type": "JUDICIAL_INTERPRETATION"
+   },
+   {
+    "object_id": "jprin-3-1987-w6517-d7b8a9c739",
+    "authority_type": "judicial",
+    "relation_type": "PROCEDURAL_REQUIREMENT"
+   },
+   {
+    "object_id": "jprin-x-x-e5552-1e6eaa09f1",
+    "authority_type": "judicial",
+    "relation_type": "PROCEDURAL_REQUIREMENT"
+   },
+   {
+    "object_id": "jprin-93-1997-e5461-4e884ccee5",
+    "authority_type": "judicial",
+    "relation_type": "EXCEPTION"
+   },
+   {
+    "object_id": "jprin-82-2003-e5477-1392aff49f",
+    "authority_type": "judicial",
+    "relation_type": "EXCEPTION"
+   },
+   {
+    "object_id": "jprin-7-1996-e5376-66fde4a508",
+    "authority_type": "judicial",
+    "relation_type": "EXCEPTION"
+   },
+   {
+    "object_id": "jprin-23-1995-e5368-2ea58f849c",
+    "authority_type": "judicial",
+    "relation_type": "EXCEPTION"
+   },
+   {
+    "object_id": "jprin-113-1999-f5018-079747969a",
+    "authority_type": "judicial",
+    "relation_type": "JUDICIAL_INTERPRETATION"
+   },
+   {
+    "object_id": "jprin-113-1999-f4550-dbe442cbc1",
+    "authority_type": "judicial",
+    "relation_type": "JUDICIAL_INTERPRETATION"
+   },
+   {
+    "object_id": "jprin-113-1999-f5017-c6f0749167",
+    "authority_type": "judicial",
+    "relation_type": "EXCEPTION"
+   },
+   {
+    "object_id": "jprin-626-1992-w6557-a65d0b75ed",
+    "authority_type": "judicial",
+    "relation_type": "JUDICIAL_INTERPRETATION"
+   },
+   {
+    "object_id": "jprin-5-1994-w6049-3d496a313e",
+    "authority_type": "judicial",
+    "relation_type": "JUDICIAL_INTERPRETATION"
+   },
+   {
+    "object_id": "jprin-71-1986-e7762-c7c9d1c242",
+    "authority_type": "judicial",
+    "relation_type": "LIMITATION_OR_QUALIFICATION"
+   },
+   {
+    "object_id": "jprin-342-2004-f4961-6238021ad6",
+    "authority_type": "judicial",
+    "relation_type": "JUDICIAL_INTERPRETATION"
+   },
+   {
+    "object_id": "jprin-252-2011-1-f59aef302684",
+    "authority_type": "judicial",
+    "relation_type": "PROCEDURAL_REQUIREMENT"
+   },
+   {
+    "object_id": "jprin-264-2005-e5314-85679bc04d",
+    "authority_type": "judicial",
+    "relation_type": "CONSEQUENCE"
+   },
+   {
+    "object_id": "jprin-20-1997-e4960-49a110271d",
+    "authority_type": "judicial",
+    "relation_type": "CONFLICTING_AUTHORITY"
+   },
+   {
+    "object_id": "jprin-33-1990-e5177-2115489f75",
+    "authority_type": "judicial",
+    "relation_type": "CONFLICTING_AUTHORITY"
+   },
+   {
+    "object_id": "jprin-1184-2014-4-856746720eb2",
+    "authority_type": "judicial",
+    "relation_type": "CONFLICTING_AUTHORITY"
+   },
+   {
+    "object_id": "jprin-1384-2013-q3-9d74d9a0f2",
+    "authority_type": "judicial",
+    "relation_type": "CONFLICTING_AUTHORITY"
+   },
+   {
+    "object_id": "jprin-128-1999-w8277-5e0d76d22c",
+    "authority_type": "judicial",
+    "relation_type": "PROCEDURAL_REQUIREMENT"
+   },
+   {
+    "object_id": "jprin-128-1999-f3077-844b4fdeb2",
+    "authority_type": "judicial",
+    "relation_type": "PROCEDURAL_REQUIREMENT"
+   },
+   {
+    "object_id": "jprin-13-1981-w3219-870ffbd9b4",
+    "authority_type": "judicial",
+    "relation_type": "PROCEDURAL_EFFECT"
+   },
+   {
+    "object_id": "jprin-13-1982-w5672-91b6b0769e",
+    "authority_type": "judicial",
+    "relation_type": "PROCEDURAL_EFFECT"
+   },
+   {
+    "object_id": "jprin-3-2003-w8286-fbb6cae952",
+    "authority_type": "judicial",
+    "relation_type": "PROCEDURAL_EFFECT"
+   },
+   {
+    "object_id": "jprin-145-2001-w6602-c4ebd60980",
+    "authority_type": "judicial",
+    "relation_type": "PROCEDURAL_EFFECT"
+   },
+   {
+    "object_id": "jprin-23-2008-w9752-4128ffcad8",
+    "authority_type": "judicial",
+    "relation_type": "PROCEDURAL_REQUIREMENT"
+   },
+   {
+    "object_id": "jprin-1293-2007-e5403-9deca050bc",
+    "authority_type": "judicial",
+    "relation_type": "EXCEPTION"
+   },
+   {
+    "object_id": "jprin-1293-2007-e5494-0baaa9b827",
+    "authority_type": "judicial",
+    "relation_type": "EXCEPTION"
+   },
+   {
+    "object_id": "jprin-678-2002-e1061-c00b4f4cf1",
+    "authority_type": "judicial",
+    "relation_type": "EXCEPTION"
+   },
+   {
+    "object_id": "jprin-442-2001-w4875-134b279be5",
+    "authority_type": "judicial",
+    "relation_type": "EXCEPTION"
+   },
+   {
+    "object_id": "jprin-16-1990-e5435-27799b783d",
+    "authority_type": "judicial",
+    "relation_type": "EXCEPTION"
+   },
+   {
+    "object_id": "jprin-93-1997-f5013-3ef65fc777",
+    "authority_type": "judicial",
+    "relation_type": "EXCEPTION"
+   },
+   {
+    "object_id": "jprin-28-1996-w7968-6b8aecb11e",
+    "authority_type": "judicial",
+    "relation_type": "PROCEDURAL_REQUIREMENT"
+   }
+  ],
+  "seats": {
+   "legislative_used": 9,
+   "judicial_used": 9,
+   "full_judgment_used": 0
+  },
+  "counts": {
+   "lanes_executed": 19,
+   "lanes_not_applicable": 0,
+   "queries_issued": 20,
+   "raw_results_total": 400,
+   "duplicates_dropped_total": 79,
+   "discovery_pool": 113,
+   "relation_validated": 63,
+   "admitted": 18
+  }
+ }
+]

@@ -3,7 +3,7 @@
 
 كل اعتمادية محقونة بمزيَّف، فالاختبار يشغّل **دوال الإنتاج نفسها** لا نسخة
 منها. التشغيل: python3 retrieval/test_retrieval_layer.py"""
-import sys, os
+import sys, os, json
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from retrieval.pool import CandidatePool
@@ -157,6 +157,26 @@ CH.citation(pc, db_law, "الطعن رقم 441 لسنة 2014", None)
 check("رقم الطعن يجلب مبدأه مثبَّتًا",
       any(c.pinned and c.layer == LAYER_PRINCIPLE for c in pc))
 
+# --------------------------------------------- 5b. حصّة المرتِّب لكل قناة
+print("\n[5b] مدخل المرتِّب — حصّة مضمونة لكل قناة")
+from retrieval.fusion import rerank_input
+pq = CandidatePool()
+for i in range(1, 501):
+    pq.add("D%03d" % i, CH_DENSE, (i % 12) + 1, 0.9, LAYER_LEGISLATION)
+for i in range(1, 31):
+    pq.add("ADJ%02d" % i, "adjacency", (i % 4) + 1, 0.0, LAYER_LEGISLATION)
+rq = fuse(pq)
+adj_rank = [k for k, c in enumerate(rq, 1) if "adjacency" in c.channels]
+check("مقيس: مرشح الجوار وحده يقع دون كل مرشحي المتجه في الدمج",
+      min(adj_rank) > sum(1 for c in rq if CH_DENSE in c.channels) * 0.9,
+      (min(adj_rank), len(rq)))
+naive = sum(1 for c in rq[:300] if "adjacency" in c.channels)
+withq = sum(1 for c in rerank_input(rq, cap=300, min_per_channel=12)
+            if "adjacency" in c.channels)
+check("القصّ الساذج يُقصي قناة الجوار كليًا عن المرتِّب", naive == 0, naive)
+check("الحصّة تضمن تقييم القناة رغم ذيل الترتيب", withq >= 12, withq)
+check("الحصّة لا تتجاوز السقف", len(rerank_input(rq, cap=300)) == 300)
+
 # ------------------------------------------------------------ 6. pipeline
 print("\n[6] الخط كاملًا (اعتماديات مزيَّفة)")
 class Deps:
@@ -178,8 +198,10 @@ class Deps:
     def row_of(self, i):
         return {"metadata": {}}
     resolve_law_prefix = staticmethod(lambda n, y: "legis-%s-%s-" % (n, y))
+# العمق يُمرَّر صراحةً: الاختبار يفحص سلوك الخط لا قيمة الثابت الافتراضي
 res = PL.run(Deps(), "المادة 144 من القانون رقم 6 لسنة 2010",
-             [[0.1] * 4, [0.2] * 4], anchor_ids=["legis-9-9999-m9"],
+             [[0.1] * 4, [0.2] * 4, [0.3] * 4, [0.4] * 4],
+             anchor_ids=["legis-9-9999-m9"], dense_depth=24,
              phrases=["عدم سماع الدعوى بمضي المدة"])
 check("التجمّع أوسع بكثير من المقبول", res["pool_size_raw"] > 4 * len(res["admitted"]),
       (res["pool_size_raw"], len(res["admitted"])))
@@ -194,6 +216,15 @@ check("السياق داخل ميزانية الإنتاج نفسها (85k)",
 check("الانتقاء صارم (نسبة القبول ≤ 0.35)", res["selectivity"] <= 0.35, res["selectivity"])
 check("كل مقبول يحمل سلسلة نسبه", all(x["channels"] for x in res["packet"]["provenance"]))
 check("لا قناة معطَّلة صامتة", res["disabled_channels"] == [], res["disabled_channels"])
+# حارس الثابت: العمق الافتراضي مشتقٌّ من منحنى Recall@k المقيس (هضبة عند 9)
+_curve = json.load(open(os.path.join(os.path.dirname(os.path.dirname(
+    os.path.abspath(__file__))), "tools/depth_curve.json")))
+check("العمق الافتراضي = هضبة المنحنى المقيس + هامش 3",
+      PL.DEFAULT_DENSE_DEPTH == _curve["plateau_k"] + 3,
+      (PL.DEFAULT_DENSE_DEPTH, _curve["plateau_k"]))
+check("المنحنى لا يزيد بعد الهضبة (تعميق القناة وحده لا يكفي)",
+      _curve["curve"]["20"] == _curve["curve"][str(_curve["plateau_k"])],
+      _curve["curve"]["20"])
 
 print("\n" + "=" * 62)
 print("نجح %d / %d" % (len(OK), len(OK) + len(FAIL)))

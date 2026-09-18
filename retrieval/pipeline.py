@@ -8,13 +8,20 @@
 نفسها (85,000 حرفًا) — يتوسّع التجمّع لا المُرسَل."""
 from . import channels as CH
 from .pool import CandidatePool
-from .fusion import fuse, apply_rerank
+from .fusion import fuse, apply_rerank, rerank_input
 from .admission import admit, PRODUCTION_BUDGET, PROTECTED_FRACTION
 from .temporal import annotate
 from .packet import build as build_packet
 from .model import LAYER_PRINCIPLE
 
-DEFAULT_DENSE_DEPTH = 24     # يُشتق من منحنى Recall@k المقيس، لا يُخمَّن
+# مُشتقٌّ من البيانات لا مخمَّن: منحنى Recall@k على 98 نداء بحث حقيقيًا (1,959
+# نتيجة خام، tools/depth_curve.py) يبلغ الهضبة عند k=9 بقيمة 0.706، ولا يزيد
+# حرفًا واحدًا حتى k=20. فالعمق 12 = الهضبة + هامش 3، وما بعده **مقيسٌ بصفر
+# عائد** على هذه البيانات. وهذا بنفسه أهمّ ما يقوله القياس: تعميقُ القناة
+# الكثيفة وحدها **لا يمكن أن يتجاوز 0.706** مهما زاد — فالعلاج قنواتٌ أخرى،
+# لا عمقٌ أكبر. (ولهذا تحديدًا لا نطارد 100% بتوسيع أعمى: التوسيع بلا ضبط
+# يشتري ضجيجًا لا تغطية.)
+DEFAULT_DENSE_DEPTH = 12
 
 
 def retrieve(deps, query_text, vectors, anchor_ids=(), phrases=(),
@@ -67,8 +74,11 @@ def run(deps, query_text, vectors, anchor_ids=(), phrases=(), issues=None,
 
     rr = {}
     if getattr(deps, "rerank", None):
-        pairs = [(c.object_id, texts[c.object_id]["text"]) for c in ranked
-                 if not c.pinned and c.object_id in texts]
+        # حصّة مضمونة لكل قناة: بلا هذا يُقصي القصُّ مرشحي القنوات الضعيفة
+        # الوزن قبل أن يراهم المرتِّب، فتُهدر القناة التي وُجدت لتجاوز المتجه
+        pairs = [(c.object_id, texts[c.object_id]["text"])
+                 for c in rerank_input([c for c in ranked if not c.pinned])
+                 if c.object_id in texts]
         try:
             rr = deps.rerank(query_text, pairs) or {}
         except Exception:
