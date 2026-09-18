@@ -41,6 +41,15 @@ PROTECTED_FRACTION = 0.5
 # 425→308. القيم معلَنة لا مضبوطة على هدف: التشريع والمبادئ بميزانية الإنتاج
 # كاملةً، والأحكام **ضعف** ميزانية الإنتاج (مكسب قضائي مقصود لكنه محدود)،
 # والنماذج عند حدّها المحمي فقط لأنها **غير قابلة للاستشهاد** أصلًا.
+# أولوية الطبقة عند توزيع الفائض — نفس ترتيب `prio` في الإنتاج حرفيًا.
+# الحدُّ المحميُّ يسبقها فيضمن للقضاء نصيبه أولًا؛ والأولوية هنا للفائض وحده.
+LAYER_PRIORITY = {
+    LAYER_LEGISLATION: 0,
+    LAYER_PRINCIPLE:   1,
+    LAYER_JUDGMENT:    2,
+    LAYER_TEMPLATE:    3,
+}
+
 LAYER_CEILING = {
     LAYER_LEGISLATION: 48000,
     LAYER_PRINCIPLE:   24000,
@@ -120,7 +129,9 @@ def admit(candidates, block_size_of, budget=None, fraction=PROTECTED_FRACTION):
         for k, v in live.items():
             ceilings[k] = v + int(absent_cap * v / tot_live)
 
-    # --- المرحلة 2: السعة المشتركة، بالدرجة عبر كل الطبقات، بسقف لكل طبقة ---
+    # --- المرحلة 2: السعة المشتركة، بأولوية الطبقة ثم الدرجة، بسقف لكل طبقة ---
+    left.sort(key=lambda c: (not c.pinned, LAYER_PRIORITY.get(c.layer, 9),
+                             -(c.final_score or 0.0), c.object_id))
     for c in left:
         s = sizes[c.object_id]
         ceil = ceilings.get(c.layer)

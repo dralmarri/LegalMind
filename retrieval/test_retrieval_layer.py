@@ -368,6 +368,24 @@ check("التعارض يُوسَم ولا يُحسم بلا سند",
       all(x["resolution"] is None for x in _r3["conflicts"]
           if not x.get("basis_available")), _r3["conflicts"])
 
+# ------------------- 12. ترتيب الفائض بأولوية الطبقة (سبب سقوط m146/m442)
+print("\n[12] الفائض بأولوية الطبقة — التشريع لا يُزاحَم بعد ضمان القضاء")
+_hi_j = [mk("HJ%d" % i, LAYER_JUDGMENT, 0.99) for i in range(30)]
+_hi_p = [mk("HP%d" % i, LAYER_PRINCIPLE, 0.97) for i in range(30)]
+_lo_l = [mk("LL%d" % i, LAYER_LEGISLATION, 0.05 - i * 0.0001) for i in range(40)]
+_a12, _r12 = admit(_hi_j + _hi_p + _lo_l,
+                   lambda c: 3400 if c.layer == LAYER_JUDGMENT else 1500)
+_u12 = _r12["used_by_layer"]
+check("التشريع الأدنى درجةً يبلغ سقفه رغم اكتساح الأعلى درجةً",
+      _u12.get(LAYER_LEGISLATION, 0) >= 0.9 * _r12["layer_ceiling"][LAYER_LEGISLATION],
+      _u12)
+check("القضاء يبقى حاضرًا بحدّه المحمي (المكسب محفوظ)",
+      _u12.get(LAYER_JUDGMENT, 0) >= build_floors()[LAYER_JUDGMENT] * 0.8, _u12)
+check("المبادئ تبقى حاضرة", _u12.get(LAYER_PRINCIPLE, 0) > 0, _u12)
+_n_l = sum(1 for c in _a12 if c.layer == LAYER_LEGISLATION)
+check("عدد السلطات التشريعية المقبولة يقارب طاقة سقفها",
+      _n_l >= 25, _n_l)
+
 print("\n" + "=" * 62)
 print("نجح %d / %d" % (len(OK), len(OK) + len(FAIL)))
 if FAIL:
