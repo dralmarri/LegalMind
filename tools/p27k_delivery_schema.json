@@ -88,5 +88,55 @@
   "BENCHMARK_INSUFFICIENT_if": "الأدوار التسعة «الزائدة» أنتجت propositions ذات قيمة قانونية حقيقية",
   "ROLE_ROUTING_PROMISING_if": "صحيحة نظريًا ولم تضف propositions ذات قيمة",
   "_never": "لا PASS ما دام الرقم الرسمي 0.275، ولا FAIL بالرقم وحده قبل رؤية أثر الزيادات"
+ },
+ "_AMENDMENT_1": {
+  "amended_at": "2026-09-18T07:29:41Z",
+  "lane_results_present_at_amendment_time": [],
+  "_integrity": "عُدِّل **قبل وصول أي نتيجة مسار** (القائمة أعلاه فارغة)، و**كلا التعديلين يشدّدان المعيار ولا يخففانه** — فلا يمكن أن يكونا تفصيلًا على نتيجة.",
+  "amendment_1_unsafe_requires_explicit_link": {
+   "rule": "وجود النص النافذ في مسار آخر **لا يرفع وصف UNSAFE تلقائيًا**. يلزم **علاقة صريحة مكتشَفة** تربط السلطة القديمة بالنص الحالي.",
+   "m167_worked_example": {
+    "not_sufficient": "العثور على مبدأ يقول «خمسة أيام» + العثور منفصلًا على م167 تقول «عشرة أيام»",
+    "why_not": "النظام حينئذ يسلّم الاثنين للمحرر ويترك تناقضًا غير محلول — وهذا بعينه الخطر",
+    "required": "اكتشاف صريح أن رقم «الخمسة» يعود إلى **النص السابق** لهذه المادة بذاتها، ووسم المبدأ SUPERSEDED على هذا الأساس"
+   },
+   "scoring": "بلا هذه العلاقة الصريحة: DELIVERED_UNSAFE — حتى لو كان النص النافذ حاضرًا في الحزمة"
+  },
+  "amendment_2_delivered_requires_packet_with_provenance": {
+   "rule": "DELIVERED **لا تعني** أن المستخرِج أنتج proposition صحيحة، بل أنها **وصلت إلى Authority Packet النهائي** ومعها provenance يسمح بالرجوع إلى المصدر.",
+   "rationale": "وإلا أُعيدت بصورة أخرى المشكلة القديمة الموثقة: المصدر حاضر في مرحلة وسيطة ولا يصل إلى ما يستعمله نموذج الاستشارة (نمط «في المرشحات لا السياق»).",
+   "scoring": "proposition صحيحة مستخرَجة ولم تبلغ الحزمة النهائية = **ليست DELIVERED** — تتوقف عند PROPOSITION_VALIDATED"
+  },
+  "revised_funnel_9_stages": [
+   "ROLE_EXPECTED",
+   "ROLE_PLANNED",
+   "LANE_EXECUTED",
+   "SOURCE_DISCOVERED",
+   "SOURCE_FETCHED",
+   "PROPOSITION_EXTRACTED",
+   "PROPOSITION_VALIDATED",
+   "TEMPORAL_CONFLICT_VALIDATED",
+   "AUTHORITY_PACKET_DELIVERED"
+  ],
+  "unsafe_is_a_separate_failure_path": "DELIVERED_UNSAFE **مسار فشل مستقل يبدأ بعد الاستخراج**، لا نجاح جزئي. لا يُحتسب في أي بسط نجاح إطلاقًا.",
+  "three_capabilities_under_test": {
+   "A_gs-0011": {
+    "capability": "JUDICIAL_VALUE_ADD",
+    "weight": "الأعلى",
+    "pass": "الوصول من السؤال وحده — بلا تسريب الحزمة — إلى الحكم القضائي، ثم استخراج **متطلبات قبول الدعوى التي لم تكشفها التشريعات** وتسليمها مع سندها"
+   },
+   "B_gs-0013_m167": {
+    "capability": "TEMPORAL_SAFETY",
+    "weight": "الثاني",
+    "pass": "منع سلطة قضائية **صحيحة تاريخيًا** من تلويث القاعدة النافذة، بعلاقة نسخ صريحة"
+   },
+   "D_dna": {
+    "capability": "CONFLICT_AWARENESS",
+    "weight": "الثالث",
+    "pass": "كشف الاختلاف ووسمه POTENTIAL_TEMPORAL_CONFLICT بدل اختراع ترجيح غير مثبت"
+   },
+   "_significance": "اجتياز الأنماط الثلاثة = ثلاث قدرات متمايزة مُثبَتة، لا رقم recall واحد مرتفع"
+  },
+  "reading_rule": "تُقرأ النتائج كما خرجت، بما فيها أي NOT_FOUND أو DELIVERED_UNSAFE، ولو خفّضت الأرقام بشدة."
  }
 }
