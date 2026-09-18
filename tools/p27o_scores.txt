@@ -1,0 +1,34 @@
+=== L / N / O ===
+         NBU↓         NAR↑         RBN↑         fan-out
+P2.7-L   0/11         4/11         5/6          47
+P2.7-N   0/11         6/11         2/6          56
+P2.7-O   0/11         5/11         4/6          82
+
+=== الحجز والإزاحة ===
+  legis-6-2010-m144      legis=9/9 jud=9/9 judg=0/2   lanes EXEC=19 NA=0  pool=113 val=63 adm=18
+  legis-51-1984-m337     legis=5/9 jud=9/9 judg=0/2   lanes EXEC=19 NA=0  pool=87 val=33 adm=14
+  legis-51-1984-m338     legis=9/9 jud=9/9 judg=0/2   lanes EXEC=19 NA=0  pool=138 val=59 adm=18
+  legis-68-1980-m550     legis=9/9 jud=9/9 judg=0/2   lanes EXEC=19 NA=0  pool=126 val=50 adm=18
+  legis-68-1980-m551     legis=9/9 jud=9/9 judg=0/2   lanes EXEC=19 NA=0  pool=109 val=47 adm=18
+  سقط عند TYPE_RESERVED بحسب النوع: {'legislative': 16, 'judicial': 150}
+
+=== التعايش داخل كل حزمة ===
+  legis-6-2010-m144      legis=9 jud=9 judg=0  -> OK
+  legis-51-1984-m337     legis=5 jud=9 judg=0  -> OK
+  legis-51-1984-m338     legis=9 jud=9 judg=0  -> OK
+  legis-68-1980-m550     legis=9 jud=9 judg=0  -> OK
+  legis-68-1980-m551     legis=9 jud=9 judg=0  -> OK
+
+=== الأحكام الكاملة ===
+   FULL_JUDGMENT_NO_ELIGIBLE_CANDIDATE — صفر اجتاز RELATION_VALIDATED؛ المقعدان بقيا فارغين بلا إعادة تخصيص. **ليس فشلًا**.
+
+=== الضوابط ===
+  H  JOINT_LAYER_RECALL (NAR>=6 و RBN>=5)   FAIL   NAR=5 RBN=4
+  C1/C2 إزاحة عبر الأنواع                   PASS   السقوط بحسب النوع: {'legislative': 16, 'judicial': 150}
+  C3 NEAR_BUT_UNRELATED == 0               PASS   0
+  C4 fan-out (مرصود لا حاكم — AMENDMENT_1)        82  (مرجع 93)
+  C4b selectivity <= 0.30                  PASS   0.150  (86/573)
+  C5 تغطية >=16 و NA<=3                     PASS 
+  C6 تعايش في كل حزمة                       PASS   5/5
+
+VERDICT: TYPE_RESERVED_ARCHITECTURE_REJECTED
