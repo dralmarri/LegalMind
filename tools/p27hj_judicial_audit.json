@@ -1,0 +1,657 @@
+{
+ "_note": "P2.7-HJ — تدقيق تغطية السند القضائي. **تدقيق فقط**: لا تعديل على Gold Set ولا الـgraph ولا الحواف ولا البوابات ولا Planner ولا القرارات البشرية.",
+ "audited_at": "2026-09-18T06:57:15Z",
+ "freeze_ref": "tools/p27h_freeze.json",
+ "object_types_used": {
+  "_source": "kb_types.py الحقيقي من فرع main (bd55a2d) — لم تُفترض الأسماء",
+  "LEGISLATION_TYPES": [
+   "legislation_article",
+   "legislation",
+   "legislation_issuing_article",
+   "legislation_preamble",
+   "legislation_archived"
+  ],
+  "PRINCIPLE_TYPES": [
+   "judicial_principle",
+   "judicial_principles_collection"
+  ],
+  "JUDGMENT_TYPES": [
+   "full_judgment"
+  ],
+  "TEMPLATE_TYPES": [
+   "judicial_template"
+  ]
+ },
+ "cards": {
+  "1_gs-0005_E22": {
+   "case_id": "gs-0005",
+   "edge_id": "E22",
+   "dimension": "عدم سماع الدعاوى العمالية بمضي سنة",
+   "statutory_basis": [
+    "legis-6-2010-m144"
+   ],
+   "judicial_authorities_found": [
+    {
+     "object_id": "jprin-626-1992-w6557-a65d0b75ed",
+     "court": "التمييز — عمالي",
+     "appeal_case_number": "626/1992",
+     "session_date": "31/10/1994",
+     "year": "1994",
+     "principle_text": "الدعوى العمالية لا تسمع بعد سنة من انتهاء عقد العمل.",
+     "holding": "تقرير أصل القاعدة",
+     "articles_interpreted": [
+      "م25 ق38/1964 (السلف)"
+     ],
+     "source_strength": "محكمة التمييز — مبدأ منشور",
+     "relation_to_edge": "CONFIRMS",
+     "explanation": "يؤكد وجود القاعدة نفسها",
+     "temporal_validity": "PRE_AMENDMENT"
+    },
+    {
+     "object_id": "jprin-7-1996-e5376-66fde4a508",
+     "court": "التمييز — عمالي",
+     "appeal_case_number": "7/1996 و129/1996",
+     "session_date": "10/3/1997",
+     "year": "1997",
+     "principle_text": "الدعوى العمالية لا تسمع بعد سنة من انتهاء عقد العمل. هذه المدة يرد عليها الوقف والانقطاع.",
+     "holding": "المدة ليست حدًّا جامدًا — تقبل الوقف والانقطاع",
+     "articles_interpreted": [
+      "السلف"
+     ],
+     "source_strength": "محكمة التمييز — مبدأ منشور",
+     "relation_to_edge": "QUALIFIES",
+     "explanation": "يقيّد إطلاق «مضي سنة»: المدة قابلة للوقف والانقطاع فلا تُحسب آليًا",
+     "temporal_validity": "PRE_AMENDMENT"
+    },
+    {
+     "object_id": "jprin-7-1996-w6050-2679f20795",
+     "court": "التمييز — عمالي",
+     "appeal_case_number": "7/1996",
+     "session_date": "10/3/1997",
+     "year": "1997",
+     "principle_text": "تقديم العامل طلبًا إلى وزارة الشئون الاجتماعية والعمل. هو الإجراء الوحيد لرفع الدعوى العمالية.",
+     "holding": "إجراء سابق وجوبي لرفع الدعوى العمالية",
+     "articles_interpreted": [
+      "السلف"
+     ],
+     "source_strength": "محكمة التمييز — مبدأ منشور",
+     "relation_to_edge": "ADDS_MISSING_DIMENSION",
+     "explanation": "بُعد إجرائي سابق وجوبي غائب عن الحقيقة الأرضية وعن الـgraph معًا",
+     "temporal_validity": "PRE_AMENDMENT"
+    },
+    {
+     "object_id": "jprin-150-2000-f4558-00881498b8",
+     "court": "التمييز — عمالي",
+     "appeal_case_number": "150/2000",
+     "session_date": "19/11/2001",
+     "year": "2001",
+     "principle_text": "لا تسمع بمضي سنة... علة ذلك تصفية المراكز القانونية. ورود الانقطاع والوقف. عدم استقرار إصابة العامل لا يعد مانعًا يوقف التقادم.",
+     "holding": "بيان العلة وحدود المانع",
+     "articles_interpreted": [
+      "السلف"
+     ],
+     "source_strength": "محكمة التمييز — مبدأ منشور",
+     "relation_to_edge": "QUALIFIES",
+     "explanation": "يحدد ما لا يُعد مانعًا موقفًا",
+     "temporal_validity": "PRE_AMENDMENT"
+    },
+    {
+     "object_id": "jprin-441-2014-s2174-b159be2ed9",
+     "court": "التمييز — عمالي",
+     "appeal_case_number": "441/2014",
+     "session_date": "18/5/2015",
+     "year": "2015",
+     "principle_text": "الدعاوى التي يرفعها العمال استنادًا لأحكام القانون 6 لسنة 2010... عند الإنكار لا تسمع بمضي سنة... سريان م442/2 مدني... وجوب أن يحلف المتمسك بعدم سماع الدعوى اليمين بأنه أدى الدين للعامل فعلًا... وجوب أن توجه المحكمة اليمين من تلقاء نفسها.",
+     "holding": "عدم السماع ليس تلقائيًا: يشترط الإنكار + يمين يوجّهها القاضي من تلقاء نفسه",
+     "articles_interpreted": [
+      "legis-6-2010-m144",
+      "م442/2 مدني"
+     ],
+     "source_strength": "محكمة التمييز — مبدأ منشور",
+     "relation_to_edge": "QUALIFIES",
+     "explanation": "**الأهم في هذه البطاقة**: يفسّر م144 الحالية نفسها ويجعل الدفع مشروطًا بيمين وجوبية — يسند مباشرة تكييف البُعد مشروطًا لا مطلقًا",
+     "temporal_validity": "CURRENTLY_COMPATIBLE"
+    }
+   ],
+   "edge_relation_summary": "CONFIRMS + QUALIFIES + ADDS_MISSING_DIMENSION",
+   "necessity_impact": "الأحكام تدعم تكييف البُعد **مشروطًا** لا مطلقًا (الإنكار + اليمين + قابلية الوقف والانقطاع) — أي أن وصف الحافة MANDATORY أضعف سندًا مما يبدو."
+  },
+  "2_gs-0006_E23": {
+   "case_id": "gs-0006",
+   "edge_id": "E23",
+   "dimension": "إيداع الأجرة خزانة إدارة التنفيذ",
+   "statutory_basis": [
+    "legis-35-1978-m10"
+   ],
+   "judicial_authorities_found": [
+    {
+     "object_id": "jprin-1900-2012-s303-c63e0006cf",
+     "court": "التمييز — تجاري",
+     "appeal_case_number": "1900/2012",
+     "session_date": "16/9/2014",
+     "year": "2014",
+     "principle_text": "التزام المستأجر بالوفاء بالأجرة... أو إيداع الإيجار بخزينة إدارة التنفيذ. شرط هذا الإيداع: عرض الأجرة قانونًا وأن يكون خلال عشرين يومًا من تاريخ استحقاق الإيجار.",
+     "holding": "تأكيد شرطَي الإيداع، وربط م10 بم20/1 في مبدأ واحد",
+     "articles_interpreted": [
+      "legis-35-1978-m10",
+      "legis-35-1978-m20"
+     ],
+     "source_strength": "محكمة التمييز — مبدأ منشور",
+     "relation_to_edge": "CONFIRMS",
+     "explanation": "يؤكد الحافة حرفيًا، **ويربط المادتين اللتين يعاملهما الـgraph بحافتين منفصلتين (E23 وE06)**",
+     "temporal_validity": "CURRENTLY_COMPATIBLE"
+    },
+    {
+     "object_id": "jprin-1900-2012-s81-68a45b672d",
+     "court": "التمييز — تجاري",
+     "appeal_case_number": "1900/2012",
+     "session_date": "16/9/2014",
+     "year": "2014",
+     "principle_text": "طلب الإخلاء لعدم سداد الأجرة يشمل حتمًا طلبًا ضمنيًا بفسخ العقد. اعتبار يد المستأجر يد غاصب من تاريخ الحكم بالإخلاء. أثره: إلزامه بمقابل حق الانتفاع حتى تمام الإخلاء.",
+     "holding": "أثر مالي لازم لدعوى الإخلاء",
+     "articles_interpreted": [
+      "م10",
+      "م20/1"
+     ],
+     "source_strength": "محكمة التمييز — مبدأ منشور",
+     "relation_to_edge": "ADDS_MISSING_DIMENSION",
+     "explanation": "بُعد (الفسخ الضمني + مقابل حق الانتفاع) غائب عن الحقيقة الأرضية وعن الـgraph",
+     "temporal_validity": "CURRENTLY_COMPATIBLE"
+    },
+    {
+     "object_id": "jprin-x-x-a940-cd64ff7060",
+     "court": "التمييز — قاعدة",
+     "appeal_case_number": "1688/2010",
+     "session_date": null,
+     "year": null,
+     "principle_text": "حلول موعد استحقاق الأجرة. وجوب أن يسعى المؤجر إلى موطن المستأجر ليطالبه بالوفاء ما لم يوجد اتفاق أو عرف. تقاعسه وتمسك المستأجر بأن يكون الوفاء في موطنه: عدم اعتباره مخلًا بالتزامه رغم بقائه مدينًا. م412، م586 مدني.",
+     "holding": "نفي الإخلال عند تقاعس المؤجر عن السعي",
+     "articles_interpreted": [
+      "م412 مدني",
+      "م586 مدني"
+     ],
+     "source_strength": "محكمة التمييز — مبدأ منشور",
+     "relation_to_edge": "CREATES_EXCEPTION",
+     "explanation": "**يقيّد مقدّمة السؤال نفسها**: «عدم السداد» قد لا يكون إخلالًا أصلًا إن لم يسعَ المؤجر — استثناء لا يظهر في نص م10 ولا في الحافة",
+     "temporal_validity": "CURRENTLY_COMPATIBLE"
+    },
+    {
+     "object_id": "jprin-501-2012-s1235-d0d0acfacc",
+     "court": "التمييز — مدني",
+     "appeal_case_number": "501/2012",
+     "session_date": "11/3/2014",
+     "year": "2014",
+     "principle_text": "الوفاء بالأجرة... الوفاء لغير الدائن الذي تبرأ به ذمة المدين. حالاته. م400 مدني.",
+     "holding": "توسيع صور الوفاء المبرئ",
+     "articles_interpreted": [
+      "م400 مدني"
+     ],
+     "source_strength": "محكمة التمييز — مبدأ منشور",
+     "relation_to_edge": "QUALIFIES",
+     "explanation": "صور وفاء مبرئة خارج آلية م10",
+     "temporal_validity": "CURRENTLY_COMPATIBLE"
+    }
+   ],
+   "edge_relation_summary": "CONFIRMS + CREATES_EXCEPTION + ADDS_MISSING_DIMENSION",
+   "necessity_impact": "الأحكام تسند بقوة أن فحص الوفاء/الإيداع جزء لازم من تحليل دعوى الإخلاء — متسق مع حكم الخبير REQUIRED."
+  },
+  "3_gs-0011_E09": {
+   "case_id": "gs-0011",
+   "edge_id": "E09",
+   "dimension": "مهلة لجنة النسب وأثر انقضائها",
+   "statutory_basis": [
+    "legis-53-2026-m8"
+   ],
+   "judicial_authorities_found": [
+    {
+     "object_id": "jprin-30-2007-w4373-6aabd70c46",
+     "court": "التمييز — أحوال شخصية",
+     "appeal_case_number": "30/2007",
+     "session_date": "24/1/2008",
+     "year": "2008",
+     "principle_text": "الطلبات المتعلقة بالنسب وتصحيح الأسماء... وجوب قبل عرضها على القضاء أن تعرض على اللجنة المنصوص عليها بالمادة الأولى من القانون 1/1988... هذا الطلب هو الإجراء الذي تبدأ به المطالبة القضائية ويعد من النظام العام.",
+     "holding": "الطلب أمام اللجنة هو بداية المطالبة القضائية، ومن النظام العام",
+     "articles_interpreted": [
+      "ق1/1988 م1"
+     ],
+     "source_strength": "محكمة التمييز — مبدأ منشور",
+     "relation_to_edge": "CONFIRMS",
+     "explanation": "يؤكد **بنية** الإجراء السابق الوجوبي — لكن على القانون السلف لا على 53/2026",
+     "temporal_validity": "PRE_AMENDMENT"
+    },
+    {
+     "object_id": "jprin-125-1999-a707-bfdeff691e",
+     "court": "التمييز — أحوال شخصية",
+     "appeal_case_number": "125/1999",
+     "session_date": "24/3/2002",
+     "year": "2002",
+     "principle_text": "أوجب المشرع قبل رفع دعاوى النسب وتصحيح الأسماء قيام اللجنة بتحقيق هذه الطلبات... عدم العرض: عدم قبول الدعوى **لرفعها قبل الأوان**، وهو من النظام العام تقضي به المحكمة من تلقاء نفسها.",
+     "holding": "أثر التخلف: عدم القبول لرفعها قبل الأوان، من النظام العام",
+     "articles_interpreted": [
+      "ق1/1988 م1،3،4"
+     ],
+     "source_strength": "محكمة التمييز — مبدأ منشور",
+     "relation_to_edge": "RESOLVES_AMBIGUITY",
+     "explanation": "يحسم **أثر** تخلف الإجراء (لا مجرد وجوبه) — وهو ما لا يصرّح به نص م8 الحالي",
+     "temporal_validity": "PRE_AMENDMENT"
+    },
+    {
+     "object_id": "jprin-28-1988-e1895-3a7c07994e",
+     "court": "التمييز — مدني",
+     "appeal_case_number": "28/1988",
+     "session_date": "16/1/1989",
+     "year": "1989",
+     "principle_text": "الدعاوى التي رفعت قبل نفاذ المرسوم ولم يفصل فيها: يتعين على المحكمة قبل الحكم فيها تكليف اللجنة إجراء تحقيق وتقديم تقرير مفصل. مخالفة ذلك: بطلان الحكم.",
+     "holding": "قاعدة انتقالية عند تغيّر التشريع",
+     "articles_interpreted": [
+      "ق1/1988"
+     ],
+     "source_strength": "محكمة التمييز — مبدأ منشور",
+     "relation_to_edge": "ADDS_MISSING_DIMENSION",
+     "explanation": "قاعدة انتقالية قد تنطبق تمامًا على **الانتقال الحالي إلى 53/2026** — غائبة عن GT وعن الـgraph",
+     "temporal_validity": "PRE_AMENDMENT"
+    }
+   ],
+   "edge_relation_summary": "CONFIRMS (بنية الإجراء) + RESOLVES_AMBIGUITY (الأثر) — لكن **لا سلطة قضائية على عنصر المهلة نفسه**",
+   "deadline_element_specific": "NO_RELEVANT_JUDICIAL_AUTHORITY_FOUND_IN_KB — لم يُعثر على مبدأ يفسر مهلة الستة أشهر/الثلاثة أو أثر انقضائها. المعنى: لم نجدها في قاعدة LegalMind الحالية، لا أنها غير موجودة في الواقع.",
+   "necessity_impact": "السلطة القضائية على السلف تسند وجوبية المسار، ولا تحسم المهلة الجديدة."
+  },
+  "4_gs-0011_E10": {
+   "case_id": "gs-0011",
+   "edge_id": "E10",
+   "dimension": "إجراءات تحقيق اللجنة (الشهود والبصمة الوراثية)",
+   "statutory_basis": [
+    "legis-53-2026-m7"
+   ],
+   "judicial_authorities_found": [
+    {
+     "object_id": "JUR-أحوال-شخصية-النسب-ثبوت-النسب-PR-63-f505506de5b9c8fa",
+     "court": "التمييز — أحوال شخصية",
+     "appeal_case_number": "78/2004",
+     "session_date": "5/3/2006",
+     "year": "2006",
+     "principle_text": "الطلبات المتعلقة بثبوت النسب وتصحيح الأسماء. وجوب عرضها على اللجنة المختصة قبل عرضها على القضاء. نطاق ما يعرض. قيام اللجنة بتحقيق هذه الطلبات بقصد اكتشاف مراميها وغاياتها ومدى صحة النسب أو الاسم.",
+     "holding": "بيان وظيفة التحقيق ونطاقه",
+     "articles_interpreted": [
+      "ق1/1988"
+     ],
+     "source_strength": "محكمة التمييز — مبدأ منشور",
+     "relation_to_edge": "CONFIRMS",
+     "explanation": "يؤكد أن التحقيق موضوعي لا شكلي",
+     "temporal_validity": "PRE_AMENDMENT"
+    },
+    {
+     "object_id": "jprin-38-2008-i2563-f452d93627",
+     "court": "التمييز — أحوال شخصية",
+     "appeal_case_number": "38/2008",
+     "session_date": "23/10/2008",
+     "year": "2008",
+     "principle_text": "تقرير البصمة الوراثية. **ليس دليلًا شرعيًا** على ثبوت النسب أو نفيه. علة ذلك: اصطدامه بالقاعدة الشرعية بثبوت النسب بالفراش أو الإقرار أو البينة... غير منتج في الدعوى.",
+     "holding": "حجية البصمة الوراثية منفية في إثبات/نفي النسب",
+     "articles_interpreted": [
+      "قواعد الشريعة — الفراش والإقرار والبينة"
+     ],
+     "source_strength": "محكمة التمييز — مبدأ منشور",
+     "relation_to_edge": "CONTRADICTS",
+     "explanation": "**تعارض ظاهر مع م7 من 53/2026** التي تخوّل اللجنة صراحة الأمر بفحص البصمة الوراثية",
+     "temporal_validity": "PRE_AMENDMENT"
+    }
+   ],
+   "edge_relation_summary": "CONFIRMS (وظيفة التحقيق) + **POTENTIAL_AUTHORITY_CONFLICT** (البصمة الوراثية)",
+   "potential_authority_conflict": {
+    "authority_A": "jprin-38-2008 (التمييز، 23/10/2008): البصمة الوراثية ليست دليلًا شرعيًا وغير منتجة",
+    "authority_B": "legis-53-2026-m7 (نص تشريعي نافذ): «وللجنة أن تأمر بإجراء فحص البصمة الوراثية وغيره من الوسائل العلمية الحديثة»",
+    "apparent_conflict": "الحكم ينفي الحجية، والنص الأحدث يخوّل الأمر بالفحص صراحةً",
+    "is_temporal": "نعم على الأرجح — الحكم 2008 سابق على 53/2026؛ والنص الأحدث قد يكون قصد تجاوز هذا القضاء",
+    "is_legislative_amendment": "نعم — تشريع لاحق",
+    "different_facts": "محتمل — الحكم في سياق إثبات/نفي أمام المحكمة، والنص في سياق تحقيق اللجنة التمهيدي",
+    "different_circuit": "لا — كلاهما أحوال شخصية",
+    "resolution": "**لم يُحسم.** يلزم بحث أحكام لاحقة على 53/2026، ولم يُعثر عليها في القاعدة."
+   },
+   "necessity_impact": "التعارض يمس **مضمون** البُعد لا وجوبه."
+  },
+  "5_gs-0013_E01": {
+   "case_id": "gs-0013",
+   "edge_id": "E01",
+   "dimension": "التكليف بالوفاء قبل أمر الأداء",
+   "statutory_basis": [
+    "legis-38-1980-m167"
+   ],
+   "judicial_authorities_found": [
+    {
+     "object_id": "jprin-136-1993-w3468-12238e8e20",
+     "court": "التمييز — تجاري",
+     "appeal_case_number": "136/1993",
+     "session_date": "25/1/1994",
+     "year": "1994",
+     "principle_text": "وجوب تكليف الدائن للمدين بالوفاء بالحق قبل استصدار أمر الأداء **بخمسة أيام** وإلا امتنع القاضي عن إصدار الأمر. إصداره رغم تخلف التكليف: بطلان الأمر وعلى محكمة التظلم إلغاؤه. **عبء إثبات حصول التكليف على الدائن**.",
+     "holding": "التكليف شرط صحة + عبء الإثبات على الدائن",
+     "articles_interpreted": [
+      "legis-38-1980-m167"
+     ],
+     "source_strength": "محكمة التمييز — مبدأ منشور",
+     "relation_to_edge": "CONFIRMS",
+     "explanation": "يؤكد الحافة ويضيف عبء الإثبات — **لكن بميعاد خمسة أيام، وهو النص قبل التعديل**",
+     "temporal_validity": "PRE_AMENDMENT"
+    },
+    {
+     "object_id": "jprin-240-2002-w3440-9cab9086a9",
+     "court": "التمييز — مدني",
+     "appeal_case_number": "240/2002",
+     "session_date": "10/3/2003",
+     "year": "2003",
+     "principle_text": "إصدار أمر الأداء. شرطه: تكليف المدين بالوفاء قبل تقديم العريضة **بخمسة أيام**. مخالفة ذلك أو بطلان التكليف: إلغاء الأمر واعتباره كأن لم يكن.",
+     "holding": "الأثر: إلغاء الأمر واعتباره كأن لم يكن",
+     "articles_interpreted": [
+      "legis-38-1980-m167"
+     ],
+     "source_strength": "محكمة التمييز — مبدأ منشور",
+     "relation_to_edge": "CONFIRMS",
+     "explanation": "نفس التنبيه الزمني — «خمسة أيام» بينما النص النافذ «عشرة أيام»",
+     "temporal_validity": "PRE_AMENDMENT"
+    },
+    {
+     "object_id": "jprin-312-2011-2-dd35ea459e84",
+     "court": "التمييز — مدني",
+     "appeal_case_number": "312/2011",
+     "session_date": "9/4/2012",
+     "year": "2012",
+     "principle_text": "النص في المادة 167... «بميعاد خمسة أيام على الأقل»... شرط لإصدار أمر الأداء ويلزم توافره لصحة الالتجاء إلى هذا الطريق وصحة إجراءاته، ويتعين على محكمة التظلم عند ثبوت عدم التكليف أو بطلانه أن تلغي الأمر وتعتبره كأن لم يكن وتنظر الدعوى وتصدر حكمها في موضوعها.",
+     "holding": "تفصيل سلطة محكمة التظلم",
+     "articles_interpreted": [
+      "legis-38-1980-m167"
+     ],
+     "source_strength": "محكمة التمييز — مبدأ منشور",
+     "relation_to_edge": "CONFIRMS",
+     "explanation": "الأحدث في هذا العنقود (2012) ومع ذلك ما زال يقتبس «خمسة أيام»",
+     "temporal_validity": "PRE_AMENDMENT"
+    },
+    {
+     "object_id": "jprin-240-2008-e1083-050e9ce997",
+     "court": "التمييز — مدني",
+     "appeal_case_number": "240/2008",
+     "session_date": "7/12/2009",
+     "year": "2009",
+     "principle_text": "تكليف المدين بالوفاء... المقصود به: تنبيه بالمبادرة إلى الوفاء اختياريًا قبل أن يستصدر الدائن أمرًا يمكّنه من التنفيذ الجبري... الأمر بالأداء يتضمن قضاءً لازمًا بوجود الدين وانشغال ذمة المدين به.",
+     "holding": "تكييف وظيفة التكليف وأثر الأمر",
+     "articles_interpreted": [
+      "legis-38-1980-m167",
+      "م170 مرافعات"
+     ],
+     "source_strength": "محكمة التمييز — مبدأ منشور",
+     "relation_to_edge": "QUALIFIES",
+     "explanation": "يفسّر الغاية من التكليف ويربطه بحجية الأمر",
+     "temporal_validity": "UNCERTAIN_TEMPORAL_RELEVANCE"
+    },
+    {
+     "object_id": "jprin-599-2013-s2846-a73028863b",
+     "court": "التمييز — مدني",
+     "appeal_case_number": "599/2013",
+     "session_date": "4/2/2015",
+     "year": "2015",
+     "principle_text": "أوامر الأداء. أنزلها المشرع منزلة الأحكام الغيابية. وجوب إعلانها إلى شخص المدين أو في موطنه الأصلي أو محل عمله.",
+     "holding": "قاعدة إعلان خاصة",
+     "articles_interpreted": [
+      "م170 مرافعات"
+     ],
+     "source_strength": "محكمة التمييز — مبدأ منشور",
+     "relation_to_edge": "ADDS_MISSING_DIMENSION",
+     "explanation": "بُعد إعلان خاص — مرتبط بالسؤال (مواعيد التظلم) وغائب عن الحافة",
+     "temporal_validity": "CURRENTLY_COMPATIBLE"
+    }
+   ],
+   "edge_relation_summary": "CONFIRMS بقوة (خمسة مبادئ) + QUALIFIES + ADDS_MISSING_DIMENSION",
+   "temporal_warning": "**ثلاثة من خمسة مبادئ تقتبس «خمسة أيام» وهو النص قبل التعديل؛ النص النافذ «عشرة أيام».** القاعدة (وجوب التكليف وأثر تخلفه) سارية، والرقم متقادم — ولو استُعملت هذه المبادئ بلا هذا التنبيه لأنتجت خطأ عمليًا في احتساب الميعاد.",
+   "necessity_impact": "الإسناد القضائي يقوّي MANDATORY بوضوح — متسق مع حكم الخبير REQUIRED."
+  },
+  "6_gs-0021_E06": {
+   "case_id": "gs-0021",
+   "edge_id": "E06",
+   "dimension": "اعتبار دعوى الإخلاء كأن لم تكن",
+   "statutory_basis": [
+    "legis-35-1978-m20"
+   ],
+   "judicial_authorities_found": [
+    {
+     "object_id": "jprin-1900-2012-s81-68a45b672d",
+     "court": "التمييز — تجاري",
+     "appeal_case_number": "1900/2012",
+     "session_date": "16/9/2014",
+     "year": "2014",
+     "principle_text": "التزام المستأجر بالوفاء بالأجرة... م10، 20/1 من المرسوم بقانون 35/1978 أو إيداع الإيجار بخزينة إدارة التنفيذ...",
+     "holding": "ربط م10 وم20/1 معًا في تحليل واحد",
+     "articles_interpreted": [
+      "legis-35-1978-m10",
+      "legis-35-1978-m20"
+     ],
+     "source_strength": "محكمة التمييز — مبدأ منشور",
+     "relation_to_edge": "CONFIRMS",
+     "explanation": "يؤكد أن المادتين تُقرآن معًا",
+     "temporal_validity": "CURRENTLY_COMPATIBLE"
+    },
+    {
+     "object_id": "jprin-x-x-a940-cd64ff7060",
+     "court": "التمييز — قاعدة",
+     "appeal_case_number": "1688/2010",
+     "session_date": null,
+     "year": null,
+     "principle_text": "وجوب أن يسعى المؤجر إلى موطن المستأجر... تقاعسه: لا يعد المستأجر مخلًا بالتزامه رغم بقائه مدينًا. م412، م586 مدني.",
+     "holding": "نفي الإخلال عند تقاعس المؤجر",
+     "articles_interpreted": [
+      "م412 مدني",
+      "م586 مدني"
+     ],
+     "source_strength": "محكمة التمييز — مبدأ منشور",
+     "relation_to_edge": "CREATES_EXCEPTION",
+     "explanation": "يقدّم مخرجًا للمستأجر **قبل** الوصول إلى دفع «كأن لم تكن» — أي بُعدًا سابقًا عليه",
+     "temporal_validity": "CURRENTLY_COMPATIBLE"
+    }
+   ],
+   "edge_relation_summary": "CONFIRMS + CREATES_EXCEPTION",
+   "cure_conditions_specific": "NO_RELEVANT_JUDICIAL_AUTHORITY_FOUND_IN_KB — لم يُعثر على مبدأ يفسّر شرطَي «العذر القوي» و«الوفاء حتى أول جلسة» تحديدًا.",
+   "necessity_impact": "لا سلطة قضائية تغيّر تكييف CONDITIONAL القائم — والحافة مصنَّفة CONDITIONAL أصلًا."
+  },
+  "7_gs-0033_E11": {
+   "case_id": "gs-0033",
+   "edge_id": "E11",
+   "dimension": "وجوب تدخل النيابة العامة في دعاوى النسب",
+   "statutory_basis": [
+    "legis-51-1984-m337",
+    "legis-51-1984-m338"
+   ],
+   "judicial_authorities_found": [
+    {
+     "object_id": "jprin-13-2001-g521-59b49c0ed0",
+     "court": "التمييز — أحوال شخصية",
+     "appeal_case_number": "13/2001",
+     "session_date": "13/1/2002",
+     "year": "2002",
+     "principle_text": "إذ كان المشرع قد أوجب في المادة 337... تدخل النيابة العامة في المسائل التي تعتبر من النظام العام والتي أوردتها المادة 338... ومن بينها دعاوى النسب وتصحيح الأسماء، وهو إجراء مقرر **بقاعدة آمرة** متعلقة بالنظام العام يترتب على إغفاله **البطلان المطلق**... بما يوجب على المحكمة أن تأمر **بإبلاغ النيابة العامة عملًا بالمادة 340**... وإذ قضي في الدعوى دون تمثيل النيابة فإن حكمها يكون باطلًا بطلانًا مطلقًا.",
+     "holding": "الحكم الكامل بالتعليل: الوجوب مطلق، والجزاء البطلان المطلق، والآلية م340",
+     "articles_interpreted": [
+      "legis-51-1984-m337",
+      "legis-51-1984-m338",
+      "legis-51-1984-m340"
+     ],
+     "source_strength": "محكمة التمييز — مبدأ منشور",
+     "relation_to_edge": "RESOLVES_AMBIGUITY",
+     "explanation": "**الدعوى هنا مرفوعة من ذي شأن (الطاعن)، ومع ذلك قُضي بالبطلان لعدم تدخل النيابة** — فقيد «إذا لم يتقدم أحد من ذوي الشأن» لا يقيّد واجب التدخل",
+     "temporal_validity": "CURRENTLY_COMPATIBLE"
+    },
+    {
+     "object_id": "jprin-51-1998-w5561-8999b86677",
+     "court": "التمييز — أحوال شخصية",
+     "appeal_case_number": "51/1998",
+     "session_date": "12/6/1999",
+     "year": "1999",
+     "principle_text": "تدخل النيابة في المسائل التي تعد من النظام العام ومنها النسب وتصحيح الأسماء. وجوبي. إغفاله: البطلان المطلق. **طلب الطاعنة تغيير لقبها**... فصل الحكم في الدعوى دون مباشرة هذا الإجراء يبطله بطلانًا مطلقًا... جواز التمسك به في أي حالة وتقضي به المحكمة من تلقاء نفسها.",
+     "holding": "دعوى رفعها ذو شأن — والتدخل مع ذلك وجوبي",
+     "articles_interpreted": [
+      "م337",
+      "م338"
+     ],
+     "source_strength": "محكمة التمييز — مبدأ منشور",
+     "relation_to_edge": "RESOLVES_AMBIGUITY",
+     "explanation": "حالة ثانية مستقلة بالوقائع نفسها (رفع من ذي شأن) تصل للنتيجة نفسها",
+     "temporal_validity": "CURRENTLY_COMPATIBLE"
+    },
+    {
+     "object_id": "jprin-23-1986-e2190-eea3dfd267",
+     "court": "التمييز — أحوال شخصية",
+     "appeal_case_number": "23/1986",
+     "session_date": "19/1/1987",
+     "year": "1987",
+     "principle_text": "تدخل النيابة في بعض قضايا الأحوال الشخصية التي تمس النظام العام ومنها دعوى النسب. تدخل وجوبي مقرر بقاعدة متعلقة بالنظام العام. عدم تدخلها يرتب بطلان الحكم بطلانًا مطلقًا.",
+     "holding": "أقدم سند في العنقود",
+     "articles_interpreted": [
+      "م337",
+      "م338"
+     ],
+     "source_strength": "محكمة التمييز — مبدأ منشور",
+     "relation_to_edge": "CONFIRMS",
+     "explanation": "يثبت استقرار القاعدة منذ 1987",
+     "temporal_validity": "CURRENTLY_COMPATIBLE"
+    },
+    {
+     "object_id": "jprin-21-2009-w2153-bba11040b3",
+     "court": "التمييز — أحوال شخصية",
+     "appeal_case_number": "21/2009",
+     "session_date": "11/1/2010",
+     "year": "2010",
+     "principle_text": "تدخل النيابة في الحالات الواردة في المادة 338. مقرر بقاعدة آمرة متعلقة بالنظام العام. مخالفتها: البطلان المطلق. جواز التمسك به في أي حالة وتقضي به المحكمة من تلقاء نفسها.",
+     "holding": "أحدث سند في العنقود (2010)",
+     "articles_interpreted": [
+      "م338"
+     ],
+     "source_strength": "محكمة التمييز — مبدأ منشور",
+     "relation_to_edge": "CONFIRMS",
+     "explanation": "يثبت استمرار القاعدة إلى 2010 بلا انحراف",
+     "temporal_validity": "CURRENTLY_COMPATIBLE"
+    },
+    {
+     "object_id": "JUR-أحوال-شخصية-مرض-الموت-PR-10-a5080271db898625",
+     "court": "التمييز — أحوال شخصية",
+     "appeal_case_number": "59/1995",
+     "session_date": "8/6/1996",
+     "year": "1996",
+     "principle_text": "عدم تدخل النيابة في الدعاوى التي أوجب المشرع تدخلها فيها يترتب عليه بطلان الحكم **ولا يصحح هذا البطلان أن تكون النيابة قد أبدت رأيها في موضوع الدعوى**. النيابة خصم أصيل فيها.",
+     "holding": "التدخل شكلي-إجرائي لا يُغني عنه إبداء الرأي",
+     "articles_interpreted": [
+      "م337",
+      "م338"
+     ],
+     "source_strength": "محكمة التمييز — مبدأ منشور",
+     "relation_to_edge": "QUALIFIES",
+     "explanation": "يشدّد القاعدة: إبداء الرأي وحده لا يصحح البطلان",
+     "temporal_validity": "CURRENTLY_COMPATIBLE"
+    },
+    {
+     "object_id": "jprin-9-1997-e188-28e4d02f58",
+     "court": "التمييز — أحوال شخصية",
+     "appeal_case_number": "9/1997",
+     "session_date": "10/1/1998",
+     "year": "1998",
+     "principle_text": "تدخل النيابة في بعض قضايا الأحوال الشخصية. وجوبي. **وروده على سبيل الحصر**. م338 ق51/1984.",
+     "holding": "الحالات محصورة بم338",
+     "articles_interpreted": [
+      "م338"
+     ],
+     "source_strength": "محكمة التمييز — مبدأ منشور",
+     "relation_to_edge": "QUALIFIES",
+     "explanation": "يحصر النطاق — ودعاوى النسب داخله نصًّا",
+     "temporal_validity": "CURRENTLY_COMPATIBLE"
+    }
+   ],
+   "edge_relation_summary": "**RESOLVES_AMBIGUITY** بشكل حاسم + CONFIRMS + QUALIFIES",
+   "ambiguity_resolution": "الإشكال الذي أوقف الخبير — هل يقيّد «إذا لم يتقدم أحد من ذوي الشأن» واجبَ التدخل؟ — **محسوم في القاعدة**: في الطعنين 13/2001 و51/1998 كانت الدعوى مرفوعة من ذي شأن (الطاعن/الطاعنة) وقُضي مع ذلك بالبطلان المطلق لعدم تدخل النيابة. وستة مبادئ مستقلة من 1987 إلى 2010 تقرر القاعدة بلا تحفظ. **هذه الأدلة كانت في القاعدة ولم تُعرض على الخبير.**",
+   "necessity_impact": "يرفع السند من نصين محتملَي التأويل إلى قاعدة آمرة مستقرة جزاؤها البطلان المطلق."
+  }
+ },
+ "judicially_discovered_candidate_dimensions": [
+  {
+   "case_id": "gs-0005",
+   "dimension": "تقديم العامل طلبًا إلى وزارة الشئون الاجتماعية والعمل كإجراء سابق وجوبي لرفع الدعوى العمالية",
+   "judicial_authority": [
+    "jprin-7-1996-w6050-2679f20795"
+   ],
+   "why_potentially_required": "وُصف بأنه «الإجراء الوحيد لرفع الدعوى العمالية» — إجراء سابق وجوبي من فئة «فصول الاستلزام القانوني» نفسها التي بُني الـgraph لالتقاطها",
+   "temporal": "PRE_AMENDMENT — يلزم التحقق من مقابله في 6/2010"
+  },
+  {
+   "case_id": "gs-0005",
+   "dimension": "وجوب توجيه المحكمة اليمين من تلقاء نفسها عند التمسك بعدم سماع الدعوى العمالية",
+   "judicial_authority": [
+    "jprin-441-2014-s2174-b159be2ed9"
+   ],
+   "why_potentially_required": "شرط إجرائي وجوبي على المحكمة نفسها، يقيّد الدفع بعدم السماع",
+   "temporal": "CURRENTLY_COMPATIBLE"
+  },
+  {
+   "case_id": "gs-0006",
+   "dimension": "اشتمال طلب الإخلاء على طلب ضمني بالفسخ، واعتبار يد المستأجر يد غاصب، والالتزام بمقابل حق الانتفاع",
+   "judicial_authority": [
+    "jprin-1900-2012-s81-68a45b672d"
+   ],
+   "why_potentially_required": "أثر مالي لازم لطلب الإخلاء نفسه",
+   "temporal": "CURRENTLY_COMPATIBLE"
+  },
+  {
+   "case_id": "gs-0006",
+   "dimension": "انتفاء الإخلال عند تقاعس المؤجر عن السعي لموطن المستأجر (م412+م586 مدني)",
+   "judicial_authority": [
+    "jprin-x-x-a940-cd64ff7060"
+   ],
+   "why_potentially_required": "يقيّد مقدّمة «عدم السداد» التي تقوم عليها الدعوى كلها",
+   "temporal": "CURRENTLY_COMPATIBLE"
+  },
+  {
+   "case_id": "gs-0011",
+   "dimension": "عدم قبول دعوى إثبات النسب إلى الميت إلا ضمن دعوى حق أو مال على خصم شرعي",
+   "judicial_authority": [
+    "judgment-civ-754-2013-3448cd25",
+    "jprin-399-2004-g1095-fa7f7ce717",
+    "jprin-13-2001-g521-59b49c0ed0"
+   ],
+   "why_potentially_required": "**ينطبق حرفيًا على وقائع gs-0011** (وفاة الزوج وإنكار الورثة والمطالبة بالميراث): شرط قبول مستقل قد يُسقط الدعوى إن رُفعت مجردة. غائب عن الحقيقة الأرضية وعن الـgraph معًا",
+   "temporal": "CURRENTLY_COMPATIBLE"
+  },
+  {
+   "case_id": "gs-0011",
+   "dimension": "وجوب إبلاغ قلم كتاب المحكمة النيابةَ كتابة بمجرد قيد الدعوى (م340 ق51/1984)",
+   "judicial_authority": [
+    "jprin-13-2001-g521-59b49c0ed0"
+   ],
+   "supporting_statute": "legis-51-1984-m340",
+   "why_potentially_required": "الآلية الإجرائية التي يتحقق بها التدخل الوجوبي — مادة ثالثة لم تظهر في الـgraph ولا في الحقيقة الأرضية",
+   "temporal": "CURRENTLY_COMPATIBLE"
+  },
+  {
+   "case_id": "gs-0011",
+   "dimension": "قاعدة انتقالية: إحالة الدعاوى القائمة إلى اللجنة عند تغيّر التشريع، وإلا بطل الحكم",
+   "judicial_authority": [
+    "jprin-28-1988-e1895-3a7c07994e"
+   ],
+   "why_potentially_required": "قد تنطبق على الانتقال الحالي من التشريع السابق إلى 53/2026",
+   "temporal": "PRE_AMENDMENT"
+  },
+  {
+   "case_id": "gs-0013",
+   "dimension": "إعلان أمر الأداء لشخص المدين بوصفه منزَّلًا منزلة الأحكام الغيابية",
+   "judicial_authority": [
+    "jprin-599-2013-s2846-a73028863b"
+   ],
+   "why_potentially_required": "يرتبط مباشرة بشق «مواعيد التظلم» في السؤال",
+   "temporal": "CURRENTLY_COMPATIBLE"
+  },
+  {
+   "case_id": "gs-0013",
+   "dimension": "عبء إثبات حصول التكليف بالوفاء يقع على الدائن",
+   "judicial_authority": [
+    "jprin-136-1993-w3468-12238e8e20"
+   ],
+   "why_potentially_required": "قاعدة إثبات عملية حاسمة في التظلم",
+   "temporal": "PRE_AMENDMENT (الرقم) / القاعدة سارية"
+  }
+ ],
+ "_disc_hard_rule": "لم تُضف إلى الـgraph ولا إلى Gold Set ولا تدخل أي مقياس."
+}

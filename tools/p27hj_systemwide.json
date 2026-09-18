@@ -1,0 +1,52 @@
+{
+ "_note": "P2.7-HJ القسم 13 — قياس على مستوى المنظومة. تدقيق فقط: لم يُعدَّل provenance أي حافة.",
+ "edge_authority_classification": {
+  "STATUTE_ONLY": 22,
+  "JUDICIAL_ONLY": 1
+ },
+ "n_edges": 23,
+ "judicially_backed_edges": [
+  "E15"
+ ],
+ "provenance_object_type_breakdown": {
+  "STATUTORY": 25,
+  "JUDICIAL_PRINCIPLE": 1,
+  "FULL_JUDGMENT": 0,
+  "total": 26
+ },
+ "was_p27_construction_judicially_informed": {
+  "verdict": "NO — مسار التحقق كان منحازًا للتشريعات بنيويًا، والدليل من البيانات والكود لا من الانطباع",
+  "evidence_chain": [
+   {
+    "stage": "1. الحقيقة الأرضية لـGold Set40 (المصدر الأول)",
+    "measure": "ground_truth_authority_ids = 164 تشريعي مقابل 21 مبدأ قضائي",
+    "judicial_share": "11.4%"
+   },
+   {
+    "stage": "2. طريقة التحقق المسجَّلة في الحقيقة الأرضية نفسها",
+    "measure": "verification_method: mcp_get_article=99, mcp_search_legal=34, mcp_get_object=9",
+    "note": "get_article أداة **تشريعية حصرًا بحكم توقيعها** (law_number, law_year, article) — فأكثر من نصفي التحقق لا يمكنه بنيويًا أن يصل إلى حكم أو مبدأ"
+   },
+   {
+    "stage": "3. تدقيق الأخطاء P2.7-C (المدخل المباشر لبناء الحواف)",
+    "measure": "sources = 34 تشريعي مقابل 1 مبدأ قضائي",
+    "judicial_share": "2.9%",
+    "note": "حقل sources نُقل من ground_truth_authority_ids فورث الانحياز وضاعفه"
+   },
+   {
+    "stage": "4. الحواف الـ23 الناتجة",
+    "measure": "25 كائن إسناد تشريعي مقابل كائن قضائي واحد",
+    "judicial_share": "3.8%",
+    "note": "22/23 حافة STATUTE_ONLY، وصفر حافة STATUTE_PLUS_JUDICIAL"
+   }
+  ],
+  "structural_cause": "P2.7 لم يكن فيه قط خطوة تبحث السند القضائي. كل حافة بُنيت من مصادر تدقيق الأخطاء، وهذه من الحقيقة الأرضية، وتلك بُنيت أساسًا بـget_article التشريعية. **فالانحياز موروث في ثلاث طبقات متتالية لا قرار في طبقة واحدة.**",
+  "what_this_audit_proves": "البحث القضائي في هذه الجولة وجد سندًا قضائيًا **في ست من البطاقات السبع** — أي أن الغياب لم يكن لندرة المادة في القاعدة بل لغياب قناة البحث."
+ },
+ "kb_reachability_defect_found": {
+  "issue": "معرفات عائلة JUR-* (مبادئ منشورة بترقيم موسوعي) يردّها get_object عبر MCP بـ«معرف غير صالح»",
+  "example": "JUR-أحوال-شخصية-النسب-ثبوت-النسب-PR-43-18dfadf5d86f0cef",
+  "impact": "هذه المبادئ تظهر في نتائج search_legal لكن لا يمكن جلب نصها الكامل بمعرّفها — حدّ وصول حقيقي في قناة MCP",
+  "status": "مسجَّل كملاحظة تدقيق فقط — لم يُصلَح ولم يُمس أي كود"
+ }
+}
