@@ -376,7 +376,22 @@ def main():
             R["controls"].append({"case": ct["case"], "error": repr(e)})
             continue
         o_ids, n_ids = set(old["seen"]), {x.object_id for x in new["admitted"]}
-        row = {"case": ct["case"],
+        # أين مات كل هدف: في التجمّع؟ عُرض على المرتِّب؟ أم سقط عند القبول وبأي مرحلة؟
+        _stage = {}
+        _pool_ids = new["rec"].generated | new["rec"].fetched
+        _by_id = {c.object_id: c for c in new["admitted"]}
+        for _t in ct["NAR"] + ct["RBN"]:
+            if _t in _by_id:
+                _stage[_t] = "ADMITTED"
+            elif _t in new["rec"].rr_out:
+                _stage[_t] = "RERANKED_NOT_ADMITTED"
+            elif _t in new["rec"].rr_in:
+                _stage[_t] = "RERANKER_INPUT_ONLY"
+            elif _t in _pool_ids:
+                _stage[_t] = "IN_POOL_ONLY"
+            else:
+                _stage[_t] = "NEVER_GENERATED"
+        row = {"case": ct["case"], "target_stage": _stage,
                "NAR_new": [t for t in ct["NAR"] if hit(n_ids, t)],
                "RBN_new": [t for t in ct["RBN"] if hit(n_ids, t)],
                "NBU_new": [t for t in ct["NBU"] if hit(n_ids, t)],
@@ -391,6 +406,7 @@ def main():
         if ct["nbu_scored"]:
             C["nbu"] += len(row["NBU_new"]); C["nbu_n"] += len(ct["NBU"])
             C["b_nbu"] += len(row["NBU_base"])
+        print("    مواضع الأهداف:", _stage, flush=True)
         print("  ضوابط %s: NAR %d/%d (أساس %d) · RBN %d/%d (أساس %d) · NBU %d (أساس %d)"
               % (ct["case"], len(row["NAR_new"]), len(ct["NAR"]), len(row["NAR_base"]),
                  len(row["RBN_new"]), len(ct["RBN"]), len(row["RBN_base"]),

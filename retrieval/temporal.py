@@ -21,12 +21,16 @@
                        بوصفه النافذ، ولا يُدَّعى تاريخ انتقال لا تثبته القاعدة.**
 """
 import re
+from .model import LAYER_PRINCIPLE
 
 CURRENT = "CURRENT"
 SUPERSEDED = "SUPERSEDED"
 TRANSITION_VERIFIED = "TRANSITION_VERIFIED"
 HISTORICAL = "HISTORICAL"
 CONFLICT_DETECTED = "CONFLICT_DETECTED"
+
+# أقصى عدد اختلافات يُقبل قبل اعتبار المصدر ضجيج استخراج لا تعارضًا حقيقيًا
+MAX_CLASHES = 2
 
 _AR_NUM = {
     "واحد": 1, "يوم": 1, "يومان": 2, "يومين": 2, "اثنين": 2, "اثنان": 2,
@@ -109,6 +113,10 @@ def detect_conflict(principle_text, article_text, article_row=None):
                           "article_values": sorted(vals)})
     if not clash:
         return None
+    # التعارض الزمني الحقيقي **مفرد**: مدةٌ عُدِّلت. أما عشرات الاختلافات في
+    # مصدر واحد فدليل ضجيج استخراج (نص سردي بأرقام قضايا وتواريخ) لا تعارض.
+    if len(clash) > MAX_CLASHES:
+        return None
     status, prov = classify_object(article_row or {})
     return {"status": (TRANSITION_VERIFIED if status == TRANSITION_VERIFIED
                        else CONFLICT_DETECTED),
@@ -125,7 +133,9 @@ def annotate(candidates, row_of, text_of, xref_of=None):
     for c in candidates:
         st, _prov = classify_object(row_of(c.object_id) or {})
         conflict = None
-        if st == CURRENT and xref_of:
+        # المبادئ وحدها: صياغتها قاعدية مركّزة فمُددها معتبرة. والأحكام الكاملة
+        # نصوص وقائعية طويلة، استخراج المدد منها يولّد تنبيهات كاذبة (قيس حيًّا).
+        if st == CURRENT and xref_of and c.layer == LAYER_PRINCIPLE:
             ptext = text_of(c.object_id) or ""
             for aid in (xref_of(c) or [])[:4]:
                 conflict = detect_conflict(ptext, text_of(aid) or "",
