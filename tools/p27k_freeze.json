@@ -1,0 +1,32 @@
+{
+ "_note": "P2.7-K — تجميد. دراسة ظلّية بحتة: لا تعديل على الإنتاج ولا app.py ولا Graph ولا Planner ولا Gold Set ولا القرارات البشرية.",
+ "frozen_at_utc": "2026-09-18T07:17:54Z",
+ "git_head": "01a36236cb649354f06cdce94f9e79f2af4813aa",
+ "p27j_commit": "01a3623",
+ "file_hashes": {
+  "tools/p27k_frozen_packets.json": "6a76edac9d0fe07e842b70753eb3adf3244889b6225d5798bc8e9e9fef15aded",
+  "tools/p27k_frozen_thresholds.json": "4eb0c8bad66f722000adde889b8c2590a9f1e3a70bb21d0cd0d618a019547f43",
+  "tools/p26_v_original_gold40_required_dimensions.json": "a433b7fda60e56668ed72fe0973a2c69725515b5e046bbad76b3f8a9d1c8d536",
+  "tools/p27_coverage_graph.json": "61331d68377991c57e6757ff5cfebb2212494a8f227a335da3756adc12ed10ca",
+  "tools/p2_7_h_human_adjudication.json": "2f5716b8dcfac81f3c8ef5b6d18f6a79febbe107f530065b25ffc098e1ebc67a",
+  "tools/p27hj_judicial_audit.json": "3b698ba646cef9cff591e4d78d0bb9e08cf26081b6e4ebc69a808da448771659",
+  "tools/p27j_architecture_audit.json": "793698f803f7fa14b6b2b6fdd2143f8faf6f38b7fe7083e584d7754141dbba88",
+  "tools/p26_prompt.py": "ae40b77925a3d9be9dd521a35319048685e7a5047bcfe73eeac0166340c39801",
+  "tools/p26_evaluator.py": "755894c6612a463d906de342dc179e8d4e4cbb14d64e6a6f623abfb3d79ef09d"
+ },
+ "access_adapter": {
+  "_section_1": "إصلاح وصول للقياس فقط — لا تغيير سلوك استرجاع",
+  "what_was_NOT_touched": [
+   "mcp/server.py::get_object الإنتاجي",
+   "legislation_inventory الإنتاجي",
+   "admin/app.py",
+   "أي قناة استرجاع"
+  ],
+  "adapter_built": "محوّل قراءة داخل أداة الدراسة يعتمد search_legal لجلب محتوى JUR-* (المتعذّر عبر get_object)",
+  "adapter_limit": "النص يعود مقصوصًا عند ~1700 حرف — كافٍ لنصوص المبادئ القصيرة، غير كافٍ لنصوص الأحكام الكاملة",
+  "recorded_blind_spots": [
+   "get_object: re.fullmatch بصنف محارف ASCII يردّ كل معرّف عربي (عائلة JUR-*)",
+   "legislation_inventory: يستعلم بادئتي legis وregl فقط — LEG-* وlegislation_archived غائبان عن الجرد الرسمي"
+  ]
+ }
+}

@@ -1,0 +1,446 @@
+{
+ "_note": "P2.7-K القسم 6 — حزم السلطة **مجمَّدة قبل التجربة**. مصدرها P2.7-HJ (المعتمد في cc86dd3) + بحث تحقق للحالتين D وG أُجري قبل هذا التجميد.",
+ "frozen_at": "2026-09-18T07:15:11Z",
+ "_hard_rule": "ممنوع إضافة أو تعديل أي proposition بعد رؤية نتيجة النظام.",
+ "n_cases": 7,
+ "cases": {
+  "A_gs-0011": {
+   "question": "موكلتي امرأة جعفرية المذهب تزوجت من رجل سني بعقد زواج عرفي غير موثق وأنجبت منه طفلين ثم توفي الزوج وترك أبناء من زوجة أولى موثقة الزواج. أبناء الزوجة الأولى ينكرون الزواج الثاني وينكرون نسب الطفلين ويرفضون إدخالهم في الميراث. ما إجراءات إثبات الزواج والنسب وأثر اختلاف مذهب الزوجين على الميراث؟",
+   "focus": "بُعد اكتشفه القضاء وحده (شرط قبول)",
+   "expected_roles": [
+    "GOVERNING_STATUTE",
+    "JUDICIAL_INTERPRETATION",
+    "JUDICIAL_APPLICATION",
+    "PROCEDURAL_REQUIREMENT",
+    "EXCEPTION_CHECK",
+    "TEMPORAL_CHECK"
+   ],
+   "critical_roles": [
+    "GOVERNING_STATUTE",
+    "JUDICIAL_APPLICATION",
+    "PROCEDURAL_REQUIREMENT"
+   ],
+   "propositions": [
+    {
+     "proposition": "لا تقبل دعوى النسب إلا إذا سبقها تحقيق تجريه لجنة دعاوى النسب",
+     "authority_role": "PROCEDURAL_REQUIREMENT",
+     "authority_ids": [
+      "legis-53-2026-m8"
+     ],
+     "source_layer": "STATUTE",
+     "critical": true,
+     "note": null
+    },
+    {
+     "proposition": "تدخل النيابة العامة وجوبي في دعاوى النسب ويترتب على إغفاله البطلان المطلق",
+     "authority_role": "PROCEDURAL_REQUIREMENT",
+     "authority_ids": [
+      "legis-51-1984-m337",
+      "legis-51-1984-m338",
+      "jprin-13-2001-g521-59b49c0ed0"
+     ],
+     "source_layer": "STATUTE+JUDICIAL",
+     "critical": true,
+     "note": null
+    },
+    {
+     "proposition": "النسب إلى الميت لا يثبت إلا ضمن دعوى حق أو مال على خصم شرعي، وإلا كانت الدعوى غير مقبولة",
+     "authority_role": "JUDICIAL_APPLICATION",
+     "authority_ids": [
+      "judgment-civ-754-2013-3448cd25",
+      "jprin-399-2004-g1095-fa7f7ce717"
+     ],
+     "source_layer": "JUDICIAL_ONLY",
+     "critical": true,
+     "note": "**البُعد الحاسم**: لا يُبلَغ من ألفاظ السؤال ولا من أي مادة تشريعية"
+    },
+    {
+     "proposition": "الحكم الصادر في النسب لا يكون حجة إلا على من كان طرفًا في الخصومة فيه",
+     "authority_role": "JUDICIAL_INTERPRETATION",
+     "authority_ids": [
+      "legis-51-1984-m185",
+      "jprin-687-2005-1-0767c7701980"
+     ],
+     "source_layer": "STATUTE+JUDICIAL",
+     "critical": true,
+     "note": null
+    },
+    {
+     "proposition": "عدم سماع دعوى الزوجية عند الإنكار إلا بشروطها",
+     "authority_role": "GOVERNING_STATUTE",
+     "authority_ids": [
+      "legis-51-1984-m92"
+     ],
+     "source_layer": "STATUTE",
+     "critical": false,
+     "note": null
+    }
+   ]
+  },
+  "B_gs-0013": {
+   "question": "موكلي مورّد بضائع باع لشركة ذات مسؤولية محدودة بضاعة بمبلغ 42,000 دينار، وتسلم منها شيكين ارتدّا لعدم كفاية الرصيد، ومضى على تاريخ استحقاق الشيك الأول ما يقارب السنتين والنصف. المطلوب: هل الطريق الأسلم أمر أداء أم دعوى موضوعية؟ وما شروط استصدار أمر الأداء وإجراءاته ومواعيد التظلم منه؟",
+   "focus": "تعديل تشريعي — م167 خمسة أيام مقابل عشرة",
+   "expected_roles": [
+    "GOVERNING_STATUTE",
+    "JUDICIAL_INTERPRETATION",
+    "PROCEDURAL_REQUIREMENT",
+    "TEMPORAL_CHECK",
+    "EXCEPTION_CHECK"
+   ],
+   "critical_roles": [
+    "GOVERNING_STATUTE",
+    "TEMPORAL_CHECK",
+    "PROCEDURAL_REQUIREMENT"
+   ],
+   "propositions": [
+    {
+     "proposition": "على الدائن أن يكلف المدين بالوفاء **بميعاد عشرة أيام** قبل استصدار أمر الأداء (النص النافذ)",
+     "authority_role": "GOVERNING_STATUTE",
+     "authority_ids": [
+      "legis-38-1980-m167"
+     ],
+     "source_layer": "STATUTE",
+     "critical": true,
+     "note": null
+    },
+    {
+     "proposition": "تخلف التكليف بالوفاء أو بطلانه يوجب إلغاء الأمر واعتباره كأن لم يكن",
+     "authority_role": "JUDICIAL_INTERPRETATION",
+     "authority_ids": [
+      "jprin-240-2002-w3440-9cab9086a9",
+      "jprin-312-2011-2-dd35ea459e84"
+     ],
+     "source_layer": "JUDICIAL_ONLY",
+     "critical": true,
+     "note": null
+    },
+    {
+     "proposition": "عبء إثبات حصول التكليف بالوفاء يقع على الدائن",
+     "authority_role": "JUDICIAL_INTERPRETATION",
+     "authority_ids": [
+      "jprin-136-1993-w3468-12238e8e20"
+     ],
+     "source_layer": "JUDICIAL_ONLY",
+     "critical": true,
+     "note": null
+    },
+    {
+     "proposition": "المبادئ القضائية المتاحة تقتبس ميعاد **خمسة أيام** وهو نص سابق على التعديل — الرقم غير صالح للنقل",
+     "authority_role": "TEMPORAL_CHECK",
+     "authority_ids": [
+      "jprin-136-1993-w3468-12238e8e20",
+      "jprin-240-2002-w3440-9cab9086a9",
+      "jprin-312-2011-2-dd35ea459e84"
+     ],
+     "source_layer": "JUDICIAL_ONLY",
+     "critical": true,
+     "note": "**اختبار السلامة الزمنية الإلزامي**"
+    },
+    {
+     "proposition": "لا يحول تقادم دعوى المطالبة بقيمة الشيك دون مطالبة الساحب برد ما أثري به دون حق",
+     "authority_role": "EXCEPTION_CHECK",
+     "authority_ids": [
+      "legis-68-1980-m553"
+     ],
+     "source_layer": "STATUTE",
+     "critical": false,
+     "note": null
+    }
+   ]
+  },
+  "C_gs-0033": {
+   "question": "ما هو الشرط الإجرائي الذي يجب توافره قبل قبول دعوى إثبات النسب المباشر أمام المحكمة؟",
+   "focus": "إجراء وجوبي وحسم غموض نصي بالقضاء",
+   "expected_roles": [
+    "GOVERNING_STATUTE",
+    "JUDICIAL_INTERPRETATION",
+    "PROCEDURAL_REQUIREMENT",
+    "TEMPORAL_CHECK"
+   ],
+   "critical_roles": [
+    "GOVERNING_STATUTE",
+    "PROCEDURAL_REQUIREMENT",
+    "JUDICIAL_INTERPRETATION"
+   ],
+   "propositions": [
+    {
+     "proposition": "لا تقبل دعوى النسب إلا إذا سبقها تحقيق تجريه اللجنة",
+     "authority_role": "GOVERNING_STATUTE",
+     "authority_ids": [
+      "legis-53-2026-m8"
+     ],
+     "source_layer": "STATUTE",
+     "critical": true,
+     "note": null
+    },
+    {
+     "proposition": "تدخل النيابة العامة وجوبي وقاعدة آمرة، وإغفاله يرتب البطلان المطلق الذي تقضي به المحكمة من تلقاء نفسها",
+     "authority_role": "JUDICIAL_INTERPRETATION",
+     "authority_ids": [
+      "jprin-13-2001-g521-59b49c0ed0",
+      "jprin-51-1998-w5561-8999b86677",
+      "jprin-21-2009-w2153-bba11040b3"
+     ],
+     "source_layer": "JUDICIAL_ONLY",
+     "critical": true,
+     "note": "يحسم غموض «إذا لم يتقدم أحد من ذوي الشأن» — الدعوى في الطعنين مرفوعة من ذي شأن"
+    },
+    {
+     "proposition": "لا يصحح البطلان أن تكون النيابة قد أبدت رأيها في موضوع الدعوى",
+     "authority_role": "JUDICIAL_INTERPRETATION",
+     "authority_ids": [
+      "JUR-أحوال-شخصية-مرض-الموت-PR-10-a5080271db898625"
+     ],
+     "source_layer": "JUDICIAL_ONLY",
+     "critical": true,
+     "note": "**سند من عائلة JUR-* غير القابلة للجلب بالمعرّف**"
+    },
+    {
+     "proposition": "على قلم كتاب المحكمة إبلاغ النيابة كتابة بمجرد قيد الدعوى",
+     "authority_role": "PROCEDURAL_REQUIREMENT",
+     "authority_ids": [
+      "legis-51-1984-m340"
+     ],
+     "source_layer": "STATUTE",
+     "critical": true,
+     "note": null
+    },
+    {
+     "proposition": "تخلف عرض الطلب على اللجنة أثره عدم قبول الدعوى لرفعها قبل الأوان، وهو من النظام العام",
+     "authority_role": "JUDICIAL_INTERPRETATION",
+     "authority_ids": [
+      "jprin-125-1999-a707-bfdeff691e"
+     ],
+     "source_layer": "JUDICIAL_ONLY",
+     "critical": true,
+     "note": "PRE_AMENDMENT — يفسّر ق1/1988 السلف"
+    }
+   ]
+  },
+  "D_dna": {
+   "question": "هل يجوز الاعتماد على فحص البصمة الوراثية في إثبات النسب أو نفيه أمام المحكمة الكويتية، وما حجيته؟",
+   "focus": "تعارض محتمل بين قضاء سابق ونص لاحق",
+   "expected_roles": [
+    "GOVERNING_STATUTE",
+    "JUDICIAL_INTERPRETATION",
+    "TEMPORAL_CHECK",
+    "CONFLICT_CHECK"
+   ],
+   "critical_roles": [
+    "GOVERNING_STATUTE",
+    "JUDICIAL_INTERPRETATION",
+    "CONFLICT_CHECK"
+   ],
+   "propositions": [
+    {
+     "proposition": "للجنة أن تأمر بإجراء فحص البصمة الوراثية وغيره من الوسائل العلمية الحديثة",
+     "authority_role": "GOVERNING_STATUTE",
+     "authority_ids": [
+      "legis-53-2026-m7"
+     ],
+     "source_layer": "STATUTE",
+     "critical": true,
+     "note": null
+    },
+    {
+     "proposition": "تقرير البصمة الوراثية ليس دليلًا شرعيًا على ثبوت النسب أو نفيه وغير منتج في الدعوى",
+     "authority_role": "JUDICIAL_INTERPRETATION",
+     "authority_ids": [
+      "jprin-38-2008-i2563-f452d93627"
+     ],
+     "source_layer": "JUDICIAL_ONLY",
+     "critical": true,
+     "note": null
+    },
+    {
+     "proposition": "تعارض ظاهر بين القضاء السابق (2008) والنص اللاحق (53/2026) يستوجب علم POTENTIAL_TEMPORAL_CONFLICT",
+     "authority_role": "CONFLICT_CHECK",
+     "authority_ids": [
+      "jprin-38-2008-i2563-f452d93627",
+      "legis-53-2026-m7"
+     ],
+     "source_layer": "CROSS_LAYER",
+     "critical": true,
+     "note": "**اختبار التعارض الإلزامي** — لا يُحسم، يُكشف فقط"
+    },
+    {
+     "proposition": "ثبوت النسب بالفراش أو الإقرار أو البينة",
+     "authority_role": "JUDICIAL_INTERPRETATION",
+     "authority_ids": [
+      "jprin-122-2009-w6023-1aa9ee3377"
+     ],
+     "source_layer": "JUDICIAL_ONLY",
+     "critical": false,
+     "note": null
+    }
+   ]
+  },
+  "E_gs-0006": {
+   "question": "مؤجر يطلب إخلاء المستأجر لعدم سداد الأجرة المتأخرة وإلزامه بالمتأخر",
+   "focus": "استثناء قضائي يقيّد مقدّمة الدعوى",
+   "expected_roles": [
+    "GOVERNING_STATUTE",
+    "JUDICIAL_INTERPRETATION",
+    "EXCEPTION_CHECK",
+    "PROCEDURAL_REQUIREMENT"
+   ],
+   "critical_roles": [
+    "GOVERNING_STATUTE",
+    "EXCEPTION_CHECK"
+   ],
+   "propositions": [
+    {
+     "proposition": "سبب الإخلاء لعدم دفع الأجرة خلال عشرين يومًا من الاستحقاق",
+     "authority_role": "GOVERNING_STATUTE",
+     "authority_ids": [
+      "legis-35-1978-m20"
+     ],
+     "source_layer": "STATUTE",
+     "critical": true,
+     "note": null
+    },
+    {
+     "proposition": "إيداع الأجرة خزانة إدارة التنفيذ بعد العرض القانوني خلال عشرين يومًا يعتبر وفاءً",
+     "authority_role": "GOVERNING_STATUTE",
+     "authority_ids": [
+      "legis-35-1978-m10"
+     ],
+     "source_layer": "STATUTE",
+     "critical": true,
+     "note": null
+    },
+    {
+     "proposition": "على المؤجر أن يسعى إلى موطن المستأجر؛ فإن تقاعس لم يُعد المستأجر مخلًا رغم بقائه مدينًا",
+     "authority_role": "EXCEPTION_CHECK",
+     "authority_ids": [
+      "jprin-x-x-a940-cd64ff7060"
+     ],
+     "source_layer": "JUDICIAL_ONLY",
+     "critical": true,
+     "note": "**استثناء يقيّد مقدّمة «عدم السداد» نفسها** — م412+م586 مدني"
+    },
+    {
+     "proposition": "طلب الإخلاء يشمل حتمًا طلبًا ضمنيًا بالفسخ، ويد المستأجر يد غاصب من تاريخ الحكم فيلتزم بمقابل الانتفاع",
+     "authority_role": "JUDICIAL_INTERPRETATION",
+     "authority_ids": [
+      "jprin-1900-2012-s81-68a45b672d"
+     ],
+     "source_layer": "JUDICIAL_ONLY",
+     "critical": true,
+     "note": null
+    },
+    {
+     "proposition": "اعتبار الدعوى كأن لم تكن بعذر قوي ووفاء حتى أول جلسة",
+     "authority_role": "EXCEPTION_CHECK",
+     "authority_ids": [
+      "legis-35-1978-m20"
+     ],
+     "source_layer": "STATUTE",
+     "critical": false,
+     "note": null
+    }
+   ]
+  },
+  "F_gs-0005": {
+   "question": "عامل في القطاع الأهلي فصل تعسفيا دون إنذار ويطالب بمكافأة نهاية الخدمة والتعويض",
+   "focus": "تقييد قضائي لقاعدة تشريعية مطلقة الظاهر",
+   "expected_roles": [
+    "GOVERNING_STATUTE",
+    "JUDICIAL_INTERPRETATION",
+    "PROCEDURAL_REQUIREMENT",
+    "EXCEPTION_CHECK",
+    "TEMPORAL_CHECK"
+   ],
+   "critical_roles": [
+    "GOVERNING_STATUTE",
+    "JUDICIAL_INTERPRETATION"
+   ],
+   "propositions": [
+    {
+     "proposition": "لا تسمع عند الإنكار بمضي سنة من انتهاء عقد العمل الدعاوى التي يرفعها العمال",
+     "authority_role": "GOVERNING_STATUTE",
+     "authority_ids": [
+      "legis-6-2010-m144"
+     ],
+     "source_layer": "STATUTE",
+     "critical": true,
+     "note": null
+    },
+    {
+     "proposition": "عدم السماع مشروط بيمين يحلفها المتمسك به، وتوجهها المحكمة من تلقاء نفسها (م442/2 مدني)",
+     "authority_role": "JUDICIAL_INTERPRETATION",
+     "authority_ids": [
+      "jprin-441-2014-s2174-b159be2ed9"
+     ],
+     "source_layer": "JUDICIAL_ONLY",
+     "critical": true,
+     "note": "**يقيّد القاعدة ويغيّر تكييف لزومها**"
+    },
+    {
+     "proposition": "مدة السنة يرد عليها الوقف والانقطاع",
+     "authority_role": "EXCEPTION_CHECK",
+     "authority_ids": [
+      "jprin-7-1996-e5376-66fde4a508"
+     ],
+     "source_layer": "JUDICIAL_ONLY",
+     "critical": true,
+     "note": null
+    },
+    {
+     "proposition": "حق الطعن في قرار الفصل أمام الدائرة العمالية المختصة",
+     "authority_role": "GOVERNING_STATUTE",
+     "authority_ids": [
+      "legis-6-2010-m41"
+     ],
+     "source_layer": "STATUTE",
+     "critical": true,
+     "note": null
+    },
+    {
+     "proposition": "تقديم العامل طلبًا إلى الوزارة هو الإجراء الوحيد لرفع الدعوى العمالية",
+     "authority_role": "PROCEDURAL_REQUIREMENT",
+     "authority_ids": [
+      "jprin-7-1996-w6050-2679f20795"
+     ],
+     "source_layer": "JUDICIAL_ONLY",
+     "critical": false,
+     "note": "PRE_AMENDMENT — يفسّر السلف"
+    }
+   ]
+  },
+  "G_negative_control": {
+   "question": "ما هي المدة اللازمة كحد أدنى للبقاء في درجة وكيل نيابة (ج) قبل الترقية؟",
+   "focus": "**ضابط سلبي** — مسألة تشريعية بحتة لا تحتاج تفسيرًا قضائيًا",
+   "expected_roles": [
+    "GOVERNING_STATUTE"
+   ],
+   "critical_roles": [
+    "GOVERNING_STATUTE"
+   ],
+   "propositions": [
+    {
+     "proposition": "المدة اللازمة كحد أدنى للبقاء في درجة وكيل نيابة (ج) أربع سنوات",
+     "authority_role": "GOVERNING_STATUTE",
+     "authority_ids": [
+      "legis-136-2026-annex-1"
+     ],
+     "source_layer": "STATUTE",
+     "critical": true,
+     "note": null
+    },
+    {
+     "proposition": "الترقية على أساس الأقدمية مع الأهلية وإلى الدرجة التالية مباشرة",
+     "authority_role": "GOVERNING_STATUTE",
+     "authority_ids": [
+      "legis-80-2026-m22"
+     ],
+     "source_layer": "STATUTE",
+     "critical": false,
+     "note": null
+    }
+   ],
+   "expected_no_judicial": true,
+   "expected_no_judicial_reason": "بحث قضائي أُجري فعليًا قبل التجميد ولم يُعثر على مبدأ يفسّر جدول المدد — NO_AUTHORITY_FOUND نتيجة مشروعة لا نقص"
+  }
+ }
+}

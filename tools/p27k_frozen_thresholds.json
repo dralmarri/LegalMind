@@ -1,0 +1,47 @@
+{
+ "_note": "P2.7-K القسم 18 — عتبات مسجَّلة **قبل التشغيل**. لا تُغيَّر بعد القياس.",
+ "frozen_at": "2026-09-18T07:15:11Z",
+ "thresholds": {
+  "authority_role_planning_recall": {
+   "op": ">=",
+   "value": 0.9
+  },
+  "critical_role_planning_recall": {
+   "op": ">=",
+   "value": 0.95
+  },
+  "relevant_proposition_recall": {
+   "op": ">=",
+   "value": 0.9
+  },
+  "judicial_value_add_recall": {
+   "op": ">=",
+   "value": 0.9
+  },
+  "temporal_safety_recall": {
+   "op": "==",
+   "value": 1.0,
+   "scope": "الحالات الحرجة المجمدة (B)"
+  },
+  "conflict_detection_recall": {
+   "op": "==",
+   "value": 1.0,
+   "scope": "حالات التعارض المجمدة (D)"
+  },
+  "role_overplanning_rate": {
+   "op": "<=",
+   "value": 0.15
+  }
+ },
+ "classification_criteria": {
+  "ROLE_ROUTING_PASS": "كل العتبات السبع مستوفاة",
+  "ROLE_ROUTING_PROMISING": "عتبتان أو أقل ساقطتان، وبشرط أن يكون LEGAL_COVERAGE_MISS أقل منه في خط الأساس التشريعي، وألا يتجاوز ROLE_OVERPLANNING_RATE عتبته",
+  "ROLE_ROUTING_FAIL": "ثلاث عتبات فأكثر ساقطة، أو تجاوز ROLE_OVERPLANNING_RATE عتبته، أو عدم انخفاض LEGAL_COVERAGE_MISS",
+  "BENCHMARK_INSUFFICIENT": "تعذّر تنفيذ مسار دور واحد على الأقل لأسباب وصول لا لأسباب تصميم"
+ },
+ "declared_measurement_limits": [
+  "لا وصول مباشر لـPostgreSQL من هذه البيئة — محوّل الجلب مبني على MCP search_legal (نص مقصوص عند ~1700 حرف) لا على استعلام SQL. يكفي للتحقق من نصوص المبادئ القصيرة ولا يكفي لنصوص الأحكام الكاملة.",
+  "الخطة تُنتَج بوكيل **أعمى** لا يرى الحزم المجمَّدة ولا أي معرّف — ضبط تسريب القسم 14.",
+  "Authority-Role Search Completion يبلغ 1.0 بالبناء ما لم تفشل قناة وصول — وهذا يُعلَن لا يُعرَض كإنجاز."
+ ]
+}
