@@ -33,7 +33,8 @@ def main() -> int:
     with psycopg.connect(dsn) as conn, conn.cursor() as cur:
         info = publication_consistency(cur, number, year)
     print(json.dumps(info, ensure_ascii=False, indent=2))
-    return 0 if info["status"] == "unique" else 2
+    # unique and multiple_valid are both healthy states. Only missing evidence fails.
+    return 0 if info["status"] in {"unique", "multiple_valid"} else 2
 
 
 if __name__ == "__main__":
