@@ -11,16 +11,17 @@ def _norm_pub(value: str | None) -> str:
     s = (value or "").strip()
     s = re.sub(r"\s+", " ", s)
     s = s.replace("–", "-").replace("—", "-")
-    return s
+    s = re.sub(r"\s*ص\s*", " ص ", s)
+    return s.strip()
 
 
 def appeal_publications(cur, number: str, year: str) -> list[dict]:
-    """Return every principle row for an appeal, including publication metadata.
+    """Return every stored principle row for an appeal.
 
-    This is intentionally numeric/SQL based; semantic search is not used for citation identity.
+    One appeal may legitimately be published in more than one legal topic/volume/page.
+    Therefore publication locations are a set of allowed alternatives, not a single canonical
+    value and not a conflict merely because there is more than one.
     """
-    # ID is the strongest discriminator in this corpus (jprin-N-Y-*).  The text fallback
-    # covers legacy/JUR objects whose IDs do not follow that convention.
     cur.execute(
         """
         SELECT id, object_type, title, original_text,
@@ -53,6 +54,11 @@ def _extract_publications_from_text(text: str) -> list[str]:
 
 
 def publication_consistency(cur, number: str, year: str) -> dict:
+    """Return all verified publication alternatives for the appeal.
+
+    Multiple values mean MULTIPLE_VALID, not conflict.  A citation is invalid only when the
+    location asserted by the answer matches none of the stored alternatives.
+    """
     rows = appeal_publications(cur, number, year)
     pubs = defaultdict(list)
     for row in rows:
@@ -64,45 +70,51 @@ def publication_consistency(cur, number: str, year: str) -> dict:
             if pub:
                 pubs[pub].append(row["id"])
     values = sorted(pubs)
+    status = "missing" if not values else ("unique" if len(values) == 1 else "multiple_valid")
     return {
         "appeal": f"{number}/{year}",
         "rows": rows,
         "publications": [{"value": p, "ids": sorted(set(pubs[p]))} for p in values],
-        "status": "unique" if len(values) == 1 else ("missing" if not values else "conflict"),
+        "status": status,
+        "allowed_publications": values,
         "canonical_publication": values[0] if len(values) == 1 else None,
     }
 
 
-def audit_publications(answer: str, cur) -> list[dict]:
-    """Audit publication tails for every cited appeal.
+def _matches_allowed(cited: str, allowed: list[str]) -> bool:
+    cited = _norm_pub(cited)
+    if not cited:
+        return True
+    for value in allowed:
+        value = _norm_pub(value)
+        if cited == value or cited in value or value in cited:
+            return True
+    return False
 
-    A publication location is safe only when the database has exactly one publication value
-    for that appeal and the answer's publication tail agrees with it.  Conflicting database
-    metadata is never silently resolved by model preference.
+
+def audit_publications(answer: str, cur) -> list[dict]:
+    """Audit only publication locations actually asserted by the answer.
+
+    Multiple stored locations are legitimate alternatives.  No warning is raised when the
+    answer cites any one of them.  A warning is raised only for an asserted location that is
+    absent from every stored alternative, or when no publication evidence exists at all.
     """
     findings = []
-    done = set()
     for m in _APPEAL_RE.finditer(answer or ""):
         number, year = m.group(1), m.group(2)
-        key = (number, year)
-        if key in done:
-            continue
-        done.add(key)
         info = publication_consistency(cur, number, year)
         window = (answer or "")[m.end():m.end() + 280]
         cited = _PUB_RE.search(window)
         cited_pub = _norm_pub(cited.group(0)) if cited else ""
-        if info["status"] == "conflict":
-            findings.append({"kind": "publication_conflict", "appeal": info["appeal"],
-                             "cited": cited_pub, "publications": info["publications"]})
-        elif cited_pub and info["status"] == "unique":
-            canonical = info["canonical_publication"] or ""
-            # Exact normalized containment is deliberate: page/volume metadata must not be fuzzy-matched.
-            if cited_pub not in canonical and canonical not in cited_pub:
-                findings.append({"kind": "publication_mismatch", "appeal": info["appeal"],
-                                 "cited": cited_pub, "canonical": canonical,
-                                 "publications": info["publications"]})
-        elif cited_pub and info["status"] == "missing":
+        if not cited_pub:
+            continue
+        allowed = info.get("allowed_publications") or []
+        if not allowed:
             findings.append({"kind": "publication_unverified", "appeal": info["appeal"],
-                             "cited": cited_pub, "publications": []})
+                             "cited": cited_pub, "allowed_publications": []})
+        elif not _matches_allowed(cited_pub, allowed):
+            findings.append({"kind": "publication_mismatch", "appeal": info["appeal"],
+                             "cited": cited_pub,
+                             "allowed_publications": allowed,
+                             "publications": info["publications"]})
     return findings
