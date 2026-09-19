@@ -4,7 +4,13 @@ import re
 from collections import defaultdict
 
 _APPEAL_RE = re.compile(r"(?:الطعن(?:ان|ين)?\s+(?:رقم\s*)?)([0-9]{1,5})\s*(?:/\s*|لسنة\s+)([0-9]{4})")
-_PUB_RE = re.compile(r"(?:مج(?:لة)?\s+القضاء[^\n؛.)]*|مج\s+القسم[^\n؛.)]*|المجلد\s+[^\n؛.)]*?ص\s*[0-9]+|(?:س|السنة)\s*[^\n؛.)]*?(?:ج|الجزء)\s*[^\n؛.)]*?ص\s*[0-9]+)")
+# Publication tail only. Deliberately starts at the publication marker, never at the hearing date.
+_PUB_RE = re.compile(
+    r"(?:مج(?:لة)?\s+القضاء[^\n؛.)]*?ص\s*[0-9]+|"
+    r"مج\s+القسم[^\n؛.)]*?ص\s*[0-9]+|"
+    r"المجلد\s+[^\n؛.)]*?ص\s*[0-9]+|"
+    r"(?:س|السنة)\s*[^\n؛.)]*?(?:ج|الجزء)\s*[^\n؛.)]*?ص\s*[0-9]+)"
+)
 
 
 def _norm_pub(value: str | None) -> str:
@@ -19,8 +25,7 @@ def appeal_publications(cur, number: str, year: str) -> list[dict]:
     """Return every stored principle row for an appeal.
 
     One appeal may legitimately be published in more than one legal topic/volume/page.
-    Therefore publication locations are a set of allowed alternatives, not a single canonical
-    value and not a conflict merely because there is more than one.
+    Publication locations are therefore allowed alternatives, not mutually exclusive values.
     """
     cur.execute(
         """
@@ -44,28 +49,41 @@ def appeal_publications(cur, number: str, year: str) -> list[dict]:
     return out
 
 
-def _extract_publications_from_text(text: str) -> list[str]:
-    values = []
-    for m in _PUB_RE.finditer(text or ""):
-        v = _norm_pub(m.group(0))
-        if v and v not in values:
-            values.append(v)
+def _appeal_citation_segments(text: str, number: str, year: str) -> list[str]:
+    """Return only citation segments belonging to the requested appeal.
+
+    This prevents a second appeal cited in the same principle row from donating its publication
+    location to the first appeal. A segment ends at newline/closing parenthesis, which is how the
+    corpus stores the citation tails observed in production.
+    """
+    if not text:
+        return []
+    pat = re.compile(
+        rf"(?:الطعن(?:ان|ين)?\s+(?:رقم\s*)?){re.escape(number)}\s*/\s*{re.escape(year)}[^\n)]*",
+        re.IGNORECASE,
+    )
+    return [m.group(0) for m in pat.finditer(text)]
+
+
+def _extract_publications_for_appeal(text: str, number: str, year: str) -> list[str]:
+    values: list[str] = []
+    for segment in _appeal_citation_segments(text, number, year):
+        for m in _PUB_RE.finditer(segment):
+            value = _norm_pub(m.group(0))
+            if value and value not in values:
+                values.append(value)
     return values
 
 
 def publication_consistency(cur, number: str, year: str) -> dict:
-    """Return all verified publication alternatives for the appeal.
-
-    Multiple values mean MULTIPLE_VALID, not conflict.  A citation is invalid only when the
-    location asserted by the answer matches none of the stored alternatives.
-    """
+    """Return all verified publication alternatives belonging to this appeal only."""
     rows = appeal_publications(cur, number, year)
     pubs = defaultdict(list)
     for row in rows:
         candidates = []
         if row["publication"]:
             candidates.append(row["publication"])
-        candidates.extend(_extract_publications_from_text(row["text"]))
+        candidates.extend(_extract_publications_for_appeal(row["text"], number, year))
         for pub in candidates:
             if pub:
                 pubs[pub].append(row["id"])
@@ -93,18 +111,17 @@ def _matches_allowed(cited: str, allowed: list[str]) -> bool:
 
 
 def audit_publications(answer: str, cur) -> list[dict]:
-    """Audit only publication locations actually asserted by the answer.
-
-    Multiple stored locations are legitimate alternatives.  No warning is raised when the
-    answer cites any one of them.  A warning is raised only for an asserted location that is
-    absent from every stored alternative, or when no publication evidence exists at all.
-    """
+    """Audit only a publication location actually asserted for the cited appeal."""
     findings = []
     for m in _APPEAL_RE.finditer(answer or ""):
         number, year = m.group(1), m.group(2)
         info = publication_consistency(cur, number, year)
-        window = (answer or "")[m.end():m.end() + 280]
-        cited = _PUB_RE.search(window)
+        # Stop before a subsequent appeal so its publication cannot be attributed to this one.
+        tail = (answer or "")[m.end():m.end() + 320]
+        next_appeal = _APPEAL_RE.search(tail)
+        if next_appeal:
+            tail = tail[:next_appeal.start()]
+        cited = _PUB_RE.search(tail)
         cited_pub = _norm_pub(cited.group(0)) if cited else ""
         if not cited_pub:
             continue
