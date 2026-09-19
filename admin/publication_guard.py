@@ -4,12 +4,13 @@ import re
 from collections import defaultdict
 
 _APPEAL_RE = re.compile(r"(?:الطعن(?:ان|ين)?\s+(?:رقم\s*)?)([0-9]{1,5})\s*(?:/\s*|لسنة\s+)([0-9]{4})")
-# Publication tail only. Deliberately starts at the publication marker, never at the hearing date.
+# Publication tail only. Every alternative starts at a real publication marker.
+# The standalone Arabic "س" marker must not match the final س in words such as "جلسة".
 _PUB_RE = re.compile(
-    r"(?:مج(?:لة)?\s+القضاء[^\n؛.)]*?ص\s*[0-9]+|"
+    r"(?:مجلة\s+القضاء[^\n؛.)]*?ص\s*[0-9]+|"
     r"مج\s+القسم[^\n؛.)]*?ص\s*[0-9]+|"
     r"المجلد\s+[^\n؛.)]*?ص\s*[0-9]+|"
-    r"(?:س|السنة)\s*[^\n؛.)]*?(?:ج|الجزء)\s*[^\n؛.)]*?ص\s*[0-9]+)"
+    r"(?<![\u0600-\u06FF])(?:س|السنة)\s*[^\n؛.)]*?(?:ج|الجزء)\s*[^\n؛.)]*?ص\s*[0-9]+)"
 )
 
 
@@ -50,15 +51,9 @@ def appeal_publications(cur, number: str, year: str) -> list[dict]:
 
 
 def _appeal_citation_segments(text: str, number: str, year: str) -> list[str]:
-    """Return only citation segments belonging to the requested appeal.
-
-    Handles both spaced and compact citation forms, and stops before a later appeal citation
-    even when multiple appeals are stored in one principle row.
-    """
+    """Return only citation segments belonging to the requested appeal."""
     if not text:
         return []
-
-    # Normalize only for matching; keep original text for extraction.
     pat = re.compile(
         rf"(?:الطعن(?:ان|ين)?\s+(?:رقم\s*)?)"
         rf"{re.escape(number)}\s*/\s*{re.escape(year)}",
@@ -67,11 +62,9 @@ def _appeal_citation_segments(text: str, number: str, year: str) -> list[str]:
     matches = list(pat.finditer(text))
     if not matches:
         return []
-
     out: list[str] = []
-    for i, m in enumerate(matches):
+    for m in matches:
         start = m.start()
-        # End at the first of: newline, closing parenthesis, or a subsequent appeal citation.
         hard_end = len(text)
         nl = text.find("\n", m.end())
         if nl != -1:
@@ -139,7 +132,6 @@ def audit_publications(answer: str, cur) -> list[dict]:
     for m in _APPEAL_RE.finditer(answer or ""):
         number, year = m.group(1), m.group(2)
         info = publication_consistency(cur, number, year)
-        # Stop before a subsequent appeal so its publication cannot be attributed to this one.
         tail = (answer or "")[m.end():m.end() + 320]
         next_appeal = _APPEAL_RE.search(tail)
         if next_appeal:
