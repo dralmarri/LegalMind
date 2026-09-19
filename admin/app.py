@@ -5271,26 +5271,81 @@ def _audit_answer(answer, seen):
 _GAP_RE = re.compile(r"لم\s+يرد[^.\n؟]{0,40}?في\s+(?:السياق|المصادر)")
 
 
-def _compute_review_status(answer, flags, inctx, crosscheck_findings):
-    """يُشتق من إشارات تحقق فعلية لا من إعلان ذاتي للنموذج (قرار المالك 2026-09-10):
-    needs_review عند شبهة استشهاد غير موجود أو إعلان غياب كاذب باقيين على النص
-    النهائي بعد التنقيح، أو تصنيف تدقيق متقاطع «suspicious»، أو علامة [للتحقق]
-    الصريحة (تعليمات جولة التنقيح تأمر بوضعها متى بقي شكّ)؛ partial عند بقاء إفصاح
-    صريح بفجوة استرجاع (_GAP_RE) بلا أي شبهة؛ وإلا verified. فشل الحساب نفسه يُرَد
-    needs_review احتياطًا — لا verified — فحقل سلامة لا يصح أن يفشل صامتًا لصالح
-    الطمأنة الكاذبة."""
+def _compute_review_assessment(answer, flags, inctx, crosscheck_findings):
+    """تصنيف سلامة قابل للتفسير بدل ختمٍ مبهم على كامل الرأي.
+
+    - needs_review: شبهة موضوعية غير محلولة تمس صحة الاستشهاد/النسبة.
+    - partial: لا توجد شبهة موضوعية، لكن بقيت فجوة معلنة أو موضع [للتحقق].
+    - verified: لم يبق شيء من ذلك.
+
+    الاستنتاج القانوني الموسوم بوضوح لا يُعد عيبًا بذاته؛ المعيار هنا سلامة الإسناد،
+    لا مجرد وجود تحليل مهني في الرأي.
+    """
     try:
-        cc_suspicious = any((f or {}).get("verdict") == "suspicious"
-                             for f in (crosscheck_findings or []))
-        needs_review = bool(flags) or bool(inctx) or cc_suspicious or ("[للتحقق]" in (answer or ""))
-        if needs_review:
-            return "needs_review"
-        if _GAP_RE.search(answer or ""):
-            return "partial"
-        return "verified"
+        flags = list(flags or [])
+        inctx = list(inctx or [])
+        cfs = list(crosscheck_findings or [])
+        suspicious = [f for f in cfs if (f or {}).get("verdict") == "suspicious"]
+        unverifiable = [f for f in cfs if (f or {}).get("verdict") == "unverifiable"]
+        verify_marks = (answer or "").count("[للتحقق]")
+        gap_count = len(list(_GAP_RE.finditer(answer or "")))
+
+        reasons = []
+        if flags:
+            reasons.append({"kind": "citation_not_found", "count": len(flags),
+                            "label": "استشهاد لم يوجد في قاعدة النظام بصيغته المذكورة",
+                            "items": flags[:10]})
+        if inctx:
+            reasons.append({"kind": "false_absence", "count": len(inctx),
+                            "label": "أُعلن غياب مصدر وهو موجود في السياق",
+                            "items": inctx[:10]})
+        if suspicious:
+            reasons.append({"kind": "crosscheck_suspicious", "count": len(suspicious),
+                            "label": "التدقيق المتقاطع أثار شبهة موضوعية في نسبة أو استشهاد",
+                            "items": [{"citation": x.get("citation"), "reason": x.get("reason")}
+                                      for x in suspicious[:10]]})
+        if unverifiable:
+            reasons.append({"kind": "crosscheck_unverifiable", "count": len(unverifiable),
+                            "label": "تعذر على المدقق المستقل التحقق من موضع",
+                            "items": [{"citation": x.get("citation"), "reason": x.get("reason")}
+                                      for x in unverifiable[:10]]})
+        if verify_marks:
+            reasons.append({"kind": "verify_marker", "count": verify_marks,
+                            "label": "مواضع موسومة صراحةً [للتحقق]", "items": []})
+        if gap_count:
+            reasons.append({"kind": "retrieval_gap", "count": gap_count,
+                            "label": "فجوة مصادر أفصح عنها الرأي صراحةً", "items": []})
+
+        hard = bool(flags or inctx or suspicious)
+        soft = bool(unverifiable or verify_marks or gap_count)
+        status = "needs_review" if hard else ("partial" if soft else "verified")
+
+        if status == "verified":
+            headline = "موثق آليًا: لم يبق تنبيه إسناد أو فجوة معلنة."
+        elif status == "partial":
+            headline = "موثق جزئيًا: الإسناد الأساسي سليم، مع مواضع محددة معلنة تحتاج استكمالًا."
+        else:
+            headline = "تحتاج مراجعتك: توجد شبهة إسناد محددة غير محلولة؛ راجع الأسباب أدناه."
+
+        return {"status": status, "headline": headline, "reasons": reasons,
+                "counts": {"citation_not_found": len(flags),
+                           "false_absence": len(inctx),
+                           "crosscheck_suspicious": len(suspicious),
+                           "crosscheck_unverifiable": len(unverifiable),
+                           "verify_marker": verify_marks,
+                           "retrieval_gap": gap_count}}
     except Exception as _rs_e:
-        print("[draft] review-status-error:", repr(_rs_e), flush=True)
-        return "needs_review"
+        print("[draft] review-assessment-error:", repr(_rs_e), flush=True)
+        return {"status": "needs_review",
+                "headline": "تحتاج مراجعتك: تعذر حساب حالة التحقق آليًا.",
+                "reasons": [{"kind": "assessment_error", "count": 1,
+                             "label": "تعذر حساب حالة التحقق", "items": []}],
+                "counts": {}}
+
+
+def _compute_review_status(answer, flags, inctx, crosscheck_findings):
+    """واجهة توافقية للكود القديم."""
+    return _compute_review_assessment(answer, flags, inctx, crosscheck_findings)["status"]
 
 
 def _gap_confirmed_art(window_text):
@@ -5874,9 +5929,12 @@ def _draft_run(inp: _DraftIn) -> dict:
     except Exception as _rs_e:
         print("[draft] review-status-error:", repr(_rs_e), flush=True)
         _final_flags, _final_inctx = list(audit_flags), list(audit_inctx)
-    review_status = _compute_review_status(answer, _final_flags, _final_inctx, crosscheck_findings)
+    review_assessment = _compute_review_assessment(
+        answer, _final_flags, _final_inctx, crosscheck_findings)
+    review_status = review_assessment["status"]
     print("[draft] review-status:", review_status, "| flags:", len(_final_flags),
-          "| inctx:", len(_final_inctx), flush=True)
+          "| inctx:", len(_final_inctx), "| reasons:",
+          [r.get("kind") for r in review_assessment.get("reasons", [])], flush=True)
     # حزمة الأدلة: سجل دائم للجولة — أساس مقارنة النماذج العادلة والتشخيص.
     # تسجيل خالص: أي فشل يُطبع ولا يمس الجولة (لا ابتلاع صامتًا — درس معياري).
     try:
@@ -5912,6 +5970,8 @@ def _draft_run(inp: _DraftIn) -> dict:
             "selffix_extra": selffix_ids,
             "audit_flags": audit_flags, "audit_incontext": audit_inctx,
             "review_status": review_status,
+            "review_assessment": review_assessment,
+            "review_reason": review_assessment.get("headline"),
             "usage": {"input": resp.usage.input_tokens, "output": resp.usage.output_tokens}}
 def _store_draft_result(rid, res):
     """التسليم المضمون: النتيجة تُحفظ خادميًا فور اكتمالها فيستردها العميل إن مات البث —
