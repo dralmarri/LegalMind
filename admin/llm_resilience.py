@@ -6,6 +6,9 @@ provider transport and, specifically, the OpenAI leg used by dual-model drafting
 """
 import time
 
+OPENAI_BACKGROUND_POLL_SECONDS = 2.0
+OPENAI_BACKGROUND_MAX_SECONDS = 1500.0
+
 DRAFT_TRANSPORT_TIMEOUT_SECONDS = 1800.0
 OPENAI_DRAFT_ATTEMPTS = 3
 
@@ -66,7 +69,28 @@ def install(llm_module):
                 # output budget on hidden reasoning.
                 if str(model).startswith("gpt-5.6"):
                     kwargs["reasoning"] = {"effort": "low"}
-                r = cli.responses.create(**kwargs)
+                # Long legal drafts run in Responses background mode so a transient
+                # HTTP disconnect cannot destroy a valid generation.  We submit once,
+                # then poll the response object by id until it reaches a terminal state.
+                # Fast-role calls stay synchronous below because they are short.
+                if role == "draft":
+                    kwargs["background"] = True
+                    r = cli.responses.create(**kwargs)
+                    rid = getattr(r, "id", None)
+                    started = time.monotonic()
+                    while str(getattr(r, "status", "") or "") in ("queued", "in_progress"):
+                        if time.monotonic() - started > OPENAI_BACKGROUND_MAX_SECONDS:
+                            raise TimeoutError(
+                                "انتهت مهلة انتظار GPT في الخلفية بعد %d ثانية" %
+                                int(OPENAI_BACKGROUND_MAX_SECONDS)
+                            )
+                        if not rid:
+                            raise RuntimeError("OpenAI background response بلا response id")
+                        time.sleep(OPENAI_BACKGROUND_POLL_SECONDS)
+                        r = cli.responses.retrieve(rid)
+                else:
+                    r = cli.responses.create(**kwargs)
+
                 txt = getattr(r, "output_text", "") or ""
                 status = str(getattr(r, "status", "") or "")
                 if txt.strip():
@@ -79,9 +103,12 @@ def install(llm_module):
 
                 details = getattr(r, "incomplete_details", None)
                 reason = getattr(details, "reason", None) if details is not None else None
+                err = getattr(r, "error", None)
+                err_msg = getattr(err, "message", None) if err is not None else None
                 last = RuntimeError(
-                    "OpenAI أعاد نتيجة بلا نص (status=%s, reason=%s)" %
-                    (status or "unknown", reason or "unknown")
+                    "OpenAI أعاد نتيجة بلا نص (status=%s, reason=%s%s)" %
+                    (status or "unknown", reason or "unknown",
+                     (", error=" + str(err_msg)) if err_msg else "")
                 )
             except Exception as exc:
                 last = exc
