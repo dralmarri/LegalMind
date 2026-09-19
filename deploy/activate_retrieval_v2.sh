@@ -23,10 +23,9 @@ sleep 4
 systemctl is-active --quiet legalmind-admin.service
 
 echo "[5/5] تحقق أن v2 رُكبت فعليًا داخل عملية الاستيراد"
-set -a
-[ -f deploy/admin.env ] && . deploy/admin.env || true
-[ -f deploy/.env ] && . deploy/.env || true
-set +a
+# لا نعمل source لملفات env هنا: بعض القيم قد تحتوي محارف shell مثل $3،
+# والخدمة نفسها قرأت EnvironmentFile بالفعل عند إعادة التشغيل.
+# التحقق المطلوب هنا بنيوي فقط ولا يحتاج مفاتيح خارجية.
 "$PY" - <<'PY'
 import admin.main as m
 assert getattr(m.app_module, "_retrieval_v2_installed", False), "Retrieval v2 not installed"
