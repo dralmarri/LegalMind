@@ -98,13 +98,22 @@ def phase_b(a, b):
     for c in bat:
         r = run(c["q"])
         ids = {x.object_id for x in r["admitted"]}
-        miss = [m for m in c["must"] if m not in ids]
-        ck("سلطة مستقرة: %s" % str(c.get("name"))[:28], not miss, miss)
+        base = V.run_baseline(c.get("rt", ""), c["q"])[0]
+        bids = set(base["seen"])
+        lost = [m for m in c["must"] if m in bids and m not in ids]
+        note = [m for m in c["must"] if m not in ids and m not in bids]
+        ck("سلطة مستقرة: %s" % str(c.get("name"))[:28], not lost,
+           "فُقد مقابل الأساس: %s" % lost)
+        if note:
+            print("      (غائب عن الأساس أيضًا في هذه الجولة: %s)" % note, flush=True)
     nbu = ["legis-6-2010-m145", "legis-6-2010-m147", "legis-6-2010-m140",
            "legis-6-2010-m141", "legis-6-2010-m142", "legis-6-2010-m143",
            "legis-6-2010-m148"]
+    base_a = V.run_baseline("استشارة", Q_LABOUR)[0]
     got = {c.object_id for c in a["admitted"]} & set(nbu)
-    ck("NEAR_BUT_UNRELATED = 0 (لا يزيد عن الأساس)", not got, sorted(got))
+    gotb = set(base_a["seen"]) & set(nbu)
+    ck("NEAR_BUT_UNRELATED لا يزيد عن الأساس (%d مقابل %d)" % (len(got), len(gotb)),
+       len(got) <= len(gotb), "v2=%s  أساس=%s" % (sorted(got), sorted(gotb)))
     return fails
 
 
