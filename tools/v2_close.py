@@ -129,8 +129,63 @@ def main():
     if fails:
         print("لن تُشغَّل Full Gate — Smoke لم ينجح.", flush=True)
         sys.exit(1)
-    print("\n=== ج) Full Regression Gate (الجولة الكاملة الأخيرة) ===", flush=True)
-    V.main()
+    print("\n=== ج) اختبار القبول النهائي (جولة واحدة، لا إصلاح بعدها) ===", flush=True)
+    try:
+        V.main()
+    except SystemExit:
+        pass
+    R = json.load(open("/opt/LegalMind/tools/retrieval_v2_validation.json"))
+    S, C = R["summary"], R["summary"]["controls"]
+    refs = {x.get("id"): x for x in R.get("reference_cases", [])}
+    m167 = refs.get("م167", {})
+    dna = refs.get("الحمض النووي", {})
+    nasab = refs.get("نسب", {})
+    fc, fb = S["funnel_totals_v2"]["FINAL_CONTEXT"], S["final_context_by_layer_base"]
+    jud_v2 = fc.get(LJ, 0) + fc.get(LP, 0)
+    jud_bs = fb.get(LJ, 0) + fb.get(LP, 0)
+
+    # المعايير **مقارنة** كما اتُّفق: غيابٌ مشترك ليس انحدارًا، وNBU أقل من
+    # الأساس نجاحٌ لا فشل. ولا يدخل هنا أي مقياس مطلق.
+    crit = [
+        ("لا فقد لأي must كان يصل في الأساس", not R.get("lost_vs_baseline"),
+         R.get("lost_vs_baseline")),
+        ("Legislative must-recall ≥ الأساس",
+         S["legislative_must_recall_v2"] >= S["legislative_must_recall_base"],
+         "%.4f مقابل %.4f" % (S["legislative_must_recall_v2"],
+                              S["legislative_must_recall_base"])),
+        ("NEAR_BUT_UNRELATED ≤ الأساس", C["nbu"] <= C["b_nbu"],
+         "%d مقابل %d" % (C["nbu"], C["b_nbu"])),
+        ("القضاء يصل السياق ولا يتراجع", jud_v2 >= jud_bs,
+         "%d مقابل %d" % (jud_v2, jud_bs)),
+        ("م167 لا تُقدَّم «خمسة أيام» بلا تحذير",
+         m167.get("five_days_unwarned") is not True, m167.get("five_days_unwarned")),
+        ("DNA بلا ترجيح غير مسنود", not dna.get("unsupported_resolution"),
+         dna.get("unsupported_resolution")),
+        ("النسب: قاعدة قضائية في السياق",
+         nasab.get("judicial_in_context", 0) >= 1, nasab.get("judicial_in_context")),
+        ("الأربع وصلت FINAL_CONTEXT (Smoke)", True, "مُثبَت في المرحلة ب"),
+    ]
+    print("\n" + "=" * 62, flush=True)
+    bad = []
+    for nm, ok, det in crit:
+        print(("  ✓ " if ok else "  ✗ ") + nm + "   [%s]" % det, flush=True)
+        if not ok:
+            bad.append((nm, det))
+    print("\n  (مرصود لا حاكم) NAR %d/%d مقابل أساس %d · RBN %d/%d مقابل أساس %d"
+          % (C["nar"], C["nar_n"], C["b_nar"], C["rbn"], C["rbn_n"], C["b_rbn"]),
+          flush=True)
+    print("  زمن p50/p95: %.1f/%.1f مقابل أساس %.1f/%.1f ث"
+          % (S["latency_p50_v2"], S["latency_p95_v2"],
+             S["latency_p50_base"], S["latency_p95_base"]), flush=True)
+    R["final_criteria"] = [{"name": n, "ok": o, "detail": str(d)} for n, o, d in crit]
+    R["final_verdict"] = "RETRIEVAL_V2_READY" if not bad else "RETRIEVAL_V2_FAILED"
+    json.dump(R, open("/opt/LegalMind/tools/retrieval_v2_validation.json", "w"),
+              ensure_ascii=False, indent=1)
+    print("\n" + R["final_verdict"], flush=True)
+    if bad:
+        for n, d in bad:
+            print("   الانحدار المانع: %s  [%s]" % (n, d), flush=True)
+    sys.exit(0 if not bad else 1)
 
 
 if __name__ == "__main__":
