@@ -5972,12 +5972,14 @@ def draft_endpoint(inp: _DraftIn, _: str = Depends(require_auth)):
             box["res"] = _draft_run(inp)
         except HTTPException as e:
             print("[draft] HTTPException:", e.status_code, str(e.detail)[:200], flush=True)
-            box["res"] = {"answer": "تعذر إتمام الطلب: " + str(e.detail), "error": True}
+            _msg = "تعذر إتمام الطلب: " + str(e.detail)
+            box["res"] = {"answer": _msg, "error": _msg, "error_type": "http"}
         except Exception as e:
             import traceback
             print("[draft] CRASH:", flush=True)
             traceback.print_exc()
-            box["res"] = {"answer": "خطأ داخلي غير متوقع: " + str(e)[:300], "error": True}
+            _msg = "خطأ داخلي غير متوقع: " + str(e)[:500]
+            box["res"] = {"answer": _msg, "error": _msg, "error_type": type(e).__name__}
         _store_draft_result(getattr(inp, "client_rid", None), box.get("res"))
     th = threading.Thread(target=_work, daemon=True)
     th.start()
