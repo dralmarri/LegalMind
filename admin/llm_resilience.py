@@ -1,33 +1,37 @@
 # -*- coding: utf-8 -*-
 """Production resilience for long LegalMind drafting calls.
 
-Keeps Retrieval v2 untouched.  The drafting pipeline legitimately sends a large,
-source-grounded legal context and may need longer than the SDK's ordinary request
-window.  Apply a per-provider 30 minute transport timeout without changing the
-retrieved authority packet, model, prompt, or output-token budget.
+Keeps Retrieval v2 and the authority packet untouched.  This module hardens
+provider transport and, specifically, the OpenAI leg used by dual-model drafting.
 """
+import time
 
 DRAFT_TRANSPORT_TIMEOUT_SECONDS = 1800.0
+OPENAI_DRAFT_ATTEMPTS = 3
+
+
+def _error_text(exc):
+    """Return a useful provider error without leaking credentials or request bodies."""
+    name = type(exc).__name__
+    msg = str(exc).replace("\n", " ").strip()
+    if len(msg) > 500:
+        msg = msg[:500] + "…"
+    return (name + ": " + msg) if msg else name
 
 
 def install(llm_module):
-    """Install transport-timeout hardening idempotently."""
+    """Install transport/retry hardening idempotently."""
     if getattr(llm_module, "_legalmind_resilience_installed", False):
         return
 
     original_stream_final = llm_module._stream_final
 
     def _stream_final_resilient(msgs_api, **kw):
-        # Anthropic SDK accepts per-request timeout through the messages API.
-        # This affects transport/read timeout only; it does not alter model work.
         kw.setdefault("timeout", DRAFT_TRANSPORT_TIMEOUT_SECONDS)
         return original_stream_final(msgs_api, **kw)
 
     llm_module._stream_final = _stream_final_resilient
 
-    # OpenAI fallback must have an independent full transport window as well.
-    # Otherwise a long first-provider attempt can be followed by a fallback that
-    # dies under the SDK's default request timeout for the same large legal packet.
     def _oa_client_resilient():
         key = llm_module._env("OPENAI_API_KEY")
         if not key:
@@ -36,4 +40,59 @@ def install(llm_module):
         return OpenAI(api_key=key, timeout=DRAFT_TRANSPORT_TIMEOUT_SECONDS, max_retries=2)
 
     llm_module._oa_client = _oa_client_resilient
+
+    # Replace the OpenAI call itself, not Retrieval v2.  The previous adapter could
+    # return an empty _Resp when Responses API ended as incomplete, which the UI
+    # later rendered as a boolean-looking failure ("reason: true").  A dual-model
+    # leg must either return usable text or raise a concrete provider error.
+    def _oa_call_resilient(role, system, messages, max_tokens):
+        if not llm_module._env("OPENAI_API_KEY"):
+            raise RuntimeError("OPENAI_API_KEY غير مضبوط في البيئة")
+        model = llm_module._oa_model(role)
+        payload = llm_module._oa_input(messages)
+        last = None
+        for attempt in range(1, OPENAI_DRAFT_ATTEMPTS + 1):
+            try:
+                cli = llm_module._oa_client()
+                kwargs = {
+                    "model": model,
+                    "instructions": system,
+                    "input": payload,
+                    "max_output_tokens": max_tokens,
+                }
+                # GPT-5.6 supports explicit reasoning effort.  Low is deliberate
+                # here: retrieval already supplies the legal authorities, and the
+                # parallel drafting leg must finish reliably rather than spend its
+                # output budget on hidden reasoning.
+                if str(model).startswith("gpt-5.6"):
+                    kwargs["reasoning"] = {"effort": "low"}
+                r = cli.responses.create(**kwargs)
+                txt = getattr(r, "output_text", "") or ""
+                status = str(getattr(r, "status", "") or "")
+                if txt.strip():
+                    u = getattr(r, "usage", None)
+                    usage = llm_module._Usage(
+                        getattr(u, "input_tokens", 0) or 0,
+                        getattr(u, "output_tokens", 0) or 0,
+                    )
+                    return llm_module._Resp(txt, model, refusal=False, usage=usage)
+
+                details = getattr(r, "incomplete_details", None)
+                reason = getattr(details, "reason", None) if details is not None else None
+                last = RuntimeError(
+                    "OpenAI أعاد نتيجة بلا نص (status=%s, reason=%s)" %
+                    (status or "unknown", reason or "unknown")
+                )
+            except Exception as exc:
+                last = exc
+
+            if attempt < OPENAI_DRAFT_ATTEMPTS:
+                time.sleep(2 * attempt)
+
+        raise RuntimeError(
+            "فشل مسار GPT بعد %d محاولات مستقلة: %s" %
+            (OPENAI_DRAFT_ATTEMPTS, _error_text(last or RuntimeError("سبب غير معروف")))
+        )
+
+    llm_module._oa_call = _oa_call_resilient
     llm_module._legalmind_resilience_installed = True
