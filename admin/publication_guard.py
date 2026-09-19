@@ -52,17 +52,40 @@ def appeal_publications(cur, number: str, year: str) -> list[dict]:
 def _appeal_citation_segments(text: str, number: str, year: str) -> list[str]:
     """Return only citation segments belonging to the requested appeal.
 
-    This prevents a second appeal cited in the same principle row from donating its publication
-    location to the first appeal. A segment ends at newline/closing parenthesis, which is how the
-    corpus stores the citation tails observed in production.
+    Handles both spaced and compact citation forms, and stops before a later appeal citation
+    even when multiple appeals are stored in one principle row.
     """
     if not text:
         return []
+
+    # Normalize only for matching; keep original text for extraction.
     pat = re.compile(
-        rf"(?:الطعن(?:ان|ين)?\s+(?:رقم\s*)?){re.escape(number)}\s*/\s*{re.escape(year)}[^\n)]*",
+        rf"(?:الطعن(?:ان|ين)?\s+(?:رقم\s*)?)"
+        rf"{re.escape(number)}\s*/\s*{re.escape(year)}",
         re.IGNORECASE,
     )
-    return [m.group(0) for m in pat.finditer(text)]
+    matches = list(pat.finditer(text))
+    if not matches:
+        return []
+
+    out: list[str] = []
+    for i, m in enumerate(matches):
+        start = m.start()
+        # End at the first of: newline, closing parenthesis, or a subsequent appeal citation.
+        hard_end = len(text)
+        nl = text.find("\n", m.end())
+        if nl != -1:
+            hard_end = min(hard_end, nl)
+        rp = text.find(")", m.end())
+        if rp != -1:
+            hard_end = min(hard_end, rp)
+        next_any = _APPEAL_RE.search(text, m.end())
+        if next_any:
+            hard_end = min(hard_end, next_any.start())
+        segment = text[start:hard_end].strip()
+        if segment:
+            out.append(segment)
+    return out
 
 
 def _extract_publications_for_appeal(text: str, number: str, year: str) -> list[str]:
