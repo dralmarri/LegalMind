@@ -43,17 +43,31 @@ def appeal_publications(cur, number: str, year: str) -> list[dict]:
     return out
 
 
+def _extract_publications_from_text(text: str) -> list[str]:
+    values = []
+    for m in _PUB_RE.finditer(text or ""):
+        v = _norm_pub(m.group(0))
+        if v and v not in values:
+            values.append(v)
+    return values
+
+
 def publication_consistency(cur, number: str, year: str) -> dict:
     rows = appeal_publications(cur, number, year)
     pubs = defaultdict(list)
     for row in rows:
+        candidates = []
         if row["publication"]:
-            pubs[row["publication"]].append(row["id"])
+            candidates.append(row["publication"])
+        candidates.extend(_extract_publications_from_text(row["text"]))
+        for pub in candidates:
+            if pub:
+                pubs[pub].append(row["id"])
     values = sorted(pubs)
     return {
         "appeal": f"{number}/{year}",
         "rows": rows,
-        "publications": [{"value": p, "ids": pubs[p]} for p in values],
+        "publications": [{"value": p, "ids": sorted(set(pubs[p]))} for p in values],
         "status": "unique" if len(values) == 1 else ("missing" if not values else "conflict"),
         "canonical_publication": values[0] if len(values) == 1 else None,
     }
