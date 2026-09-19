@@ -1,0 +1,11 @@
+{
+ "stages": {
+  "legis-6-2010-m146": "RERANKER_INPUT_ONLY",
+  "legis-67-1980-m442": "FINAL_CONTEXT",
+  "legis-38-1980-m166": "FINAL_CONTEXT",
+  "legis-38-1980-m167": "FINAL_CONTEXT"
+ },
+ "smoke_failures": [
+  "m146 يصل FINAL_CONTEXT"
+ ]
+}
