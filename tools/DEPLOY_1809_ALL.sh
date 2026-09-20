@@ -47,7 +47,7 @@ mkdir -p /opt/LegalMind/tools /opt/legalmind-data
 
 echo "═══ 1) كتابة السكربتات الثلاثة ═══"
 base64 -d <<'B64_SUKUK' | gunzip > /opt/LegalMind/tools/ingest_sukuk90_2026.py
-H4sIAIqxr2oC/+19a1Nb57nod/2KVXUyI6WAxdXAGZ8ZYpOEE2xnA95tj49HlUG21XDxcEni3elMMAgTObNzOtPzA1JqI2QwVjB2Sb75V8DX/pLzXN/LuklycdLd2Zk2QdJa7+V5n/vt/WXQ/X53MLs0V1m8Oxqsrd7pHsZvMtlsNnNWPW2e
+H4sIADi8r2oC/+19a1Nb57nod/2KVXUyI6WAxdXAGZ8ZYpOEE2xnA95tj49HlUG21XDxcEni3elMMAgTObNzOtPzA1JqI2QwVjB2Sb75V8DX/pLzXN/LuklycdLd2Zk2QdJa7+V5n/vt/WXQ/X53MLs0V1m8Oxqsrd7pHsZvMtlsNnNWPW2e
 Hp1tn1WD0/rZw9Pdsy34sBWcNs8ewncjheBsE37fOt0L+gp9Q8HZ+lktOH15uoPP7MJvx2cb8MIGfzigD9WzGjz+96/+zF8+OT08fY5/0cezDfh39WyzJ5Ohj9XTY/i9OSo/wuu10wZ/qOFYp9/wKCfw1GHQO1wY0W94VfTnM1o3znq2zb+d
 1k9PcCP68M7pAbw+AvuCbdZOT/jbv8DCmkHvwMDw2aOzr2RBNMT62UPa8IWRC30FXsVxH8AtB3/v4wS8xO3T72HE3dPv8j0Bb4TBeIx/8CJrZ+sMtf6OJu8dCGgXDZiwDs/hYs6qALX334fvtnCgs0d6TLC5XZiqOvr++wH/FchwmzC7wLkJ
 427D5LCCA/wlePNsuPDmx4CG2oIHdvnJrdNjXiAiRhWPW84J4PmfZ3+CtcDzD+HDZubNsw7xB6ZDvIBHHp59C28+lZl4F3WEGwz+GJdSPz2E8faCgb7C3P0KDAPPNQDvNk4PezJn27+bL9+trHQPF7px3N8FAMPt4P333SUgmP4GwwkwHp6+
@@ -145,7 +145,7 @@ bEin4VNsqS10tVAQ3uHxp3PQu0urqTJb4Prv41MTH/42TNqXUtRuGNjOIto0TYbqvGNxrqwI777laZ6L
 JyeuTgB8YRHtodiCj2MhHPLMQjQDqWcoZ5ihFvJK2qBhr2cqxzH8lfBNQtKixUcwN/9T0lQ8O42lmWGfZhK0XMOcVK3NJ2wy4zG9iWsfjU+DTLvxyY1PRgogtygoDxhcLC6WFsrFIpJdtlhEj0KxmJXYO7kXMv8f4B/1p7fNAAA=
 B64_SUKUK
 base64 -d <<'B64_GAZ' | gunzip > /opt/LegalMind/tools/ingest_gazette1809.py
-H4sIAIqxr2oC/9V9a1NbV5bod/2K3SdFWScRMgLHNqoiVcTIbm5j8AV8p3vclEZIx0aJkLiScOKemqrwNE1y0zdVM5/mw1TG44CxMcEYO+R+y68QX/uX3PXYr/PSA7CTSSUK0tlnP9Ze77X22h+I/g/7RbFWKlcfZMVy837/dfwl4ThOonVw
+H4sIADi8r2oC/9V9a1NbV5bod/2K3SdFWScRMgLHNqoiVcTIbm5j8AV8p3vclEZIx0aJkLiScOKemqrwNE1y0zdVM5/mw1TG44CxMcEYO+R+y68QX/uX3PXYr/PSA7CTSSUK0tlnP9Ze77X22h+I/g/7RbFWKlcfZMVy837/dfwl4ThOonVw
 utI6aT0TrZ3T9dO1063T7dYef9mGLxvi71/9K32FRgetA5G5PjDc+oZ/OTrdlC+2nsPnJrz6TJxu8bPWbusEOthUjZ+09uH1YdE6bO1CwxP+9T9bL1uHInPlyvXTx6dfJWjcDepi5XRVDA4MXr08fHlw4HQjnUicbrR2RGvv9G8wkZfQ7rE4
 fdz6Ef5HPcl1ZBNCJFtPXAGtD2GGuAQYcJXmB9OB8U9X4bfhjNArwGGgUWsP1wjLXscvJ603Aid9ugavbjBEQr0kr7l2N5kBGB3/gfdft55gu6fw6HVrp/U9TBaW/QMC7AnOC7pa5V438BPhtgdtf4LxN4R86a0EHTw7DLQnWKu9gebHgicK
 X75u7chpJHE5MJed1gto/RGOfIhLEwxj2I+PeIQ9WNQq7gr8uAdLAqgBZNeg9Z6C71N4/AYe7+PIadE6vt4/nCZg77qwK623uK0wRQQS4YrEjD3cd3jnuQB8WD/9axCS1y4j3LJyxv0wtUwW2gAC7cFUDwg2tDOH0P3K6ben2zAkdrHVegXd
@@ -229,7 +229,7 @@ bLDH7FAf2N5S6OCTEZGJXrZJjdET2IcJ/GQtOcBArB2KBaE/uyOag/gSq1TWThx0Nig0ugWAQdRdeui2
 AA==
 B64_GAZ
 base64 -d <<'B64_REGL' | gunzip > /opt/LegalMind/tools/fix_regl_10_2020_official.py
-H4sIAIqxr2oC/9U7aVMcR5bf+1eky0Goi2mKQ6CjY/FGS7RkxggUDaztlYieortAJfcVVYUOW44QEo1Y7F3JEbOf5pOHkAXoYLCuwfqmX1H91b9k33uZWZV1dAPyemYXW1DHy5cv3/1eZn3MBvoHWKVZtRvLebbiLQ2cwScZTdMy/q6/37nX
+H4sIADi8r2oC/9U7aVMcR5bf+1eky0Goi2mKQ6CjY/FGS7RkxggUDaztlYieortAJfcVVYUOW44QEo1Y7F3JEbOf5pOHkAXoYLCuwfqmX1H91b9k33uZWZV1dAPyemYXW1DHy5cv3/1eZn3MBvoHWKVZtRvLebbiLQ2cwScZTdMy/q6/37nX
 2fR3mP+ks9ZZ85/4P/nPxa2/21nvrMLbvxEEvL8Hj9c7G511+X7Df9rZ7NxjWcdarg0MDw2MDI0M6azTBpDOuv/SfyFRt/2XAL2Ht4/h9j/403X/NUe1D6/bnU0jk6HbF/AOZ97Jc7j7SBhAP/F3+YO7p07jLA8B44vOf8EIwPuSBn0HQN8j
 sfeRBpjW34Yn+/ic+c+B2u86P8AloHzVWWX+FizoAb7aEshgWZz+/n6FaFj6dmctI4h+5e9HyO7v53T6e0AzTvcM6dmF6dqdNfb+KYzeRyIYsbvNsgx4tAZj1wEOWHbq/Tv2690/C5wE0lnFAf4v9BxYfh+kAGtiJLINmOYlMoNz6xmQ+AQe
 rnEET0mOT/0d5MMG3oS0wAUyY9N/wWFfA8kbQJiAgxXvA7oDJvAiJCxfiAXeAnxs7VJCRJSQzibctGF2gjuAIXts+MzQWfmEr5vTShpF6rXB3wH/DlDFJPAW6OMeOwusAwlsStL+Cpq1z4ZHR890HnTuCuoIxSqoI7J08OzgyBCn4vXI2YGT
@@ -318,6 +318,8 @@ if [ "$PG" = "$QD" ]; then echo "CONSISTENT_OK"; else
 
 echo
 echo "═══ 8) اختبارات استرجاع حية (مرشَّحة بالتشريعات) ═══"
+# تشخيصٌ لا بوابة: عُزل عن set -e بعد أن أسقط عطبٌ فيه البطاريةَ في أول تشغيل حي.
+set +e
 HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 /opt/LegalMind/.venv/bin/python - <<'PYTEST'
 import sys, os, subprocess, json
 sys.path.insert(0, "/opt/LegalMind"); os.chdir("/opt/LegalMind")
@@ -331,9 +333,15 @@ CASES = [
 ]
 ok_all = True
 for q, want in CASES:
-    out = subprocess.run(["/opt/LegalMind/.venv/bin/python", "engine/embed_query_cli.py", q],
-                         capture_output=True, text=True, env=dict(os.environ))
-    vec = json.loads(out.stdout)
+    # embed_query_cli يقرأ السؤال من stdin لا من argv — تمريره وسيطًا يُخرج [] فيرفضه Qdrant بـ400
+    out = subprocess.run(["/opt/LegalMind/.venv/bin/python", "engine/embed_query_cli.py"],
+                         input=q, capture_output=True, text=True,
+                         env=dict(os.environ), timeout=240)
+    vec = json.loads((out.stdout or "").strip() or "[]")
+    if not vec:
+        print("  EMBED_EMPTY لـ«%s» — stderr: %s" % (q[:40], (out.stderr or "")[-200:]))
+        ok_all = False
+        continue
     r = eng.qdrant_request("POST", "/collections/%s/points/search" % eng.COLLECTION,
           {"vector": vec, "limit": 6, "with_payload": True,
            "filter": {"must": [{"key": "object_type", "match": {"any": [
@@ -346,6 +354,8 @@ for q, want in CASES:
         print("        %.3f  %s" % (s, oid))
 print("RETRIEVAL_" + ("ALL_OK" if ok_all else "SOME_MISS"))
 PYTEST
+[ $? -eq 0 ] || echo "RETRIEVAL_TEST_ERROR — تشخيص فقط، لا يوقف الدفعة"
+set -e
 
 echo
 echo "═══ 9) بطارية القياس (صمام الانتكاس) ═══"
