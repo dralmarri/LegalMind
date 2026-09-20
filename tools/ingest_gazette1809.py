@@ -12,10 +12,16 @@
         والنص القديم يُحفظ في metadata.previous_versions[] — لا يُمحى نص قط.
       - المواد 108، 109، 110، 111، 112، 113، 116: توسم superseded/repealed_by
         ولا تُحذف (نموذج §10 المعتمد في إلغاء 23/1990).
-  (ج) المذكرة الإيضاحية للمرسوم بقانون رقم 93 لسنة 2026 بتعديل المادة (11) من
-      القانون (النظام) الموحد لمكافحة الغش التجاري الصادر بالقانون 20/2019. ص12.
-      **نص المرسوم نفسه غير متاح في المصدر المرفوع** — تُدخل المذكرة وحدها،
-      ويوسم legis-20-2019-m11 بأنه معدَّل بانتظار النص الرسمي. لا يُصطنع نص.
+  (ج) مرسوم بقانون رقم 93 لسنة 2026 بتعديل المادة (11) من القانون (النظام) الموحد
+      لمكافحة الغش التجاري الصادر بالقانون 20/2019: مادتاه + مذكرته الإيضاحية.
+      وقاعدة التحديث على `legis-20-2019-m11`: النص النافذ على معرّفها نفسه والقديم
+      إلى previous_versions[].
+      **مصدر المتن:** وصل نصًّا من المالك نقلًا عن الجريدة الرسمية (لا صورةً)، وقوبل
+      بالمذكرة الإيضاحية المصوَّرة فتطابقا في كل عنصر جوهري (قائمة الإحالة الجديدة،
+      واستبعاد المادتين 4 و6، والنفاذ من تاريخ النشر) — تطابق مصدرين مستقلين.
+
+إعادة تشغيل هذه الدفعة آمنة: كل تعديل يفحص أولًا إن كان مطبَّقًا سلفًا فيتخطاه،
+وإضافة النسخ السابقة تمنع التكرار ببصمة sha256 — فلا يتضاعف سجل شيء.
 
 ما لا تُدخله هذه الدفعة عمدًا:
   - المرسوم بقانون بشأن الصكوك الحكومية: المرفوع لا يحمل منه إلا ذيل مذكرته
@@ -137,6 +143,37 @@ D93_MEMO = """صدر القانون رقم (20) لسنة 2019 متضمنا ال�
 ونصت المادة الثانية على أن يعمل به من تاريخ نشره في الجريدة الرسمية.
 وإذ صدر الأمر الأميري بتاريخ 2 ذو القعدة 1445هـ الموافق 10 مايو 2024 ونصت المادة 4 منه على أن تصدر القوانين بمراسيم بقوانين، لذا أعد المرسوم بقانون الماثل."""
 
+D93_A1 = """مادة أولى
+يستبدل بنص المادة (11) من القانون (النظام) الموحد لمنع الغش التجاري لدول مجلس التعاون لدول الخليج العربية المرافق للقانون رقم 20 لسنة 2019 المشار إليه النص الآتي:
+"يعاقب بالحبس مدة لا تزيد على سنتين وبغرامة لا تقل عن 5000 خمسة آلاف ريال سعودي أو ما يعادلها من عملات دول المجلس ولا تزيد على 1,000,000 مليون ريال سعودي أو ما يعادلها من عملات دول المجلس أو بإحدى هاتين العقوبتين، كل من خالف أحكام المواد (2) و (3) و (5)، والبندين (أ) و (ب) من المادة (8) من هذا القانون (النظام)."."""
+
+D93_A2 = """مادة ثانية
+على الوزراء - كل فيما يخصه - تنفيذ هذا المرسوم بقانون، ويعمل به من تاريخ نشره في الجريدة الرسمية."""
+
+# نص المادة (11) النافذ — هو ما استبدلته المادة الأولى أعلاه، مقتطعًا من بين علامتَي
+# الاقتباس فيها ليوضع على معرّف المادة الأصلي legis-20-2019-m11 وفق قاعدة التحديث.
+NEW_M11 = ("يعاقب بالحبس مدة لا تزيد على سنتين وبغرامة لا تقل عن 5000 خمسة آلاف ريال سعودي "
+           "أو ما يعادلها من عملات دول المجلس ولا تزيد على 1,000,000 مليون ريال سعودي أو ما "
+           "يعادلها من عملات دول المجلس أو بإحدى هاتين العقوبتين، كل من خالف أحكام المواد "
+           "(2) و (3) و (5)، والبندين (أ) و (ب) من المادة (8) من هذا القانون (النظام).")
+
+
+def _push_prev(meta, old_text, note):
+    """إضافة نسخة سابقة مع منع التكرار ببصمتها — فإعادة تشغيل الدفعة لا تضاعف السجل."""
+    import hashlib as _h
+    sha = _h.sha256(old_text.encode("utf-8")).hexdigest()
+    prev = list(meta.get("previous_versions") or [])
+    if any(pv.get("sha256") == sha for pv in prev):
+        return meta, False
+    prev.append({
+        "text": old_text, "sha256": sha,
+        "superseded_on": GAZETTE_DATE,
+        "superseded_by": note,
+        "recorded_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    })
+    meta["previous_versions"] = prev
+    return meta, True
+
 
 # ═══════════════════════════ بناء الكائنات ═══════════════════════════
 
@@ -205,17 +242,32 @@ def build_93_records():
             "instrument": "مرسوم بقانون رقم 93 لسنة 2026",
             "instrument_rank": "مرسوم بقانون",
             "amends": "المادة (11) من القانون رقم (20) لسنة 2019 — legis-20-2019-m11",
-            "document_kind": "explanatory_memorandum",
-            "decree_text_missing": True,
-            "decree_text_missing_note": (
-                "المصدر المرفوع يحمل المذكرة الإيضاحية وحدها (ص12 من العدد 1809)؛ "
-                "متن المرسوم (المادتان الأولى والثانية) على صفحة أخرى لم تُرفع. "
-                "لم يُصطنع نص المادة (11) الجديدة ولم تُعدَّل legis-20-2019-m11 نصًّا — "
-                "مطلوب تصوير صفحة المرسوم لاستكمال الإدخال."),
-            "related_laws": ["legis-20-2019"]}
-    return [_row("legis-93-2026-memo-1", "legislation_preamble", D93_BRANCH,
-                 D93_TOPIC, "المذكرة الإيضاحية",
-                 "المذكرة الإيضاحية — %s" % D93_LONGTITLE, D93_MEMO, base)]
+            "related_laws": ["legis-20-2019"],
+            "text_provenance": (
+                "متن المرسوم (المادتان الأولى والثانية) وصل نصًّا من المالك نقلًا عن الجريدة "
+                "الرسمية، لا صورةً؛ وقوبل بالمذكرة الإيضاحية المصوَّرة (ص12 من العدد 1809) "
+                "فتطابقا في كل عنصر جوهري: قائمة الإحالة الجديدة (2) و(3) و(5) وبندا (أ)/(ب) "
+                "من م8، واستبعاد (4) و(6)، والنفاذ من تاريخ النشر — تطابق مصدرين مستقلين."),
+            "title_note": (
+                "متن المادة الأولى يسمّي النظام الموحد «لمنع الغش التجاري» بينما عنوان "
+                "المرسوم ومذكرته يسمّيانه «لمكافحة الغش التجاري» — نُقل كلٌّ كما ورد."),
+            }
+    out = []
+    for seq, (label, text) in enumerate([("أولى", D93_A1), ("ثانية", D93_A2)], 1):
+        m = dict(base, issuing=True, issuing_seq=seq, issuing_label=label)
+        if seq == 1:
+            m["replaces_article"] = "legis-20-2019-m11"
+        if seq == 2:
+            m["is_effective_article"] = True
+            m["effective_rule"] = "يعمل به من تاريخ نشره في الجريدة الرسمية (2026/9/20)"
+        out.append(_row("legis-93-2026-issue-%d" % seq, "legislation_issuing_article",
+                        D93_BRANCH, D93_TOPIC, "مواد المرسوم",
+                        "مادة %s — مرسوم بقانون رقم 93 لسنة 2026" % label, text, m))
+    out.append(_row("legis-93-2026-memo-1", "legislation_preamble", D93_BRANCH,
+                    D93_TOPIC, "المذكرة الإيضاحية",
+                    "المذكرة الإيضاحية — %s" % D93_LONGTITLE, D93_MEMO,
+                    dict(base, document_kind="explanatory_memorandum", issuing=False)))
+    return out
 
 
 # ═══════════════════ قاعدة التحديث على القانون 7/2010 ═══════════════════
@@ -239,6 +291,12 @@ def update_7_2010_m1(cur):
         raise SystemExit("M1_MISSING: legis-7-2010-m1 غير موجودة — أوقفت الدفعة.")
     old_text, meta = row[0], (row[1] or {})
 
+    # إعادة التشغيل آمنة: إن كان التعريفان الجديدان مُثبَتين سلفًا فلا شيء يُفعل
+    if NEW_DEF_MINISTER in old_text and NEW_DEF_COURT in old_text \
+            and OLD_DEF_MINISTER not in old_text and OLD_DEF_COURT not in old_text:
+        print("M1_ALREADY_CURRENT: legis-7-2010-m1 تحمل التعريفين النافذين سلفًا — لا تكرار.")
+        return False
+
     # مرساة صارمة: كل تعريف يجب أن يرد مرة واحدة بالضبط، وإلا نتوقف (لا رقعة عمياء)
     for needle in (OLD_DEF_MINISTER, OLD_DEF_COURT):
         n = old_text.count(needle)
@@ -250,16 +308,9 @@ def update_7_2010_m1(cur):
     new_text = new_text.replace(OLD_DEF_COURT, NEW_DEF_COURT)
     assert new_text != old_text
 
-    prev = list(meta.get("previous_versions") or [])
-    prev.append({
-        "text": old_text,
-        "sha256": hashlib.sha256(old_text.encode("utf-8")).hexdigest(),
-        "superseded_on": GAZETTE_DATE,
-        "superseded_by": "مرسوم بقانون رقم 91 لسنة 2026 — legis-91-2026-issue-1",
-        "recorded_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
-        "note": "النص السابق لاستبدال تعريفَي (الوزير المختص) و(المحكمة المختصة).",
-    })
-    meta["previous_versions"] = prev
+    meta, _added = _push_prev(meta, old_text,
+                              "مرسوم بقانون رقم 91 لسنة 2026 — legis-91-2026-issue-1")
+    prev = meta["previous_versions"]
     meta["amended_by"] = "legis-91-2026-issue-1"
     meta["amendment_date"] = GAZETTE_DATE
     meta["amendment_scope"] = "استبدال تعريفَي (الوزير المختص) و(المحكمة المختصة) دون سائر التعريفات"
@@ -298,26 +349,44 @@ def mark_repealed_7_2010(cur):
     return done
 
 
-def flag_20_2019_m11(cur):
-    """توسيم فقط — لا تعديل نص: متن المرسوم 93/2026 غير متاح في المصدر المرفوع."""
+def update_20_2019_m11(cur):
+    """قاعدة التحديث: نص م11 النافذ على معرّفها نفسه، والقديم إلى previous_versions[].
+    (وصل متن المرسوم 93/2026 من المالك نقلًا عن الجريدة، وطابق المذكرة المصوَّرة.)"""
     rid = "legis-20-2019-m11"
-    cur.execute("SELECT metadata FROM knowledge_objects WHERE id=%s", (rid,))
+    cur.execute("SELECT original_text, metadata FROM knowledge_objects WHERE id=%s", (rid,))
     row = cur.fetchone()
     if not row:
         raise SystemExit("M11_MISSING: %s غير موجودة — أوقفت الدفعة." % rid)
-    meta = row[0] or {}
-    meta["amended_by"] = "مرسوم بقانون رقم 93 لسنة 2026 (المذكرة الإيضاحية: legis-93-2026-memo-1)"
+    old_text, meta = row[0], (row[1] or {})
+
+    if old_text.strip() == NEW_M11.strip():
+        print("M11_ALREADY_CURRENT: %s تحمل النص النافذ سلفًا — لا تكرار." % rid)
+        return False
+
+    # حارس هوية: النص القائم يجب أن يكون النص القديم فعلًا (إحالته للمواد 3 و4 و6)
+    compact = old_text.replace(" ", "")
+    if "(3)،(4)،(6)" not in compact and "(3)و(4)و(6)" not in compact:
+        raise SystemExit("M11_UNEXPECTED_BASE: النص القائم ليس النص السابق المعروف "
+                         "(لا يحمل الإحالة للمواد 3 و4 و6) — أوقفت الدفعة بدل الكتابة فوقه.")
+
+    meta, added = _push_prev(meta, old_text,
+                             "مرسوم بقانون رقم 93 لسنة 2026 — legis-93-2026-issue-1")
+    meta["amended_by"] = "مرسوم بقانون رقم 93 لسنة 2026 — legis-93-2026-issue-1"
     meta["amendment_date"] = GAZETTE_DATE
-    meta["amendment_pending_official_text"] = True
     meta["amendment_note"] = (
         "استُبدل نص هذه المادة بالمادة الأولى من المرسوم بقانون 93/2026 (الكويت اليوم 1809، "
-        "2026/9/20) بحيث تشمل العقوبة مخالفة أحكام المواد (2) و(3) و(5) والبندين (أ) و(ب) من "
-        "المادة (8)، واستُبعدت الإحالة إلى المادتين (4) و(6). النص المعروض هنا هو النص "
-        "السابق على التعديل — متن المرسوم لم يَرد في المصدر المرفوع فلم يُصطنع. "
-        "عند الاستشهاد بهذه المادة يجب التنبيه إلى التعديل.")
-    cur.execute("UPDATE knowledge_objects SET metadata=%s, updated_at=now() WHERE id=%s",
-                (Jsonb(meta), rid))
-    print("M11_FLAGGED: %s وُسمت معدَّلة بانتظار النص الرسمي (النص لم يُمس)." % rid)
+        "2026/9/20): صارت العقوبة على مخالفة أحكام المواد (2) و(3) و(5) والبندين (أ) و(ب) "
+        "من المادة (8)، واستُبعدت الإحالة إلى المادتين (4) و(6) — تداركًا لخطأ مطبعي في "
+        "النص الأصلي للنظام الموحد وفق ما أفادت به الأمانة العامة لمجلس التعاون. "
+        "النص السابق محفوظ كاملًا في previous_versions.")
+    meta.pop("amendment_pending_official_text", None)
+    cur.execute("""UPDATE knowledge_objects
+                   SET original_text=%s, normalized_text=%s, metadata=%s, updated_at=now()
+                   WHERE id=%s""",
+                (NEW_M11, normalize_text(NEW_M11), Jsonb(meta), rid))
+    print("M11_UPDATED: %s نصها النافذ مُثبَت، والقديم محفوظ في previous_versions[%d]"
+          % (rid, len(meta["previous_versions"])))
+    return True
 
 
 # ═══════════════════════════ مسابر وتحقق ═══════════════════════════
@@ -413,7 +482,7 @@ def main():
     records = build_91_records() + build_93_records()
     ids = [r["id"] for r in records]
     assert len(ids) == len(set(ids)), "معرفات مكررة!"
-    assert len(records) == 7, "العدد غير متوقع: %d (المتوقع 7)" % len(records)
+    assert len(records) == 9, "العدد غير متوقع: %d (المتوقع 9)" % len(records)
     pubscrub_assert(records)
 
     # كل ما يلي داخل معاملة واحدة: أي بوابة تفشل ترجع بالقاعدة كما كانت (لا كتابة جزئية).
@@ -432,14 +501,14 @@ def main():
                 row = dict(r)
                 row["metadata"] = Jsonb(row["metadata"])
                 cur.execute(INSERT_SQL, row)
-            print("INSERT_OK: %d كائنًا (91/2026 = 6، 93/2026 = 1)" % len(records))
+            print("INSERT_OK: %d كائنًا (91/2026 = 6، 93/2026 = 3)" % len(records))
 
             print("\n──── قاعدة التحديث على legis-7-2010 ────")
             update_7_2010_m1(cur)
             mark_repealed_7_2010(cur)
 
-            print("\n──── توسيم legis-20-2019-m11 ────")
-            flag_20_2019_m11(cur)
+            print("\n──── قاعدة التحديث على legis-20-2019-m11 ────")
+            update_20_2019_m11(cur)
         conn.commit()
     except SystemExit:
         print("\nROLLED_BACK: بوابة فشلت — لم تُكتب أي تغييرات على القاعدة.")
@@ -447,7 +516,7 @@ def main():
 
     print("\n──── تحقق بعد الإدخال ────")
     with psycopg.connect(dsn) as conn, conn.cursor() as cur:
-        for p, expect in (("legis-91-2026-%", 6), ("legis-93-2026-%", 1)):
+        for p, expect in (("legis-91-2026-%", 6), ("legis-93-2026-%", 3)):
             cur.execute("SELECT count(*) FROM knowledge_objects WHERE id LIKE %s", (p,))
             got = cur.fetchone()[0]
             print("  %s = %d (المتوقع %d)" % (p, got, expect))
@@ -470,13 +539,15 @@ def main():
         print("  مواد 7/2010 الموسومة بالإلغاء = %d (المتوقع 7)" % n_rep)
         assert n_rep == 7
 
-        cur.execute("""SELECT original_text FROM knowledge_objects WHERE id='legis-20-2019-m11'""")
-        m11 = cur.fetchone()[0]
-        assert "(3)،(4)،(6)" in m11.replace(" ", "") or "(3)" in m11, "م11: النص تغيّر وما كان ينبغي!"
-        cur.execute("""SELECT metadata->>'amendment_pending_official_text'
-                       FROM knowledge_objects WHERE id='legis-20-2019-m11'""")
-        print("  legis-20-2019-m11: النص لم يُمس، amendment_pending_official_text = %s"
-              % cur.fetchone()[0])
+        cur.execute("SELECT original_text, metadata FROM knowledge_objects WHERE id=%s",
+                    ("legis-20-2019-m11",))
+        m11, m11meta = cur.fetchone()
+        assert m11.strip() == NEW_M11.strip(), "م11: النص النافذ لم يُثبَّت!"
+        assert m11meta.get("amendment_pending_official_text") is None, "علم الانتظار لم يُرفع"
+        npv = len(m11meta.get("previous_versions") or [])
+        assert npv >= 1, "م11: النص السابق لم يُحفظ!"
+        print("  legis-20-2019-m11: النص النافذ مُثبَت، previous_versions = %d، "
+              "علم الانتظار مرفوع" % npv)
 
         cur.execute("SELECT count(*) FROM knowledge_objects")
         print("  إجمالي كائنات القاعدة =", cur.fetchone()[0])
