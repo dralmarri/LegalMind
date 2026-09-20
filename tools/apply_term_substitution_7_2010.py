@@ -15,7 +15,9 @@
   (1) مسح كل كائنات `legis-7-2010-%` بلا استثناء، وتصنيف كل ورود بفئته، وطباعة
       تقرير مفصَّل بسياق كل ورود (±60 حرفًا) **قبل أي كتابة**.
   (2) لا يُستبدل إلا ما اجتمع فيه شرطان:
-        أ- العبارة **حرفيًا** كما سمّاها المرسوم (لا بمرادف ولا بصيغة أخرى)؛
+        أ- العبارة **حرفيًا** كما سمّاها المرسوم (لا بمرادف ولا بصيغة أخرى)،
+           وأي فراغ بين كلماتها يقبل كسر سطر — فكسر السطر خاصية نقلٍ عندنا لا
+           صيغةٌ في الجريدة (أثبتته م2 حيًّا: «وزير التجارة\nوالصناعة»)؛
         ب- والكائن **مادةٌ نافذةٌ من متن القانون** (`legis-7-2010-mN`،
            `legislation_article`، وليست موسومة `superseded`).
   (3) وكل ما عدا ذلك **لا يُمسّ** ويُدرَج في التقرير باسمه لقرار المالك:
@@ -68,6 +70,21 @@ SUBS = [
 UNNAMED_VARIANTS = ["محكمة سوق المال"]
 
 
+def phrase_rx(phrase):
+    """العبارة نفسها حرفيًا، لكن **أي فراغ بين كلماتها يقبل سطرًا جديدًا**.
+
+    الجولة الأولى الحية أثبتت لزوم هذا: م2 (نافذة) تقول «يشرف عليها وزير التجارة\n
+    والصناعة» — العبارة التي سمّاها المرسوم بعينها، لكن نقلنا نحن كسر السطر في
+    منتصفها، فأخطأتها `str.count` وكادت تُفلت. كسر السطر خاصيةُ نقلٍ عندنا لا
+    صيغةٌ في الجريدة، فتجاهله تنفيذٌ للأمر لا توسيعٌ له — بخلاف الهمزة والمرادف.
+    """
+    return re.compile(r"\s+".join(re.escape(w) for w in phrase.split()))
+
+
+SUBS_RX = [(old, new, phrase_rx(old)) for old, new in SUBS]
+VARIANT_RX = [(v, phrase_rx(v)) for v in UNNAMED_VARIANTS]
+
+
 def _norm_ortho(s):
     """تطبيع إملائي للكشف فقط (همزات/ألفات/تاء مربوطة/مسافات) — لا يُكتب به شيء."""
     s = re.sub(r"[ـً-ْ]", "", s)
@@ -111,19 +128,14 @@ def classify(oid, otype, vstatus):
 APPLY_CLASS = "مادة نافذة"
 
 
-def context_of(text, phrase, width=60):
+def context_of(text, rx, width=60):
     """كل مواضع العبارة بسياقها — التقرير يُقرأ لا يُصدَّق على عمياء."""
     out = []
-    start = 0
-    while True:
-        i = text.find(phrase, start)
-        if i < 0:
-            break
-        a = max(0, i - width)
-        b = min(len(text), i + len(phrase) + width)
+    for m in rx.finditer(text):
+        a = max(0, m.start() - width)
+        b = min(len(text), m.end() + width)
         snippet = re.sub(r"\s+", " ", text[a:b]).strip()
         out.append(("…" if a > 0 else "") + snippet + ("…" if b < len(text) else ""))
-        start = i + len(phrase)
     return out
 
 
@@ -145,21 +157,21 @@ def scan(cur):
         text = text or ""
         cls = classify(oid, otype, vstatus)
         ntext = _norm_ortho(text)
-        for old, new in SUBS:
-            n = text.count(old)
+        for old, new, rx in SUBS_RX:
+            n = len(rx.findall(text))
             if n:
                 hits.append({"id": oid, "cls": cls, "old": old, "new": new,
-                             "n": n, "ctx": context_of(text, old)})
+                             "n": n, "ctx": context_of(text, rx)})
             # مطابقة إملائية بلا مطابقة حرفية = فرق همزة/ألف في نقلنا نحن
             n_norm = ntext.count(_norm_ortho(old))
             if n_norm > n:
                 ortho_hits.append({"id": oid, "cls": cls, "old": old,
                                    "n": n_norm - n})
-        for v in UNNAMED_VARIANTS:
-            n = text.count(v)
+        for v, vrx in VARIANT_RX:
+            n = len(vrx.findall(text))
             if n:
                 variant_hits.append({"id": oid, "cls": cls, "phrase": v, "n": n,
-                                     "ctx": context_of(text, v)})
+                                     "ctx": context_of(text, vrx)})
 
     print("TERM_BLAST_RADIUS — القياس الشامل (لم يُكتب شيء بعد):")
     print("  كائنات القانون 7/2010 = %d" % len(rows))
@@ -204,25 +216,28 @@ def apply_subs(cur, rows):
         if classify(oid, otype, vstatus) != APPLY_CLASS:
             continue
         old_text = text or ""
-        counts = {old: old_text.count(old) for old, _ in SUBS}
-        if not any(counts.values()):
+        matches = {old: rx.findall(old_text) for old, _, rx in SUBS_RX}
+        if not any(matches.values()):
             continue
 
         new_text = old_text
         delta = 0
         applied = []
-        for old, new in SUBS:
-            if counts[old]:
-                new_text = new_text.replace(old, new)
-                delta += counts[old] * (len(new) - len(old))
-                applied.append({"from": old, "to": new, "count": counts[old]})
+        for old, new, rx in SUBS_RX:
+            got = matches[old]
+            if got:
+                new_text = rx.sub(new, new_text)
+                # المقيس هو طول ما طابق فعلًا (قد يحمل كسر سطر)، لا طول العبارة المجردة
+                delta += len(got) * len(new) - sum(len(g) for g in got)
+                applied.append({"from": old, "to": new, "count": len(got),
+                                "matched": sorted(set(g for g in got if g != old))})
 
         # حارس استبدال: لا رقعة عمياء — الطول الجديد محسوبٌ سلفًا، وأي انحراف يوقف الدفعة
         if len(new_text) != len(old_text) + delta:
             raise SystemExit("SUBST_LEN_MISMATCH: %s — الطول المتوقع %d والفعلي %d."
                              % (oid, len(old_text) + delta, len(new_text)))
-        for old, _ in SUBS:
-            if old in new_text:
+        for old, _, rx in SUBS_RX:
+            if rx.search(new_text):
                 raise SystemExit("SUBST_RESIDUE: %s — «%s» باقية بعد الاستبدال." % (oid, old))
         if new_text == old_text:
             raise SystemExit("SUBST_NOCHANGE: %s — لا تغيير رغم وجود ورود." % oid)
@@ -276,7 +291,7 @@ def main():
 
                 targets = [r[0] for r in rows
                            if classify(r[0], r[1], r[2]) == APPLY_CLASS
-                           and any((r[3] or "").count(old) for old, _ in SUBS)]
+                           and any(rx.search(r[3] or "") for _, _, rx in SUBS_RX)]
                 fp_before = fingerprint_outside(cur, targets)
 
                 if not targets:
@@ -310,8 +325,8 @@ def main():
             cur.execute("""SELECT original_text, metadata FROM knowledge_objects
                            WHERE id=%s""", (oid,))
             t, m = cur.fetchone()
-            for old, _ in SUBS:
-                assert old not in t, "%s: «%s» باقية!" % (oid, old)
+            for old, _, rx in SUBS_RX:
+                assert not rx.search(t), "%s: «%s» باقية!" % (oid, old)
             assert len(m.get("previous_versions") or []) >= 1, "%s: النص السابق لم يُحفظ!" % oid
             print("  %s ✓ (previous_versions=%d)" % (oid, len(m["previous_versions"])))
 
