@@ -74,11 +74,11 @@ with psycopg.connect(os.environ["DATABASE_URL"]) as c, c.cursor() as cur:
 PYC
 
 echo "== 6) البطارية (فشلٌ مفرد يُعاد مرة — §17)"
-B1=$($APY tools/battery_run.py 2>&1); echo "$B1" | tail -3
-if ! echo "$B1" | grep -q "BATTERY_PASS"; then
+$APY tools/battery_run.py > "$SAFE/battery1.txt" 2>&1; grep -E "^✗|البطاقة|BATTERY_" "$SAFE/battery1.txt"
+if ! grep -q "BATTERY_PASS" "$SAFE/battery1.txt"; then
   echo "-- إعادة مرة واحدة"
-  B2=$($APY tools/battery_run.py 2>&1); echo "$B2" | tail -3
-  echo "$B2" | grep -q "BATTERY_PASS" || rollback "البطارية سقطت مرتين"
+  $APY tools/battery_run.py > "$SAFE/battery2.txt" 2>&1; grep -E "^✗|البطاقة|BATTERY_" "$SAFE/battery2.txt"
+  grep -q "BATTERY_PASS" "$SAFE/battery2.txt" || rollback "البطارية سقطت مرتين"
 fi
 
 echo "== 7) تقرير الجولة التالية (قراءة خالصة — تشخيصي لا يُسقط شيئًا)"
