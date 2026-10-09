@@ -295,6 +295,12 @@ def apply(a):
                             + GEXPR + " = %s", (TYPES, key))
                 grp = cur.fetchall()
                 if not grp:
+                    # ضُمّت المجموعة إلى أخرى (merge_cma_group.py: 91/2026 ← أسواق المال) — بطاقتها بطاقة المضيفة
+                    cur.execute("SELECT count(*) FROM knowledge_objects WHERE object_type = ANY(%s) AND id LIKE %s "
+                                "AND metadata ? 'merged_from'", (TYPES, key + "-%"))
+                    if cur.fetchone()[0]:
+                        print("CARD_MERGED: %s — ضُمّت إلى مجموعة أخرى، لا بطاقة مستقلة لها" % key)
+                        continue
                     raise SystemExit("CARD_GROUP_MISSING: %s" % key)
                 cur.execute("UPDATE knowledge_objects SET metadata = coalesce(metadata,'{}'::jsonb) || "
                             "jsonb_build_object('library_card_name', %s::text) WHERE object_type = ANY(%s) AND "
