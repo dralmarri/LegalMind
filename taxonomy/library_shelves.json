@@ -8,7 +8,7 @@
   },
   "shelves": [
     {"order": 1, "name": "الدستور ومجلس الأمة وقانون الجنسية", "groups": [
-      ["legis-dustur-1962", "ref"], ["legis-14-1973", "ref"]]},
+      ["legis-dustur-1962", "ref"], ["legis-14-1973", "ref"], ["legis-12-1963", "ref"], ["legis-120-2023", "ref"], ["legis-15-1959", "ref"]]},
     {"order": 2, "name": "القوانين الجزائية", "groups": [
       ["legis-16-1960", "ref"], ["legis-31-1970", "ref"], ["legis-17-1960", "ref"],
       ["legis-88-1995", "ref"], ["legis-25-1996", "ref"], ["legis-2-2016", "ref"],
@@ -20,7 +20,7 @@
       ["legis-19-2012", "ref"], ["legis-106-2013", "ref"], ["legis-47-2026", "ref"],
       ["legis-13-2026", "ref"], ["legis-51-2026", "ref"]]},
     {"order": 3, "name": "قوانين النشر وتقنية المعلومات", "groups": [
-      ["legis-102-2026", "ref"], ["legis-75-2019", "ref"], ["legis-12-2020", "ref"],
+      ["legis-102-2026", "ref"], ["legis-63-2015", "ref"], ["legis-37-2014", "ref"], ["legis-61-2015", "ref"], ["legis-75-2019", "ref"], ["legis-12-2020", "ref"],
       ["legis-20-2014", "ref"], ["legis-148-2025", "follows:legis-20-2014"],
       ["legis-10-2026", "ref"], ["legis-3-2006", "subject"], ["legis-61-2007", "subject"],
       ["legis-8-2016", "subject"], ["legis-109-2026", "subject"]]},
@@ -28,7 +28,7 @@
       ["legis-38-1980", "ref"], ["legis-39-1980", "ref"], ["legis-46-1989", "ref"],
       ["legis-17-1973", "ref"], ["legis-7-1961", "ref"]]},
     {"order": 5, "name": "قوانين القضاء والفتوى والتحقيقات والمحاماة", "groups": [
-      ["legis-80-2026", "ref"], ["legis-136-2026", "follows:legis-80-2026"],
+      ["legis-80-2026", "ref"], ["legis-70-2020", "ref"], ["legis-136-2026", "follows:legis-80-2026"],
       ["legis-23-1990", "subject"], ["legis-12-1960", "ref"], ["legis-53-2001", "ref"],
       ["legis-40-1980", "ref"], ["legis-42-1964", "ref"], ["legis-10-2020", "ref"]]},
     {"order": 6, "name": "القوانين الإدارية", "groups": [
