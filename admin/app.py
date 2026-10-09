@@ -815,12 +815,42 @@ def _draft_fetch_texts(ids):
     with psycopg.connect(dsn) as conn, conn.cursor() as cur:
         cur.execute(
             "SELECT id, object_type, branch, topic, subtopic, title, original_text, "
-            "metadata->>'publication' "
+            "metadata->>'publication', metadata->>'source_note' "
             "FROM knowledge_objects WHERE id = ANY(%s)", (list(ids),))
-        for i, ot, br, tp, st, ti, tx, pb in cur.fetchall():
+        for i, ot, br, tp, st, ti, tx, pb, nt in cur.fetchall():
             out[i] = {"object_type": ot, "branch": br, "topic": tp,
-                      "subtopic": st, "title": ti, "text": tx, "publication": pb}
+                      "subtopic": st, "title": ti, "text": tx, "publication": pb,
+                      "note": nt}
     return out
+
+
+# ─── إظهار ملاحظات المحرِّر (metadata.source_note) في السياق ─────────────────
+# كانت مكتوبةً في القاعدة ولا تصل أحدًا (الحدّ الموثق في §13). ثلاثة قيود:
+# (1) تُلحق **بعد** احتساب ميزانية الكتلة، فلا تُخرج مرشَّحًا من السياق أبدًا؛
+# (2) تُغلَّف بوسم صريح أنها ليست من نص الجريدة ولا يُستشهد بها — فلا تُقتبس
+#     ملاحظتنا على أنها نصُّ المشرّع؛ (3) بسقف طول.
+_NOTE_CAP_DRAFT = 700
+_NOTE_OPEN = "⟦ملاحظة توثيقية من محرِّر القاعدة — ليست من نص الجريدة ولا يُستشهد بها⟧"
+
+
+def _draft_note_text(note, cap=_NOTE_CAP_DRAFT):
+    nt = (note or "").strip()
+    if not nt:
+        return ""
+    if len(nt) > cap:
+        nt = nt[:cap].rstrip() + " […]"
+    return "\n\n" + _NOTE_OPEN + "\n" + nt
+
+
+def _draft_with_note(block, note):
+    """يُدرج التنبيه داخل الكتلة قبل وسم الإغلاق — لا بعده فيبقى معلّقًا."""
+    nt = _draft_note_text(note)
+    if not nt:
+        return block
+    tail = "\n</مصدر>"
+    if block.endswith(tail):
+        return block[:-len(tail)] + nt + tail
+    return block + nt
 
 _AR_DIAC = re.compile("[\u0640\u064B-\u0652\u0670]")
 def _draft_norm_ar(t):
@@ -5657,8 +5687,9 @@ def _draft_build_context(client, inp: _DraftIn, facts_ret: str) -> dict:
                                     "remaining_budget": LBL_BUDGET.get(label, 4000) - lbl_used.get(label, 0)})
             continue                     # نفدت ميزانيةُ هذا النوع — لا يزاحم غيرَه
         seen.add(oid)
+        # الميزانية محسوبة على الكتلة وحدها — التنبيه يُلحق بعدها فلا يزاحم مرشَّحًا
         lbl_used[label] = lbl_used.get(label, 0) + len(block)
-        parts.append(block)
+        parts.append(_draft_with_note(block, t.get("note")))
     context = "\n\n".join(parts)
     # P1.5 (2026-09-10): سلسلة نسب كل مرشح (أي قناة أتى منها + درجاته عبر مراحل
     # الترتيب) — قياس بحت بلا أي تحويل لقاعدة قبول صلبة (بأمر المالك الصريح).

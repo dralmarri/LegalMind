@@ -57,6 +57,9 @@ def _embed(q):
     return vec
 
 
+_NOTE_CAP = 500
+
+
 def _fmt_row(row, score=None, cap=1600):
     head = "«%s» [%s]" % (row.get("title") or row["id"], row["id"])
     if score is not None:
@@ -66,6 +69,14 @@ def _fmt_row(row, score=None, cap=1600):
     tx = (row.get("txt") or row.get("original_text") or "").strip()
     if len(tx) > cap:
         tx = tx[:cap] + " …(مقتطع — اجلب النص الكامل بأداة get_object)"
+    # ملاحظة محرِّر القاعدة (metadata.source_note) — كانت مكتوبة ولا تظهر في أي
+    # أداة. تُعرض بوسم صريح أنها ليست من نص الجريدة، فلا تُقتبس كأنها نصٌّ رسمي.
+    nt = (row.get("note") or "").strip()
+    if nt:
+        if len(nt) > _NOTE_CAP:
+            nt = nt[:_NOTE_CAP].rstrip() + " […]"
+        tx += ("\n\n⟦ملاحظة توثيقية من محرِّر القاعدة — ليست من نص الجريدة "
+               "ولا يُستشهد بها⟧\n" + nt)
     return head + "\n" + tx
 
 
@@ -104,7 +115,8 @@ def search_legal(query: str, kind: str = "الكل", limit: int = 8) -> str:
     if not ids:
         return "لا نتائج مطابقة."
     rows = _pg("SELECT id, object_type, title, left(original_text, 1700) AS txt, "
-               "usable_as_citation FROM knowledge_objects WHERE id = ANY(%s)", (ids,))
+               "usable_as_citation, metadata->>'source_note' AS note "
+               "FROM knowledge_objects WHERE id = ANY(%s)", (ids,))
     by = {x["id"]: x for x in rows}
     out = []
     for h in hits:
@@ -124,7 +136,8 @@ def get_object(object_id: str) -> str:
     if not (3 <= len(oid) <= 200) or re.search(r"[\x00-\x1f'\"%;\\]", oid):
         return "معرف غير صالح."
     rows = _pg("SELECT id, object_type, branch, topic, subtopic, title, original_text, "
-               "usable_as_citation FROM knowledge_objects WHERE id = %s", (oid,))
+               "usable_as_citation, metadata->>'source_note' AS note "
+               "FROM knowledge_objects WHERE id = %s", (oid,))
     if not rows:
         return "لا كائن بهذا المعرف: " + oid
     row = rows[0]
@@ -139,7 +152,8 @@ def get_article(law_number: int, law_year: int, article: str) -> str:
     if not art:
         return "رقم مادة غير صالح."
     base = "legis-%d-%d-m%s" % (int(law_number), int(law_year), art)
-    rows = _pg("SELECT id, object_type, title, original_text, usable_as_citation "
+    rows = _pg("SELECT id, object_type, title, original_text, usable_as_citation, "
+               "metadata->>'source_note' AS note "
                "FROM knowledge_objects WHERE id = %s OR id LIKE %s ORDER BY id LIMIT 6",
                (base, base + "-%"))
     if not rows:
