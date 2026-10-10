@@ -73,7 +73,18 @@ def chap_of(ents, base):
                 sub = t
     return " — ".join([x for x in (bab, fasl, sub) if x]) or None
 
+import difflib
+VIS = json.load(open(sys.argv[2], encoding="utf-8")) if len(sys.argv) > 2 else {}
+def _letters(t):
+    return re.sub(r"[^ء-ي]", "", re.sub("[%s]" % DIAC, "", t))
+VIS_NOTE = ("قوبل نص هذه المادة بصورة صفحة المرجع (صفحة PDF {pages}) وصُحّح على الصورة — أُزيل اضطراب "
+            "طبقة النص (كلمات مشقوقة أو منقولة عن مواضعها). نسبة تطابق كيس الحروف مع المستخرج آليًا {ratio:.3f}.")
+# حاشية المرجع على م16 (حكم دستوري) — تُظهر للمحامي ولا تمسّ النص
+CONST_NOTES = {"legis-12-1963-m16": ("حاشية المرجع المجمّع: «حكمت المحكمة الدستورية في الطعن رقم 6 لسنة 2018 بعدم "
+    "دستورية المادة 16 من اللائحة الداخلية لمجلس الأمة الصادر بالقانون رقم 12 لسنة 1963 مع ما يترتب على ذلك "
+    "من آثار». يُراجع منطوق الحكم ونطاقه قبل الاستناد إلى المادة.")}
 records, report = [], {}
+VIS_APPLIED = []
 for k, r in R.items():
     M = META[k]; pfx = M["id"] + "-"
     ents = chapters(r["toc"])
@@ -98,7 +109,17 @@ for k, r in R.items():
     if M.get("title_note"):
         common["title_note"] = M["title_note"]
     n_flag = 0
+    vis = VIS.get(M["id"], {})
     for x in arts:
+        vfix = vis.get(label(x["num"])) or vis.get(x["num"])
+        vratio = None
+        if vfix:
+            # مقياس بكيس الحروف لا بتسلسلها: الاضطراب ينقل المقاطع عن مواضعها، والنقل الصحيح يحفظ الحروف نفسها
+            ca, cb = collections.Counter(_letters(x["text"])), collections.Counter(_letters(vfix["text"]))
+            vratio = sum((ca & cb).values()) / max(sum(ca.values()), sum(cb.values()))
+            assert vratio >= 0.97, ("VISUAL_MISMATCH", M["id"], x["num"], round(vratio, 3))
+            x["text"] = vfix["text"]
+            VIS_APPLIED.append((M["id"], x["num"], round(vratio, 3)))
         why = residue(x["text"])
         ch = chap_of(ents, x["base"]) if ents else None
         lab = label(x["num"])
@@ -110,6 +131,12 @@ for k, r in R.items():
         if foot_by_page.get(x["page"]):
             meta["page_footnotes"] = foot_by_page[x["page"]]
             meta["page_footnotes_note"] = "حواشي صفحة المرجع التي وردت فيها المادة — قد لا تخص هذه المادة بعينها."
+        if vfix:
+            meta["extraction_method"] = "visual_check_against_reference_page_photo"
+            meta["source_correction"] = [{"date": "2026-10-10",
+                                          "note": VIS_NOTE.format(pages="، ".join(map(str, vfix["pages"])), ratio=vratio)}]
+        if pfx + sid(x["num"]) in CONST_NOTES:
+            meta["source_note"] = CONST_NOTES[pfx + sid(x["num"])]
         if x["num"] in special:
             meta["source_correction"] = [{"date": "2026-10-09", "note": special[x["num"]]}]
             why = why + ["heading_displacement"]
@@ -157,4 +184,5 @@ for rec in records:
 json.dump(records, open(D + "/records.json", "w", encoding="utf-8"), ensure_ascii=False)
 for k, v in report.items():
     print(k, v)
+print("VISUAL_APPLIED", len(VIS_APPLIED), VIS_APPLIED)
 print("RECORDS", len(records), "flagged", sum(1 for r in records if r["metadata"].get("extraction_uncertain")))
