@@ -61,6 +61,10 @@ def chapters(T):
         ents.append((t.strip(" -"), st, main))
     return ents
 
+HEAD_TAIL = []
+def _hnorm(s):
+    return "".join(re.sub(r"^ال", "", w) for w in re.findall(r"[ء-ي]+", s))
+
 def chap_of(ents, base):
     bab = fasl = sub = None
     for t, st, main in ents:
@@ -103,6 +107,32 @@ for k, r in R.items():
         corr = ("نُقلت الفقرة «يكون الانتخاب عامًا وسريًا ومباشرًا.» من ذيل المادة 34 إلى المادة 35: في طبقة نص "
                 "المرجع جاء عنوان المادة 35 بعد هذه الفقرة مباشرةً وبلا نص، فهي نصّها الذي سبق عنوانَه.")
         special["35"] = special["34"] = corr
+    # عنوان القسم التالي عالقٌ في ذيل المادة السابقة (سطرًا مستقلًا أو ملتصقًا بآخر جملة) لأن صيغته تخالف الفهرس
+    # قليلًا («مزاول»/«مزاولة»، «أخلاقيتها»/«أخلاقياتها») فلم يُعرف عنوانًا — والقسم مسجَّل أصلًا في تبويب المادة التالية
+    if ents:
+        for i in range(len(arts) - 1):
+            cur_ch, nx_ch = chap_of(ents, arts[i]["base"]), chap_of(ents, arts[i + 1]["base"])
+            if not nx_ch or nx_ch == cur_ch:
+                continue
+            cur_parts = (cur_ch or "").split(" — ")
+            removed = []
+            for comp in reversed(nx_ch.split(" — ")):
+                if comp in cur_parts:
+                    break  # مستوى مشترك مع المادة الحالية — ليس عنوانًا جديدًا
+                leaf = comp.split(":", 1)[-1].strip()
+                t = arts[i]["text"].rstrip()
+                n = len(leaf.split())
+                mt = re.search(r"((?:\S+[ \t]+){%d}\S+)$" % (n - 1), t)  # آخر n كلمات على السطر الأخير وحده
+                if not mt or mt.start() == 0:
+                    break
+                tail = mt.group(1)
+                if difflib.SequenceMatcher(None, _hnorm(tail), _hnorm(leaf)).ratio() < 0.85:
+                    break
+                arts[i]["text"] = t[:mt.start()].rstrip()
+                removed.insert(0, tail)
+            if removed:
+                fixes["heading_tail_removed"] = fixes.get("heading_tail_removed", 0) + 1
+                HEAD_TAIL.append((M["id"], arts[i]["num"], " | ".join(removed)))
     common = {"law_number": M["num"], "law_year": M["year"], "instrument": M["instrument"],
               "source": "reference_compilation_20261005", "text_provenance": PROVENANCE,
               "extraction_method": "pdf_text_layer_markdown_auto_cleaned"}
@@ -194,5 +224,6 @@ for rec in records:
 json.dump(records, open(D + "/records.json", "w", encoding="utf-8"), ensure_ascii=False)
 for k, v in report.items():
     print(k, v)
+print("HEADING_TAIL_REMOVED", len(HEAD_TAIL), HEAD_TAIL)
 print("VISUAL_APPLIED", len(VIS_APPLIED), VIS_APPLIED)
 print("RECORDS", len(records), "flagged", sum(1 for r in records if r["metadata"].get("extraction_uncertain")))
