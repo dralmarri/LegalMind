@@ -13,6 +13,7 @@ LAWS = {  # key: (first_page, last_page, toc_page)
 }
 DIAC = "ًٌٍَُِّْ"
 FIX = collections.Counter()
+SEAM_NEW = re.compile(r"^(?:(?:[أ-ي]|هـ)\s*[-–]\s*\S|[-–]?\s*[0-9٠-٩]+\s*[-–:.]|[^:،.]{2,45}\s*:\s*\S)")
 TERMINAL = re.compile(r"[.:؛!؟]\s*$|-:\s*$")
 
 def sub(name, pat, rep, s, flags=0):
@@ -178,7 +179,8 @@ def extract(key):
                 FIX["footnote_inline_removed"] += 1
                 t = t2.strip()
             if was_seam and cur and cur["lines"]:
-                if TERMINAL.search(cur["lines"][-1]):
+                # بداية تعريفٍ («شبكة اتصالات عامة: …») أو بندٍ («ح -…»، «-3 …») على رأس الصفحة = فقرة جديدة لا تكملة جملة
+                if TERMINAL.search(cur["lines"][-1]) or SEAM_NEW.match(t):
                     cur["lines"].append("")
                 else:  # جملة تعبر حدّ الصفحة — تُلحم بمسافة لا بفقرة
                     cur["lines"][-1] = cur["lines"][-1].rstrip() + " " + t
