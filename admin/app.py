@@ -6128,6 +6128,9 @@ def browse_kb(kind: str, b: str = "", t: str = "", group: str = "", part: str = 
         "postgresql://legalmind:legalmind@127.0.0.1:55432/legalmind"
     tph = ",".join(["%s"] * len(types))
     BR = "CASE WHEN branch LIKE 'أحوال شخصية%%' THEN 'أحوال شخصية' ELSE COALESCE(NULLIF(branch,''),'غير مصنّف') END"
+    # رفوف المكتبة (taxonomy/library_shelves.json) — مجلدات القوانين بترتيب المرجع؛ وما لا رفّ له يبقى في فرعه
+    SH = "COALESCE(NULLIF(metadata->>'library_shelf',''), " + BR + ")"
+    SHO = "NULLIF(metadata->>'library_shelf_order','')::int"
     TP = "COALESCE(NULLIF(topic,''),'عام')"
     # مفتاح التجميع: قانون (legis-N-Y) أو كتاب لائحة تنفيذية (lreg-N-Y-kM) — كلٌّ عقدةٌ مستقلّة
     GEXPR = ("COALESCE(metadata->>'library_group', substring(id from '^(legis-[a-z0-9]+-[0-9]+)'), "
@@ -6139,8 +6142,9 @@ def browse_kb(kind: str, b: str = "", t: str = "", group: str = "", part: str = 
             # فرع (مجلد) ← قانون/كتاب لائحة ← مواد
             if not b:
                 _cur.execute(
-                    "SELECT " + BR + " AS g, count(*) FROM knowledge_objects "
-                    "WHERE object_type IN (" + tph + ") GROUP BY g ORDER BY count(*) DESC",
+                    "SELECT " + SH + " AS g, count(*), min(" + SHO + ") AS o FROM knowledge_objects "
+                    "WHERE object_type IN (" + tph + ") AND " + GEXPR + " IS NOT NULL "
+                    "GROUP BY g ORDER BY o NULLS LAST, count(*) DESC",
                     tuple(types))
                 return {"mode": "groups", "level": "branch",
                         "groups": [{"key": r[0], "count": r[1]} for r in _cur.fetchall()]}
@@ -6151,7 +6155,7 @@ def browse_kb(kind: str, b: str = "", t: str = "", group: str = "", part: str = 
                     "THEN split_part(min(title), ' — ', 2) || "
                     "COALESCE(' — كتاب ' || min(metadata->>'book_title'), '') "
                     "ELSE btrim(substring(min(title) from '[^—]*$')) END) AS name "
-                    "FROM knowledge_objects WHERE object_type IN (" + tph + ") AND " + BR + " = %s "
+                    "FROM knowledge_objects WHERE object_type IN (" + tph + ") AND " + SH + " = %s "
                     "GROUP BY g ORDER BY g", tuple(types) + (b,))
                 return {"mode": "groups", "level": "law",
                         "groups": [{"key": r[0], "count": r[1], "name": (r[2] or None)}

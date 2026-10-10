@@ -1,0 +1,65 @@
+{
+  "source": "مجموعة من التشريعات الكويتية — إعداد: مستشار أول جزاء العتيبي، محكمة الاستئناف — التعديلات حتى 2026/10/5",
+  "adopted": "2026-10-09",
+  "basis_legend": {
+    "ref": "مذكور في المرجع بعينه",
+    "follows": "تعديل أو لائحة أو صك مرافق لقانون مذكور في المرجع — يتبع رفّ قانونه",
+    "subject": "غير مذكور في المرجع — رُفّ بموضوعه اقتراحًا لا نقلًا"
+  },
+  "shelves": [
+    {"order": 1, "name": "الدستور ومجلس الأمة وقانون الجنسية", "groups": [
+      ["legis-dustur-1962", "ref"], ["legis-14-1973", "ref"], ["legis-12-1963", "ref"], ["legis-120-2023", "ref"], ["legis-15-1959", "ref"]]},
+    {"order": 2, "name": "القوانين الجزائية", "groups": [
+      ["legis-16-1960", "ref"], ["legis-31-1970", "ref"], ["legis-17-1960", "ref"],
+      ["legis-88-1995", "ref"], ["legis-25-1996", "ref"], ["legis-2-2016", "ref"],
+      ["legis-1-1993", "ref"], ["legis-20-2019", "ref"], ["legis-93-2026", "follows:legis-20-2019"],
+      ["legis-33-2016", "ref"], ["legis-1358-2018", "follows:legis-33-2016"],
+      ["legis-42-2014", "ref"], ["legis-67-1976", "ref"], ["legis-111-2015", "ref"],
+      ["legis-21-2015", "ref"], ["legis-11-2026", "subject"], ["legis-91-2013", "ref"],
+      ["legis-159-2025", "ref"], ["legis-13-1991", "ref"], ["legis-35-1985", "ref"],
+      ["legis-19-2012", "ref"], ["legis-106-2013", "ref"], ["legis-47-2026", "ref"],
+      ["legis-13-2026", "ref"], ["legis-51-2026", "ref"]]},
+    {"order": 3, "name": "قوانين النشر وتقنية المعلومات", "groups": [
+      ["legis-102-2026", "ref"], ["legis-63-2015", "ref"], ["legis-37-2014", "ref"], ["legis-61-2015", "ref"], ["legis-75-2019", "ref"], ["legis-12-2020", "ref"],
+      ["legis-20-2014", "ref"], ["legis-148-2025", "follows:legis-20-2014"],
+      ["legis-10-2026", "ref"], ["legis-3-2006", "subject"], ["legis-61-2007", "subject"],
+      ["legis-8-2016", "subject"], ["legis-109-2026", "subject"]]},
+    {"order": 4, "name": "قوانين المرافعات المدنية والإثبات والرسوم", "groups": [
+      ["legis-38-1980", "ref"], ["legis-39-1980", "ref"], ["legis-46-1989", "ref"],
+      ["legis-17-1973", "ref"], ["legis-7-1961", "ref"]]},
+    {"order": 5, "name": "قوانين القضاء والفتوى والتحقيقات والمحاماة", "groups": [
+      ["legis-80-2026", "ref"], ["legis-70-2020", "ref"], ["legis-136-2026", "follows:legis-80-2026"],
+      ["legis-23-1990", "subject"], ["legis-12-1960", "ref"], ["legis-53-2001", "ref"],
+      ["legis-40-1980", "ref"], ["legis-42-1964", "ref"], ["legis-10-2020", "ref"]]},
+    {"order": 6, "name": "القوانين الإدارية", "groups": [
+      ["legis-20-1981", "ref"], ["legis-nsm-1979", "ref"], ["legis-15-1979", "ref"],
+      ["legis-61-1976", "ref"], ["legis-128-1992", "ref"], ["legis-8-2010", "ref"],
+      ["legis-105-1980", "subject"], ["legis-20-2015", "subject"], ["legis-49-2016", "subject"],
+      ["reg-30-2017", "follows:legis-49-2016"], ["legis-94-2026", "follows:legis-49-2016"],
+      ["legis-61-2026", "subject"], ["legis-72-2026", "subject"], ["legis-8-2026", "subject"],
+      ["legis-87-2026", "subject"], ["legis-89-2026", "subject"], ["legis-mof-11", "subject"],
+      ["LEG-75-2026", "subject"]]},
+    {"order": 7, "name": "القوانين العمالية", "groups": [
+      ["legis-46-1987", "ref"], ["legis-6-2010", "ref"], ["legis-28-1969", "ref"],
+      ["legis-68-2015", "ref"], ["legis-19-2000", "ref"]]},
+    {"order": 8, "name": "القوانين المدنية والإيجارات", "groups": [
+      ["legis-67-1980", "ref"], ["legis-35-1978", "ref"], ["legis-5-1959", "ref"],
+      ["legis-21-2019", "ref"]]},
+    {"order": 9, "name": "قوانين الأحوال الشخصية ودعاوى النسب", "groups": [
+      ["legis-51-1984", "ref"], ["legis-12-2015", "ref"], ["legis-124-2019", "ref"],
+      ["legis-53-2026", "ref"], ["legis-67-1983", "subject"], ["legis-4-1977", "subject"]]},
+    {"order": 10, "name": "القوانين التجارية والشركات", "groups": [
+      ["legis-68-1980", "ref"], ["cma-authority-unified", "ref"],
+      ["legis-71-2020", "ref"], ["legis-1-2016", "ref"], ["legis-78-2026", "ref"],
+      ["legis-88-2026", "ref"], ["cp-unified", "subject"],
+      ["legis-13-2015", "subject"], ["legis-152-2023", "subject"], ["legis-164-2020", "subject"],
+      ["legis-90-2026", "subject"], ["maritime-book-2011", "subject"]]}
+  ],
+  "new_groups": {
+    "LEG-75-2026": {
+      "id_like": "LEG-75-%",
+      "expect_rows": 12,
+      "card_name": "مرسوم بقانون 75/2026 بتعديل بعض أحكام القانون 67/2015 في شأن الديوان الوطني لحقوق الإنسان"
+    }
+  }
+}
