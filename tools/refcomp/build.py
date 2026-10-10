@@ -120,7 +120,8 @@ for k, r in R.items():
             assert vratio >= 0.97, ("VISUAL_MISMATCH", M["id"], x["num"], round(vratio, 3))
             x["text"] = vfix["text"]
             VIS_APPLIED.append((M["id"], x["num"], round(vratio, 3)))
-        why = residue(x["text"])
+        # النص المقابَل بصورة الأصل محكومٌ بالعين لا بكاشف البقايا (الذي يَعُدّ «البند أ» حرفًا منفصلًا)
+        why = [] if vfix else residue(x["text"])
         ch = chap_of(ents, x["base"]) if ents else None
         lab = label(x["num"])
         repealed = x["text"].strip(" .") in ("ملغاة", "مُلغاة", "ملغاه")
@@ -135,6 +136,10 @@ for k, r in R.items():
             meta["extraction_method"] = "visual_check_against_reference_page_photo"
             meta["source_correction"] = [{"date": "2026-10-10",
                                           "note": VIS_NOTE.format(pages="، ".join(map(str, vfix["pages"])), ratio=vratio)}]
+            if vfix.get("corrections"):
+                meta["source_correction"][0]["corrections"] = vfix["corrections"]
+            if vfix.get("note"):
+                meta["source_note"] = vfix["note"]
         if pfx + sid(x["num"]) in CONST_NOTES:
             meta["source_note"] = CONST_NOTES[pfx + sid(x["num"])]
         if x["num"] in special:
