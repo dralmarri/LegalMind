@@ -161,6 +161,9 @@ for k, r in R.items():
     gaps = sorted(set(range(1, max(x["base"] for x in arts) + 1)) - {x["base"] for x in arts})
     if gaps:
         pm["missing_articles_in_source"] = gaps
+        if k == "legis-37-2014":
+            pm["missing_articles_photo_check"] = ("المادة 69: صورتا صفحتي المرجع 504–505 تثبتان غياب عنوانها عن المرجع "
+                                                  "المطبوع نفسه (2026-10-10).")
         pm["missing_articles_note"] = ("مواد غائبة عن المرجع نفسه (لا عنوان لها في طبقة النص) — لم تُختلق، "
                                        "وتُستكمل من الجريدة الرسمية.")
     if k == "legis-15-1959":
@@ -174,7 +177,9 @@ for k, r in R.items():
                        "chapters_from_toc": bool(ents)}
     if gaps and k == "legis-37-2014":
         for rec in records:
-            if rec["id"] == pfx + "m68":
+            if rec["id"] == pfx + "m68" and rec["metadata"].get("extraction_method", "").startswith("visual"):
+                pass  # قوبلت بصورة الصفحتين: الغياب ثابت في المرجع نفسه، وملاحظتها من ملف التصحيحات
+            elif rec["id"] == pfx + "m68":
                 rec["metadata"]["extraction_uncertain"] = True
                 rec["metadata"].setdefault("extraction_flags", []).append("next_heading_missing")
                 rec["metadata"]["source_note"] = ("عنوان المادة 69 غائب عن طبقة نص المرجع، فقد يكون آخر هذه المادة "
