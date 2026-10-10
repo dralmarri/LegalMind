@@ -31,6 +31,15 @@ def clean(s):
             return m.group(3) + m.group(2) + m.group(1)
         return m.group(0)
     s = re.sub(r"(?<![0-9٠-٩])([0-9٠-٩]+)(\s+[-–]\s+)([0-9٠-٩]+)(?![0-9٠-٩])", _rng, s)
+    # والقلب نفسه يعكس قوائم الإحالة المفصولة بفواصل («بالمواد 21، 20، 19» والمطبوع «١٩ ، ٢٠ ، ٢١») — مقيَّد بلفظ الإحالة
+    def _lst(m):
+        nums = re.findall(r"[0-9٠-٩]+", m.group(2))
+        vals = [ai2int(n) for n in nums]
+        if len(vals) > 1 and vals == sorted(vals, reverse=True) and len(set(vals)) == len(vals):
+            FIX["list_reversed"] += 1
+            return m.group(1) + "، ".join(reversed(nums))
+        return m.group(0)
+    s = re.sub(r"((?:المادتين|المواد|بالمواد|البنود|البندين|بالبنود)\s+)([0-9٠-٩]{1,3}(?:\s*،\s*[0-9٠-٩]{1,3})+)(?![0-9٠-٩/])", _lst, s)
     s = sub("paren_number", r"\(\s*\)\s?([0-9٠-٩]{1,4}(?:[،,][0-9٠-٩]{1,4})*)", r"(\1)", s)
     s = sub("year_comma", r"لسنة\s*،\s*([0-9]{4})", r"لسنة \1،", s)
     s = sub("diac_split_a", r"([ء-ي]) ([%s])([ء-ي])\2" % DIAC, r"\1\3\2", s)
