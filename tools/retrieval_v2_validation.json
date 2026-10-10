@@ -1,0 +1,1253 @@
+{
+ "started": "2026-09-18 22:02:54",
+ "blocking": [
+  "RERANKER_REQUIRED_BUT_UNAVAILABLE"
+ ],
+ "reranker_available": true,
+ "regression_refs_present": {
+  "jprin-754-2013-s1454-50db709d0f": true,
+  "judgment-civ-697-2013-9e001784": true
+ },
+ "battery": [
+  {
+   "name": "المطار: منع سفر بأمر أداء وتزوير",
+   "lost_vs_baseline": [],
+   "must_total": 2,
+   "must_old": 2,
+   "must_new": 2,
+   "missing_new": [],
+   "pool_v2": 380,
+   "pool_after_dedupe": 362,
+   "reranker_input": 294,
+   "admitted_old": 123,
+   "admitted_new": 104,
+   "ctx_chars_old": 82399,
+   "ctx_chars_new": 79907,
+   "latency_old": 37.12,
+   "latency_new": 89.38,
+   "selectivity": 0.2873,
+   "funnel": {
+    "GENERATED": {
+     "تشريع": 181,
+     "مبدأ قضائي": 74,
+     "حكم كامل": 91,
+     "نموذج صياغة": 28
+    },
+    "DEDUPED": {
+     "تشريع": 181,
+     "مبدأ قضائي": 74,
+     "حكم كامل": 91,
+     "نموذج صياغة": 28
+    },
+    "RELATION_VALIDATED": null,
+    "RERANKER_INPUT": {
+     "تشريع": 119,
+     "مبدأ قضائي": 56,
+     "حكم كامل": 91,
+     "نموذج صياغة": 28
+    },
+    "RERANKED": {
+     "تشريع": 119,
+     "مبدأ قضائي": 56,
+     "حكم كامل": 91,
+     "نموذج صياغة": 28
+    },
+    "ADMITTED": {
+     "تشريع": 65,
+     "مبدأ قضائي": 34,
+     "حكم كامل": 4,
+     "نموذج صياغة": 1
+    },
+    "FINAL_CONTEXT": {
+     "تشريع": 65,
+     "مبدأ قضائي": 34,
+     "حكم كامل": 4,
+     "نموذج صياغة": 1
+    }
+   }
+  },
+  {
+   "name": "الشيك بدون رصيد",
+   "lost_vs_baseline": [],
+   "must_total": 0,
+   "must_old": 0,
+   "must_new": 0,
+   "missing_new": [],
+   "pool_v2": 250,
+   "pool_after_dedupe": 239,
+   "reranker_input": 223,
+   "admitted_old": 130,
+   "admitted_new": 106,
+   "ctx_chars_old": 78709,
+   "ctx_chars_new": 80384,
+   "latency_old": 33.33,
+   "latency_new": 65.8,
+   "selectivity": 0.4435,
+   "funnel": {
+    "GENERATED": {
+     "تشريع": 128,
+     "مبدأ قضائي": 63,
+     "حكم كامل": 37,
+     "نموذج صياغة": 22
+    },
+    "DEDUPED": {
+     "تشريع": 128,
+     "مبدأ قضائي": 63,
+     "حكم كامل": 37,
+     "نموذج صياغة": 22
+    },
+    "RELATION_VALIDATED": null,
+    "RERANKER_INPUT": {
+     "تشريع": 112,
+     "مبدأ قضائي": 52,
+     "حكم كامل": 37,
+     "نموذج صياغة": 22
+    },
+    "RERANKED": {
+     "تشريع": 112,
+     "مبدأ قضائي": 52,
+     "حكم كامل": 37,
+     "نموذج صياغة": 22
+    },
+    "ADMITTED": {
+     "تشريع": 63,
+     "مبدأ قضائي": 37,
+     "حكم كامل": 5,
+     "نموذج صياغة": 1
+    },
+    "FINAL_CONTEXT": {
+     "تشريع": 63,
+     "مبدأ قضائي": 37,
+     "حكم كامل": 5,
+     "نموذج صياغة": 1
+    }
+   }
+  },
+  {
+   "name": "طلاق للضرر",
+   "lost_vs_baseline": [],
+   "must_total": 0,
+   "must_old": 0,
+   "must_new": 0,
+   "missing_new": [],
+   "pool_v2": 345,
+   "pool_after_dedupe": 335,
+   "reranker_input": 300,
+   "admitted_old": 148,
+   "admitted_new": 125,
+   "ctx_chars_old": 82851,
+   "ctx_chars_new": 77900,
+   "latency_old": 34.25,
+   "latency_new": 80.99,
+   "selectivity": 0.3731,
+   "funnel": {
+    "GENERATED": {
+     "تشريع": 174,
+     "مبدأ قضائي": 83,
+     "حكم كامل": 58,
+     "نموذج صياغة": 30
+    },
+    "DEDUPED": {
+     "تشريع": 174,
+     "مبدأ قضائي": 83,
+     "حكم كامل": 58,
+     "نموذج صياغة": 30
+    },
+    "RELATION_VALIDATED": null,
+    "RERANKER_INPUT": {
+     "تشريع": 139,
+     "مبدأ قضائي": 73,
+     "حكم كامل": 58,
+     "نموذج صياغة": 30
+    },
+    "RERANKED": {
+     "تشريع": 139,
+     "مبدأ قضائي": 73,
+     "حكم كامل": 58,
+     "نموذج صياغة": 30
+    },
+    "ADMITTED": {
+     "تشريع": 93,
+     "مبدأ قضائي": 26,
+     "حكم كامل": 5,
+     "نموذج صياغة": 1
+    },
+    "FINAL_CONTEXT": {
+     "تشريع": 93,
+     "مبدأ قضائي": 26,
+     "حكم كامل": 5,
+     "نموذج صياغة": 1
+    }
+   }
+  },
+  {
+   "name": "حضانة جعفرية",
+   "lost_vs_baseline": [],
+   "must_total": 0,
+   "must_old": 0,
+   "must_new": 0,
+   "missing_new": [],
+   "pool_v2": 310,
+   "pool_after_dedupe": 307,
+   "reranker_input": 276,
+   "admitted_old": 175,
+   "admitted_new": 142,
+   "ctx_chars_old": 78387,
+   "ctx_chars_new": 78033,
+   "latency_old": 34.66,
+   "latency_new": 72.93,
+   "selectivity": 0.4625,
+   "funnel": {
+    "GENERATED": {
+     "تشريع": 200,
+     "مبدأ قضائي": 50,
+     "حكم كامل": 36,
+     "نموذج صياغة": 24
+    },
+    "DEDUPED": {
+     "تشريع": 200,
+     "مبدأ قضائي": 50,
+     "حكم كامل": 36,
+     "نموذج صياغة": 24
+    },
+    "RELATION_VALIDATED": null,
+    "RERANKER_INPUT": {
+     "تشريع": 169,
+     "مبدأ قضائي": 47,
+     "حكم كامل": 36,
+     "نموذج صياغة": 24
+    },
+    "RERANKED": {
+     "تشريع": 169,
+     "مبدأ قضائي": 47,
+     "حكم كامل": 36,
+     "نموذج صياغة": 24
+    },
+    "ADMITTED": {
+     "تشريع": 96,
+     "مبدأ قضائي": 40,
+     "حكم كامل": 5,
+     "نموذج صياغة": 1
+    },
+    "FINAL_CONTEXT": {
+     "تشريع": 96,
+     "مبدأ قضائي": 40,
+     "حكم كامل": 5,
+     "نموذج صياغة": 1
+    }
+   }
+  },
+  {
+   "name": "فصل تعسفي عمل أهلي",
+   "lost_vs_baseline": [],
+   "must_total": 0,
+   "must_old": 0,
+   "must_new": 0,
+   "missing_new": [],
+   "pool_v2": 353,
+   "pool_after_dedupe": 333,
+   "reranker_input": 300,
+   "admitted_old": 110,
+   "admitted_new": 101,
+   "ctx_chars_old": 78071,
+   "ctx_chars_new": 82435,
+   "latency_old": 32.9,
+   "latency_new": 74.27,
+   "selectivity": 0.3033,
+   "funnel": {
+    "GENERATED": {
+     "تشريع": 160,
+     "مبدأ قضائي": 96,
+     "حكم كامل": 69,
+     "نموذج صياغة": 28
+    },
+    "DEDUPED": {
+     "تشريع": 160,
+     "مبدأ قضائي": 96,
+     "حكم كامل": 69,
+     "نموذج صياغة": 28
+    },
+    "RELATION_VALIDATED": null,
+    "RERANKER_INPUT": {
+     "تشريع": 127,
+     "مبدأ قضائي": 76,
+     "حكم كامل": 69,
+     "نموذج صياغة": 28
+    },
+    "RERANKED": {
+     "تشريع": 127,
+     "مبدأ قضائي": 76,
+     "حكم كامل": 69,
+     "نموذج صياغة": 28
+    },
+    "ADMITTED": {
+     "تشريع": 62,
+     "مبدأ قضائي": 34,
+     "حكم كامل": 4,
+     "نموذج صياغة": 1
+    },
+    "FINAL_CONTEXT": {
+     "تشريع": 62,
+     "مبدأ قضائي": 34,
+     "حكم كامل": 4,
+     "نموذج صياغة": 1
+    }
+   }
+  },
+  {
+   "name": "إخلاء مأجور",
+   "lost_vs_baseline": [],
+   "must_total": 0,
+   "must_old": 0,
+   "must_new": 0,
+   "missing_new": [],
+   "pool_v2": 361,
+   "pool_after_dedupe": 335,
+   "reranker_input": 300,
+   "admitted_old": 126,
+   "admitted_new": 108,
+   "ctx_chars_old": 77219,
+   "ctx_chars_new": 78882,
+   "latency_old": 59.74,
+   "latency_new": 119.45,
+   "selectivity": 0.3224,
+   "funnel": {
+    "GENERATED": {
+     "تشريع": 204,
+     "مبدأ قضائي": 71,
+     "حكم كامل": 57,
+     "نموذج صياغة": 29
+    },
+    "DEDUPED": {
+     "تشريع": 204,
+     "مبدأ قضائي": 71,
+     "حكم كامل": 57,
+     "نموذج صياغة": 29
+    },
+    "RELATION_VALIDATED": null,
+    "RERANKER_INPUT": {
+     "تشريع": 169,
+     "مبدأ قضائي": 45,
+     "حكم كامل": 57,
+     "نموذج صياغة": 29
+    },
+    "RERANKED": {
+     "تشريع": 169,
+     "مبدأ قضائي": 45,
+     "حكم كامل": 57,
+     "نموذج صياغة": 29
+    },
+    "ADMITTED": {
+     "تشريع": 69,
+     "مبدأ قضائي": 34,
+     "حكم كامل": 4,
+     "نموذج صياغة": 1
+    },
+    "FINAL_CONTEXT": {
+     "تشريع": 69,
+     "مبدأ قضائي": 34,
+     "حكم كامل": 4,
+     "نموذج صياغة": 1
+    }
+   }
+  },
+  {
+   "name": "إلغاء قرار إداري",
+   "lost_vs_baseline": [],
+   "must_total": 0,
+   "must_old": 0,
+   "must_new": 0,
+   "missing_new": [],
+   "pool_v2": 342,
+   "pool_after_dedupe": 326,
+   "reranker_input": 296,
+   "admitted_old": 130,
+   "admitted_new": 102,
+   "ctx_chars_old": 80715,
+   "ctx_chars_new": 82272,
+   "latency_old": 49.89,
+   "latency_new": 109.87,
+   "selectivity": 0.3129,
+   "funnel": {
+    "GENERATED": {
+     "تشريع": 166,
+     "مبدأ قضائي": 74,
+     "حكم كامل": 79,
+     "نموذج صياغة": 23
+    },
+    "DEDUPED": {
+     "تشريع": 166,
+     "مبدأ قضائي": 74,
+     "حكم كامل": 79,
+     "نموذج صياغة": 23
+    },
+    "RELATION_VALIDATED": null,
+    "RERANKER_INPUT": {
+     "تشريع": 136,
+     "مبدأ قضائي": 58,
+     "حكم كامل": 79,
+     "نموذج صياغة": 23
+    },
+    "RERANKED": {
+     "تشريع": 136,
+     "مبدأ قضائي": 58,
+     "حكم كامل": 79,
+     "نموذج صياغة": 23
+    },
+    "ADMITTED": {
+     "تشريع": 63,
+     "مبدأ قضائي": 33,
+     "حكم كامل": 5,
+     "نموذج صياغة": 1
+    },
+    "FINAL_CONTEXT": {
+     "تشريع": 63,
+     "مبدأ قضائي": 33,
+     "حكم كامل": 5,
+     "نموذج صياغة": 1
+    }
+   }
+  },
+  {
+   "name": "تستر تجاري",
+   "lost_vs_baseline": [],
+   "must_total": 0,
+   "must_old": 0,
+   "must_new": 0,
+   "missing_new": [],
+   "pool_v2": 313,
+   "pool_after_dedupe": 289,
+   "reranker_input": 284,
+   "admitted_old": 110,
+   "admitted_new": 75,
+   "ctx_chars_old": 79766,
+   "ctx_chars_new": 83272,
+   "latency_old": 58.76,
+   "latency_new": 110.77,
+   "selectivity": 0.2595,
+   "funnel": {
+    "GENERATED": {
+     "تشريع": 169,
+     "مبدأ قضائي": 59,
+     "حكم كامل": 56,
+     "نموذج صياغة": 29
+    },
+    "DEDUPED": {
+     "تشريع": 169,
+     "مبدأ قضائي": 59,
+     "حكم كامل": 56,
+     "نموذج صياغة": 29
+    },
+    "RELATION_VALIDATED": null,
+    "RERANKER_INPUT": {
+     "تشريع": 164,
+     "مبدأ قضائي": 35,
+     "حكم كامل": 56,
+     "نموذج صياغة": 29
+    },
+    "RERANKED": {
+     "تشريع": 164,
+     "مبدأ قضائي": 35,
+     "حكم كامل": 56,
+     "نموذج صياغة": 29
+    },
+    "ADMITTED": {
+     "تشريع": 44,
+     "مبدأ قضائي": 25,
+     "حكم كامل": 5,
+     "نموذج صياغة": 1
+    },
+    "FINAL_CONTEXT": {
+     "تشريع": 44,
+     "مبدأ قضائي": 25,
+     "حكم كامل": 5,
+     "نموذج صياغة": 1
+    }
+   }
+  },
+  {
+   "name": "شركات: عزل مدير",
+   "lost_vs_baseline": [],
+   "must_total": 0,
+   "must_old": 0,
+   "must_new": 0,
+   "missing_new": [],
+   "pool_v2": 475,
+   "pool_after_dedupe": 453,
+   "reranker_input": 300,
+   "admitted_old": 124,
+   "admitted_new": 97,
+   "ctx_chars_old": 78463,
+   "ctx_chars_new": 80789,
+   "latency_old": 74.67,
+   "latency_new": 145.67,
+   "selectivity": 0.2141,
+   "funnel": {
+    "GENERATED": {
+     "تشريع": 309,
+     "مبدأ قضائي": 73,
+     "حكم كامل": 66,
+     "نموذج صياغة": 27
+    },
+    "DEDUPED": {
+     "تشريع": 309,
+     "مبدأ قضائي": 73,
+     "حكم كامل": 66,
+     "نموذج صياغة": 27
+    },
+    "RELATION_VALIDATED": null,
+    "RERANKER_INPUT": {
+     "تشريع": 156,
+     "مبدأ قضائي": 51,
+     "حكم كامل": 66,
+     "نموذج صياغة": 27
+    },
+    "RERANKED": {
+     "تشريع": 156,
+     "مبدأ قضائي": 51,
+     "حكم كامل": 66,
+     "نموذج صياغة": 27
+    },
+    "ADMITTED": {
+     "تشريع": 63,
+     "مبدأ قضائي": 29,
+     "حكم كامل": 4,
+     "نموذج صياغة": 1
+    },
+    "FINAL_CONTEXT": {
+     "تشريع": 63,
+     "مبدأ قضائي": 29,
+     "حكم كامل": 4,
+     "نموذج صياغة": 1
+    }
+   }
+  },
+  {
+   "name": "ميراث سني",
+   "lost_vs_baseline": [],
+   "must_total": 0,
+   "must_old": 0,
+   "must_new": 0,
+   "missing_new": [],
+   "pool_v2": 331,
+   "pool_after_dedupe": 315,
+   "reranker_input": 283,
+   "admitted_old": 149,
+   "admitted_new": 124,
+   "ctx_chars_old": 81502,
+   "ctx_chars_new": 77528,
+   "latency_old": 69.86,
+   "latency_new": 143.45,
+   "selectivity": 0.3937,
+   "funnel": {
+    "GENERATED": {
+     "تشريع": 193,
+     "مبدأ قضائي": 67,
+     "حكم كامل": 48,
+     "نموذج صياغة": 23
+    },
+    "DEDUPED": {
+     "تشريع": 193,
+     "مبدأ قضائي": 67,
+     "حكم كامل": 48,
+     "نموذج صياغة": 23
+    },
+    "RELATION_VALIDATED": null,
+    "RERANKER_INPUT": {
+     "تشريع": 161,
+     "مبدأ قضائي": 51,
+     "حكم كامل": 48,
+     "نموذج صياغة": 23
+    },
+    "RERANKED": {
+     "تشريع": 161,
+     "مبدأ قضائي": 51,
+     "حكم كامل": 48,
+     "نموذج صياغة": 23
+    },
+    "ADMITTED": {
+     "تشريع": 88,
+     "مبدأ قضائي": 31,
+     "حكم كامل": 4,
+     "نموذج صياغة": 1
+    },
+    "FINAL_CONTEXT": {
+     "تشريع": 88,
+     "مبدأ قضائي": 31,
+     "حكم كامل": 4,
+     "نموذج صياغة": 1
+    }
+   }
+  },
+  {
+   "name": "زواج عرفي مختلط المذاهب — زوجية ونسب وميراث",
+   "lost_vs_baseline": [],
+   "must_total": 2,
+   "must_old": 2,
+   "must_new": 2,
+   "missing_new": [],
+   "pool_v2": 330,
+   "pool_after_dedupe": 314,
+   "reranker_input": 278,
+   "admitted_old": 122,
+   "admitted_new": 113,
+   "ctx_chars_old": 82452,
+   "ctx_chars_new": 78979,
+   "latency_old": 72.46,
+   "latency_new": 155.66,
+   "selectivity": 0.3599,
+   "funnel": {
+    "GENERATED": {
+     "تشريع": 240,
+     "مبدأ قضائي": 85,
+     "حكم كامل": 52,
+     "نموذج صياغة": 21
+    },
+    "DEDUPED": {
+     "تشريع": 172,
+     "مبدأ قضائي": 85,
+     "حكم كامل": 52,
+     "نموذج صياغة": 21
+    },
+    "RELATION_VALIDATED": null,
+    "RERANKER_INPUT": {
+     "تشريع": 136,
+     "مبدأ قضائي": 69,
+     "حكم كامل": 52,
+     "نموذج صياغة": 21
+    },
+    "RERANKED": {
+     "تشريع": 136,
+     "مبدأ قضائي": 69,
+     "حكم كامل": 52,
+     "نموذج صياغة": 21
+    },
+    "ADMITTED": {
+     "تشريع": 78,
+     "مبدأ قضائي": 29,
+     "حكم كامل": 5,
+     "نموذج صياغة": 1
+    },
+    "FINAL_CONTEXT": {
+     "تشريع": 78,
+     "مبدأ قضائي": 29,
+     "حكم كامل": 5,
+     "نموذج صياغة": 1
+    }
+   }
+  },
+  {
+   "name": "عقد بيع محل تجاري — لغة المحامي مقابل لغة المشرع",
+   "lost_vs_baseline": [],
+   "must_total": 1,
+   "must_old": 1,
+   "must_new": 1,
+   "missing_new": [],
+   "pool_v2": 449,
+   "pool_after_dedupe": 415,
+   "reranker_input": 300,
+   "admitted_old": 122,
+   "admitted_new": 89,
+   "ctx_chars_old": 81124,
+   "ctx_chars_new": 82185,
+   "latency_old": 56.88,
+   "latency_new": 112.14,
+   "selectivity": 0.2145,
+   "funnel": {
+    "GENERATED": {
+     "تشريع": 252,
+     "مبدأ قضائي": 110,
+     "حكم كامل": 61,
+     "نموذج صياغة": 26
+    },
+    "DEDUPED": {
+     "تشريع": 252,
+     "مبدأ قضائي": 110,
+     "حكم كامل": 61,
+     "نموذج صياغة": 26
+    },
+    "RELATION_VALIDATED": null,
+    "RERANKER_INPUT": {
+     "تشريع": 137,
+     "مبدأ قضائي": 76,
+     "حكم كامل": 61,
+     "نموذج صياغة": 26
+    },
+    "RERANKED": {
+     "تشريع": 137,
+     "مبدأ قضائي": 76,
+     "حكم كامل": 61,
+     "نموذج صياغة": 26
+    },
+    "ADMITTED": {
+     "تشريع": 55,
+     "مبدأ قضائي": 29,
+     "حكم كامل": 4,
+     "نموذج صياغة": 1
+    },
+    "FINAL_CONTEXT": {
+     "تشريع": 55,
+     "مبدأ قضائي": 29,
+     "حكم كامل": 4,
+     "نموذج صياغة": 1
+    }
+   }
+  },
+  {
+   "name": "الشيكان وأمر الأداء — بوابتا الاستلزام (م166 وتقادم الشيك)",
+   "lost_vs_baseline": [],
+   "must_total": 5,
+   "must_old": 2,
+   "must_new": 5,
+   "missing_new": [],
+   "pool_v2": 584,
+   "pool_after_dedupe": 566,
+   "reranker_input": 300,
+   "admitted_old": 107,
+   "admitted_new": 98,
+   "ctx_chars_old": 80811,
+   "ctx_chars_new": 80764,
+   "latency_old": 106.92,
+   "latency_new": 184.33,
+   "selectivity": 0.1731,
+   "funnel": {
+    "GENERATED": {
+     "تشريع": 391,
+     "مبدأ قضائي": 83,
+     "حكم كامل": 82,
+     "نموذج صياغة": 28
+    },
+    "DEDUPED": {
+     "تشريع": 391,
+     "مبدأ قضائي": 83,
+     "حكم كامل": 82,
+     "نموذج صياغة": 28
+    },
+    "RELATION_VALIDATED": null,
+    "RERANKER_INPUT": {
+     "تشريع": 125,
+     "مبدأ قضائي": 65,
+     "حكم كامل": 82,
+     "نموذج صياغة": 28
+    },
+    "RERANKED": {
+     "تشريع": 0,
+     "مبدأ قضائي": 0,
+     "حكم كامل": 0,
+     "نموذج صياغة": 0
+    },
+    "ADMITTED": {
+     "تشريع": 64,
+     "مبدأ قضائي": 29,
+     "حكم كامل": 4,
+     "نموذج صياغة": 1
+    },
+    "FINAL_CONTEXT": {
+     "تشريع": 64,
+     "مبدأ قضائي": 29,
+     "حكم كامل": 4,
+     "نموذج صياغة": 1
+    }
+   }
+  },
+  {
+   "name": "قانون الخدمة الوطنية العسكرية (نوع legislation — LEG-*)",
+   "lost_vs_baseline": [],
+   "must_total": 1,
+   "must_old": 0,
+   "must_new": 1,
+   "missing_new": [],
+   "pool_v2": 333,
+   "pool_after_dedupe": 314,
+   "reranker_input": 284,
+   "admitted_old": 103,
+   "admitted_new": 94,
+   "ctx_chars_old": 82485,
+   "ctx_chars_new": 82106,
+   "latency_old": 89.96,
+   "latency_new": 143.35,
+   "selectivity": 0.2994,
+   "funnel": {
+    "GENERATED": {
+     "تشريع": 181,
+     "مبدأ قضائي": 63,
+     "حكم كامل": 61,
+     "نموذج صياغة": 28
+    },
+    "DEDUPED": {
+     "تشريع": 181,
+     "مبدأ قضائي": 63,
+     "حكم كامل": 61,
+     "نموذج صياغة": 28
+    },
+    "RELATION_VALIDATED": null,
+    "RERANKER_INPUT": {
+     "تشريع": 151,
+     "مبدأ قضائي": 44,
+     "حكم كامل": 61,
+     "نموذج صياغة": 28
+    },
+    "RERANKED": {
+     "تشريع": 151,
+     "مبدأ قضائي": 44,
+     "حكم كامل": 61,
+     "نموذج صياغة": 28
+    },
+    "ADMITTED": {
+     "تشريع": 63,
+     "مبدأ قضائي": 26,
+     "حكم كامل": 4,
+     "نموذج صياغة": 1
+    },
+    "FINAL_CONTEXT": {
+     "تشريع": 63,
+     "مبدأ قضائي": 26,
+     "حكم كامل": 4,
+     "نموذج صياغة": 1
+    }
+   }
+  },
+  {
+   "name": "تعليمات كفاية رأس المال الرقابي (نوع legislation_archived)",
+   "lost_vs_baseline": [],
+   "must_total": 1,
+   "must_old": 0,
+   "must_new": 1,
+   "missing_new": [],
+   "pool_v2": 347,
+   "pool_after_dedupe": 331,
+   "reranker_input": 298,
+   "admitted_old": 137,
+   "admitted_new": 95,
+   "ctx_chars_old": 83028,
+   "ctx_chars_new": 80984,
+   "latency_old": 63.34,
+   "latency_new": 107.71,
+   "selectivity": 0.287,
+   "funnel": {
+    "GENERATED": {
+     "تشريع": 212,
+     "مبدأ قضائي": 57,
+     "حكم كامل": 53,
+     "نموذج صياغة": 25
+    },
+    "DEDUPED": {
+     "تشريع": 212,
+     "مبدأ قضائي": 57,
+     "حكم كامل": 53,
+     "نموذج صياغة": 25
+    },
+    "RELATION_VALIDATED": null,
+    "RERANKER_INPUT": {
+     "تشريع": 179,
+     "مبدأ قضائي": 41,
+     "حكم كامل": 53,
+     "نموذج صياغة": 25
+    },
+    "RERANKED": {
+     "تشريع": 179,
+     "مبدأ قضائي": 41,
+     "حكم كامل": 53,
+     "نموذج صياغة": 25
+    },
+    "ADMITTED": {
+     "تشريع": 69,
+     "مبدأ قضائي": 20,
+     "حكم كامل": 5,
+     "نموذج صياغة": 1
+    },
+    "FINAL_CONTEXT": {
+     "تشريع": 69,
+     "مبدأ قضائي": 20,
+     "حكم كامل": 5,
+     "نموذج صياغة": 1
+    }
+   }
+  }
+ ],
+ "rerank_failures": [
+  "الشيكان وأمر الأداء — بوابتا الاستلزام (م166 وتقادم الشيك)"
+ ],
+ "controls": [
+  {
+   "case": "A1",
+   "target_stage": {
+    "legis-6-2010-m146": "RERANKED_NOT_ADMITTED",
+    "legis-67-1980-m442": "NEVER_GENERATED",
+    "jprin-441-2014-s2174-b159be2ed9": "NEVER_GENERATED",
+    "jprin-7-1996-e5376-66fde4a508": "NEVER_GENERATED"
+   },
+   "NAR_new": [],
+   "RBN_new": [],
+   "NBU_new": [],
+   "NAR_base": [
+    "legis-6-2010-m146"
+   ],
+   "RBN_base": [
+    "legis-67-1980-m442"
+   ],
+   "NBU_base": [
+    "legis-6-2010-m145",
+    "legis-6-2010-m147"
+   ],
+   "funnel": {
+    "GENERATED": {
+     "تشريع": 276,
+     "مبدأ قضائي": 96,
+     "حكم كامل": 69,
+     "نموذج صياغة": 28
+    },
+    "DEDUPED": {
+     "تشريع": 165,
+     "مبدأ قضائي": 96,
+     "حكم كامل": 69,
+     "نموذج صياغة": 28
+    },
+    "RELATION_VALIDATED": null,
+    "RERANKER_INPUT": {
+     "تشريع": 127,
+     "مبدأ قضائي": 76,
+     "حكم كامل": 69,
+     "نموذج صياغة": 28
+    },
+    "RERANKED": {
+     "تشريع": 127,
+     "مبدأ قضائي": 76,
+     "حكم كامل": 69,
+     "نموذج صياغة": 28
+    },
+    "ADMITTED": {
+     "تشريع": 62,
+     "مبدأ قضائي": 34,
+     "حكم كامل": 4,
+     "نموذج صياغة": 1
+    },
+    "FINAL_CONTEXT": {
+     "تشريع": 62,
+     "مبدأ قضائي": 34,
+     "حكم كامل": 4,
+     "نموذج صياغة": 1
+    }
+   },
+   "latency_new": 110.73
+  },
+  {
+   "case": "A2",
+   "target_stage": {
+    "legis-51-1984-m340": "RERANKED_NOT_ADMITTED",
+    "legis-51-1984-m339": "RERANKED_NOT_ADMITTED",
+    "legis-51-1984-m341": "RERANKED_NOT_ADMITTED",
+    "jprin-13-2001-g521-59b49c0ed0": "NEVER_GENERATED",
+    "jprin-21-2009-w2153-bba11040b3": "NEVER_GENERATED",
+    "JUR-أحوال-شخصية-مرض-الموت-PR-10-a5080271db898625": "NEVER_GENERATED"
+   },
+   "NAR_new": [],
+   "RBN_new": [],
+   "NBU_new": [],
+   "NAR_base": [],
+   "RBN_base": [],
+   "NBU_base": [],
+   "funnel": {
+    "GENERATED": {
+     "تشريع": 573,
+     "مبدأ قضائي": 78,
+     "حكم كامل": 58,
+     "نموذج صياغة": 20
+    },
+    "DEDUPED": {
+     "تشريع": 180,
+     "مبدأ قضائي": 78,
+     "حكم كامل": 58,
+     "نموذج صياغة": 20
+    },
+    "RELATION_VALIDATED": null,
+    "RERANKER_INPUT": {
+     "تشريع": 148,
+     "مبدأ قضائي": 68,
+     "حكم كامل": 58,
+     "نموذج صياغة": 20
+    },
+    "RERANKED": {
+     "تشريع": 148,
+     "مبدأ قضائي": 68,
+     "حكم كامل": 58,
+     "نموذج صياغة": 20
+    },
+    "ADMITTED": {
+     "تشريع": 63,
+     "مبدأ قضائي": 29,
+     "حكم كامل": 5,
+     "نموذج صياغة": 1
+    },
+    "FINAL_CONTEXT": {
+     "تشريع": 63,
+     "مبدأ قضائي": 29,
+     "حكم كامل": 5,
+     "نموذج صياغة": 1
+    }
+   },
+   "latency_new": 75.86
+  },
+  {
+   "case": "A3",
+   "target_stage": {
+    "legis-68-1980-m553": "ADMITTED",
+    "legis-68-1980-m549": "RERANKED_NOT_ADMITTED",
+    "legis-68-1980-m552": "RERANKED_NOT_ADMITTED",
+    "legis-68-1980-m554": "RERANKED_NOT_ADMITTED",
+    "legis-68-1980-m548": "RERANKED_NOT_ADMITTED",
+    "legis-68-1980-m546": "RERANKED_NOT_ADMITTED",
+    "legis-68-1980-m547": "RERANKED_NOT_ADMITTED"
+   },
+   "NAR_new": [
+    "legis-68-1980-m553"
+   ],
+   "RBN_new": [],
+   "NBU_new": [],
+   "NAR_base": [
+    "legis-68-1980-m553"
+   ],
+   "RBN_base": [],
+   "NBU_base": [],
+   "funnel": {
+    "GENERATED": {
+     "تشريع": 772,
+     "مبدأ قضائي": 97,
+     "حكم كامل": 82,
+     "نموذج صياغة": 28
+    },
+    "DEDUPED": {
+     "تشريع": 278,
+     "مبدأ قضائي": 97,
+     "حكم كامل": 82,
+     "نموذج صياغة": 28
+    },
+    "RELATION_VALIDATED": null,
+    "RERANKER_INPUT": {
+     "تشريع": 118,
+     "مبدأ قضائي": 72,
+     "حكم كامل": 82,
+     "نموذج صياغة": 28
+    },
+    "RERANKED": {
+     "تشريع": 118,
+     "مبدأ قضائي": 72,
+     "حكم كامل": 82,
+     "نموذج صياغة": 28
+    },
+    "ADMITTED": {
+     "تشريع": 61,
+     "مبدأ قضائي": 25,
+     "حكم كامل": 5,
+     "نموذج صياغة": 1
+    },
+    "FINAL_CONTEXT": {
+     "تشريع": 61,
+     "مبدأ قضائي": 25,
+     "حكم كامل": 5,
+     "نموذج صياغة": 1
+    }
+   },
+   "latency_new": 89.47
+  }
+ ],
+ "reference_cases": [
+  {
+   "id": "نسب",
+   "by_layer": {
+    "تشريع": 67,
+    "مبدأ قضائي": 31,
+    "حكم كامل": 5,
+    "نموذج صياغة": 1
+   },
+   "judicial_in_context": 36,
+   "conflicts": [],
+   "latency": 66.77
+  },
+  {
+   "id": "م167",
+   "by_layer": {
+    "تشريع": 71,
+    "مبدأ قضائي": 30,
+    "حكم كامل": 4,
+    "نموذج صياغة": 1
+   },
+   "judicial_in_context": 34,
+   "conflicts": [
+    {
+     "flag": "POTENTIAL_AUTHORITY_CONFLICT",
+     "axis": "statute_vs_judicial",
+     "judicial": "jprin-312-2011-2-dd35ea459e84",
+     "statute": "legis-38-1980-m167",
+     "clashes": [
+      {
+       "unit": "يوم",
+       "principle_value": 5,
+       "article_values": [
+        3,
+        10
+       ]
+      }
+     ],
+     "resolution": null,
+     "basis_available": false,
+     "note": "المبدأ يقتبس مدةً تخالف النص النافذ — يبقى صالحًا فيما عدا هذه النقطة، ولا يُقدَّم تفصيله القديم بوصفه النافذ."
+    }
+   ],
+   "latency": 70.19,
+   "m167_in_context": true,
+   "five_days_unwarned": false
+  },
+  {
+   "id": "الحمض النووي",
+   "by_layer": {
+    "تشريع": 69,
+    "مبدأ قضائي": 34,
+    "حكم كامل": 4,
+    "نموذج صياغة": 1
+   },
+   "judicial_in_context": 38,
+   "conflicts": [],
+   "latency": 77.2,
+   "unsupported_resolution": []
+  }
+ ],
+ "summary": {
+  "legislative_must_recall_base": 0.5833,
+  "legislative_must_recall_v2": 1.0,
+  "funnel_totals_v2": {
+   "GENERATED": {
+    "تشريع": 3160,
+    "مبدأ قضائي": 1108,
+    "حكم كامل": 906,
+    "نموذج صياغة": 391
+   },
+   "DEDUPED": {
+    "تشريع": 3092,
+    "مبدأ قضائي": 1108,
+    "حكم كامل": 906,
+    "نموذج صياغة": 391
+   },
+   "RERANKER_INPUT": {
+    "تشريع": 2180,
+    "مبدأ قضائي": 839,
+    "حكم كامل": 906,
+    "نموذج صياغة": 391
+   },
+   "RERANKED": {
+    "تشريع": 2055,
+    "مبدأ قضائي": 774,
+    "حكم كامل": 824,
+    "نموذج صياغة": 363
+   },
+   "ADMITTED": {
+    "تشريع": 1035,
+    "مبدأ قضائي": 456,
+    "حكم كامل": 67,
+    "نموذج صياغة": 15
+   },
+   "FINAL_CONTEXT": {
+    "تشريع": 1035,
+    "مبدأ قضائي": 456,
+    "حكم كامل": 67,
+    "نموذج صياغة": 15
+   }
+  },
+  "final_context_by_layer_base": {
+   "تشريع": 1438,
+   "مبدأ قضائي": 430,
+   "حكم كامل": 30,
+   "نموذج صياغة": 18
+  },
+  "controls": {
+   "nar": 1,
+   "nar_n": 11,
+   "rbn": 0,
+   "rbn_n": 6,
+   "nbu": 0,
+   "nbu_n": 11,
+   "b_nar": 2,
+   "b_rbn": 1,
+   "b_nbu": 2
+  },
+  "temporal_statuses": {
+   "CURRENT": 5230,
+   "CONFLICT_DETECTED": 2,
+   "TRANSITION_VERIFIED": 2
+  },
+  "latency_p50_base": 58.8,
+  "latency_p95_base": 110.3,
+  "latency_p50_v2": 110.8,
+  "latency_p95_v2": 190.1,
+  "pool_median_v2": 345,
+  "reranker_input_median_v2": 296,
+  "ctx_chars_median_v2": 80764,
+  "full_judgment_end_to_end": [
+   {
+    "case": "المطار: منع سفر بأمر أداء وتزوير",
+    "judgments": [
+     "judgment-civ-1357-2016-21f5396e",
+     "judgment-civ-599-2013-198ec680",
+     "judgment-civ-932-2011-b159f82b",
+     "judgment-civ-1-2012-73080a62"
+    ]
+   },
+   {
+    "case": "الشيك بدون رصيد",
+    "judgments": [
+     "judgment-jaz-551-2013-190e96d0",
+     "judgment-civ-373-2013-7aa3787e",
+     "judgment-com-1129-2009-64bc6241",
+     "judgment-com-x-x-ad7c0a58"
+    ]
+   },
+   {
+    "case": "طلاق للضرر",
+    "judgments": [
+     "judgment-ahwal-80-2024-f8671ac8",
+     "judgment-ahwal-50-2014-78b7c7dd",
+     "judgment-ahwal-509-2012-60d20ae2",
+     "judgment-ahwal-471-2011-3f7493fd"
+    ]
+   },
+   {
+    "case": "حضانة جعفرية",
+    "judgments": [
+     "judgment-civ-1015-2012-62c12cc1",
+     "judgment-ahwal-509-2012-60d20ae2",
+     "judgment-civ-x-x-78425a49",
+     "judgment-ahwal-568-2009-3c6866dc"
+    ]
+   },
+   {
+    "case": "فصل تعسفي عمل أهلي",
+    "judgments": [
+     "judgment-lab-2565-2021-49345143",
+     "judgment-lab-730-2012-fd398321",
+     "judgment-lab-290-2010-dd087610",
+     "judgment-lab-141-2015-3f88a185"
+    ]
+   },
+   {
+    "case": "إخلاء مأجور",
+    "judgments": [
+     "judgment-com-x-x-10205f4f",
+     "judgment-com-1833-2010-605611be",
+     "judgment-civ-501-2012-44fa0e02",
+     "judgment-com-x-x-f6362a51"
+    ]
+   }
+  ],
+  "relation_validator": "NOT_IMPLEMENTED_IN_V2"
+ },
+ "verdict": "VALIDATION_INCOMPLETE",
+ "regressions": {
+  "nbu_worse": false,
+  "legislative_worse": false,
+  "lost_vs_baseline": false,
+  "reference_case_fail": false,
+  "principles_worse": false,
+  "latency_p95_doubled": false,
+  "judgments_gained": true
+ }
+}

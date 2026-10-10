@@ -815,12 +815,42 @@ def _draft_fetch_texts(ids):
     with psycopg.connect(dsn) as conn, conn.cursor() as cur:
         cur.execute(
             "SELECT id, object_type, branch, topic, subtopic, title, original_text, "
-            "metadata->>'publication' "
+            "metadata->>'publication', metadata->>'source_note' "
             "FROM knowledge_objects WHERE id = ANY(%s)", (list(ids),))
-        for i, ot, br, tp, st, ti, tx, pb in cur.fetchall():
+        for i, ot, br, tp, st, ti, tx, pb, nt in cur.fetchall():
             out[i] = {"object_type": ot, "branch": br, "topic": tp,
-                      "subtopic": st, "title": ti, "text": tx, "publication": pb}
+                      "subtopic": st, "title": ti, "text": tx, "publication": pb,
+                      "note": nt}
     return out
+
+
+# ─── إظهار ملاحظات المحرِّر (metadata.source_note) في السياق ─────────────────
+# كانت مكتوبةً في القاعدة ولا تصل أحدًا (الحدّ الموثق في §13). ثلاثة قيود:
+# (1) تُلحق **بعد** احتساب ميزانية الكتلة، فلا تُخرج مرشَّحًا من السياق أبدًا؛
+# (2) تُغلَّف بوسم صريح أنها ليست من نص الجريدة ولا يُستشهد بها — فلا تُقتبس
+#     ملاحظتنا على أنها نصُّ المشرّع؛ (3) بسقف طول.
+_NOTE_CAP_DRAFT = 700
+_NOTE_OPEN = "⟦ملاحظة توثيقية من محرِّر القاعدة — ليست من نص الجريدة ولا يُستشهد بها⟧"
+
+
+def _draft_note_text(note, cap=_NOTE_CAP_DRAFT):
+    nt = (note or "").strip()
+    if not nt:
+        return ""
+    if len(nt) > cap:
+        nt = nt[:cap].rstrip() + " […]"
+    return "\n\n" + _NOTE_OPEN + "\n" + nt
+
+
+def _draft_with_note(block, note):
+    """يُدرج التنبيه داخل الكتلة قبل وسم الإغلاق — لا بعده فيبقى معلّقًا."""
+    nt = _draft_note_text(note)
+    if not nt:
+        return block
+    tail = "\n</مصدر>"
+    if block.endswith(tail):
+        return block[:-len(tail)] + nt + tail
+    return block + nt
 
 _AR_DIAC = re.compile("[\u0640\u064B-\u0652\u0670]")
 def _draft_norm_ar(t):
@@ -5271,26 +5301,81 @@ def _audit_answer(answer, seen):
 _GAP_RE = re.compile(r"لم\s+يرد[^.\n؟]{0,40}?في\s+(?:السياق|المصادر)")
 
 
-def _compute_review_status(answer, flags, inctx, crosscheck_findings):
-    """يُشتق من إشارات تحقق فعلية لا من إعلان ذاتي للنموذج (قرار المالك 2026-09-10):
-    needs_review عند شبهة استشهاد غير موجود أو إعلان غياب كاذب باقيين على النص
-    النهائي بعد التنقيح، أو تصنيف تدقيق متقاطع «suspicious»، أو علامة [للتحقق]
-    الصريحة (تعليمات جولة التنقيح تأمر بوضعها متى بقي شكّ)؛ partial عند بقاء إفصاح
-    صريح بفجوة استرجاع (_GAP_RE) بلا أي شبهة؛ وإلا verified. فشل الحساب نفسه يُرَد
-    needs_review احتياطًا — لا verified — فحقل سلامة لا يصح أن يفشل صامتًا لصالح
-    الطمأنة الكاذبة."""
+def _compute_review_assessment(answer, flags, inctx, crosscheck_findings):
+    """تصنيف سلامة قابل للتفسير بدل ختمٍ مبهم على كامل الرأي.
+
+    - needs_review: شبهة موضوعية غير محلولة تمس صحة الاستشهاد/النسبة.
+    - partial: لا توجد شبهة موضوعية، لكن بقيت فجوة معلنة أو موضع [للتحقق].
+    - verified: لم يبق شيء من ذلك.
+
+    الاستنتاج القانوني الموسوم بوضوح لا يُعد عيبًا بذاته؛ المعيار هنا سلامة الإسناد،
+    لا مجرد وجود تحليل مهني في الرأي.
+    """
     try:
-        cc_suspicious = any((f or {}).get("verdict") == "suspicious"
-                             for f in (crosscheck_findings or []))
-        needs_review = bool(flags) or bool(inctx) or cc_suspicious or ("[للتحقق]" in (answer or ""))
-        if needs_review:
-            return "needs_review"
-        if _GAP_RE.search(answer or ""):
-            return "partial"
-        return "verified"
+        flags = list(flags or [])
+        inctx = list(inctx or [])
+        cfs = list(crosscheck_findings or [])
+        suspicious = [f for f in cfs if (f or {}).get("verdict") == "suspicious"]
+        unverifiable = [f for f in cfs if (f or {}).get("verdict") == "unverifiable"]
+        verify_marks = (answer or "").count("[للتحقق]")
+        gap_count = len(list(_GAP_RE.finditer(answer or "")))
+
+        reasons = []
+        if flags:
+            reasons.append({"kind": "citation_not_found", "count": len(flags),
+                            "label": "استشهاد لم يوجد في قاعدة النظام بصيغته المذكورة",
+                            "items": flags[:10]})
+        if inctx:
+            reasons.append({"kind": "false_absence", "count": len(inctx),
+                            "label": "أُعلن غياب مصدر وهو موجود في السياق",
+                            "items": inctx[:10]})
+        if suspicious:
+            reasons.append({"kind": "crosscheck_suspicious", "count": len(suspicious),
+                            "label": "التدقيق المتقاطع أثار شبهة موضوعية في نسبة أو استشهاد",
+                            "items": [{"citation": x.get("citation"), "reason": x.get("reason")}
+                                      for x in suspicious[:10]]})
+        if unverifiable:
+            reasons.append({"kind": "crosscheck_unverifiable", "count": len(unverifiable),
+                            "label": "تعذر على المدقق المستقل التحقق من موضع",
+                            "items": [{"citation": x.get("citation"), "reason": x.get("reason")}
+                                      for x in unverifiable[:10]]})
+        if verify_marks:
+            reasons.append({"kind": "verify_marker", "count": verify_marks,
+                            "label": "مواضع موسومة صراحةً [للتحقق]", "items": []})
+        if gap_count:
+            reasons.append({"kind": "retrieval_gap", "count": gap_count,
+                            "label": "فجوة مصادر أفصح عنها الرأي صراحةً", "items": []})
+
+        hard = bool(flags or inctx or suspicious)
+        soft = bool(unverifiable or verify_marks or gap_count)
+        status = "needs_review" if hard else ("partial" if soft else "verified")
+
+        if status == "verified":
+            headline = "موثق آليًا: لم يبق تنبيه إسناد أو فجوة معلنة."
+        elif status == "partial":
+            headline = "موثق جزئيًا: الإسناد الأساسي سليم، مع مواضع محددة معلنة تحتاج استكمالًا."
+        else:
+            headline = "تحتاج مراجعتك: توجد شبهة إسناد محددة غير محلولة؛ راجع الأسباب أدناه."
+
+        return {"status": status, "headline": headline, "reasons": reasons,
+                "counts": {"citation_not_found": len(flags),
+                           "false_absence": len(inctx),
+                           "crosscheck_suspicious": len(suspicious),
+                           "crosscheck_unverifiable": len(unverifiable),
+                           "verify_marker": verify_marks,
+                           "retrieval_gap": gap_count}}
     except Exception as _rs_e:
-        print("[draft] review-status-error:", repr(_rs_e), flush=True)
-        return "needs_review"
+        print("[draft] review-assessment-error:", repr(_rs_e), flush=True)
+        return {"status": "needs_review",
+                "headline": "تحتاج مراجعتك: تعذر حساب حالة التحقق آليًا.",
+                "reasons": [{"kind": "assessment_error", "count": 1,
+                             "label": "تعذر حساب حالة التحقق", "items": []}],
+                "counts": {}}
+
+
+def _compute_review_status(answer, flags, inctx, crosscheck_findings):
+    """واجهة توافقية للكود القديم."""
+    return _compute_review_assessment(answer, flags, inctx, crosscheck_findings)["status"]
 
 
 def _gap_confirmed_art(window_text):
@@ -5704,8 +5789,9 @@ def _draft_build_context(client, inp: _DraftIn, facts_ret: str) -> dict:
                                     "remaining_budget": LBL_BUDGET.get(label, 4000) - lbl_used.get(label, 0)})
             continue                     # نفدت ميزانيةُ هذا النوع — لا يزاحم غيرَه
         seen.add(oid)
+        # الميزانية محسوبة على الكتلة وحدها — التنبيه يُلحق بعدها فلا يزاحم مرشَّحًا
         lbl_used[label] = lbl_used.get(label, 0) + len(block)
-        parts.append(block)
+        parts.append(_draft_with_note(block, t.get("note")))
     context = "\n\n".join(parts)
     # P1.5 (2026-09-10): سلسلة نسب كل مرشح (أي قناة أتى منها + درجاته عبر مراحل
     # الترتيب) — قياس بحت بلا أي تحويل لقاعدة قبول صلبة (بأمر المالك الصريح).
@@ -5976,9 +6062,12 @@ def _draft_run(inp: _DraftIn) -> dict:
     except Exception as _rs_e:
         print("[draft] review-status-error:", repr(_rs_e), flush=True)
         _final_flags, _final_inctx = list(audit_flags), list(audit_inctx)
-    review_status = _compute_review_status(answer, _final_flags, _final_inctx, crosscheck_findings)
+    review_assessment = _compute_review_assessment(
+        answer, _final_flags, _final_inctx, crosscheck_findings)
+    review_status = review_assessment["status"]
     print("[draft] review-status:", review_status, "| flags:", len(_final_flags),
-          "| inctx:", len(_final_inctx), flush=True)
+          "| inctx:", len(_final_inctx), "| reasons:",
+          [r.get("kind") for r in review_assessment.get("reasons", [])], flush=True)
     # حزمة الأدلة: سجل دائم للجولة — أساس مقارنة النماذج العادلة والتشخيص.
     # تسجيل خالص: أي فشل يُطبع ولا يمس الجولة (لا ابتلاع صامتًا — درس معياري).
     try:
@@ -6014,6 +6103,8 @@ def _draft_run(inp: _DraftIn) -> dict:
             "selffix_extra": selffix_ids,
             "audit_flags": audit_flags, "audit_incontext": audit_inctx,
             "review_status": review_status,
+            "review_assessment": review_assessment,
+            "review_reason": review_assessment.get("headline"),
             "usage": {"input": resp.usage.input_tokens, "output": resp.usage.output_tokens}}
 def _store_draft_result(rid, res):
     """التسليم المضمون: النتيجة تُحفظ خادميًا فور اكتمالها فيستردها العميل إن مات البث —
@@ -6074,12 +6165,14 @@ def draft_endpoint(inp: _DraftIn, _: str = Depends(require_auth)):
             box["res"] = _draft_run(inp)
         except HTTPException as e:
             print("[draft] HTTPException:", e.status_code, str(e.detail)[:200], flush=True)
-            box["res"] = {"answer": "تعذر إتمام الطلب: " + str(e.detail), "error": True}
+            _msg = "تعذر إتمام الطلب: " + str(e.detail)
+            box["res"] = {"answer": _msg, "error": _msg, "error_type": "http"}
         except Exception as e:
             import traceback
             print("[draft] CRASH:", flush=True)
             traceback.print_exc()
-            box["res"] = {"answer": "خطأ داخلي غير متوقع: " + str(e)[:300], "error": True}
+            _msg = "خطأ داخلي غير متوقع: " + str(e)[:500]
+            box["res"] = {"answer": _msg, "error": _msg, "error_type": type(e).__name__}
         _store_draft_result(getattr(inp, "client_rid", None), box.get("res"))
     th = threading.Thread(target=_work, daemon=True)
     th.start()
@@ -6137,6 +6230,9 @@ def browse_kb(kind: str, b: str = "", t: str = "", group: str = "", part: str = 
         "postgresql://legalmind:legalmind@127.0.0.1:55432/legalmind"
     tph = ",".join(["%s"] * len(types))
     BR = "CASE WHEN branch LIKE 'أحوال شخصية%%' THEN 'أحوال شخصية' ELSE COALESCE(NULLIF(branch,''),'غير مصنّف') END"
+    # رفوف المكتبة (taxonomy/library_shelves.json) — مجلدات القوانين بترتيب المرجع؛ وما لا رفّ له يبقى في فرعه
+    SH = "COALESCE(NULLIF(metadata->>'library_shelf',''), " + BR + ")"
+    SHO = "NULLIF(metadata->>'library_shelf_order','')::int"
     TP = "COALESCE(NULLIF(topic,''),'عام')"
     # مفتاح التجميع: قانون (legis-N-Y) أو كتاب لائحة تنفيذية (lreg-N-Y-kM) — كلٌّ عقدةٌ مستقلّة
     GEXPR = ("COALESCE(metadata->>'library_group', substring(id from '^(legis-[a-z0-9]+-[0-9]+)'), "
@@ -6148,8 +6244,9 @@ def browse_kb(kind: str, b: str = "", t: str = "", group: str = "", part: str = 
             # فرع (مجلد) ← قانون/كتاب لائحة ← مواد
             if not b:
                 _cur.execute(
-                    "SELECT " + BR + " AS g, count(*) FROM knowledge_objects "
-                    "WHERE object_type IN (" + tph + ") GROUP BY g ORDER BY count(*) DESC",
+                    "SELECT " + SH + " AS g, count(*), min(" + SHO + ") AS o FROM knowledge_objects "
+                    "WHERE object_type IN (" + tph + ") AND " + GEXPR + " IS NOT NULL "
+                    "GROUP BY g ORDER BY o NULLS LAST, count(*) DESC",
                     tuple(types))
                 return {"mode": "groups", "level": "branch",
                         "groups": [{"key": r[0], "count": r[1]} for r in _cur.fetchall()]}
@@ -6160,7 +6257,7 @@ def browse_kb(kind: str, b: str = "", t: str = "", group: str = "", part: str = 
                     "THEN split_part(min(title), ' — ', 2) || "
                     "COALESCE(' — كتاب ' || min(metadata->>'book_title'), '') "
                     "ELSE btrim(substring(min(title) from '[^—]*$')) END) AS name "
-                    "FROM knowledge_objects WHERE object_type IN (" + tph + ") AND " + BR + " = %s "
+                    "FROM knowledge_objects WHERE object_type IN (" + tph + ") AND " + SH + " = %s "
                     "GROUP BY g ORDER BY g", tuple(types) + (b,))
                 return {"mode": "groups", "level": "law",
                         "groups": [{"key": r[0], "count": r[1], "name": (r[2] or None)}
