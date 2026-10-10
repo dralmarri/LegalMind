@@ -28,14 +28,14 @@ def fx(extra=None):
         c.commit()
 os.makedirs(S + "/simout", exist_ok=True)
 fx(); h0 = q(ALL)[0][0]
-rc, out = run("--ids-out", S + "/simout/ids1.txt"); print(out[-1200:])
+rc, out = run("--ids-out", S + "/simout/ids1.txt", "--snapshot-out", S + "/simout/ids1.txt" + ".snap"); print(out[-1200:])
 check(rc == 0 and "INGEST_REFMISSING_OK" in out, "الإدخال ينجح")
 n = q("SELECT count(*) FROM knowledge_objects")[0][0]
-check(n == 5 + 504, "العدد 509: %d" % n)
+check(n == 5 + 505, "العدد 510: %d" % n)
 ids1 = open(S + "/simout/ids1.txt").read().split()
-check(len(ids1) == 504, "ملف المعرفات الجديدة 504")
+check(len(ids1) == 505, "ملف المعرفات الجديدة 505")
 r = q("SELECT verification_status, count(*) FROM knowledge_objects WHERE id LIKE 'legis-%%' AND metadata ? 'text_provenance' GROUP BY 1 ORDER BY 1")
-check(dict(r) == {"machine_pending_human": 5, "operationally_accepted": 499}, "توزيع الحالة: %s" % r)
+check(dict(r) == {"machine_pending_human": 1, "operationally_accepted": 504}, "توزيع الحالة: %s" % r)
 r = q("SELECT count(*) FROM knowledge_objects WHERE metadata->>'extraction_uncertain'='true' AND NOT (metadata ? 'source_note')")
 check(r[0][0] == 0, "كل موسوم يحمل source_note ظاهرة")
 r = q("SELECT original_text FROM knowledge_objects WHERE id='legis-120-2023-m35'")
@@ -56,8 +56,8 @@ r = q("SELECT metadata->>'source_note' FROM knowledge_objects WHERE id='legis-12
 check("عدم دستورية المادة 16" in (r[0][0] or ""), "م16 تحمل حاشية الحكم الدستوري")
 # إعادة التشغيل
 h1 = q(ALL)[0][0]
-rc, out = run("--ids-out", S + "/simout/ids2.txt")
-check(rc == 0 and "قائم سلفًا من هذه الدفعة 504،" in out and open(S + "/simout/ids2.txt").read() == "", "إعادة التشغيل: لا جديد")
+rc, out = run("--ids-out", S + "/simout/ids2.txt", "--snapshot-out", S + "/simout/ids2.txt" + ".snap")
+check(rc == 0 and "قائم سلفًا من هذه الدفعة 505،" in out and open(S + "/simout/ids2.txt").read() == "", "إعادة التشغيل: لا جديد")
 h2 = q("SELECT md5(string_agg(id||'|'||coalesce(title,'')||'|'||coalesce(original_text,'')||'|'||coalesce(metadata::text,''),'#' ORDER BY id)) FROM knowledge_objects")[0][0]
 check(h2 == h1, "إعادة التشغيل بلا أثر في المحتوى")
 # التراجع
@@ -65,17 +65,36 @@ open(S + "/qlog.txt", "w").close()
 rc, out = run("--rollback", S + "/simout/ids1.txt")
 ql = [json.loads(l) for l in open(S + "/qlog.txt")]
 check(rc == 0 and "ROLLBACK_DONE" in out and q(ALL)[0][0] == h0, "التراجع يعيد القاعدة بايتًا ببايت")
-check(ql and ql[0]["n"] == 504 and "points/delete" in ql[0]["p"], "التراجع يحذف 504 نقطة Qdrant: %s" % ql)
+check(ql and ql[0]["n"] == 505 and "points/delete" in ql[0]["p"], "التراجع يحذف 505 نقطة Qdrant: %s" % ql)
 # تراجع يرفض معرّفًا غريبًا
 open(S + "/simout/evil.txt", "w").write("legis-16-1960-m1\n")
 rc, out = run("--rollback", S + "/simout/evil.txt")
 check(rc != 0 and "ROLLBACK_REFUSED" in out, "التراجع يرفض معرّفًا ليس من الدفعة")
 # فشل Qdrant في التراجع يُعلن لا يُبتلع
-fx(); run("--ids-out", S + "/simout/ids3.txt")
+fx(); run("--ids-out", S + "/simout/ids3.txt", "--snapshot-out", S + "/simout/ids3.txt" + ".snap")
 rc, out = run("--rollback", S + "/simout/ids3.txt", extra={"FAKE_QDRANT_FAIL": "1"})
 check(rc == 2 and "QDRANT_DELETE_FAILED" in out, "فشل حذف Qdrant يُعلَن برمز 2")
+# إعادة التشغيل فوق بناءٍ قديم حيّ (حالة الخادم): نصوص أقدم + غياب م8 مكرر 1 ⇒ تحديث + إدخال واحد، ثم تراجع كامل
+fx(); run("--ids-out", S + "/simout/ids5.txt", "--snapshot-out", S + "/simout/ids5.snap")
+with psycopg.connect(DB) as c, c.cursor() as cur:
+    cur.execute("UPDATE knowledge_objects SET original_text = original_text || ' [بناء قديم]', metadata = metadata || '{\"library_shelf\": \"رف قديم\"}' WHERE id LIKE 'legis-12-1963-%%'")
+    cur.execute("DELETE FROM knowledge_objects WHERE id = 'legis-61-2015-m8-mukarrar-1'")
+    c.commit()
+h_old = q(ALL)[0][0]
+rc, out = run("--ids-out", S + "/simout/ids6.txt", "--snapshot-out", S + "/simout/ids6.snap")
+snap = [l for l in open(S + "/simout/ids6.snap") if l.strip()]
+check(rc == 0 and "قائم سلفًا من هذه الدفعة 504، والجديد 1" in out and open(S + "/simout/ids6.txt").read().split() == ["legis-61-2015-m8-mukarrar-1"]
+      and len(snap) == 504, "فوق البناء القديم: 504 تُحدَّث (ولقطتها 504) وجديد واحد")
+r = q("SELECT count(*) FROM knowledge_objects WHERE original_text LIKE '%%[بناء قديم]%%'")
+check(r[0][0] == 0, "التحديث أزال نصوص البناء القديم")
+rc1, o1 = run("--rollback", S + "/simout/ids6.txt")
+rc2, o2 = run("--restore", S + "/simout/ids6.snap")
+check(rc1 == 0 and rc2 == 0 and "PG_RESTORED: 504" in o2 and q(ALL)[0][0] == h_old, "التراجع الكامل (حذف الجديد + استعادة اللقطة) يعيد البناء القديم بايتًا ببايت")
+open(S + "/simout/evil.snap", "w").write(json.dumps({"id": "legis-16-1960-m1"}) + "\n")
+rc, out = run("--restore", S + "/simout/evil.snap")
+check(rc != 0 and "RESTORE_REFUSED" in out, "الاستعادة ترفض صفًّا من خارج البادئات")
 # تصادم بادئة
 fx("collide"); hc = q(ALL)[0][0]
-rc, out = run("--ids-out", S + "/simout/ids4.txt")
+rc, out = run("--ids-out", S + "/simout/ids4.txt", "--snapshot-out", S + "/simout/ids4.txt" + ".snap")
 check(rc != 0 and "PREFIX_COLLISION" in out and q(ALL)[0][0] == hc, "تصادم البادئة يُسقط بلا أثر")
 print("%d/%d" % (sum(ok), len(ok))); print("SIM_REFMISSING_PASS" if all(ok) else "SIM_REFMISSING_FAIL")

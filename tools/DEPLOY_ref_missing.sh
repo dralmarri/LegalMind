@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# إدخال سبعة قوانين غائبة من «مجموعة التشريعات» (التعديلات حتى 2026/10/5) — 504 كائنًا (2026-10-09)
+# إدخال سبعة قوانين غائبة من «مجموعة التشريعات» (التعديلات حتى 2026/10/5) — 505 كائنًا (2026-10-09، 505 منذ فصل م8 مكرر 1 من 61/2015 في 2026-10-10)
 # القناة: git show. التشغيل من ملف يدخل خلفية صامدة؛ السجل /tmp/deploy_refmissing_*.log
 # لا كود ولا إعادة تشغيل خدمات. فهرسة تفاضلية لما أُدخل وحده (لا فهرسة كاملة — §10).
-# أي فشل بعد الكتابة ⇒ حذف ما أدخلته الدفعة وحدها (PG + Qdrant) + استرداد الرفوف والخريطة ⇒ ROLLED_BACK
+# أي فشل بعد الكتابة ⇒ استرداد الرفوف ← حذف ما أدخلته الدفعة (PG + Qdrant) ← استعادة لقطة الصفوف القائمة
+# (إعادة التشغيل تُحدِّث صفوف التشغيلة السابقة — ON CONFLICT DO UPDATE) ← فهرسة تفاضلية تعيد Qdrant إلى نصوصها ⇒ ROLLED_BACK
 BR="claude/inspiring-pasteur-0cpn0m"
 LOG="/tmp/deploy_refmissing_$(date +%s).log"
 SELF="${BASH_SOURCE[0]:-}"
@@ -17,14 +18,23 @@ HPY=/opt/LegalMind/.venv/bin/python
 APY=/opt/LegalMind/admin/.venv/bin/python
 SAFE="/opt/legalmind-data/refmissing_safe_$(date +%Y%m%d_%H%M%S)"
 mkdir -p "$SAFE/shelves"
-INGESTED=0; SHELVED=0
+INGESTED=0; SHELVED=0; REINDEXED=0
 PATS=('legis-12-1963-%' 'legis-120-2023-%' 'legis-15-1959-%' 'legis-63-2015-%' 'legis-37-2014-%' 'legis-61-2015-%' 'legis-70-2020-%')
 
 rollback() {
   echo "!!! تراجع: $1"
   if [ "$SHELVED" = 1 ]; then $APY tools/apply_library_shelves.py --restore "$SAFE/shelves/metadata_before.jsonl"; fi
-  if [ "$INGESTED" = 1 ]; then $HPY tools/ingest_reference_missing_20261005.py --rollback "$SAFE/new_ids.txt" \
-       || echo "ROLLBACK_INCOMPLETE — راجع $SAFE/new_ids.txt"; fi
+  if [ "$INGESTED" = 1 ]; then
+    $HPY tools/ingest_reference_missing_20261005.py --rollback "$SAFE/new_ids.txt" \
+       || echo "ROLLBACK_INCOMPLETE — راجع $SAFE/new_ids.txt"
+    $HPY tools/ingest_reference_missing_20261005.py --restore "$SAFE/snapshot.jsonl" \
+       || echo "RESTORE_INCOMPLETE — راجع $SAFE/snapshot.jsonl"
+    if [ "$REINDEXED" = 1 ]; then
+      HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 $HPY tools/reindex_delta.py "${PATS[@]}" > "$SAFE/reindex_restore.txt" 2>&1
+      grep -q "REINDEX_DELTA_OK" "$SAFE/reindex_restore.txt" && echo "أُعيدت فهرسة النصوص المستعادة" \
+        || echo "REINDEX_RESTORE_FAILED — شغّل reindex_delta يدويًا على البادئات السبع"
+    fi
+  fi
   cp -f "$SAFE/library_shelves.json" taxonomy/library_shelves.json && echo "استُعيدت الخريطة"
   echo "ROLLED_BACK"; exit 1
 }
@@ -41,12 +51,13 @@ for f in tools/ingest_reference_missing_20261005.py tools/apply_library_shelves.
 done
 
 echo "== 2) الإدخال (معاملة واحدة بحُرّاسها)"
-$HPY tools/ingest_reference_missing_20261005.py --ids-out "$SAFE/new_ids.txt" > "$SAFE/ingest.txt" 2>&1
+$HPY tools/ingest_reference_missing_20261005.py --ids-out "$SAFE/new_ids.txt" --snapshot-out "$SAFE/snapshot.jsonl" > "$SAFE/ingest.txt" 2>&1
 cat "$SAFE/ingest.txt" | tail -14
-grep -q "INGEST_REFMISSING_OK" "$SAFE/ingest.txt" || rollback "الإدخال لم يكتمل"
+grep -q "INGEST_REFMISSING_OK" "$SAFE/ingest.txt" || { echo "الإدخال لم يكتمل — المعاملة تراجعت وحدها، لا شيء كُتب"; cp -f "$SAFE/library_shelves.json" taxonomy/library_shelves.json; echo "ROLLED_BACK"; exit 1; }
 INGESTED=1
 
 echo "== 3) فهرسة تفاضلية للبادئات السبع وحدها"
+REINDEXED=1
 HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 $HPY tools/reindex_delta.py "${PATS[@]}" > "$SAFE/reindex.txt" 2>&1
 tail -3 "$SAFE/reindex.txt"
 grep -q "REINDEX_DELTA_OK" "$SAFE/reindex.txt" || rollback "الفهرسة التفاضلية"
