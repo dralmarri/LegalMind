@@ -53,7 +53,12 @@ def items_of(path):
 if __name__ == '__main__':
     files = sorted(glob.glob(sys.argv[1] + '/*.txt'))
     data = {'files': [], 'items': []}
+    seen = {}
     for i, p in enumerate(files):
+        h = hashlib.md5(open(p, 'rb').read()).hexdigest()
+        if h in seen:  # نسخة مكررة حرفيًا من ملف سابق — لا تُعدّ مرتين
+            data.setdefault('duplicates', []).append([os.path.basename(p)[:-4], seen[h]]); data['files'].append(os.path.basename(p)[:-4]); continue
+        seen[h] = os.path.basename(p)[:-4]
         name = os.path.basename(p)[:-4]
         its = items_of(p)
         data['files'].append(name)
