@@ -173,8 +173,10 @@ for k, r in R.items():
         if pfx + sid(x["num"]) in CONST_NOTES:
             meta["source_note"] = CONST_NOTES[pfx + sid(x["num"])]
         if x["num"] in special:
-            meta["source_correction"] = [{"date": "2026-10-09", "note": special[x["num"]]}]
-            why = why + ["heading_displacement"]
+            # التصحيح الخاص يبقى موثَّقًا؛ والوسم يُرفع إن قوبلت المادة بصورة الأصل فثبت التصحيح
+            meta["source_correction"] = [{"date": "2026-10-09", "note": special[x["num"]]}] + meta.get("source_correction", [])
+            if not vfix:
+                why = why + ["heading_displacement"]
         if why:
             n_flag += 1
             meta["extraction_uncertain"] = True
