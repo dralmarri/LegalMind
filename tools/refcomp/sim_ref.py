@@ -31,17 +31,17 @@ fx(); h0 = q(ALL)[0][0]
 rc, out = run("--ids-out", S + "/simout/ids1.txt", "--snapshot-out", S + "/simout/ids1.txt" + ".snap"); print(out[-1200:])
 check(rc == 0 and "INGEST_REFMISSING_OK" in out, "الإدخال ينجح")
 n = q("SELECT count(*) FROM knowledge_objects")[0][0]
-check(n == 5 + 505, "العدد 510: %d" % n)
+check(n == 5 + 506, "العدد 511: %d" % n)
 ids1 = open(S + "/simout/ids1.txt").read().split()
-check(len(ids1) == 505, "ملف المعرفات الجديدة 505")
+check(len(ids1) == 506, "ملف المعرفات الجديدة 506")
 r = q("SELECT verification_status, count(*) FROM knowledge_objects WHERE id LIKE 'legis-%%' AND metadata ? 'text_provenance' GROUP BY 1 ORDER BY 1")
-check(dict(r) == {"operationally_accepted": 505}, "توزيع الحالة: %s" % r)
+check(dict(r) == {"operationally_accepted": 506}, "توزيع الحالة: %s" % r)
 r = q("SELECT count(*) FROM knowledge_objects WHERE metadata->>'extraction_uncertain'='true' AND NOT (metadata ? 'source_note')")
 check(r[0][0] == 0, "كل موسوم يحمل source_note ظاهرة")
 r = q("SELECT original_text FROM knowledge_objects WHERE id='legis-120-2023-m35'")
 check(r[0][0] == "يكون الانتخاب عامًا وسريًا ومباشرًا.", "120/2023 م35 بنصّها")
-r = q("SELECT metadata->'missing_articles_in_source' FROM knowledge_objects WHERE id='legis-70-2020-preamble'")
-check(r[0][0] == [25], "70/2020 م25 مسجَّلة غائبة: %s" % r)
+r = q("SELECT metadata->'missing_articles_in_source' FROM knowledge_objects WHERE id='legis-37-2014-preamble'")
+check(r[0][0] == [69], "37/2014 م69 مسجَّلة غائبة (غير مستكملة): %s" % r)
 r = q("SELECT count(*) FROM knowledge_objects WHERE original_text ~ '\\(\\(\\(|جزاء العتيبي|^#'")
 check(r[0][0] == 0, "لا علامات إحالة ولا اسم مُعِدّ ولا عناوين Markdown")
 r = q("SELECT title FROM knowledge_objects WHERE id='legis-61-2015-m1'")
@@ -50,6 +50,11 @@ r = q("SELECT count(*) FROM knowledge_objects WHERE id IN ('legis-12-1960-m1','l
 check(r[0][0] == 4, "البادئات المتشابهة لم تُمسّ")
 r = q("SELECT original_text, verification_status, metadata->>'extraction_method' FROM knowledge_objects WHERE id='legis-12-1963-m5'")
 check(r[0][0].startswith("لكل ناخب") and "مرشحًا فيها" in r[0][0] and r[0][1]=="operationally_accepted" and r[0][2].startswith("visual"), "م5 بنص الصورة وبلا وسم")
+r = q("SELECT original_text, verification_status, metadata->>'source_note', metadata->>'extraction_method', subtopic FROM knowledge_objects WHERE id='legis-70-2020-m25'")
+check(r and r[0][0].startswith("تشكل بالوزارة") and r[0][1] == "operationally_accepted" and "غائبة عن المرجع" in r[0][2]
+      and r[0][3] == "transcribed_from_web_page_screenshot" and r[0][4].startswith("الفصل الثالث"), "م25 طب مستكملة بملاحظة ظاهرة وفي الفصل الثالث")
+r = q("SELECT metadata ? 'missing_articles_in_source', metadata->'supplemented_articles' FROM knowledge_objects WHERE id='legis-70-2020-preamble'")
+check(r[0][0] is False and r[0][1] == [25], "ديباجة 70/2020: لا فجوة، والمستكملة [25]")
 r = q("SELECT count(*) FROM knowledge_objects WHERE original_text ~ '(تم|عدلت?|معدلة|مضافة|مستبدلة)\\s+[^\\n]{0,30}(بموجب|وفق)\\s+(ال)?(قانون|مرسوم)[^\\n]{0,30}لسنة\\s*[0-9٠-٩]{4}\\s*$' AND id LIKE 'legis-%%' AND metadata ? 'text_provenance'")
 check(r[0][0] == 0, "لا حاشية تعديل في ذيل أي مادة: %s" % r)
 r = q("SELECT metadata->>'source_note' FROM knowledge_objects WHERE id='legis-12-1963-m16'")
@@ -57,7 +62,7 @@ check("عدم دستورية المادة 16" in (r[0][0] or ""), "م16 تحمل
 # إعادة التشغيل
 h1 = q(ALL)[0][0]
 rc, out = run("--ids-out", S + "/simout/ids2.txt", "--snapshot-out", S + "/simout/ids2.txt" + ".snap")
-check(rc == 0 and "قائم سلفًا من هذه الدفعة 505،" in out and open(S + "/simout/ids2.txt").read() == "", "إعادة التشغيل: لا جديد")
+check(rc == 0 and "قائم سلفًا من هذه الدفعة 506،" in out and open(S + "/simout/ids2.txt").read() == "", "إعادة التشغيل: لا جديد")
 h2 = q("SELECT md5(string_agg(id||'|'||coalesce(title,'')||'|'||coalesce(original_text,'')||'|'||coalesce(metadata::text,''),'#' ORDER BY id)) FROM knowledge_objects")[0][0]
 check(h2 == h1, "إعادة التشغيل بلا أثر في المحتوى")
 # التراجع
@@ -65,7 +70,7 @@ open(S + "/qlog.txt", "w").close()
 rc, out = run("--rollback", S + "/simout/ids1.txt")
 ql = [json.loads(l) for l in open(S + "/qlog.txt")]
 check(rc == 0 and "ROLLBACK_DONE" in out and q(ALL)[0][0] == h0, "التراجع يعيد القاعدة بايتًا ببايت")
-check(ql and ql[0]["n"] == 505 and "points/delete" in ql[0]["p"], "التراجع يحذف 505 نقطة Qdrant: %s" % ql)
+check(ql and ql[0]["n"] == 506 and "points/delete" in ql[0]["p"], "التراجع يحذف 506 نقطة Qdrant: %s" % ql)
 # تراجع يرفض معرّفًا غريبًا
 open(S + "/simout/evil.txt", "w").write("legis-16-1960-m1\n")
 rc, out = run("--rollback", S + "/simout/evil.txt")
@@ -78,13 +83,14 @@ check(rc == 2 and "QDRANT_DELETE_FAILED" in out, "فشل حذف Qdrant يُعل�
 fx(); run("--ids-out", S + "/simout/ids5.txt", "--snapshot-out", S + "/simout/ids5.snap")
 with psycopg.connect(DB) as c, c.cursor() as cur:
     cur.execute("UPDATE knowledge_objects SET original_text = original_text || ' [بناء قديم]', metadata = metadata || '{\"library_shelf\": \"رف قديم\"}' WHERE id LIKE 'legis-12-1963-%%'")
-    cur.execute("DELETE FROM knowledge_objects WHERE id = 'legis-61-2015-m8-mukarrar-1'")
+    cur.execute("DELETE FROM knowledge_objects WHERE id IN ('legis-61-2015-m8-mukarrar-1', 'legis-70-2020-m25')")
     c.commit()
 h_old = q(ALL)[0][0]
 rc, out = run("--ids-out", S + "/simout/ids6.txt", "--snapshot-out", S + "/simout/ids6.snap")
 snap = [l for l in open(S + "/simout/ids6.snap") if l.strip()]
-check(rc == 0 and "قائم سلفًا من هذه الدفعة 504، والجديد 1" in out and open(S + "/simout/ids6.txt").read().split() == ["legis-61-2015-m8-mukarrar-1"]
-      and len(snap) == 504, "فوق البناء القديم: 504 تُحدَّث (ولقطتها 504) وجديد واحد")
+check(rc == 0 and "قائم سلفًا من هذه الدفعة 504، والجديد 2" in out
+      and sorted(open(S + "/simout/ids6.txt").read().split()) == ["legis-61-2015-m8-mukarrar-1", "legis-70-2020-m25"]
+      and len(snap) == 504, "فوق البناء القديم: 504 تُحدَّث (ولقطتها 504) وجديدان (م8 مكرر 1 وم25 طب)")
 r = q("SELECT count(*) FROM knowledge_objects WHERE original_text LIKE '%%[بناء قديم]%%'")
 check(r[0][0] == 0, "التحديث أزال نصوص البناء القديم")
 rc1, o1 = run("--rollback", S + "/simout/ids6.txt")

@@ -1,5 +1,5 @@
 # يبني سجلات الإدخال من extracted.json — كل تصحيح آلي معدود، وكل اضطراب باقٍ موسوم ظاهرًا
-import json, re, sys, collections, hashlib
+import json, re, sys, os, collections, hashlib
 D = sys.argv[1]
 exec(open(D + "/extract.py", encoding="utf-8").read().split("if __name__")[0])
 R = json.load(open(D + "/extracted.json", encoding="utf-8"))
@@ -81,6 +81,11 @@ def chap_of(ents, base):
 
 import difflib
 VIS = json.load(open(sys.argv[2], encoding="utf-8")) if len(sys.argv) > 2 else {}
+# مواد غائبة عن المرجع المطبوع نفسه وصلت من مصدر آخر — لا تُقبل إلا لرقمٍ غائبٍ فعلًا (لا تكتب فوق مادة قائمة)
+# وبشرط أن يطابق ما يسبقها في المصدر الآخر ذيلَ المادة السابقة عندنا (شاهدٌ على أنه القانون نفسه)
+_SUPP_PATH = os.path.join(os.path.dirname(sys.argv[2]), "supplementary_articles.json") if len(sys.argv) > 2 else ""
+SUPP = json.load(open(_SUPP_PATH, encoding="utf-8")) if _SUPP_PATH and os.path.exists(_SUPP_PATH) else {}
+SUPP_APPLIED = []
 def _letters(t):
     return re.sub(r"[^ء-ي]", "", re.sub("[%s]" % DIAC, "", t))
 VIS_NOTE = ("قوبل نص هذه المادة بصورة صفحة المرجع (صفحة PDF {pages}) وصُحّح على الصورة — أُزيل اضطراب "
@@ -193,6 +198,32 @@ for k, r in R.items():
     pm = dict(common, fix_counts=fixes, signatories_text=r["signatories"],
               amendment_footnotes=r["footnotes"], toc=r["toc"])
     gaps = sorted(set(range(1, max(x["base"] for x in arts) + 1)) - {x["base"] for x in arts})
+    supplied = []
+    for num, sp in sorted(SUPP.get(M["id"], {}).items(), key=lambda kv: int(kv[0])):
+        if num.startswith("_"):
+            continue
+        n = int(num)
+        assert n in gaps, ("SUPPLEMENT_NOT_A_GAP", M["id"], n)
+        prev = next(rec for rec in records if rec["id"] == pfx + sid(str(n - 1)))
+        ctx = _letters(sp["context_prev_tail"])
+        assert len(ctx) >= 60 and _letters(prev["text"]).endswith(ctx), ("SUPPLEMENT_CONTEXT_MISMATCH", M["id"], n)
+        ch = prev["metadata"].get("chapter")
+        meta = dict(common, article_number=str(n), chapter=ch, text_provenance=sp["provenance"],
+                    extraction_method=sp["method"], source_note=sp["note"],
+                    supplement_context_check=("ما يسبق المادة في المصدر المكمِّل يطابق حرفًا بحرف ذيل المادة %d "
+                                              "عندنا (مقارنة الحروف العربية)." % (n - 1)))
+        tch = " — ".join(p for p in (ch or "").split(" — ") if not p.startswith("الباب")) or ch
+        rec = {"id": pfx + sid(str(n)), "object_type": "legislation_article", "branch": M["branch"],
+               "topic": M["short"], "subtopic": ch or "مواد القانون",
+               "title": "المادة (%d) — %s%s" % (n, (tch + " — ") if tch else "", M["short"]),
+               "text": sp["text"], "metadata": meta, "verification_status": "operationally_accepted"}
+        records.insert(records.index(prev) + 1, rec)
+        supplied.append(n); SUPP_APPLIED.append((M["id"], n))
+    if supplied:
+        pm["supplemented_articles"] = supplied
+        pm["supplemented_articles_note"] = ("مواد غائبة عن المرجع المطبوع نفسه استُكملت من مصدر آخر موثَّق في "
+                                            "text_provenance لكل مادة، وتُراجع بالجريدة الرسمية.")
+        gaps = [g for g in gaps if g not in supplied]
     if gaps:
         pm["missing_articles_in_source"] = gaps
         if k == "legis-37-2014":
@@ -230,4 +261,5 @@ for k, v in report.items():
     print(k, v)
 print("HEADING_TAIL_REMOVED", len(HEAD_TAIL), HEAD_TAIL)
 print("VISUAL_APPLIED", len(VIS_APPLIED), VIS_APPLIED)
+print("SUPPLEMENT_APPLIED", len(SUPP_APPLIED), SUPP_APPLIED)
 print("RECORDS", len(records), "flagged", sum(1 for r in records if r["metadata"].get("extraction_uncertain")))
