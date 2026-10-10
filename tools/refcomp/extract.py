@@ -165,6 +165,9 @@ def extract(key):
         ms = SIG.search(txt)
         if ms:
             sig = ms.group(1).strip()
+            # اتجاه السطر يقدّم الرقم على النقطتين: «في 9: رجب» والمطبوع «في: ٩ رجب» (وكذا «الموافق»)
+            sig, nsc = re.subn(r"(في|الموافق)\s+([0-9٠-٩]+):", r"\1: \2", sig)
+            FIX["signature_colon"] += nsc
             txt = txt[:ms.start()].strip()
         out.append({"num": x["num"], "base": x["base"], "page": x["page"], "text": txt, "head": x["chapter"]})
     pretxt = re.sub(r"\n{3,}", "\n\n", "\n".join(pre)).strip()
