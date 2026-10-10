@@ -86,6 +86,10 @@ VIS = json.load(open(sys.argv[2], encoding="utf-8")) if len(sys.argv) > 2 else {
 _SUPP_PATH = os.path.join(os.path.dirname(sys.argv[2]), "supplementary_articles.json") if len(sys.argv) > 2 else ""
 SUPP = json.load(open(_SUPP_PATH, encoding="utf-8")) if _SUPP_PATH and os.path.exists(_SUPP_PATH) else {}
 SUPP_APPLIED = []
+# تصحيحات بمطابقة مصدرين لمواد لم تُصوَّر صفحتها: نسخة ثانية للقانون تُثبت حرفًا أسقطته طبقة النص
+_SEC_PATH = os.path.join(os.path.dirname(sys.argv[2]), "second_source_corrections.json") if len(sys.argv) > 2 else ""
+SEC = json.load(open(_SEC_PATH, encoding="utf-8")) if _SEC_PATH and os.path.exists(_SEC_PATH) else {}
+SEC_APPLIED = []
 def _letters(t):
     return re.sub(r"[^ء-ي]", "", re.sub("[%s]" % DIAC, "", t))
 VIS_NOTE = ("قوبل نص هذه المادة بصورة صفحة المرجع (صفحة PDF {pages}) وصُحّح على الصورة — أُزيل اضطراب "
@@ -157,6 +161,13 @@ for k, r in R.items():
             assert vratio >= 0.97, ("VISUAL_MISMATCH", M["id"], x["num"], round(vratio, 3))
             x["text"] = vfix["text"]
             VIS_APPLIED.append((M["id"], x["num"], round(vratio, 3)))
+        sec = SEC.get(M["id"], {}).get(x["num"])
+        if sec:
+            assert not vfix, ("SECOND_SOURCE_ON_PHOTO_CHECKED", M["id"], x["num"])  # الصورة أعلى من النسخة الثانية
+            for bad, good, cnt in sec:
+                assert x["text"].count(bad) == cnt, ("SECOND_SOURCE_ANCHOR", M["id"], x["num"], bad)
+                x["text"] = x["text"].replace(bad, good)
+            SEC_APPLIED.append((M["id"], x["num"], len(sec)))
         # النص المقابَل بصورة الأصل محكومٌ بالعين لا بكاشف البقايا (الذي يَعُدّ «البند أ» حرفًا منفصلًا)
         why = [] if vfix else residue(x["text"])
         ch = chap_of(ents, x["base"]) if ents else None
@@ -177,6 +188,10 @@ for k, r in R.items():
                 meta["source_correction"][0]["corrections"] = vfix["corrections"]
             if vfix.get("note"):
                 meta["source_note"] = vfix["note"]
+        if sec:
+            meta["source_correction"] = [{"date": "2026-10-10", "method": "second_source_reconciliation",
+                                          "source": SEC[M["id"]]["_source"],
+                                          "corrections": ["«%s» ← «%s»" % (b, g) for b, g, _ in sec]}]
         if pfx + sid(x["num"]) in CONST_NOTES:
             meta["source_note"] = CONST_NOTES[pfx + sid(x["num"])]
         if x["num"] in special:
@@ -219,6 +234,8 @@ for k, r in R.items():
                "text": sp["text"], "metadata": meta, "verification_status": "operationally_accepted"}
         records.insert(records.index(prev) + 1, rec)
         supplied.append(n); SUPP_APPLIED.append((M["id"], n))
+    if SEC.get(M["id"], {}).get("_check"):
+        pm["second_source_check"] = {"source": SEC[M["id"]]["_source"], "result": SEC[M["id"]]["_check"]}
     if supplied:
         pm["supplemented_articles"] = supplied
         pm["supplemented_articles_note"] = ("مواد غائبة عن المرجع المطبوع نفسه استُكملت من مصدر آخر موثَّق في "
@@ -262,4 +279,5 @@ for k, v in report.items():
 print("HEADING_TAIL_REMOVED", len(HEAD_TAIL), HEAD_TAIL)
 print("VISUAL_APPLIED", len(VIS_APPLIED), VIS_APPLIED)
 print("SUPPLEMENT_APPLIED", len(SUPP_APPLIED), SUPP_APPLIED)
+print("SECOND_SOURCE_APPLIED", len(SEC_APPLIED), SEC_APPLIED)
 print("RECORDS", len(records), "flagged", sum(1 for r in records if r["metadata"].get("extraction_uncertain")))
