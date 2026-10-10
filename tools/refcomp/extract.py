@@ -13,6 +13,7 @@ LAWS = {  # key: (first_page, last_page, toc_page)
 }
 DIAC = "ًٌٍَُِّْ"
 FIX = collections.Counter()
+TERMINAL = re.compile(r"[.:؛!؟]\s*$|-:\s*$")
 
 def sub(name, pat, rep, s, flags=0):
     s2, n = re.subn(pat, rep, s, flags=flags)
@@ -94,6 +95,12 @@ def extract(key):
             tnorm.setdefault(k, t)
     pre, arts, foots, cur, muk, heads = [], [], [], None, False, []
     for n in range(a, b + 1):
+        # حدّ الصفحة: فاصل الحواشي «---» في ذيل الصفحة السابقة ليس فقرة — يُزال، ويُقرَّر اللحام عند أول سطر
+        seam = False
+        if n > a and cur and cur["lines"]:
+            while cur["lines"] and cur["lines"][-1] == "":
+                cur["lines"].pop()
+            seam = bool(cur["lines"])
         for l in page_lines(n, hdrs):
             raw = l.strip()
             if not raw or raw == "---":
@@ -103,6 +110,7 @@ def extract(key):
                 foots.append({"page": n, "text": clean(raw.lstrip(") "))})
                 continue
             t = clean(raw)
+            was_seam, seam = seam, False
             if MUK.match(t):
                 muk = True
                 continue
@@ -133,6 +141,13 @@ def extract(key):
             if t2 != t:
                 FIX["footnote_inline_removed"] += 1
                 t = t2.strip()
+            if was_seam and cur and cur["lines"]:
+                if TERMINAL.search(cur["lines"][-1]):
+                    cur["lines"].append("")
+                else:  # جملة تعبر حدّ الصفحة — تُلحم بمسافة لا بفقرة
+                    cur["lines"][-1] = cur["lines"][-1].rstrip() + " " + t
+                    FIX["page_seam_joined"] += 1
+                    continue
             (cur["lines"] if cur else pre).append(t)
     out = []
     sig = None
